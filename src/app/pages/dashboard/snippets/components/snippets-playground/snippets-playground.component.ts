@@ -12,6 +12,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
   LANGUAGES_SUPPORTED,
@@ -39,7 +40,10 @@ import { SubSink } from 'subsink';
 import { Snippet } from '../../interfaces/snippets.interface';
 import { CodeEditorService } from '../../services/code-editor/code-editor.service';
 import { SnippetsService } from '../../services/snippet/snippets.service';
-import { DeleteSnippet } from '../../store/actions/snippets.action';
+import {
+  DeleteSnippet,
+  SetActiveSnippet,
+} from '../../store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
 
 @Component({
@@ -135,7 +139,22 @@ export class SnippetsPlaygroundComponent
 
   delete() {
     if (this.editor && this.activeSnippet) {
-      this.store.dispatch(new DeleteSnippet(this.activeSnippet.id));
+      const dialogRef = this.dialog.open(DeletePromptComponent, {
+        size: 'sm',
+        minHeight: 'unset',
+      });
+      this.subs.add(
+        dialogRef.afterClosed$
+          .pipe(
+            tap((response) => {
+              if (response) {
+                this.store.dispatch(new DeleteSnippet(this.activeSnippet.id));
+                this.store.dispatch(new SetActiveSnippet(null));
+              }
+            })
+          )
+          .subscribe(() => {})
+      );
     }
   }
 
