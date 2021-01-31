@@ -34,7 +34,14 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
   @ViewChild('bookmarkURL') bookmarkURLRef: ElementRef;
 
   bookmarkFormControls = {
-    url: new FormControl('', [Validators.required]),
+    url: new FormControl('', [
+      Validators.required,
+      Validators.pattern(
+        new RegExp(
+          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g
+        )
+      ),
+    ]),
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     site: new FormControl('', [Validators.required]),
@@ -137,6 +144,7 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
       favorite: false,
       metadata: null,
       private: true,
+      domain: data.domain,
       share: [],
     };
     if (this.ref.data.type === ModalOperationType.CREATE) {

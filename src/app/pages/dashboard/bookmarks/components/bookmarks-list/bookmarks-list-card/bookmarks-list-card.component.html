@@ -15,11 +15,11 @@
     <p class="line-clamp-2 text-xs to-gray-500 mb-2" [style.minHeight.px]="35">{{bookmark?.description}}</p>
   </div>
   <section>
-    <div class="flex space-x-2">
+    <a [href]="'https://' + bookmark.domain" class="flex justify-start items-center space-x-2" target="_blank">
       <img [src]="bookmark?.favicon" default="../../../../../../../assets/images/cartella.svg"
            [alt]="bookmark?.site || 'n/a'" height="20px" width="20px" class="rounded-full">
-      <p class="text-xs to-gray-400">{{bookmark?.site ? bookmark?.site : 'n/a' }}</p>
-    </div>
+      <a class="text-gray-500 text-xs hover:underline hover:text-primary">{{bookmark?.site}}</a>
+    </a>
   </section>
   <footer class="flex items-center justify-between mt-3 pb-1">
     <div class="flex items-center">
