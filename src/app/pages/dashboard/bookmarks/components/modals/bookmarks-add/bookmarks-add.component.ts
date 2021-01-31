@@ -16,10 +16,13 @@ import {
   BookmarkAddModalPayload,
   BookmarkMetaData,
   BookmarkRequest,
+  ModalOperationType,
 } from '../../../shared/interfaces/bookmarks.interface';
-import { BookmarksService } from '../../../shared/services/bookmarks.service';
 import { MetaExtractorService } from '../../../shared/services/meta-extractor.service';
-import { AddBookmark } from '../../../shared/store/actions/bookmarks.action';
+import {
+  AddBookmark,
+  UpdateBookmark,
+} from '../../../shared/store/actions/bookmarks.action';
 
 @Component({
   selector: 'app-bookmarks-add',
@@ -36,10 +39,10 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
     description: new FormControl('', [Validators.required]),
     site: new FormControl('', [Validators.required]),
   };
+  meta: BookmarkMetaData;
 
   private metaDataSubject = new BehaviorSubject<BookmarkMetaData>(null);
-  metaData$ = this.metaDataSubject.pipe();
-  meta: BookmarkMetaData;
+  metaData$ = this.metaDataSubject.pipe(tap((data) => (this.meta = data)));
 
   private isLoadingSubject = new Subject<boolean>();
   isLoading$ = this.isLoadingSubject.pipe();
@@ -47,12 +50,26 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   constructor(
     public ref: DialogRef<BookmarkAddModalPayload>,
-    private bookmarkService: BookmarksService,
     private metaExtractorService: MetaExtractorService,
     private store: Store
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if (this.ref.data.type === ModalOperationType.UPDATE) {
+      const { description, name, image, site, url } = this.ref.data.bookmark;
+      this.metaDataSubject.next({
+        description,
+        title: name,
+        image,
+        site,
+      });
+      this.bookmarkFormControls.url.disable();
+      this.bookmarkFormControls.description.setValue(description);
+      this.bookmarkFormControls.name.setValue(name);
+      this.bookmarkFormControls.site.setValue(site);
+      this.bookmarkFormControls.url.setValue(url);
+    }
+  }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
@@ -122,7 +139,18 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
       private: true,
       share: [],
     };
-    this.store.dispatch(new AddBookmark(bookmarkData));
+    if (this.ref.data.type === ModalOperationType.CREATE) {
+      this.store.dispatch(new AddBookmark(bookmarkData));
+    } else if (this.ref.data.type === ModalOperationType.UPDATE) {
+      const bookmarkUpdatedData = {
+        name: data?.title,
+        description: data?.description,
+        site: data?.site,
+      };
+      this.store.dispatch(
+        new UpdateBookmark(this.ref.data.bookmark.id, bookmarkUpdatedData)
+      );
+    }
     this.ref.close();
   }
 

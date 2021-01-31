@@ -61,7 +61,7 @@
             </circle>
           </svg>
         </ng-container>
-        {{(metaData$ | async) ? 'Bookmark It' : 'Fetch'}}
+        {{(metaData$ | async) ? (ref.data.type === 'CREATE' ? 'Save' : 'Update') : 'Fetch'}}
       </button>
 
     </div>

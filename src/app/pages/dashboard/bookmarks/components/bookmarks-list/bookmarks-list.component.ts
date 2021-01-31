@@ -9,8 +9,7 @@ import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prom
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
-import { EMPTY } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import {
   Bookmark,
@@ -18,6 +17,7 @@ import {
   BookmarkCardEvent,
   BookmarkCardEventType,
   BookmarkFolder,
+  ModalOperationType,
 } from '../../shared/interfaces/bookmarks.interface';
 import { BookmarksService } from '../../shared/services/bookmarks.service';
 import {
@@ -57,20 +57,10 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
         minHeight: 'unset',
         data: {
           folder: this.activeFolder,
+          type: ModalOperationType.CREATE,
         },
         enableClose: false,
       }
-    );
-    this.subs.add(
-      dialogRef.afterClosed$
-        .pipe(
-          switchMap((data) => {
-            if (data) {
-            }
-            return EMPTY;
-          })
-        )
-        .subscribe(() => {})
     );
   }
 
@@ -84,6 +74,7 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
         );
         break;
       case BookmarkCardEventType.edit:
+        this.handleEdit(event.bookmark);
         break;
       case BookmarkCardEventType.delete:
         this.handleDelete(event.bookmark);
@@ -94,6 +85,22 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
       default:
         break;
     }
+  }
+
+  private handleEdit(bookmark: Bookmark) {
+    const dialogRef = this.dialog.open<BookmarkAddModalPayload>(
+      BookmarksAddComponent,
+      {
+        size: 'md',
+        minHeight: 'unset',
+        data: {
+          folder: this.activeFolder,
+          bookmark,
+          type: ModalOperationType.UPDATE,
+        },
+        enableClose: false,
+      }
+    );
   }
 
   private handleDelete(bookmark: Bookmark) {
