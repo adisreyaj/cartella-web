@@ -29,9 +29,13 @@ import { AddBookmark } from '../../../shared/store/actions/bookmarks.action';
 })
 export class BookmarksAddComponent implements OnInit, OnDestroy {
   @ViewChild('bookmarkURL') bookmarkURLRef: ElementRef;
-  bookmarkURL = new FormControl('', [Validators.required]);
-  bookmarkName = new FormControl('', [Validators.required]);
-  bookmarkDescription = new FormControl('', [Validators.required]);
+
+  bookmarkFormControls = {
+    url: new FormControl('', [Validators.required]),
+    name: new FormControl('', [Validators.required]),
+    description: new FormControl('', [Validators.required]),
+    site: new FormControl('', [Validators.required]),
+  };
 
   private metaDataSubject = new BehaviorSubject<BookmarkMetaData>(null);
   metaData$ = this.metaDataSubject.pipe();
@@ -55,7 +59,7 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit() {
-    if (this.bookmarkURL) {
+    if (this.bookmarkFormControls.url) {
       this.bookmarkURLRef?.nativeElement?.focus();
     }
   }
@@ -64,21 +68,21 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
     if (meta) {
       const data = {
         ...meta,
-        name: this.bookmarkName.value,
-        description: this.bookmarkDescription.value,
+        name: this.bookmarkFormControls.name.value,
+        description: this.bookmarkFormControls.description.value,
       };
       this.addBookmark(data);
     } else {
-      this.getMeta(this.bookmarkURL.value);
+      this.getMeta(this.bookmarkFormControls.url.value);
     }
   }
 
   reset() {
     this.metaDataSubject.next(null);
-    this.bookmarkURL.reset();
-    this.bookmarkURL.enable();
-    this.bookmarkName.reset();
-    this.bookmarkDescription.reset();
+    this.bookmarkFormControls.url.reset();
+    this.bookmarkFormControls.url.enable();
+    this.bookmarkFormControls.name.reset();
+    this.bookmarkFormControls.description.reset();
   }
 
   private getMeta(url: string) {
@@ -90,9 +94,10 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
         .pipe(
           tap((data: BookmarkMetaData) => {
             this.meta = data;
-            this.bookmarkURL.disable();
-            this.bookmarkName.setValue(data.title);
-            this.bookmarkDescription.setValue(data.description);
+            this.bookmarkFormControls.url.disable();
+            this.bookmarkFormControls.name.setValue(data.title);
+            this.bookmarkFormControls.site.setValue(data.site);
+            this.bookmarkFormControls.description.setValue(data.description);
             this.metaDataSubject.next(data);
           })
         )
@@ -110,7 +115,7 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
       image: data?.image,
       site: data?.site,
       favicon: data?.icon,
-      url: this.bookmarkURL.value,
+      url: this.bookmarkFormControls.url.value,
       folderId: this.ref.data.folder.id,
       favorite: false,
       metadata: null,

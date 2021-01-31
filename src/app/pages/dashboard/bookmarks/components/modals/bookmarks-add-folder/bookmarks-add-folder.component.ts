@@ -84,7 +84,7 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
           name: this.folderName.value,
           metadata: {},
           private: true,
-          share: {},
+          share: [],
         })
       )
       .subscribe(
