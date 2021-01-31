@@ -7,26 +7,31 @@
   <form class="w-100">
     <div class="form-group">
       <label for="url">Bookmark URL</label>
-      <input type="url" name="url" id="url" autocomplete="off" [formControl]="bookmarkURL" #bookmarkURLRef
+      <input type="url" name="url" id="url" autocomplete="off" [formControl]="bookmarkFormControls.url" #bookmarkURLRef
              [disabled]="(isLoading$ | async)">
     </div>
     <section *ngIf="(metaData$ | async) as meta">
       <div class="form-group">
         <label for="name">Name</label>
-        <input type="text" name="name" id="name" autocomplete="off" [formControl]="bookmarkName" #bookmarkURLRef
-               [disabled]="isLoading$ | async">
+        <input type="text" name="name" id="name" autocomplete="off" [formControl]="bookmarkFormControls.name"
+               #bookmarkURLRef [disabled]="isLoading$ | async">
       </div>
       <div class="form-group">
         <label for="description">Description</label>
-        <textarea name="description" id="description" rows="4" [formControl]="bookmarkDescription"></textarea>
+        <textarea name="description" id="description" rows="4"
+                  [formControl]="bookmarkFormControls.description"></textarea>
+      </div>
+      <div class="form-group w-1/2">
+        <label for="site">Site</label>
+        <input type="text" name="site" id="site" autocomplete="off" [formControl]="bookmarkFormControls.site">
       </div>
       <h3 class="mb-3 font-semibold text-sm">Preview</h3>
       <div class="grid grid-cols-5 gap-4 px-3 py-2 rounded-md shadow-lg" style="height: 170px;">
         <img [src]="meta?.image" default="../../../../../../../assets/images/bookmark-placeholder.svg"
              style="height: 150px;" class="col-span-2 object-cover rounded-md">
         <div class="col-span-3">
-          <p class="line-clamp-2 text-sm font-semibold mb-2">{{bookmarkName.value}}</p>
-          <p class="line-clamp-3 text-xs text-gray-600">{{bookmarkDescription.value}}</p>
+          <p class="line-clamp-2 text-sm font-semibold mb-2">{{bookmarkFormControls.name.value}}</p>
+          <p class="line-clamp-3 text-xs text-gray-600">{{bookmarkFormControls.description.value}}</p>
         </div>
       </div>
     </section>
@@ -38,12 +43,13 @@
     </section>
   </form>
   <footer class="flex justify-between items-center mt-6">
-    <button class="mr-2 bg-none" (click)="reset()" [disabled]="bookmarkURL?.value?.length === 0">
+    <button class="mr-2 bg-none" (click)="reset()" [disabled]="bookmarkFormControls.url?.value?.length === 0">
       <rmx-icon name="restart-line" class="icon-lg"></rmx-icon>
     </button>
     <div class="flex items-center space-x-2">
       <button dialogClose secondaryButton class="mr-2">Cancel</button>
-      <button primaryButton [disabled]="bookmarkURL.invalid || (isLoading$ | async)" (click)="fetchOrAdd(meta)">
+      <button primaryButton [disabled]="bookmarkFormControls.url.invalid || (isLoading$ | async)"
+              (click)="fetchOrAdd(meta)">
         <ng-container *ngIf="isLoading$ | async">
           <svg xmlns="http://www.w3.org/2000/svg"
                style="margin:auto;background:0 0; margin-right: 0.3rem;height: 24px;width: 24px;" width="200"
@@ -55,7 +61,7 @@
             </circle>
           </svg>
         </ng-container>
-        {{(metaData$ | async) ? 'Bookmark It' : 'Fetch'}}
+        {{(metaData$ | async) ? (ref.data.type === 'CREATE' ? 'Save' : 'Update') : 'Fetch'}}
       </button>
 
     </div>

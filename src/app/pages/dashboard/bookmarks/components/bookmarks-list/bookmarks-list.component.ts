@@ -8,8 +8,8 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
-import { EMPTY } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
+import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import {
   Bookmark,
@@ -17,8 +17,13 @@ import {
   BookmarkCardEvent,
   BookmarkCardEventType,
   BookmarkFolder,
+  ModalOperationType,
 } from '../../shared/interfaces/bookmarks.interface';
 import { BookmarksService } from '../../shared/services/bookmarks.service';
+import {
+  DeleteBookmark,
+  UpdateBookmark,
+} from '../../shared/store/actions/bookmarks.action';
 import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.component';
 
 @Component({
@@ -36,7 +41,8 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   constructor(
     private bookmarkService: BookmarksService,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {}
@@ -51,31 +57,24 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
         minHeight: 'unset',
         data: {
           folder: this.activeFolder,
+          type: ModalOperationType.CREATE,
         },
         enableClose: false,
       }
-    );
-    this.subs.add(
-      dialogRef.afterClosed$
-        .pipe(
-          switchMap((data) => {
-            if (data) {
-            }
-            return EMPTY;
-          })
-        )
-        .subscribe(() => {})
     );
   }
 
   handleCardEvent(event: BookmarkCardEvent) {
     switch (event.type) {
       case BookmarkCardEventType.favorite:
-        this.bookmarkService.updateBookmark(event.bookmark.id, {
-          favorite: !event.bookmark?.favorite,
-        });
+        this.store.dispatch(
+          new UpdateBookmark(event.bookmark.id, {
+            favorite: !event.bookmark?.favorite,
+          })
+        );
         break;
       case BookmarkCardEventType.edit:
+        this.handleEdit(event.bookmark);
         break;
       case BookmarkCardEventType.delete:
         this.handleDelete(event.bookmark);
@@ -88,6 +87,22 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
     }
   }
 
+  private handleEdit(bookmark: Bookmark) {
+    const dialogRef = this.dialog.open<BookmarkAddModalPayload>(
+      BookmarksAddComponent,
+      {
+        size: 'md',
+        minHeight: 'unset',
+        data: {
+          folder: this.activeFolder,
+          bookmark,
+          type: ModalOperationType.UPDATE,
+        },
+        enableClose: false,
+      }
+    );
+  }
+
   private handleDelete(bookmark: Bookmark) {
     const dialogRef = this.dialog.open(DeletePromptComponent, {
       size: 'sm',
@@ -98,7 +113,7 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
         .pipe(
           tap((response) => {
             if (response) {
-              this.bookmarkService.deleteBookmark(bookmark.id);
+              this.store.dispatch(new DeleteBookmark(bookmark.id));
             }
           })
         )

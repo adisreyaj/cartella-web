@@ -31,7 +31,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   allBookmarks$: Observable<Bookmark[]>;
 
   @Select(BookmarkState.getBookmarksShown)
-  snippetsShown$: Observable<Bookmark[]>;
+  bookmarksShown$: Observable<Bookmark[]>;
 
   @Select(BookmarkState.getActiveBookmark)
   activeBookmark$: Observable<Bookmark>;
@@ -90,9 +90,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
     const folderState = this.store.selectSnapshot(
       (state) => state.snippetFolders
     );
-    this.store.dispatch(
-      new GetBookmarks(folderState?.activeBookmarkFolder?.id)
-    );
+    this.store.dispatch(new GetBookmarks(ALL_BOOKMARKS_FOLDER.id));
   }
   private getBookmarkFolders() {
     this.store.dispatch(new GetBookmarkFolders());
