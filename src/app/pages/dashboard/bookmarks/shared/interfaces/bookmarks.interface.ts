@@ -68,7 +68,9 @@ export enum BookmarkCardEventType {
 
 export interface BookmarkAddModalPayload {
   folder: BookmarkFolder;
+  bookmark?: Bookmark;
   allFolders?: BookmarkFolder[];
+  type: ModalOperationType;
 }
 
 export interface BookmarkFolderAddModalPayload {

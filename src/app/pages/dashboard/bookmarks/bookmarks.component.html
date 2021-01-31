@@ -7,7 +7,7 @@
   </aside>
   <main>
     <app-bookmarks-list [user]="user" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
-                        [bookmarks]="allBookmarks$ | async">
+                        [bookmarks]="bookmarksShown$ | async">
     </app-bookmarks-list>
   </main>
 </div>
