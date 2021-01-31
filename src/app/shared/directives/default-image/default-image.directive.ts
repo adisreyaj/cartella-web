@@ -1,20 +1,31 @@
-import { Directive, ElementRef, Input, Renderer2 } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
   selector: 'img[default]',
   host: {
-    '(error)': 'updateUrl()',
-    '[src]': 'src',
+    '(load)': 'loadImage()',
+    '(error)': 'loadDefault()',
   },
 })
-export class DefaultImageDirective {
+export class DefaultImageDirective implements OnInit {
   @Input() src: string;
   @Input() default: string;
+  @Input() loader: string;
+  constructor(private renderer: Renderer2, private el: ElementRef) {}
 
-  updateUrl() {
-    this.src = this.default;
-    // this.renderer.setStyle(this.el.nativeElement, 'object-fit', 'contain');
+  ngOnInit() {
+    this.renderer.setAttribute(this.el.nativeElement, 'src', this.loader);
   }
 
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+  loadDefault() {
+    this.renderer.setAttribute(this.el.nativeElement, 'src', this.default);
+  }
+
+  loadImage() {
+    if (this.src) {
+      this.renderer.setAttribute(this.el.nativeElement, 'src', this.src);
+    } else {
+      this.renderer.setAttribute(this.el.nativeElement, 'src', this.default);
+    }
+  }
 }

@@ -8,7 +8,8 @@
               [class.text-primary]="bookmark?.favorite"></rmx-icon>
   </button>
   <img [src]="bookmark?.image" default="../../../../../../../assets/images/bookmark-placeholder.svg"
-       style="height: 150px;" class="mb-3 object-cover rounded-sm">
+       loader="../../../../../../../assets/images/image-loader.svg" style="height: 150px;"
+       class="mb-3 object-cover rounded-sm">
   <div>
     <p class="line-clamp-2 text-sm font-semibold mb-2" [style.minHeight.px]="37">{{bookmark?.name}}</p>
     <p class="line-clamp-2 text-xs to-gray-500 mb-2" [style.minHeight.px]="35">{{bookmark?.description}}</p>
