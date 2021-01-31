@@ -109,7 +109,7 @@ export class BookmarkState {
           (item) => item.id === id
         );
         allBookmarkList[bookmarkIndex] = result;
-        const shownBookmarkList = [...state.allBookmarks];
+        const shownBookmarkList = [...state.bookmarksShown];
         const shownBookmarkIndex = shownBookmarkList.findIndex(
           (item) => item.id === id
         );
