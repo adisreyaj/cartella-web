@@ -16,6 +16,7 @@ export interface BookmarkBase {
   site?: string;
   favicon?: string;
   favorite: boolean;
+  domain: string | null;
 }
 
 export interface BookmarkRequest extends BookmarkBase {
@@ -51,6 +52,7 @@ export interface BookmarkMetaData {
   description: string;
   twitter?: string;
   icon?: string;
+  domain?: string;
   site?: string;
 }
 

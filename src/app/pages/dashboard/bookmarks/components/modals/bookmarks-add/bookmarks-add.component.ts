@@ -34,7 +34,14 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
   @ViewChild('bookmarkURL') bookmarkURLRef: ElementRef;
 
   bookmarkFormControls = {
-    url: new FormControl('', [Validators.required]),
+    url: new FormControl('', [
+      Validators.required,
+      Validators.pattern(
+        new RegExp(
+          /^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/g
+        )
+      ),
+    ]),
     name: new FormControl('', [Validators.required]),
     description: new FormControl('', [Validators.required]),
     site: new FormControl('', [Validators.required]),
@@ -127,25 +134,26 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
 
   private addBookmark(data: BookmarkMetaData) {
     const bookmarkData: BookmarkRequest = {
-      name: data?.title,
-      description: data?.description,
+      name: this.bookmarkFormControls.name.value,
+      description: this.bookmarkFormControls.description.value,
       image: data?.image,
-      site: data?.site,
+      site: this.bookmarkFormControls.site.value,
       favicon: data?.icon,
       url: this.bookmarkFormControls.url.value,
       folderId: this.ref.data.folder.id,
       favorite: false,
       metadata: null,
       private: true,
+      domain: data.domain,
       share: [],
     };
     if (this.ref.data.type === ModalOperationType.CREATE) {
       this.store.dispatch(new AddBookmark(bookmarkData));
     } else if (this.ref.data.type === ModalOperationType.UPDATE) {
       const bookmarkUpdatedData = {
-        name: data?.title,
-        description: data?.description,
-        site: data?.site,
+        name: this.bookmarkFormControls.name.value,
+        description: this.bookmarkFormControls.description.value,
+        site: this.bookmarkFormControls.site.value,
       };
       this.store.dispatch(
         new UpdateBookmark(this.ref.data.bookmark.id, bookmarkUpdatedData)

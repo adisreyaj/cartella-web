@@ -9,6 +9,9 @@
       <label for="url">Bookmark URL</label>
       <input type="url" name="url" id="url" autocomplete="off" [formControl]="bookmarkFormControls.url" #bookmarkURLRef
              [disabled]="(isLoading$ | async)">
+      <p class="text-red-500 text-xs absolute bottom-0"
+         *ngIf="bookmarkFormControls.url.touched && bookmarkFormControls.url.errors ">
+        Please enter a valid URL</p>
     </div>
     <section *ngIf="(metaData$ | async) as meta">
       <div class="form-group">

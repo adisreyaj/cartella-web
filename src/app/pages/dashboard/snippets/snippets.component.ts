@@ -20,7 +20,7 @@ import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
 } from './store/actions/snippets-folders.action';
-import { GetSnippets } from './store/actions/snippets.action';
+import { GetSnippets, SetActiveSnippet } from './store/actions/snippets.action';
 import { SnippetFolderState } from './store/states/snippet-folders.state';
 import { SnippetState } from './store/states/snippets.state';
 
@@ -75,6 +75,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   handleSelectFolder(folder: SnippetFolder) {
     if (folder) {
       this.store.dispatch(new SetActiveSnippetFolder(folder));
+      this.store.dispatch(new SetActiveSnippet(null));
       this.store.dispatch(new GetSnippets(folder.id));
     }
   }
@@ -109,6 +110,4 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new GetSnippetFolders());
     this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER));
   }
-
-  private updateSnippetAndFolderBasedOnSlug(slug: string) {}
 }

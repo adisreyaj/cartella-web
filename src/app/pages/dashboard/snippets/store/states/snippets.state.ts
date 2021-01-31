@@ -107,7 +107,7 @@ export class SnippetState {
         const allSnippetList = [...state.allSnippets];
         const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
         allSnippetList[snippetIndex] = result;
-        const shownSnippetList = [...state.allSnippets];
+        const shownSnippetList = [...state.snippetsShown];
         const shownSnippetIndex = shownSnippetList.findIndex(
           (item) => item.id === id
         );
