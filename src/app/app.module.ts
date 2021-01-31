@@ -21,6 +21,8 @@ import { BookmarkState } from './pages/dashboard/bookmarks/shared/store/states/b
 import { SnippetFolderState } from './pages/dashboard/snippets/store/states/snippet-folders.state';
 import { SnippetState } from './pages/dashboard/snippets/store/states/snippets.state';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 const tippyConfig: Partial<TippyConfig> = {
   defaultVariation: 'tooltip',
@@ -70,6 +72,7 @@ const firebaseConfig = {
       BookmarkFolderState,
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     // NgxsLoggerPluginModule.forRoot(),
   ],
   providers: [
