@@ -1,0 +1,17 @@
+@import '~tippy.js/dist/tippy.css';
+@import '~tippy.js/themes/light.css';
+@import '~tippy.js/animations/scale.css';
+
+.tippy-box[role='dropdown'] {
+  .tippy-content {
+    padding: 0;
+  }
+}
+
+.dropdown-item {
+  @apply px-4 py-2;
+  cursor: pointer;
+  &:hover {
+    background-color: var(--primary-10);
+  }
+}

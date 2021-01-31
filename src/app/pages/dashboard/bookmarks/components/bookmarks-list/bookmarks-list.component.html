@@ -1,0 +1,19 @@
+<div class="p-4">
+  <header class="flex justify-between items-center mb-8">
+    <div>
+      <p class="text-xl font-bold text-gray-700">Bookmarks</p>
+      <p class="text-sm text-gray-500">Manage your bookmarks</p>
+    </div>
+
+    <div>
+      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewBookmark()">Add
+        New</button>
+    </div>
+  </header>
+  <section class="bookmarks-grid grid gap-4">
+    <ng-container *ngFor="let bookmark of bookmarks">
+      <app-bookmarks-list-card [bookmark]="bookmark" (cardEvent)="handleCardEvent($event)">
+      </app-bookmarks-list-card>
+    </ng-container>
+  </section>
+</div>

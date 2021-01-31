@@ -1,0 +1,121 @@
+.form-group {
+  display: flex;
+  flex-direction: column;
+  @apply mb-4;
+  label {
+    @apply text-gray-500;
+    @apply mb-1;
+    @apply text-sm;
+  }
+
+  input[type='text'],
+  input[type='email'],
+  input[type='url'],
+  input[type='password'] {
+    @apply form-input;
+    @apply focus:ring-1;
+    @apply focus:ring-primary;
+    &:disabled {
+      @apply text-gray-400;
+    }
+  }
+
+  textarea {
+    @apply form-textarea;
+    @apply focus:ring-1;
+    @apply focus:ring-primary;
+    resize: none;
+    &:disabled {
+      @apply text-gray-400;
+    }
+  }
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    @apply text-primary;
+  }
+}
+
+.playground__footer {
+  .ng-select-container {
+    border: none;
+    border-radius: none;
+  }
+  .ng-dropdown-panel .ng-dropdown-panel-items {
+    max-height: 300px;
+  }
+
+  .ng-option,
+  .ng-value {
+    @apply text-sm;
+  }
+  .ng-dropdown-panel {
+    border-radius: 8px !important;
+    margin-bottom: 2px;
+  }
+
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:first-child {
+    border-top-right-radius: 8px !important;
+    border-top-left-radius: 8px !important;
+  }
+  .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:last-child {
+    border-bottom-right-radius: 8px !important;
+    border-bottom-left-radius: 8px !important;
+  }
+
+  &.material-darker,
+  &.material-palenight,
+  &.dracula,
+  &.one-dark {
+    .ng-option,
+    .ng-value,
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+      @apply text-gray-400;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
+      @apply bg-gray-700;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-selected {
+      color: #fff;
+    }
+    .ng-dropdown-panel {
+      border: none;
+    }
+  }
+  &.material-darker {
+    .ng-select-container,
+    .ng-dropdown-panel {
+      background-color: #212121;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+      background-color: darken(#212121, 3%);
+    }
+  }
+  &.material-palenight {
+    .ng-select-container,
+    .ng-dropdown-panel {
+      background-color: #292d3e;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+      background-color: darken(#292d3e, 3%);
+    }
+  }
+  &.dracula {
+    .ng-select-container,
+    .ng-dropdown-panel {
+      background-color: #282a36;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+      background-color: darken(#282a36, 3%);
+    }
+  }
+  &.one-dark {
+    .ng-select-container,
+    .ng-dropdown-panel {
+      background-color: #282c34;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
+      background-color: darken(#282c34, 3%);
+    }
+  }
+}

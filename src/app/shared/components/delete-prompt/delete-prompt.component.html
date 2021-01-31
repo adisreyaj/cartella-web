@@ -1,0 +1,17 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold">
+      Are you sure you want to delete?
+    </p>
+  </header>
+  <section class="w-100">
+    <div>
+      <rmx-icon name="error-warning-line" class="text-red-500 icon-3xl"></rmx-icon>
+    </div>
+    <p class="mt-2 text-gray-500 text-sm">This will permanently delete the item. Do you want to continue?</p>
+  </section>
+  <footer class="flex justify-end mt-6">
+    <button dialogClose secondaryButton class="mr-2">Cancel</button>
+    <button [dialogClose]="true" primaryButton type="warn">Delete</button>
+  </footer>
+</div>

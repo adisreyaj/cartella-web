@@ -1,0 +1,42 @@
+<div class="explorer-sidebar w-full py-4 ">
+  <section>
+    <header class="mb-4 text-gray-500 px-4">
+      <h4 class="text-sm">Library</h4>
+    </header>
+    <ul>
+      <li class="explorer-sidebar__item flex items-center mb-3" [class.active]="activeFolder?.id === 'all'"
+          (click)="handleSelectFolder({id: 'all'})">
+        <rmx-icon name="folders-line" class="mr-2 icon-lg"></rmx-icon>
+        <p>All {{type | titlecase}}</p>
+      </li>
+      <li class="explorer-sidebar__item flex items-center" [class.active]="activeFolder?.id === 'starred'"
+          (click)="handleSelectFolder({id:'starred'})">
+        <rmx-icon name="star-line" class="mr-2 icon-lg"></rmx-icon>
+        <p>Starred</p>
+      </li>
+    </ul>
+  </section>
+  <section class="mt-6">
+    <header class="flex justify-between items-center mb-4 px-4 text-gray-500">
+      <h4 class="text-sm">Folders</h4>
+      <button (click)="handleCreateFolder()" class="default-ring rounded-full hover:text-primary"
+              tippy="Create new folder">
+        <rmx-icon name="add-circle-line" class="icon-sm"></rmx-icon>
+      </button>
+    </header>
+    <ul>
+      <ng-container *ngFor="let folder of folders">
+        <li class="explorer-sidebar__item user-item" (click)="handleSelectFolder(folder)"
+            [class.active]="activeFolder?.id === folder?.id" appHovered>
+          <span class="line-clamp-2">
+            {{folder?.name}}
+          </span>
+          <button (click)="handleEditFolder(folder);$event.stopPropagation()" class="edit-button default-ring rounded-full text-gray-500 p-1 hover:bg-gray-300 hover:text-primary
+            opacity-0 duration-75 transition-opacity" tippy="Edit folder">
+            <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
+          </button>
+        </li>
+      </ng-container>
+    </ul>
+  </section>
+</div>

@@ -1,0 +1,29 @@
+.bookmarks-grid {
+  grid-template-columns: 1fr;
+}
+
+@media screen and (min-width: 600px) {
+  .bookmarks-grid {
+    grid-template-columns: repeat(2, minmax(250px, 280px));
+  }
+}
+@media screen and (min-width: 960px) {
+  .bookmarks-grid {
+    grid-template-columns: repeat(3, minmax(250px, 280px));
+  }
+}
+@media screen and (min-width: 1280px) {
+  .bookmarks-grid {
+    grid-template-columns: repeat(4, minmax(250px, 280px));
+  }
+}
+@media screen and (min-width: 1600px) {
+  .bookmarks-grid {
+    grid-template-columns: repeat(5, minmax(250px, 280px));
+  }
+}
+@media screen and (min-width: 1900px) {
+  .bookmarks-grid {
+    grid-template-columns: repeat(6, minmax(250px, 280px));
+  }
+}

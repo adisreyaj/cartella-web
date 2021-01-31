@@ -1,0 +1,24 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+@import './styles/partials/colors';
+@import './styles/partials/dimensions';
+@import './styles/components/index';
+
+@import '../node_modules/codemirror/lib/codemirror.css';
+
+@import '~@ng-select/ng-select/themes/default.theme.css';
+@import '~ngx-toastr/toastr';
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a {
+  cursor: pointer;
+  &:focus {
+    outline: none;
+  }
+}

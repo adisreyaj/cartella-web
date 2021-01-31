@@ -1,0 +1,46 @@
+:host {
+  height: calc(100vh - var(--header-height));
+  @apply bg-gray-50;
+  display: flex;
+  flex-direction: column;
+  @apply rounded-tl-lg;
+  position: relative;
+}
+
+.snippets-sidebar {
+  &__list {
+    &-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      @apply px-4;
+      @apply py-2;
+      @apply text-sm;
+      @apply relative;
+      @apply cursor-pointer;
+      &:hover {
+        background-color: var(--primary-10);
+      }
+      &.active {
+        @apply font-medium;
+        @apply text-primary;
+        background-color: var(--primary-10);
+        &::before {
+          @apply bg-primary;
+          content: '';
+          position: absolute;
+          width: 2px;
+          height: 100%;
+          left: 0px;
+          top: 0;
+        }
+      }
+      &.hovered,
+      &:focus-within {
+        .favorite-button {
+          opacity: 1;
+        }
+      }
+    }
+  }
+}

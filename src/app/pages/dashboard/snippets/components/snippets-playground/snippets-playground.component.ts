@@ -1,0 +1,275 @@
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
+import { FormControl } from '@angular/forms';
+import {
+  DEFAULT_EDITOR_OPTIONS,
+  LANGUAGES_SUPPORTED,
+  THEMES_SUPPORTED,
+} from '@app/config/snippets.config';
+import { Technology } from '@app/interfaces/technology.interface';
+import { EditorThemeService } from '@app/services/theme/editor-theme.service';
+import emmet from '@emmetio/codemirror-plugin';
+import { DialogService } from '@ngneat/dialog';
+import { Store } from '@ngxs/store';
+import codemirror from 'codemirror';
+import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/scroll/simplescrollbars';
+import 'codemirror/mode/css/css';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/sass/sass';
+import 'codemirror/mode/shell/shell';
+import { BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import * as screenfull from 'screenfull';
+import { SubSink } from 'subsink';
+import { Snippet } from '../../interfaces/snippets.interface';
+import { CodeEditorService } from '../../services/code-editor/code-editor.service';
+import { SnippetsService } from '../../services/snippet/snippets.service';
+import { DeleteSnippet } from '../../store/actions/snippets.action';
+import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
+
+@Component({
+  selector: 'app-snippets-playground',
+  templateUrl: './snippets-playground.component.html',
+  styleUrls: ['./snippets-playground.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class SnippetsPlaygroundComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+  @Input() activeSnippet: Snippet;
+  @Input() technologies: Technology[] = [];
+
+  @ViewChild('editor', { static: true }) editorRef: ElementRef;
+  @ViewChild('playground') playgroundRef: ElementRef;
+  @ViewChild('snippetNameRef') snippetNameRef: ElementRef;
+
+  availableLanguages = LANGUAGES_SUPPORTED;
+  availableThemes = THEMES_SUPPORTED;
+  editor: codemirror.EditorFromTextArea;
+  languageFormControl = new FormControl('javascript');
+  themeFormControl = new FormControl(
+    localStorage.getItem('editor-theme') ?? 'one-light'
+  );
+  fullScreen$ = new BehaviorSubject(false);
+
+  snippetNameFormControl = new FormControl('');
+  private subs = new SubSink();
+  constructor(
+    private editorThemeService: EditorThemeService,
+    private snippetService: SnippetsService,
+    private renderer: Renderer2,
+    private dialog: DialogService,
+    private store: Store,
+    private codeEditorService: CodeEditorService
+  ) {}
+
+  ngOnInit(): void {
+    emmet(codemirror);
+  }
+
+  ngAfterViewInit(): void {
+    this.initializeEditor();
+    this.listenToLanguageChanges();
+    this.listenToThemeChanges();
+    this.listenToSnippetChanges();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.prototype.hasOwnProperty.call(changes, 'activeSnippet')) {
+      const data: Snippet = changes.activeSnippet.currentValue;
+      if (data) {
+        this.activeSnippet = data;
+        if (this.editor) {
+          const {
+            code,
+            technology: { name: technologyName, mode, id },
+            name,
+          } = data;
+          this.setEditorValue(code);
+          this.setSnippetName(name);
+          this.languageFormControl.setValue(id);
+        }
+      }
+    }
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+    (screenfull as screenfull.Screenfull).off(
+      'change',
+      this.handleFullscreenChange
+    );
+  }
+
+  get currentCode() {
+    if (this.editor) {
+      return this.editor.getValue();
+    }
+    return '';
+  }
+
+  save() {
+    if (this.editor && this.activeSnippet) {
+      this.snippetService
+        .updateSnippet(this.activeSnippet.id, {
+          code: this.editor.getValue(),
+          technologyId: this.languageFormControl.value,
+        })
+        .subscribe();
+    }
+  }
+
+  delete() {
+    if (this.editor && this.activeSnippet) {
+      this.store.dispatch(new DeleteSnippet(this.activeSnippet.id));
+    }
+  }
+
+  exportAsImage() {
+    const dialogRef = this.dialog.open(SnippetsScreenshotComponent, {
+      size: 'lg',
+      minHeight: 'auto',
+      data: {
+        name: this.snippetNameFormControl.value,
+        code: this.editor.getValue(),
+        language: this.technologies.find(
+          ({ id }) => id === this.languageFormControl.value
+        ),
+        theme: this.themeFormControl.value,
+      },
+    });
+  }
+
+  updateSnippetName() {
+    if (this.snippetNameRef) {
+      const element = this.snippetNameRef.nativeElement;
+      if (element.value.trim() === '') {
+        element.focus();
+        element.value = 'Untitled Snippet';
+      } else {
+        if (element.value.trim() !== this.activeSnippet.name) {
+          this.snippetService.updateSnippet(this.activeSnippet.id, {
+            name: element?.value?.trim() ?? 'Untitled Snippet',
+          });
+        }
+      }
+    }
+  }
+
+  toggleFullScreen() {
+    const fullScreen = screenfull as screenfull.Screenfull;
+    if (screenfull.isEnabled) {
+      screenfull.toggle();
+    }
+    fullScreen.on('change', this.handleFullscreenChange);
+  }
+
+  private listenToSnippetChanges() {}
+
+  private handleFullscreenChange = () => {
+    if ((screenfull as screenfull.Screenfull).isFullscreen) {
+      this.fullScreen$.next(true);
+      this.enableEditorFullScreen();
+    } else {
+      this.fullScreen$.next(false);
+      this.disableEditorFullScreen();
+    }
+  };
+
+  private enableEditorFullScreen() {
+    if (this.playgroundRef) {
+      this.renderer.addClass(
+        this.playgroundRef.nativeElement,
+        'playground--fullscreen'
+      );
+    }
+  }
+
+  private disableEditorFullScreen() {
+    if (this.playgroundRef) {
+      this.renderer.removeClass(
+        this.playgroundRef.nativeElement,
+        'playground--fullscreen'
+      );
+    }
+  }
+
+  private setSnippetName(name: string) {
+    this.snippetNameFormControl.setValue(name);
+  }
+  private setEditorValue(value: string) {
+    if (this.editor) {
+      this.editor.setValue(value);
+    }
+  }
+
+  private setEditorTheme(theme: string) {
+    if (this.editor) {
+      this.editor.setOption('theme', theme);
+    }
+  }
+  private setEditorMode(mode: string) {
+    if (this.editor) {
+      this.editor.setOption('mode', mode);
+    }
+  }
+  private listenToLanguageChanges() {
+    this.subs.add(
+      this.languageFormControl.valueChanges
+        .pipe(
+          tap((lng) => {
+            if (this.editor && lng) {
+              const technology = this.technologies.find(({ id }) => id === lng);
+              if (technology) {
+                this.setEditorMode(technology.mode);
+              }
+            }
+          })
+        )
+        .subscribe()
+    );
+  }
+  private listenToThemeChanges() {
+    this.subs.add(
+      this.themeFormControl.valueChanges
+        .pipe(
+          tap((theme) => {
+            if (this.editor && theme) {
+              localStorage.setItem('editor-theme', theme);
+              this.editorThemeService.loadTheme(theme);
+              this.setEditorTheme(theme);
+            }
+          })
+        )
+        .subscribe()
+    );
+  }
+  private initializeEditor() {
+    this.codeEditorService.injectCustomScripts();
+    if (this.editorRef) {
+      this.editor = codemirror.fromTextArea(this.editorRef.nativeElement, {
+        ...DEFAULT_EDITOR_OPTIONS,
+        scrollbarStyle: 'overlay',
+        theme: localStorage.getItem('editor-theme') ?? 'one-light',
+      });
+      // fromEvent<[codemirror.Editor, {}]>(this.editor, 'change').pipe(
+      //   map(([instance]) => instance),
+      //   debounceTime(200)
+      // );
+    }
+  }
+}

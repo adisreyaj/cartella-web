@@ -1,0 +1,15 @@
+.cartella-dialog {
+  max-height: 90vh;
+  overflow-y: auto;
+  .ngneat-dialog-backdrop {
+    .ngneat-dialog-content {
+      @apply rounded-md;
+      max-height: 85vh;
+      overflow-y: auto;
+      .ngneat-close-dialog {
+        @apply text-gray-700;
+        @apply hover:text-primary;
+      }
+    }
+  }
+}

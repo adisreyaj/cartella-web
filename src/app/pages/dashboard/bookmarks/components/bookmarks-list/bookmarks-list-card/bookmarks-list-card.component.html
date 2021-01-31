@@ -1,0 +1,46 @@
+<div class="flex flex-col p-2 rounded-md border border-gray-200 shadow-sm bg-white relative">
+  <div class="absolute right-2 top-2 w-full rounded-sm" [style.height.px]="150"
+       [style.background]="'linear-gradient(-134deg, rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.35) 7%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 61%,rgba(0,0,0,0) 100%)'">
+  </div>
+  <button class="absolute rounded-lg bg-white p-1 focus:outline-none cursor-pointer" style="top: 2px;right: 2px;"
+          tippy="Toggle Favorite" (click)="handleFavoriteToggle(bookmark)">
+    <rmx-icon [name]="bookmark?.favorite ? 'star-fill' : 'star-line'" class="icon-md text-gray-500"
+              [class.text-primary]="bookmark?.favorite"></rmx-icon>
+  </button>
+  <img [src]="bookmark?.image" default="../../../../../../../assets/images/bookmark-placeholder.svg"
+       style="height: 150px;" class="mb-3 object-cover rounded-sm">
+  <div>
+    <p class="line-clamp-2 text-sm font-semibold mb-2" [style.minHeight.px]="37">{{bookmark?.name}}</p>
+    <p class="line-clamp-2 text-xs to-gray-500 mb-2" [style.minHeight.px]="35">{{bookmark?.description}}</p>
+  </div>
+  <section>
+    <div class="flex space-x-2">
+      <img [src]="bookmark?.favicon" default="../../../../../../../assets/images/cartella.svg"
+           [alt]="bookmark?.site || 'n/a'" height="20px" width="20px" class="rounded-full">
+      <p class="text-xs to-gray-400">{{bookmark?.site ? bookmark?.site : 'n/a' }}</p>
+    </div>
+  </section>
+  <footer class="flex items-center justify-between mt-3 pb-1">
+    <div class="flex items-center">
+      <rmx-icon name="time-line" class="icon-xs mr-1 text-gray-500"></rmx-icon>
+      <p class="text-xs text-gray-500">{{bookmark.updatedAt | date: 'MMM d'}}</p>
+    </div>
+    <div class="flex items-center">
+      <div class="dropdown relative">
+      </div>
+      <button secondaryButton size="sm" class="mr-2" [tippy]="cardOptions" placement="bottom-start"
+              variation="menu">More</button>
+      <a primaryButton size="sm" [href]="bookmark?.url" target="_blank" rel="noopener noreferrer">View</a>
+    </div>
+  </footer>
+</div>
+
+
+<ng-template #cardOptions let-hide>
+  <div class="flex flex-col w-36">
+    <div class="dropdown-item" (click)="handleShare(bookmark);hide()">Share</div>
+    <div class="dropdown-item" (click)="handleCopyToClipboard(bookmark);hide()">Copy Link</div>
+    <div class="dropdown-item" (click)="handleEdit(bookmark);hide()">Edit</div>
+    <div class="dropdown-item text-red-600" (click)="handleDelete(bookmark);hide()">Delete</div>
+  </div>
+</ng-template>

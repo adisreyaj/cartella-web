@@ -1,0 +1,22 @@
+.social-signin {
+  button {
+    display: grid;
+    place-items: center;
+    gap: 0.5rem;
+    grid-template-columns: 40px 1fr;
+    @apply bg-gray-50;
+    @apply p-2;
+    @apply rounded-md;
+    @apply focus:outline-none;
+    @apply focus:ring-1;
+    @apply focus:ring-primary;
+    img {
+      width: 30px;
+      height: 30px;
+    }
+    p {
+      @apply text-sm;
+    }
+    @apply hover:bg-gray-100;
+  }
+}

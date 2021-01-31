@@ -1,0 +1,63 @@
+<header class="bg-gray-50 rounded-tl-lg">
+  <div class="relative">
+    <div class="absolute h-full grid items-center left-2">
+      <rmx-icon name="search-line" class="icon-sm"></rmx-icon>
+    </div>
+    <input class="w-full pl-8 py-2 focus:outline-none bg-transparent rounded-tl-lg" type="text" name="search"
+           id="search" placeholder="Search snippets" #searchRef>
+  </div>
+  <div></div>
+</header>
+<section class="snippets-sidebar__list relative overflow-y-auto">
+  <ng-container *ngIf="(snippetsToShow$ | async) as snippets">
+    <ul *ngIf="snippets?.length > 0;else noSnippets" role="list">
+      <ng-container *ngFor="let snippet of snippets">
+        <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
+            (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id" appHovered
+            role="listitem" #snippetListItem>
+          <div>
+            <p class="mb-1">{{snippet?.name}}</p>
+            <div class="flex items-center">
+              <img class="w-4 h-4 mr-1 rounded-md" [src]="snippet?.technology?.icon" [alt]="snippet?.technology?.name">
+              <p class="text-xs text-gray-500">{{snippet?.technology?.name}}</p>
+            </div>
+          </div>
+          <div class="flex flex-col justify-center items-end">
+            <button (click)="toggleFavorite(snippet);$event.stopPropagation()"
+                    class="favorite-button opacity-0 duration-75 transition-opacity default-ring rounded-full">
+              <rmx-icon [name]="snippet?.favorite ? 'star-fill':'star-line'" class="icon-md text-gray-400"
+                        [class.text-primary]="snippet?.favorite">
+              </rmx-icon>
+            </button>
+            <p class="text-xs text-gray-400 mt-2">{{snippet?.updatedAt | timeAgo}}</p>
+          </div>
+        </li>
+      </ng-container>
+    </ul>
+  </ng-container>
+  <ng-template #noSnippets>
+    <div class="grid place-items-center mt-10">
+      <img src="../../../../../../assets/images/add-file.svg" alt="Add Snippet" height="150px" width="150px">
+      <p class="text-sm text-gray-400 mt-6">No Snippets found</p>
+    </div>
+  </ng-template>
+</section>
+<div class="absolute bottom-4 right-4">
+  <button iconButton class="flex items-center justify-center rounded-full h-12 w-12 shadow-2xl focus:outline-none"
+          [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)" tippy="Create new snippet"
+          [tippy]="createSnippetSelector" placement="top-start" variation="menu">
+    <rmx-icon name="add-line" class="icon-xl"></rmx-icon>
+  </button>
+</div>
+
+
+<ng-template #createSnippetSelector let-hide>
+  <div class="flex flex-col w-44">
+    <ng-container *ngFor="let technology of technologies$ | async">
+      <div class="dropdown-item flex space-x-2" (click)="createNewSnippet(technology?.id);hide()">
+        <img [src]="technology?.icon" [alt]="technology?.name" height="20px" width="20px" class="rounded-lg">
+        <p class="text-sm">{{technology?.name}}</p>
+      </div>
+    </ng-container>
+  </div>
+</ng-template>

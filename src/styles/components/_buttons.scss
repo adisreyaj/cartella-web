@@ -1,0 +1,15 @@
+@mixin defaultRing() {
+  @apply focus:outline-none;
+  @apply focus:ring-2;
+  @apply focus:ring-primary;
+  @apply focus:ring-offset-1;
+}
+
+button:not(.bg-none):disabled {
+  background-color: lighten(#3d29bd, 20) !important;
+  cursor: not-allowed;
+}
+
+.default-ring {
+  @include defaultRing();
+}

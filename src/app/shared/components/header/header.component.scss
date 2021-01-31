@@ -1,0 +1,41 @@
+@mixin link-active() {
+  content: '';
+  width: 100%;
+  height: 4px;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+}
+
+header {
+  height: var(--header-height);
+  nav {
+    a {
+      @apply px-4;
+      position: relative;
+      &.active {
+        @apply text-primary;
+        background: var(--primary-10);
+        &:after {
+          @apply bg-primary;
+          @include link-active();
+        }
+      }
+      &:not(.active):focus {
+        @apply text-gray-800;
+        @apply bg-gray-100;
+        &:after {
+          @apply bg-gray-600;
+          @include link-active();
+        }
+      }
+    }
+  }
+
+  .dropdown {
+    &-item {
+      @apply py-2;
+      cursor: pointer;
+    }
+  }
+}
