@@ -8,6 +8,7 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
+import { Store } from '@ngxs/store';
 import { EMPTY } from 'rxjs';
 import { switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
@@ -19,6 +20,10 @@ import {
   BookmarkFolder,
 } from '../../shared/interfaces/bookmarks.interface';
 import { BookmarksService } from '../../shared/services/bookmarks.service';
+import {
+  DeleteBookmark,
+  UpdateBookmark,
+} from '../../shared/store/actions/bookmarks.action';
 import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.component';
 
 @Component({
@@ -36,7 +41,8 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   constructor(
     private bookmarkService: BookmarksService,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {}
@@ -71,9 +77,11 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   handleCardEvent(event: BookmarkCardEvent) {
     switch (event.type) {
       case BookmarkCardEventType.favorite:
-        this.bookmarkService.updateBookmark(event.bookmark.id, {
-          favorite: !event.bookmark?.favorite,
-        });
+        this.store.dispatch(
+          new UpdateBookmark(event.bookmark.id, {
+            favorite: !event.bookmark?.favorite,
+          })
+        );
         break;
       case BookmarkCardEventType.edit:
         break;
@@ -98,7 +106,7 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
         .pipe(
           tap((response) => {
             if (response) {
-              this.bookmarkService.deleteBookmark(bookmark.id);
+              this.store.dispatch(new DeleteBookmark(bookmark.id));
             }
           })
         )
