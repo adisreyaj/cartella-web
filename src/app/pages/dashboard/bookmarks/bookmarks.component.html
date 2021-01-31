@@ -5,7 +5,7 @@
                           (folderSelected)="handleSelectFolder($event)">
     </app-explorer-sidebar>
   </aside>
-  <main>
+  <main class="bookmarks__main overflow-y-auto">
     <app-bookmarks-list [user]="user" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
                         [bookmarks]="bookmarksShown$ | async">
     </app-bookmarks-list>

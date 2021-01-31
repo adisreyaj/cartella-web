@@ -10,10 +10,22 @@
         New</button>
     </div>
   </header>
-  <section class="bookmarks-grid grid gap-4">
-    <ng-container *ngFor="let bookmark of bookmarks">
-      <app-bookmarks-list-card [bookmark]="bookmark" (cardEvent)="handleCardEvent($event)">
-      </app-bookmarks-list-card>
-    </ng-container>
-  </section>
+  <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
+    <section class="bookmarks-grid grid gap-4">
+      <ng-container *ngFor="let bookmark of bookmarks">
+        <app-bookmarks-list-card [bookmark]="bookmark" (cardEvent)="handleCardEvent($event)">
+        </app-bookmarks-list-card>
+      </ng-container>
+    </section>
+  </ng-container>
 </div>
+
+
+<ng-template #noBookmarks>
+  <div class="grid place-items-center">
+    <div class="flex flex-col items-center justify-center">
+      <img src="../../../../../../assets/images/add-file.svg" alt="No Bookmarks" class="" height="100px" width="100px">
+      <p class="text-sm text-gray-500 mt-4">No Bookmarks Found!</p>
+    </div>
+  </div>
+</ng-template>
