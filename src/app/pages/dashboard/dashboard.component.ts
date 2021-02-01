@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit {
         this.router.navigate(['/auth/login']);
       } else {
         res.subscribe((user) => {
-          console.log(user);
           this.auth.setLoggedInUser(user as any);
         });
       }

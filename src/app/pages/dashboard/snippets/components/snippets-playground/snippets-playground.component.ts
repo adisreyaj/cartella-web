@@ -23,18 +23,9 @@ import emmet from '@emmetio/codemirror-plugin';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/addon/scroll/simplescrollbars';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/mode/javascript/javascript';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/sass/sass';
-import 'codemirror/mode/shell/shell';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import * as screenfull from 'screenfull';
+import screenfull from 'screenfull';
 import { SubSink } from 'subsink';
 import { Snippet } from '../../interfaces/snippets.interface';
 import { CodeEditorService } from '../../services/code-editor/code-editor.service';
@@ -280,13 +271,8 @@ export class SnippetsPlaygroundComponent
     if (this.editorRef) {
       this.editor = codemirror.fromTextArea(this.editorRef.nativeElement, {
         ...DEFAULT_EDITOR_OPTIONS,
-        scrollbarStyle: 'overlay',
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
-      // fromEvent<[codemirror.Editor, {}]>(this.editor, 'change').pipe(
-      //   map(([instance]) => instance),
-      //   debounceTime(200)
-      // );
     }
   }
 }
