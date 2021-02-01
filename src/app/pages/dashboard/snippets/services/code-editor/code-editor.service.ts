@@ -72,11 +72,11 @@ export class CodeEditorService {
   }
 
   injectCustomScripts() {
-    scripts.forEach((item) => {
-      let script = this.renderer.createElement('script');
-      script.src = item.path;
-      script.async = false;
-      this.renderer.appendChild(this.document.body, script);
-    });
+    // scripts.forEach((item) => {
+    //   let script = this.renderer.createElement('script');
+    //   script.src = item.path;
+    //   script.async = false;
+    //   this.renderer.appendChild(this.document.body, script);
+    // });
   }
 }
