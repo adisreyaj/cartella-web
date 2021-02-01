@@ -22,6 +22,7 @@
       "resources": {
         "files": [
           "/assets/**",
+          "/styles/themes/*.css",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
@@ -31,7 +32,7 @@
     {
       "name": "technologies",
       "urls": [
-        "/api/technologies"
+        "*/api/technologies"
       ],
       "version": 1,
       "cacheConfig": {

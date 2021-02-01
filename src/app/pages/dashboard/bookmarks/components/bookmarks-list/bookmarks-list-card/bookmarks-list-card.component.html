@@ -1,7 +1,4 @@
 <div class="flex flex-col p-2 rounded-md border border-gray-200 shadow-sm bg-white relative">
-  <div class="absolute right-2 top-2 w-full rounded-sm" [style.height.px]="150"
-       [style.background]="'linear-gradient(-134deg, rgba(0,0,0,0.45) 0%,rgba(0,0,0,0.35) 7%,rgba(0,0,0,0) 18%,rgba(0,0,0,0) 61%,rgba(0,0,0,0) 100%)'">
-  </div>
   <button class="absolute rounded-lg bg-white p-1 focus:outline-none cursor-pointer" style="top: 2px;right: 2px;"
           tippy="Toggle Favorite" (click)="handleFavoriteToggle(bookmark)">
     <rmx-icon [name]="bookmark?.favorite ? 'star-fill' : 'star-line'" class="icon-md text-gray-500"

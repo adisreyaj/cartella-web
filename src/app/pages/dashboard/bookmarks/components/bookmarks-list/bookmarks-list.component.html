@@ -1,10 +1,9 @@
-<div class="p-4">
+<div class="p-4 h-full flex flex-col">
   <header class="flex justify-between items-center mb-8">
     <div>
       <p class="text-xl font-bold text-gray-700">Bookmarks</p>
       <p class="text-sm text-gray-500">Manage your bookmarks</p>
     </div>
-
     <div>
       <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewBookmark()">Add
         New</button>
@@ -22,9 +21,9 @@
 
 
 <ng-template #noBookmarks>
-  <div class="grid place-items-center">
+  <div class="grid place-items-center flex-1">
     <div class="flex flex-col items-center justify-center">
-      <img src="../../../../../../assets/images/add-file.svg" alt="No Bookmarks" class="" height="100px" width="100px">
+      <img src="../../../../../../assets/images/add-file.svg" alt="No Bookmarks" class="" height="150px" width="150px">
       <p class="text-sm text-gray-500 mt-4">No Bookmarks Found!</p>
     </div>
   </div>

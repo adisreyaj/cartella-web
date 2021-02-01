@@ -15,7 +15,6 @@ import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
-  LANGUAGES_SUPPORTED,
   THEMES_SUPPORTED,
 } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
@@ -61,7 +60,6 @@ export class SnippetsPlaygroundComponent
   @ViewChild('playground') playgroundRef: ElementRef;
   @ViewChild('snippetNameRef') snippetNameRef: ElementRef;
 
-  availableLanguages = LANGUAGES_SUPPORTED;
   availableThemes = THEMES_SUPPORTED;
   editor: codemirror.EditorFromTextArea;
   languageFormControl = new FormControl('javascript');
