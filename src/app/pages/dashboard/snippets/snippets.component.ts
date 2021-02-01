@@ -15,7 +15,7 @@ import { Observable } from 'rxjs';
 import { SubSink } from 'subsink';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import { Snippet, SnippetFolder } from './interfaces/snippets.interface';
-import { SnippetsService } from './services/snippet/snippets.service';
+import { CodeEditorService } from './services/code-editor/code-editor.service';
 import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
@@ -23,7 +23,6 @@ import {
 import { GetSnippets, SetActiveSnippet } from './store/actions/snippets.action';
 import { SnippetFolderState } from './store/states/snippet-folders.state';
 import { SnippetState } from './store/states/snippets.state';
-
 @Component({
   selector: 'app-snippets',
   templateUrl: './snippets.component.html',
@@ -54,7 +53,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   technologies$: Observable<Technology[]>;
 
   constructor(
-    private snippetService: SnippetsService,
+    private editorService: CodeEditorService,
     private activatedRoute: ActivatedRoute,
     private store: Store,
     private dialog: DialogService
@@ -63,6 +62,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getSnippetFolders();
     this.getSnippets();
+    this.editorService.injectCustomScripts();
   }
   ngOnDestroy() {
     this.subs.unsubscribe();

@@ -15,7 +15,6 @@ import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
-  LANGUAGES_SUPPORTED,
   THEMES_SUPPORTED,
 } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
@@ -25,17 +24,23 @@ import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
+import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/scroll/simplescrollbars';
-import 'codemirror/mode/css/css';
+import 'codemirror/keymap/sublime';
+import 'codemirror/mode/css/css.js';
+import 'codemirror/mode/dart/dart';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/jsx/jsx';
 import 'codemirror/mode/markdown/markdown';
 import 'codemirror/mode/python/python';
 import 'codemirror/mode/sass/sass';
 import 'codemirror/mode/shell/shell';
+import 'codemirror/mode/vue/vue';
+import 'codemirror/mode/yaml/yaml';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import * as screenfull from 'screenfull';
+import screenfull from 'screenfull';
 import { SubSink } from 'subsink';
 import { Snippet } from '../../interfaces/snippets.interface';
 import { CodeEditorService } from '../../services/code-editor/code-editor.service';
@@ -61,7 +66,6 @@ export class SnippetsPlaygroundComponent
   @ViewChild('playground') playgroundRef: ElementRef;
   @ViewChild('snippetNameRef') snippetNameRef: ElementRef;
 
-  availableLanguages = LANGUAGES_SUPPORTED;
   availableThemes = THEMES_SUPPORTED;
   editor: codemirror.EditorFromTextArea;
   languageFormControl = new FormControl('javascript');
@@ -282,13 +286,8 @@ export class SnippetsPlaygroundComponent
     if (this.editorRef) {
       this.editor = codemirror.fromTextArea(this.editorRef.nativeElement, {
         ...DEFAULT_EDITOR_OPTIONS,
-        scrollbarStyle: 'overlay',
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
-      // fromEvent<[codemirror.Editor, {}]>(this.editor, 'change').pipe(
-      //   map(([instance]) => instance),
-      //   debounceTime(200)
-      // );
     }
   }
 }

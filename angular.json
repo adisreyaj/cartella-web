@@ -26,7 +26,8 @@
             "assets": [
               "src/assets/icons",
               "src/assets/images",
-              "src/vendors/codemirror/scrollbar.js",
+              "src/manifest.webmanifest",
+              "src/vendors",
               {
                 "glob": "**/*.css",
                 "input": "node_modules/codemirror/theme/",
@@ -41,7 +42,6 @@
             },
             "styles": [
               "src/styles.scss",
-              "src/vendors/codemirror/scrollbar.css",
               {
                 "input": "src/styles/themes/one-light.css",
                 "bundleName": "assets/styles/themes/one-light",
