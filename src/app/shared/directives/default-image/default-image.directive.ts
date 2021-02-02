@@ -5,17 +5,15 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
   host: {
     '(load)': 'loadImage()',
     '(error)': 'loadDefault()',
+    '[src]': 'src',
   },
 })
 export class DefaultImageDirective implements OnInit {
   @Input() src: string;
   @Input() default: string;
-  @Input() loader: string;
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
-  ngOnInit() {
-    this.renderer.setAttribute(this.el.nativeElement, 'src', this.loader);
-  }
+  ngOnInit() {}
 
   loadDefault() {
     this.renderer.setAttribute(this.el.nativeElement, 'src', this.default);
