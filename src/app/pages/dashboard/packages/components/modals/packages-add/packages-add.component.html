@@ -1,0 +1,45 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold">
+      Add a package
+    </p>
+  </header>
+  <form class="w-100">
+    <div class="form-group relative">
+      <label for="name">Folder Name</label>
+      <input type="text" name="name" id="name" autocomplete="off" [formControl]="packageName" #packageNameRef="tippy"
+             [tippy]="suggestions" placement="bottom-start" variation="menu" [zIndex]="9999999">
+      <img *ngIf="searchSuggestionsLoading$ | async" src="../../../../../assets/images/loading.svg" alt="loading"
+           class="absolute right-2 bottom-2" style="height: 25px;width: 25px;">
+    </div>
+  </form>
+  <footer class="flex justify-end mt-6">
+    <button dialogClose secondaryButton class="mr-2">Cancel</button>
+    <button primaryButton [disabled]="packageName.invalid || (saving$ | async)" (click)="addPackage()">
+      <ng-container *ngIf="saving$ | async">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             style="margin:auto;background:0 0; margin-right: 0.3rem;height: 24px;width: 24px;" width="200" height="200"
+             viewBox="0 0 100 100" preserveAspectRatio="xMidYMid" display="block">
+          <circle cx="50" cy="50" r="32" stroke-width="8" stroke="#fff"
+                  stroke-dasharray="50.26548245743669 50.26548245743669" fill="none" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" keyTimes="0;1"
+                              values="0 50 50;360 50 50" />
+          </circle>
+        </svg>
+      </ng-container>
+      Add Package
+    </button>
+  </footer>
+</div>
+
+
+<ng-template #suggestions let-hide>
+  <div *ngIf="searchSuggestions$ | async as searchSuggestions" class="flex flex-col overflow-y-auto"
+       [style.maxHeight.px]="350">
+    <div *ngFor="let suggestion of searchSuggestions" (click)="selectFromSuggestion(suggestion);hide()"
+         class="px-2 py-1 hover:bg-primary-10 cursor-pointer">
+      <p class="font-semibold line-clamp-1 text-gray-800">{{suggestion?.name}}</p>
+      <p class="line-clamp-1 text-gray-500 text-xs">{{suggestion?.description}}</p>
+    </div>
+  </div>
+</ng-template>

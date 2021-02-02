@@ -1,0 +1,18 @@
+<div class="p-4">
+  <header class="flex justify-between items-center mb-8">
+    <div>
+      <p class="text-xl font-bold text-gray-700">Packages</p>
+      <p class="text-sm text-gray-500">Manage your saved packages</p>
+    </div>
+    <div>
+      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewPackage()">Add
+        New</button>
+    </div>
+  </header>
+  <section class="packages-grid grid gap-4">
+    <ng-container *ngFor="let package of packages">
+      <app-packages-list-card [package]="package" (cardEvent)="handleCardEvent($event)">
+      </app-packages-list-card>
+    </ng-container>
+  </section>
+</div>

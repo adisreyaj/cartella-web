@@ -1,0 +1,12 @@
+<div class="packages">
+  <aside class="bg-white">
+    <app-explorer-sidebar type="packages" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
+                          (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
+                          (folderSelected)="handleSelectFolder($event)">
+    </app-explorer-sidebar>
+  </aside>
+  <main class="overflow-y-auto">
+    <app-packages-list [user]="user" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
+                       [packages]="packagesBasedOnFolder$ | async"></app-packages-list>
+  </main>
+</div>
