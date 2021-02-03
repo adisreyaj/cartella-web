@@ -10,7 +10,8 @@ import { FormControl } from '@angular/forms';
 import { ToastService } from '@app/services/toast/toast.service';
 import { DialogRef } from '@ngneat/dialog';
 import { TippyInstance } from '@ngneat/helipopper';
-import { BehaviorSubject, fromEvent, of } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { BehaviorSubject, combineLatest, fromEvent, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -24,8 +25,10 @@ import { PackageSuggestions } from '../../../shared/interfaces/package-details.i
 import {
   Package,
   PackageMetaData,
+  PackageRequest,
 } from '../../../shared/interfaces/packages.interface';
 import { PackagesService } from '../../../shared/services/packages.service';
+import { AddPackage } from '../../../store/actions/package.action';
 
 @Component({
   selector: 'app-packages-add',
@@ -53,7 +56,8 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     public ref: DialogRef,
     private packageService: PackagesService,
-    private toast: ToastService
+    private toast: ToastService,
+    private store: Store
   ) {}
 
   ngOnInit(): void {}
@@ -95,7 +99,48 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
     this.packageName.setValue(selection.name);
   }
 
-  addPackage() {}
+  addPackage() {
+    const packageName = this.packageName.value;
+    combineLatest([
+      this.packageService.getPackageDetails(packageName),
+      this.packageService.getPackageBundleDetails(packageName),
+    ]).subscribe(([details, bundle]) => {
+      const {
+        name,
+        description,
+        github,
+        license,
+        links,
+        image,
+        npm,
+        score,
+        version,
+      } = details;
+      const packageData: PackageRequest = {
+        name,
+        description,
+        image,
+        favorite: false,
+        folderId: this.ref.data.folder.id,
+        private: true,
+        metadata: {
+          license,
+          links,
+          bundle,
+          npm,
+          score,
+          version,
+        },
+        repo: {
+          url: links.repository,
+          ...github,
+        },
+        share: [],
+        tags: [],
+      };
+      this.store.dispatch(new AddPackage(packageData));
+    });
+  }
 
   private formatPackageDataForSaving({
     bundleDetails,

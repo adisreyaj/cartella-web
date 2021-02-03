@@ -4,10 +4,12 @@ import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
 import { FolderOperations } from '@app/interfaces/folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';
 import { environment } from 'src/environments/environment';
+import { PackageBundleMetaData } from '../interfaces/bundle.interface';
 import {
   Package,
   PackageFolder,
   PackageFolderRequest,
+  PackageMetaData,
   PackageRequest,
 } from '../interfaces/packages.interface';
 
@@ -48,11 +50,19 @@ export class PackagesService
   }
 
   getPackageSuggestions(query: string) {
-    return this.http.get<any[]>(`${this.packageMetaUrl}/suggestions/${query}`);
+    return this.http.get<any[]>(
+      `${this.packageMetaUrl}/suggestions/${encodeURIComponent(query)}`
+    );
   }
   getPackageDetails(packageName: string) {
-    return this.http.get<PayloadResponse<Package>>(
-      `${this.packageMetaUrl}/suggestions/${encodeURIComponent(packageName)}`
+    return this.http.get<PackageMetaData>(
+      `${this.packageMetaUrl}/details/${encodeURIComponent(packageName)}`
+    );
+  }
+
+  getPackageBundleDetails(packageName: string) {
+    return this.http.get<PackageBundleMetaData>(
+      `${this.packageMetaUrl}/bundle/${encodeURIComponent(packageName)}`
     );
   }
 

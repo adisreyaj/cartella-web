@@ -5,7 +5,6 @@ import {
 
 export class AddPackage {
   static readonly type = '[Package] Add';
-
   constructor(public payload: PackageRequest) {}
 }
 

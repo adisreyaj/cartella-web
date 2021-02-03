@@ -9,6 +9,8 @@ export interface PackageFolder extends FolderBaseResponse {}
 
 export interface PackageBase {
   name: string;
+  image: string;
+  description: string;
   metadata: any;
   repo: any;
   private: boolean;

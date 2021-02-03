@@ -7,6 +7,6 @@
   </aside>
   <main class="overflow-y-auto">
     <app-packages-list [user]="user" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
-                       [packages]="packagesBasedOnFolder$ | async"></app-packages-list>
+                       [packages]="packagesShown$ | async"></app-packages-list>
   </main>
 </div>

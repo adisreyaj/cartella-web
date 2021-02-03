@@ -5,12 +5,15 @@
     </p>
   </header>
   <form class="w-100">
-    <div class="form-group relative">
-      <label for="name">Folder Name</label>
-      <input type="text" name="name" id="name" autocomplete="off" [formControl]="packageName" #packageNameRef="tippy"
-             [tippy]="suggestions" placement="bottom-start" variation="menu" [zIndex]="9999999">
-      <img *ngIf="searchSuggestionsLoading$ | async" src="../../../../../assets/images/loading.svg" alt="loading"
-           class="absolute right-2 bottom-2" style="height: 25px;width: 25px;">
+    <div class="relative form-group">
+      <label for="name">Package Name</label>
+      <div class="relative">
+        <input type="text" name="name" id="name" autocomplete="off" class="w-full" [formControl]="packageName"
+               #packageNameRef="tippy" [tippy]="suggestions" placement="bottom-start" variation="menu"
+               [zIndex]="9999999">
+        <img *ngIf="searchSuggestionsLoading$ | async" src="../../../../../assets/images/loading.svg" alt="loading"
+             class="absolute right-2 bottom-2" style="height: 25px;width: 25px;">
+      </div>
     </div>
   </form>
   <footer class="flex justify-end mt-6">
@@ -37,9 +40,9 @@
   <div *ngIf="searchSuggestions$ | async as searchSuggestions" class="flex flex-col overflow-y-auto"
        [style.maxHeight.px]="350">
     <div *ngFor="let suggestion of searchSuggestions" (click)="selectFromSuggestion(suggestion);hide()"
-         class="px-2 py-1 hover:bg-primary-10 cursor-pointer">
-      <p class="font-semibold line-clamp-1 text-gray-800">{{suggestion?.name}}</p>
-      <p class="line-clamp-1 text-gray-500 text-xs">{{suggestion?.description}}</p>
+         class="px-2 py-1 cursor-pointer hover:bg-primary-10">
+      <p class="font-semibold text-gray-800 line-clamp-1">{{suggestion?.name}}</p>
+      <p class="text-xs text-gray-500 line-clamp-1">{{suggestion?.description}}</p>
     </div>
   </div>
 </ng-template>
