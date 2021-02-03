@@ -16,7 +16,6 @@ import {
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
 } from '../../../shared/interfaces/bookmarks.interface';
-import { BookmarksService } from '../../../shared/services/bookmarks.service';
 import {
   AddBookmarkFolder,
   DeleteBookmarkFolder,
@@ -36,7 +35,6 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
   private subs = new SubSink();
   constructor(
     public ref: DialogRef<BookmarkFolderAddModalPayload>,
-    private bookmarkService: BookmarksService,
     private toaster: ToastService,
     private store: Store
   ) {}
@@ -66,15 +64,21 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
   }
 
   async updateFolder(folder: BookmarkFolder) {
-    try {
-      this.store.dispatch(
+    this.store
+      .dispatch(
         new UpdateBookmarkFolder(folder.id, {
           name: this.folderName.value,
         })
+      )
+      .subscribe(
+        () => {
+          this.toaster.showSuccessToast('Folder updated successfully!');
+          this.ref.close();
+        },
+        () => {
+          this.toaster.showErrorToast('Failed to update the folder!');
+        }
       );
-    } catch (error) {
-      this.toaster.showErrorToast('Failed to update folder');
-    }
   }
 
   async createFolder() {

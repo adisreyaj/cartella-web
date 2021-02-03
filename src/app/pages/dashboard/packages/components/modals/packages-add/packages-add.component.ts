@@ -24,6 +24,7 @@ import { PackageBundleMetaData } from '../../../shared/interfaces/bundle.interfa
 import { PackageSuggestions } from '../../../shared/interfaces/package-details.interface';
 import {
   Package,
+  PackageAddModalPayload,
   PackageMetaData,
   PackageRequest,
 } from '../../../shared/interfaces/packages.interface';
@@ -54,7 +55,7 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private subs = new SubSink();
   constructor(
-    public ref: DialogRef,
+    public ref: DialogRef<PackageAddModalPayload>,
     private packageService: PackagesService,
     private toast: ToastService,
     private store: Store
@@ -101,6 +102,7 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   addPackage() {
     const packageName = this.packageName.value;
+    this.savingSubject.next(true);
     combineLatest([
       this.packageService.getPackageDetails(packageName),
       this.packageService.getPackageBundleDetails(packageName),
@@ -138,6 +140,7 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
         share: [],
         tags: [],
       };
+      this.savingSubject.next(false);
       this.store.dispatch(new AddPackage(packageData));
       this.ref.close();
     });

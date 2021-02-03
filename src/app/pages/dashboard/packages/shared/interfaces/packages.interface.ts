@@ -44,6 +44,23 @@ export interface PackageResponseOwner {
   email: string;
 }
 
+export interface PackageAddModalPayload {
+  folder: PackageFolder;
+  bookmark?: Package;
+  allFolders?: PackageFolder[];
+  type: ModalOperationType;
+}
+
+export interface PackageFolderAddModalPayload {
+  folder?: PackageFolder;
+  type: ModalOperationType;
+}
+
+export enum ModalOperationType {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+}
+
 export interface PackageMetaData {
   name: string;
   version: string;

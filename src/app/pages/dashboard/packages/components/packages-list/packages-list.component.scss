@@ -1,3 +1,7 @@
+:host {
+  min-height: calc(100vh - var(--header-height));
+}
+
 .packages-grid {
   grid-template-columns: 1fr;
 }

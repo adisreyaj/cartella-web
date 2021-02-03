@@ -9,8 +9,18 @@ import {
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from '@app/services/toast/toast.service';
 import { DialogRef } from '@ngneat/dialog';
+import { Store } from '@ngxs/store';
+import { has } from 'lodash-es';
 import { SubSink } from 'subsink';
-import { PackageFolder } from '../../../shared/interfaces/packages.interface';
+import {
+  PackageFolder,
+  PackageFolderAddModalPayload,
+} from '../../../shared/interfaces/packages.interface';
+import {
+  AddPackageFolder,
+  DeletePackageFolder,
+  UpdatePackageFolder,
+} from '../../../store/actions/package-folders.action';
 
 @Component({
   selector: 'app-packages-add-folder',
@@ -23,7 +33,11 @@ export class PackagesAddFolderComponent implements OnInit, OnDestroy {
   folderName = new FormControl('', [Validators.required]);
 
   private subs = new SubSink();
-  constructor(public ref: DialogRef, private toaster: ToastService) {}
+  constructor(
+    public ref: DialogRef<PackageFolderAddModalPayload>,
+    private toaster: ToastService,
+    private store: Store
+  ) {}
 
   ngOnInit(): void {
     if (this.ref?.data) {
@@ -50,22 +64,66 @@ export class PackagesAddFolderComponent implements OnInit, OnDestroy {
   }
 
   async updateFolder(folder: PackageFolder) {
-    try {
-    } catch (error) {
-      this.toaster.showErrorToast('Failed to update folder');
-    }
+    const sub = this.store
+      .dispatch(
+        new UpdatePackageFolder(folder.id, {
+          name: this.folderName.value,
+        })
+      )
+      .subscribe(
+        () => {
+          this.toaster.showSuccessToast('Folder updated successfully!');
+          this.ref.close();
+        },
+        () => {
+          this.toaster.showErrorToast('Failed to update the folder!');
+        }
+      );
+    this.subs.add(sub);
   }
 
-  async createFolder() {}
+  async createFolder() {
+    const sub = this.store
+      .dispatch(
+        new AddPackageFolder({
+          name: this.folderName.value,
+          metadata: {},
+          private: true,
+          share: [],
+        })
+      )
+      .subscribe(
+        () => {
+          this.ref.close();
+        },
+        (err) => {
+          if (has(err, 'error.message')) {
+            this.toaster.showErrorToast(err.error.message);
+          } else {
+            this.toaster.showErrorToast('Folder was not created!');
+          }
+        }
+      );
+    this.subs.add(sub);
+  }
 
   async deleteFolder(folder: PackageFolder) {
-    if (folder) {
-      try {
-      } catch (error) {
-        console.error(error);
-        this.toaster.showErrorToast('Failed to delete folder');
-      }
-    }
+    const sub = this.store
+      .dispatch(new DeletePackageFolder(folder.id))
+      .subscribe(
+        () => {
+          this.toaster.showSuccessToast('Folder deleted successfully!');
+          this.ref.close();
+        },
+        (err) => {
+          if (has(err, 'error.message')) {
+            this.toaster.showErrorToast(err.error.message);
+          } else {
+            this.toaster.showErrorToast('Folder was not deleted!');
+          }
+        }
+      );
+    this.subs.add(sub);
   }
 
   close() {
