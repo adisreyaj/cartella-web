@@ -1,0 +1,25 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold">
+      {{ref?.data?.folder ? 'Update Folder':'Create New Folder'}}
+    </p>
+  </header>
+  <form class="w-100" (ngSubmit)="createOrUpdateFolder(ref?.data?.folder)">
+    <div class="form-group">
+      <label for="name">Folder Name</label>
+      <input type="text" name="name" id="name" autocomplete="off" [formControl]="folderName" #folderNameRef>
+    </div>
+    <footer class="flex items-center mt-6" [class]="ref?.data?.folder ? 'justify-between':'justify-end'">
+      <button *ngIf="ref?.data?.folder" type="button" class="text-red-500 default-ring p-1 rounded-full"
+              (click)="deleteFolder(ref.data.folder)">
+        <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
+      </button>
+      <div class="flex items-center">
+        <button dialogClose secondaryButton class="mr-2" type="button">Cancel</button>
+        <button primaryButton [disabled]="folderName.invalid" type="submit">
+          {{ref?.data?.folder ? 'Update':'Create'}}
+        </button>
+      </div>
+    </footer>
+  </form>
+</div>

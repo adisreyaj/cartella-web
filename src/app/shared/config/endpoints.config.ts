@@ -13,6 +13,7 @@ export const CARTELLA_ENDPOINTS = {
   bookmarks: 'bookmarks',
   bookmarkFolders: 'bookmark-folders',
   packages: 'packages',
+  packagesMeta: 'packages-meta',
   packageFolders: 'package-folders',
   metaExtractor: 'metadata',
 };

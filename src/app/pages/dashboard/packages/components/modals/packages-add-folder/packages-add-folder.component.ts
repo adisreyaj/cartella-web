@@ -13,39 +13,38 @@ import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { SubSink } from 'subsink';
 import {
-  BookmarkFolder,
-  BookmarkFolderAddModalPayload,
-} from '../../../shared/interfaces/bookmarks.interface';
+  PackageFolder,
+  PackageFolderAddModalPayload,
+} from '../../../shared/interfaces/packages.interface';
 import {
-  AddBookmarkFolder,
-  DeleteBookmarkFolder,
-  UpdateBookmarkFolder,
-} from '../../../shared/store/actions/bookmark-folders.action';
+  AddPackageFolder,
+  DeletePackageFolder,
+  UpdatePackageFolder,
+} from '../../../store/actions/package-folders.action';
 
 @Component({
-  selector: 'app-bookmarks-add-folder',
-  templateUrl: './bookmarks-add-folder.component.html',
-  styleUrls: ['./bookmarks-add-folder.component.scss'],
+  selector: 'app-packages-add-folder',
+  templateUrl: './packages-add-folder.component.html',
+  styleUrls: ['./packages-add-folder.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
+export class PackagesAddFolderComponent implements OnInit, OnDestroy {
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
   folderName = new FormControl('', [Validators.required]);
 
   private subs = new SubSink();
   constructor(
-    public ref: DialogRef<BookmarkFolderAddModalPayload>,
+    public ref: DialogRef<PackageFolderAddModalPayload>,
     private toaster: ToastService,
     private store: Store
   ) {}
 
   ngOnInit(): void {
-    if (has(this.ref.data, 'folder')) {
+    if (this.ref?.data) {
       const { folder } = this.ref.data;
       this.folderName.setValue(folder?.name);
     }
   }
-
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
@@ -55,7 +54,8 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
       this.folderNameRef?.nativeElement?.focus();
     }
   }
-  createOrUpdateFolder(folder: BookmarkFolder) {
+
+  createOrUpdateFolder(folder: PackageFolder) {
     if (folder) {
       this.updateFolder(folder);
     } else {
@@ -63,10 +63,10 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
     }
   }
 
-  async updateFolder(folder: BookmarkFolder) {
-    this.store
+  async updateFolder(folder: PackageFolder) {
+    const sub = this.store
       .dispatch(
-        new UpdateBookmarkFolder(folder.id, {
+        new UpdatePackageFolder(folder.id, {
           name: this.folderName.value,
         })
       )
@@ -79,12 +79,13 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
           this.toaster.showErrorToast('Failed to update the folder!');
         }
       );
+    this.subs.add(sub);
   }
 
   async createFolder() {
-    this.store
+    const sub = this.store
       .dispatch(
-        new AddBookmarkFolder({
+        new AddPackageFolder({
           name: this.folderName.value,
           metadata: {},
           private: true,
@@ -103,22 +104,26 @@ export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
           }
         }
       );
+    this.subs.add(sub);
   }
 
-  async deleteFolder(folder: BookmarkFolder) {
-    this.store.dispatch(new DeleteBookmarkFolder(folder.id)).subscribe(
-      () => {
-        this.toaster.showSuccessToast('Folder deleted successfully!');
-        this.ref.close();
-      },
-      (err) => {
-        if (has(err, 'error.message')) {
-          this.toaster.showErrorToast(err.error.message);
-        } else {
-          this.toaster.showErrorToast('Folder was not deleted!');
+  async deleteFolder(folder: PackageFolder) {
+    const sub = this.store
+      .dispatch(new DeletePackageFolder(folder.id))
+      .subscribe(
+        () => {
+          this.toaster.showSuccessToast('Folder deleted successfully!');
+          this.ref.close();
+        },
+        (err) => {
+          if (has(err, 'error.message')) {
+            this.toaster.showErrorToast(err.error.message);
+          } else {
+            this.toaster.showErrorToast('Folder was not deleted!');
+          }
         }
-      }
-    );
+      );
+    this.subs.add(sub);
   }
 
   close() {

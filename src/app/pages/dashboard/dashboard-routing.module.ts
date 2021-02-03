@@ -25,6 +25,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
       },
+      {
+        path: 'packages',
+        loadChildren: () =>
+          import('./packages/packages.module').then((m) => m.PackagesModule),
+      },
     ],
   },
 ];

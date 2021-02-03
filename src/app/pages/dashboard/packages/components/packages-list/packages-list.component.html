@@ -1,0 +1,30 @@
+<div class="flex flex-col h-full p-4">
+  <header class="flex items-center justify-between mb-8">
+    <div>
+      <p class="text-xl font-bold text-gray-700">Packages</p>
+      <p class="text-sm text-gray-500">Manage your saved packages</p>
+    </div>
+    <div>
+      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewPackage()">Add
+        New</button>
+    </div>
+  </header>
+  <ng-container *ngIf="packages?.length > 0;else noPackages">
+    <section class="grid gap-4 packages-grid">
+      <ng-container *ngFor="let package of packages">
+        <app-packages-list-card [package]="package" (cardEvent)="handleCardEvent($event)">
+        </app-packages-list-card>
+      </ng-container>
+    </section>
+  </ng-container>
+</div>
+
+
+<ng-template #noPackages>
+  <div class="grid flex-1 place-items-center">
+    <div class="flex flex-col items-center justify-center">
+      <img src="../../../../../../assets/images/add-file.svg" alt="No Bookmarks" class="" height="150px" width="150px">
+      <p class="mt-4 text-sm text-gray-500">No Packages Found!</p>
+    </div>
+  </div>
+</ng-template>
