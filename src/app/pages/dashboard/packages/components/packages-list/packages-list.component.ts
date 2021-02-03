@@ -7,6 +7,7 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
+import { Store } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import {
@@ -16,6 +17,10 @@ import {
   PackageFolder,
 } from '../../shared/interfaces/packages.interface';
 import { PackagesService } from '../../shared/services/packages.service';
+import {
+  DeletePackage,
+  UpdatePackage,
+} from '../../store/actions/package.action';
 import { PackagesAddComponent } from '../modals/packages-add/packages-add.component';
 
 @Component({
@@ -33,6 +38,7 @@ export class PackagesListComponent implements OnInit {
   private subs = new SubSink();
   constructor(
     private dialog: DialogService,
+    private store: Store,
     private packageService: PackagesService
   ) {}
 
@@ -55,7 +61,7 @@ export class PackagesListComponent implements OnInit {
     const { id, favorite } = event.package;
     switch (event.type) {
       case PackageCardEventType.favorite:
-        this.packageService.updatePackage(id, { favorite: !favorite });
+        this.store.dispatch(new UpdatePackage(id, { favorite: !favorite }));
         break;
       case PackageCardEventType.edit:
         break;
@@ -79,7 +85,7 @@ export class PackagesListComponent implements OnInit {
         .pipe(
           tap((response) => {
             if (response) {
-              this.packageService.deletePackage(id);
+              this.store.dispatch(new DeletePackage(id));
             }
           })
         )

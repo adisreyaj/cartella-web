@@ -139,6 +139,7 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
         tags: [],
       };
       this.store.dispatch(new AddPackage(packageData));
+      this.ref.close();
     });
   }
 
