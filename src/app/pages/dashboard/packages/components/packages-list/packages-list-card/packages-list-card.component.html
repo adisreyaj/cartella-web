@@ -1,6 +1,6 @@
 <div class="relative flex flex-col p-2 bg-white border border-gray-200 rounded-md shadow-sm">
   <button class="absolute p-1 bg-white rounded-lg cursor-pointer focus:outline-none" style="top: 2px;right: 2px;"
-          tippy="Toggle Favorite" (click)="handleFavoriteToggle(package)">
+          tippy="Toggle Favorite" (click)="handleFavoriteToggle(package)" aria-label="Toggle favorite">
     <rmx-icon [name]="package?.favorite ? 'star-fill' : 'star-line'" class="text-gray-500 icon-md"
               [class.text-primary]="package?.favorite"></rmx-icon>
   </button>

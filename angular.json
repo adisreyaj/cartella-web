@@ -23,6 +23,13 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
+            "optimization": {
+              "scripts": true,
+              "fonts": {
+                "inline": true
+              },
+              "styles": true
+            },
             "assets": [
               "src/assets/icons",
               "src/assets/images",
