@@ -5,7 +5,7 @@
               [class.text-primary]="package?.favorite"></rmx-icon>
   </button>
   <div class="flex items-center">
-    <img [src]="package?.image" class="w-12 h-12 mr-4 rounded-sm" width="3rem" height="3rem">
+    <img [src]="package?.image" class="w-12 h-12 mr-4 rounded-sm" width="3rem" height="3rem" [alt]="package?.name">
     <div>
       <p class="text-sm font-semibold line-clamp-1">{{package?.name}}</p>
       <p class="mb-2 text-sm text-gray-500 line-clamp-2" [style.minHeight.px]="40">{{package?.description}}
@@ -71,7 +71,8 @@
         <div class="flex items-center">
           <p class="mr-1 font-semibold text-gray-700">{{package?.metadata?.license}}</p>
           <a target="_blank" rel="noopener noreferrer"
-             [href]="'https://choosealicense.com/licenses/' + (package?.metadata?.license | lowercase)">
+             [href]="'https://choosealicense.com/licenses/' + (package?.metadata?.license | lowercase)"
+             aria-label="License details">
             <rmx-icon name="share-box-line" class="icon-xxs text-primary"></rmx-icon>
           </a>
         </div>

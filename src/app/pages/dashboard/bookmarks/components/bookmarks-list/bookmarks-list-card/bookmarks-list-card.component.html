@@ -5,7 +5,7 @@
               [class.text-primary]="bookmark?.favorite"></rmx-icon>
   </button>
   <img [src]="bookmark?.image" default="../../../../../../../assets/images/bookmark-placeholder.svg"
-       style="height: 150px;" class="object-cover mb-3 rounded-sm" height="150px" width="280px">
+       style="height: 150px;" class="object-cover mb-3 rounded-sm" height="150px" width="280px" [alt]="bookmark?.name">
   <div>
     <p class="mb-2 text-sm font-semibold line-clamp-2" [style.minHeight.px]="37">{{bookmark?.name}}</p>
     <p class="mb-2 text-xs line-clamp-2 to-gray-500" [style.minHeight.px]="35">{{bookmark?.description}}</p>
