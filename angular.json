@@ -31,6 +31,8 @@
               "styles": true
             },
             "assets": [
+              "src/assets/fonts",
+              "src/fonts.css",
               "src/assets/icons",
               "src/assets/images",
               "src/manifest.webmanifest",
