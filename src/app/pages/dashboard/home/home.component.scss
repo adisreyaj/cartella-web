@@ -1,0 +1,10 @@
+@import 'container';
+:host {
+  height: calc(100vh - var(--header-height));
+  display: block;
+}
+
+.container {
+  @include box-layout();
+  @apply py-4;
+}

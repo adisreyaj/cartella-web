@@ -36,12 +36,6 @@
               "src/assets/icons",
               "src/assets/images",
               "src/manifest.webmanifest",
-              "src/vendors",
-              {
-                "glob": "**/*.css",
-                "input": "node_modules/codemirror/theme/",
-                "output": "assets/styles/themes"
-              }
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

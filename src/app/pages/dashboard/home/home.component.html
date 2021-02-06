@@ -1,1 +1,18 @@
-<p>home works!</p>
+<div class="container">
+  <header>
+    <ng-container *ngIf="user$ | async as user">
+      <p class="text-2xl font-semibold"><span class="font-normal text-gray-600">Hi</span> {{user?.firstname}},</p>
+    </ng-container>
+  </header>
+  <section class="grid grid-cols-5 gap-4 mt-8">
+    <app-stats-card>
+      <rmx-icon name="archive-line"></rmx-icon>
+    </app-stats-card>
+    <app-stats-card>
+      <rmx-icon name="bookmark-line"></rmx-icon>
+    </app-stats-card>
+    <app-stats-card>
+      <rmx-icon name="code-s-slash-line"></rmx-icon>
+    </app-stats-card>
+  </section>
+</div>

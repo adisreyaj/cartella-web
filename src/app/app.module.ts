@@ -86,7 +86,6 @@ const firebaseConfig = {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
-    // NgxsLoggerPluginModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
