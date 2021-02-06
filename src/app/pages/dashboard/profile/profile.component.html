@@ -1,0 +1,36 @@
+<header>
+</header>
+<section class="flex justify-center">
+  <form class="w-4/5 p-4 mt-6 bg-white rounded-md shadow-md md:w-3/6" [style.maxWidth.px]="500" [formGroup]="userForm"
+        (ngSubmit)="saveUser()">
+    <div>
+      <img class="w-40 h-40 rounded-full" src="" alt="" width="160px" height="160px">
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="form-group">
+        <label for="firstname">First Name</label>
+        <input type="text" name="firstname" id="firstname" formControlName="firstname">
+      </div>
+      <div class="form-group">
+        <label for="lastname">Last Name</label>
+        <input type="text" name="lastname" id="lastname" formControlName="lastname">
+      </div>
+    </div>
+    <div class="form-group">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" formControlName="email">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" formControlName="password">
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" name="password" id="password" formControlName="password">
+    </div>
+    <footer class="flex justify-end space-x-2">
+      <button secondaryButton class="grid items-center w-full">Cancel</button>
+      <button primaryButton class="grid items-center w-full" [disabled]="userForm.invalid">Update</button>
+    </footer>
+  </form>
+</section>

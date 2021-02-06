@@ -6,7 +6,9 @@ import {
   CARTELLA_ENDPOINTS,
 } from '@app/config/endpoints.config';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
+import { SetLoggedInUser } from '@app/store/actions/user.action';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Store } from '@ngxs/store';
 import { ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -16,25 +18,22 @@ const helper = new JwtHelperService();
   providedIn: 'root',
 })
 export class AuthService implements OnDestroy {
-  user: LoggedUser;
-
   private userSubject = new ReplaySubject<LoggedUser>();
   user$ = this.userSubject.pipe();
   apiUrl = environment.api;
   private subs = new SubSink();
-  constructor(public router: Router, private http: HttpClient) {}
+  constructor(
+    public router: Router,
+    private http: HttpClient,
+    private store: Store
+  ) {}
 
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
 
-  login(email: string, password: string) {
-    this.router.navigate(['/']);
-  }
-  register(email: string, password: string) {}
-
-  logout() {
-    localStorage.removeItem('user');
+  returnToLogin() {
+    this.router.navigate(['/auth/login']);
   }
 
   signInWithGoogle() {
@@ -58,8 +57,7 @@ export class AuthService implements OnDestroy {
       .pipe(
         tap((response) => {
           if (response) {
-            this.user = response;
-            this.userSubject.next(response);
+            this.store.dispatch(new SetLoggedInUser(response));
           }
         })
       );
@@ -76,7 +74,7 @@ export class AuthService implements OnDestroy {
       .pipe(
         tap((response) => {
           if (response) {
-            this.userSubject.next(response);
+            this.store.dispatch(new SetLoggedInUser(response));
           }
         })
       );
@@ -94,7 +92,9 @@ export class AuthService implements OnDestroy {
   }
 
   getUserWithId(id: string) {
-    return this.http.get(`${this.apiUrl}/${CARTELLA_ENDPOINTS.users}/${id}`);
+    return this.http.get<User>(
+      `${this.apiUrl}/${CARTELLA_ENDPOINTS.users}/${id}`
+    );
   }
 
   decodeAccessToken(token: string) {
@@ -103,10 +103,5 @@ export class AuthService implements OnDestroy {
     } catch (error) {
       return null;
     }
-  }
-
-  setLoggedInUser(user: LoggedUser) {
-    this.user = user;
-    this.userSubject.next(user);
   }
 }

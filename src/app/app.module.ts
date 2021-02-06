@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { TechnologyState } from '@app/store/states/technology.state';
+import { UserState } from '@app/store/states/user.state';
 import { DialogModule } from '@ngneat/dialog';
 import {
   popperVariation,
@@ -67,8 +68,9 @@ const firebaseConfig = {
     }),
     TippyModule.forRoot(tippyConfig),
     NgxsModule.forRoot([
-      SnippetState,
+      UserState,
       TechnologyState,
+      SnippetState,
       SnippetFolderState,
       BookmarkState,
       BookmarkFolderState,

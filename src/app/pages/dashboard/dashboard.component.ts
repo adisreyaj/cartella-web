@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '@app/services/auth/auth.service';
 import { GetTechnologies } from '@app/store/actions/technology.action';
+import { GetLoggedInUser } from '@app/store/actions/user.action';
 import { Store } from '@ngxs/store';
 
 @Component({
@@ -10,11 +10,7 @@ import { Store } from '@ngxs/store';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  constructor(
-    private auth: AuthService,
-    private router: Router,
-    private store: Store
-  ) {}
+  constructor(private store: Store, private router: Router) {}
 
   ngOnInit(): void {
     this.getLoggedUserDetails();
@@ -22,17 +18,14 @@ export class DashboardComponent implements OnInit {
   }
 
   private getLoggedUserDetails() {
-    const token = localStorage.getItem('token') || null;
-    if (token) {
-      const res = this.auth.getUserAssociatedWithToken(token);
-      if (res instanceof Error) {
+    this.store.dispatch(new GetLoggedInUser()).subscribe(
+      () => {
+        this.router.navigate(['/']);
+      },
+      () => {
         this.router.navigate(['/auth/login']);
-      } else {
-        res.subscribe((user) => {
-          this.auth.setLoggedInUser(user as any);
-        });
       }
-    }
+    );
   }
 
   private getTechnologies() {

@@ -1,34 +1,34 @@
 <header class="flex items-center justify-between px-4 bg-white">
   <div class="flex items-center">
-    <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="h-12 w-12" width="3rem" height="3rem">
-    <p class="text-gray-700 font-bold text-lg ml-2">CARTELLA</p>
+    <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-12 h-12" width="3rem" height="3rem">
+    <p class="ml-2 text-lg font-bold text-gray-700">CARTELLA</p>
   </div>
   <div class="flex items-center h-full">
-    <nav class="flex items-center mr-10 text-gray-500 h-full">
-      <a class="mr-8 flex items-center h-full" routerLink="/" routerLinkActive="active"
+    <nav class="flex items-center h-full mr-10 text-gray-500">
+      <a class="flex items-center h-full mr-8" routerLink="/" routerLinkActive="active"
          [routerLinkActiveOptions]="{exact:true}">Home</a>
-      <a class=" mr-8 flex items-center h-full" routerLink="/packages" routerLinkActive="active">Packages</a>
-      <a class="mr-8 flex items-center h-full" routerLink="/bookmarks" routerLinkActive="active">Bookmarks</a>
+      <a class="flex items-center h-full mr-8 " routerLink="/packages" routerLinkActive="active">Packages</a>
+      <a class="flex items-center h-full mr-8" routerLink="/bookmarks" routerLinkActive="active">Bookmarks</a>
       <a class="flex items-center h-full" routerLink="/snippets" routerLinkActive="active">Snippets</a>
     </nav>
     <div>
 
     </div>
     <div class="flex items-center" *ngIf="user$ | async as user">
-      <div class="dropdown relative">
-        <button class="btn btn-secondary dropdown-toggle focus:outline-none flex" type="button" [tippy]="userDropdown"
+      <div class="relative dropdown">
+        <button class="flex btn btn-secondary dropdown-toggle focus:outline-none" type="button" [tippy]="userDropdown"
                 placement="bottom-start" variation="menu" [offset]="[-10, 10]">
           <ng-container *ngIf="user?.picture;else userPlaceholder">
-            <img [src]="user?.picture" [alt]="user?.firstname" class="rounded-full w-10 h-10" width="2.5rem"
+            <img [src]="user?.picture" [alt]="user?.firstname" class="w-10 h-10 rounded-full" width="2.5rem"
                  height="2.5rem">
           </ng-container>
           <ng-template #userPlaceholder>
-            <img src="../../../../assets/images/user.svg" [alt]="user?.firstname" class="rounded-full w-10 h-10"
+            <img src="../../../../assets/images/user.svg" [alt]="user?.firstname" class="w-10 h-10 rounded-full"
                  height="40px" width="40px">
           </ng-template>
           <div class="flex flex-col items-end">
             <p class="ml-2 text-sm font-medium text-gray-500">{{user?.firstname}}</p>
-            <div class="grid items-center rounded-full py-1 px-2 bg-green-700 text-white">
+            <div class="grid items-center px-2 py-1 text-white bg-green-700 rounded-full">
               <p class="" style="font-size: 10px;line-height: 10px;">Free</p>
             </div>
           </div>
@@ -40,8 +40,8 @@
 
 <ng-template #userDropdown>
   <div class="flex flex-col w-48">
-    <div class="dropdown-item">Preferences</div>
+    <div class="dropdown-item" routerLink="/profile">Preferences</div>
     <div class="dropdown-item">What's New</div>
-    <div class="dropdown-item text-red-600" (click)="logout()">Logout</div>
+    <div class="text-red-600 dropdown-item" (click)="logout()">Logout</div>
   </div>
 </ng-template>
