@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { GetCustomTags } from '@app/store/actions/tag.action';
 import { GetTechnologies } from '@app/store/actions/technology.action';
 import { GetLoggedInUser } from '@app/store/actions/user.action';
 import { Store } from '@ngxs/store';
@@ -15,6 +16,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getLoggedUserDetails();
     this.getTechnologies();
+    this.getCustomTags();
   }
 
   private getLoggedUserDetails() {
@@ -28,5 +30,8 @@ export class DashboardComponent implements OnInit {
 
   private getTechnologies() {
     this.store.dispatch(new GetTechnologies());
+  }
+  private getCustomTags() {
+    this.store.dispatch(new GetCustomTags());
   }
 }

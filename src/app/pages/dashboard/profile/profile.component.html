@@ -1,40 +1,6 @@
-<header>
-</header>
-<section class="flex justify-center">
-  <form class="w-4/5 p-4 mt-6 bg-white rounded-md shadow-md md:w-3/6" [style.maxWidth.px]="500" [formGroup]="userForm"
-        (ngSubmit)="saveUser()">
-    <div class="flex items-center justify-center mb-8">
-      <img class="w-40 h-40 rounded-full" [src]="(user$ | async)?.picture || '../../../../assets/images/user.svg'"
-           default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="160px"
-           height="160px">
-    </div>
-    <div class="form-group">
-      <label for="firstname">First Name</label>
-      <input type="text" name="firstname" id="firstname" formControlName="firstname" autocomplete="given-name">
-    </div>
-    <div class="form-group">
-      <label for="lastname">Last Name</label>
-      <input type="text" name="lastname" id="lastname" formControlName="lastname" autocomplete="family-name">
-    </div>
-    <div class="form-group">
-      <label for="email">Email</label>
-      <input type="email" name="email" id="email" formControlName="email">
-    </div>
-    <div class="grid grid-cols-2 gap-2">
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" formControlName="password" autocomplete="new-password">
-      </div>
-      <div class="form-group">
-        <label for="confirmPassword">Confirm Password</label>
-        <input type="password" name="confirmPassword" id="confirmPassword" formControlName="confirmPassword"
-               autocomplete="off">
-      </div>
-    </div>
-    <footer class="flex justify-end space-x-2">
-      <button secondaryButton class="grid items-center w-full">Cancel</button>
-      <button primaryButton class="grid items-center w-full"
-              [disabled]="userForm.dirty && userForm.invalid">Update</button>
-    </footer>
-  </form>
-</section>
+<aside>
+  <app-profile-sidebar></app-profile-sidebar>
+</aside>
+<main>
+  <router-outlet></router-outlet>
+</main>

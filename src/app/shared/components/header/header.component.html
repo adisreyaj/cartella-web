@@ -38,10 +38,10 @@
   </div>
 </header>
 
-<ng-template #userDropdown>
+<ng-template #userDropdown let-hide>
   <div class="flex flex-col w-48">
-    <div class="dropdown-item" routerLink="/profile">Preferences</div>
+    <div class="dropdown-item" routerLink="/profile" (click)="hide()">Preferences</div>
     <div class="dropdown-item">What's New</div>
-    <div class="text-red-600 dropdown-item" (click)="logout()">Logout</div>
+    <div class="text-red-600 dropdown-item" (click)="logout();hide()">Logout</div>
   </div>
 </ng-template>

@@ -1,10 +1,14 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
+require('dotenv').config();
+const enablePurge = process.env.ENABLE_PURGE || 'false';
+console.log({ enablePurge });
 module.exports = {
   prefix: '',
   purge: {
+    enabled: enablePurge,
     content: ['./src/app/**/*.{html,ts}', './projects/ui/**/*.{html,ts}'],
   },
-  darkMode: 'class', // or 'media' or 'class'
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {

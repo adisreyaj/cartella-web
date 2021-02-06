@@ -4,6 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { IconModule } from '@app/modules/icon/icon.module';
+import { TagState } from '@app/store/states/tag.state';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { UserState } from '@app/store/states/user.state';
 import { DialogModule } from '@ngneat/dialog';
@@ -67,16 +68,20 @@ const firebaseConfig = {
       positionClass: 'toast-bottom-right',
     }),
     TippyModule.forRoot(tippyConfig),
-    NgxsModule.forRoot([
-      UserState,
-      TechnologyState,
-      SnippetState,
-      SnippetFolderState,
-      BookmarkState,
-      BookmarkFolderState,
-      PackageState,
-      PackageFolderState,
-    ]),
+    NgxsModule.forRoot(
+      [
+        UserState,
+        TechnologyState,
+        TagState,
+        SnippetState,
+        SnippetFolderState,
+        BookmarkState,
+        BookmarkFolderState,
+        PackageState,
+        PackageFolderState,
+      ],
+      { developmentMode: !environment.production }
+    ),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
