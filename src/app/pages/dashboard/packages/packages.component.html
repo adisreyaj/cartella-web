@@ -1,5 +1,5 @@
 <div class="packages">
-  <aside class="bg-white">
+  <aside>
     <app-explorer-sidebar type="packages" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           (folderSelected)="handleSelectFolder($event)">

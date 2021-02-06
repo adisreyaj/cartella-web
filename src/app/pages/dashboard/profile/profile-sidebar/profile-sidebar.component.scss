@@ -11,6 +11,7 @@
     @apply py-3;
     cursor: pointer;
     position: relative;
+    @apply focus:outline-none;
     &.active {
       @apply text-primary;
       background-color: var(--primary-10);
