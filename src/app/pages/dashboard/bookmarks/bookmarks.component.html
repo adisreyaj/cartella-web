@@ -1,11 +1,11 @@
 <div class="bookmarks">
-  <aside class="bg-white">
+  <aside>
     <app-explorer-sidebar type="bookmarks" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           (folderSelected)="handleSelectFolder($event)">
     </app-explorer-sidebar>
   </aside>
-  <main class="bookmarks__main overflow-y-auto bg-gray-50">
+  <main class="overflow-y-auto bookmarks__main bg-gray-50">
     <app-bookmarks-list [user]="user" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
                         [bookmarks]="bookmarksShown$ | async">
     </app-bookmarks-list>

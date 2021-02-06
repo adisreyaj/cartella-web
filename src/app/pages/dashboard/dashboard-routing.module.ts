@@ -30,6 +30,11 @@ const routes: Routes = [
         loadChildren: () =>
           import('./packages/packages.module').then((m) => m.PackagesModule),
       },
+      {
+        path: 'profile',
+        loadChildren: () =>
+          import('./profile/profile.module').then((m) => m.ProfileModule),
+      },
     ],
   },
 ];

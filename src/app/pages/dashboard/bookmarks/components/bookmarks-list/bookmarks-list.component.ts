@@ -49,6 +49,9 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
+  trackBy(_, { id }: { id: string }) {
+    return id;
+  }
   addNewBookmark() {
     const dialogRef = this.dialog.open<BookmarkAddModalPayload>(
       BookmarksAddComponent,
