@@ -3,6 +3,7 @@ import {
   RemixIconModule,
   RiAddCircleLine,
   RiAddLine,
+  RiArrowDownSLine,
   RiCamera3Line,
   RiClipboardLine,
   RiCloseLine,
@@ -12,6 +13,7 @@ import {
   RiFoldersLine,
   RiFullscreenExitLine,
   RiFullscreenLine,
+  RiHashtag,
   RiMoreLine,
   RiPaletteLine,
   RiPencilLine,
@@ -24,6 +26,7 @@ import {
   RiStarFill,
   RiStarLine,
   RiTimeLine,
+  RiUser3Line,
 } from 'angular-remix-icon';
 
 const icons = {
@@ -50,6 +53,9 @@ const icons = {
   RiErrorWarningLine,
   RiShareBoxLine,
   RiRestartLine,
+  RiUser3Line,
+  RiHashtag,
+  RiArrowDownSLine,
 };
 @NgModule({
   declarations: [],

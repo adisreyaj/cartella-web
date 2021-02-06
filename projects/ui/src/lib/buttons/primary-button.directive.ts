@@ -8,6 +8,7 @@ export class PrimaryButtonDirective {
   @HostBinding('class') get classes() {
     return `btn-primary rounded-md
     flex items-center
+    btn-${this.type}
     ${
       this.type === 'warn'
         ? 'bg-red-600 hover:bg-red-700'
@@ -19,6 +20,7 @@ export class PrimaryButtonDirective {
     border
     border-transparent
     hover:shadow-m
+    focus:outline-none
     focus:ring-primary focus:ring-1 focus:ring-offset-1
     `;
   }

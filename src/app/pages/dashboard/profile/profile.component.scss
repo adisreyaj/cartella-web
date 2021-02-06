@@ -1,0 +1,12 @@
+:host {
+  height: calc(100vh - var(--header-height) - 2px);
+  padding-top: 2px;
+  display: grid;
+  @apply bg-gray-100;
+  grid-template-columns: 200px 1fr;
+}
+main {
+  @apply bg-white;
+  @apply rounded-tl-md;
+  box-shadow: 0 5.5px 10px rgb(0 0 0 / 12%), 0 100px 80px rgb(0 0 0 / 10%);
+}

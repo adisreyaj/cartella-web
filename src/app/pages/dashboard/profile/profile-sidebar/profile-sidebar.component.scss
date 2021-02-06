@@ -1,0 +1,34 @@
+:host {
+  display: block;
+  @apply bg-gray-100;
+  height: 100%;
+}
+
+.profile-sidebar {
+  &__item {
+    @apply pl-4;
+    @apply pr-2;
+    @apply py-3;
+    cursor: pointer;
+    position: relative;
+    @apply focus:outline-none;
+    &.active {
+      @apply text-primary;
+      background-color: var(--primary-10);
+      &::before {
+        @apply bg-primary;
+        content: '';
+        position: absolute;
+        width: 2px;
+        height: 100%;
+        left: 0;
+        top: 0;
+      }
+    }
+    &.hovered {
+      .edit-button {
+        opacity: 1;
+      }
+    }
+  }
+}

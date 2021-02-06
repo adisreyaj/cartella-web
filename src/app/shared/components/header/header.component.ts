@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { User } from '@app/interfaces/user.interface';
-import { AuthService } from '@app/services/auth/auth.service';
+import { LogoutUser } from '@app/store/actions/user.action';
+import { UserState } from '@app/store/states/user.state';
+import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 @Component({
   selector: 'app-header',
@@ -10,15 +11,13 @@ import { Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent implements OnInit {
+  @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private store: Store) {}
 
-  ngOnInit(): void {
-    this.user$ = this.auth.user$;
-  }
+  ngOnInit(): void {}
 
   logout() {
-    this.router.navigate(['auth/login']);
-    this.auth.logout();
+    this.store.dispatch(new LogoutUser());
   }
 }

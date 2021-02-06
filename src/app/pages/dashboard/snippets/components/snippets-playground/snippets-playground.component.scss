@@ -3,7 +3,7 @@
   --editor-header-height: 80px;
   --editor-footer-height: 36px;
   display: block;
-  height: calc(100vh - var(--header-height));
+  height: 100%;
   width: 100%;
   overflow: hidden;
 }
