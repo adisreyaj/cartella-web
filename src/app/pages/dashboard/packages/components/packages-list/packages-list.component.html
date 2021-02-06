@@ -11,7 +11,7 @@
   </header>
   <ng-container *ngIf="packages?.length > 0;else noPackages">
     <section class="grid gap-4 packages-grid">
-      <ng-container *ngFor="let package of packages">
+      <ng-container *ngFor="let package of packages;trackBy: trackBy">
         <app-packages-list-card [package]="package" (cardEvent)="handleCardEvent($event)">
         </app-packages-list-card>
       </ng-container>

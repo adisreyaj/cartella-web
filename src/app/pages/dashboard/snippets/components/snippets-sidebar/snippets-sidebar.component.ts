@@ -84,6 +84,9 @@ export class SnippetsSidebarComponent
     this.subs.unsubscribe();
   }
 
+  trackBy(_, { id }: { id: string }) {
+    return id;
+  }
   selectSnippet(data: Snippet) {
     if (data) {
       this.store.dispatch(new SetActiveSnippet(data));

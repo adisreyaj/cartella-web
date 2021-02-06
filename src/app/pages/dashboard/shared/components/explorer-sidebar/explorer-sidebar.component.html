@@ -25,7 +25,7 @@
       </button>
     </header>
     <ul>
-      <ng-container *ngFor="let folder of folders">
+      <ng-container *ngFor="let folder of folders;trackBy:trackBy">
         <li class="explorer-sidebar__item user-item" (click)="handleSelectFolder(folder)"
             [class.active]="activeFolder?.id === folder?.id" appHovered>
           <span class="line-clamp-2">

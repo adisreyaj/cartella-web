@@ -44,6 +44,9 @@ export class PackagesListComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  trackBy(_, { id }: { id: string }) {
+    return id;
+  }
   addNewPackage() {
     const dialogRef = this.dialog.open(PackagesAddComponent, {
       size: 'md',
