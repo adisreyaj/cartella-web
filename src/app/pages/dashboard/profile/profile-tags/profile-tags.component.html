@@ -16,10 +16,10 @@
           <p>{{tag?.name}}</p>
         </div>
         <div class="flex items-center space-x-2 opacity-0 tag-item__buttons">
-          <button class="rounded-full default-ring focus:ring-1 hover:bg-gray-100">
+          <button class="rounded-full default-ring focus:ring-1 hover:bg-gray-100" (click)="editTag(tag?.id)">
             <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
           </button>
-          <button class="rounded-full default-ring focus:ring-1 hover:bg-gray-100">
+          <button class="rounded-full default-ring focus:ring-1 hover:bg-gray-100" (click)="deleteTag(tag?.id)">
             <rmx-icon name="close-line" class="text-red-600 icon-sm"></rmx-icon>
           </button>
         </div>

@@ -1,6 +1,6 @@
 const defaultTheme = require('tailwindcss/defaultTheme');
 require('dotenv').config();
-const enablePurge = process.env.ENABLE_PURGE || 'false';
+const enablePurge = (process.env.ENABLE_PURGE || 'false') === 'true';
 console.log({ enablePurge });
 module.exports = {
   prefix: '',
