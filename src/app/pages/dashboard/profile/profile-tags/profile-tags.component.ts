@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
-  OnInit,
+  OnInit
 } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { Tag } from '@app/interfaces/tag.interface';
@@ -31,6 +31,10 @@ export class ProfileTagsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subs.unsubscribe();
+  }
+
+  trackBy(_, tag: Tag) {
+    return tag?.id;
   }
 
   editTag(id: string) {}

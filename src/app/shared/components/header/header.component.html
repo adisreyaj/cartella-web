@@ -16,8 +16,8 @@
     </div>
     <div class="flex items-center" *ngIf="user$ | async as user">
       <div class="relative dropdown">
-        <button class="flex btn btn-secondary dropdown-toggle focus:outline-none" type="button" [tippy]="userDropdown"
-                placement="bottom-start" variation="menu" [offset]="[-10, 10]">
+        <button class="flex items-center btn btn-secondary dropdown-toggle focus:outline-none" type="button"
+                [tippy]="userDropdown" placement="bottom-start" variation="menu" [offset]="[-10, 10]">
           <ng-container *ngIf="user?.picture;else userPlaceholder">
             <img [src]="user?.picture" [alt]="user?.firstname" class="w-10 h-10 rounded-full" width="2.5rem"
                  height="2.5rem">
@@ -27,11 +27,12 @@
                  height="40px" width="40px">
           </ng-template>
           <div class="flex flex-col items-end">
-            <p class="ml-2 text-sm font-medium text-gray-500">{{user?.firstname}}</p>
+            <p class="mx-2 text-sm font-medium text-gray-500">{{user?.firstname}}</p>
             <div class="grid items-center px-2 py-1 text-white bg-green-700 rounded-full">
               <p class="" style="font-size: 10px;line-height: 10px;">Free</p>
             </div>
           </div>
+          <rmx-icon name="arrow-down-s-line" class="text-gray-500 icon-sm"></rmx-icon>
         </button>
       </div>
     </div>

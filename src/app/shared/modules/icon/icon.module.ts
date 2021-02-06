@@ -3,6 +3,7 @@ import {
   RemixIconModule,
   RiAddCircleLine,
   RiAddLine,
+  RiArrowDownSLine,
   RiCamera3Line,
   RiClipboardLine,
   RiCloseLine,
@@ -54,6 +55,7 @@ const icons = {
   RiRestartLine,
   RiUser3Line,
   RiHashtag,
+  RiArrowDownSLine,
 };
 @NgModule({
   declarations: [],
