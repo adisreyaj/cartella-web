@@ -19,9 +19,7 @@ export class DashboardComponent implements OnInit {
 
   private getLoggedUserDetails() {
     this.store.dispatch(new GetLoggedInUser()).subscribe(
-      () => {
-        this.router.navigate(['/']);
-      },
+      () => {},
       () => {
         this.router.navigate(['/auth/login']);
       }
