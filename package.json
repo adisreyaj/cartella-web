@@ -41,6 +41,7 @@
     "rxjs": "~6.6.0",
     "screenfull": "^5.1.0",
     "subsink": "^1.0.2",
+    "swiper": "^6.4.11",
     "tslib": "^2.0.0",
     "unique-names-generator": "^4.3.1",
     "zone.js": "~0.10.2"

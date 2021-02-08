@@ -10,6 +10,9 @@
 
 @import '~@ng-select/ng-select/themes/default.theme.css';
 @import '~ngx-toastr/toastr';
+/* Add application styles & imports to this file! */
+@import '~swiper/swiper-bundle';
+
 * {
   padding: 0;
   margin: 0;
@@ -21,4 +24,8 @@ a {
   &:focus {
     outline: none;
   }
+}
+
+.swiper-wrapper {
+  padding-bottom: 1rem;
 }

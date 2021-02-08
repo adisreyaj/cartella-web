@@ -5,6 +5,8 @@ import {
   RiAddLine,
   RiArchiveLine,
   RiArrowDownSLine,
+  RiArrowLeftLine,
+  RiArrowRightLine,
   RiBookmarkLine,
   RiCamera3Line,
   RiClipboardLine,
@@ -62,6 +64,8 @@ const icons = {
   RiCodeSSlashLine,
   RiBookmarkLine,
   RiArchiveLine,
+  RiArrowRightLine,
+  RiArrowLeftLine,
 };
 @NgModule({
   declarations: [],
