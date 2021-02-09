@@ -6,7 +6,8 @@
 }
 
 button.btn-normal:disabled {
-  background-color: lighten(#3d29bd, 20) !important;
+  // background-color: lighten(#3d29bd, 20) !important;
+  @apply bg-gray-300;
   cursor: not-allowed;
 }
 

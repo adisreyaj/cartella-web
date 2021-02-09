@@ -1,1 +1,18 @@
-<p>home works!</p>
+<div class="pt-4">
+  <section class="container flex items-center mt-8 space-x-4">
+    <app-stats-card label="Packages" value="7" class="w-100 sm:w-48">
+      <rmx-icon name="archive-line" class="icon-lg"></rmx-icon>
+    </app-stats-card>
+    <app-stats-card label="Bookmarks" value="29" class="w-100 sm:w-48">
+      <rmx-icon name="bookmark-line" class="icon-lg"></rmx-icon>
+    </app-stats-card>
+    <app-stats-card label="Snippets" value="20" class="w-100 sm:w-48">
+      <rmx-icon name="code-s-slash-line" class="icon-lg"></rmx-icon>
+    </app-stats-card>
+  </section>
+  <section class="container mt-8">
+    <app-home-top-items></app-home-top-items>
+    <div class="mt-10"></div>
+    <app-home-most-recently-added></app-home-most-recently-added>
+  </section>
+</div>

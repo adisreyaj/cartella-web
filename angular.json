@@ -23,25 +23,12 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "optimization": {
-              "scripts": true,
-              "fonts": {
-                "inline": true
-              },
-              "styles": true
-            },
             "assets": [
               "src/assets/fonts",
               "src/fonts.css",
               "src/assets/icons",
               "src/assets/images",
-              "src/manifest.webmanifest",
-              "src/vendors",
-              {
-                "glob": "**/*.css",
-                "input": "node_modules/codemirror/theme/",
-                "output": "assets/styles/themes"
-              }
+              "src/manifest.webmanifest"
             ],
             "stylePreprocessorOptions": {
               "includePaths": [

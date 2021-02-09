@@ -1,0 +1,23 @@
+<h1 class="text-xl font-semibold to-gray-800">Top Items</h1>
+<div class="relative mt-4 home__recent">
+  <swiper [pagination]="swiperPagination" [breakpoints]="swiperBreakPoints" (swiper)="onSwiper($event)"
+          (init)="onAfterInit($event)" (breakpoint)="onBreakpoint($event)">
+    <ng-container *ngFor="let item of (top$ | async)">
+      <ng-template swiperSlide>
+        <app-home-item-card
+                            [data]="{label: item?.data?.name, type: item?.type, updatedAt: item?.data?.updatedAt, views: item?.views}">
+          {{item?.views}} Views
+        </app-home-item-card>
+      </ng-template>
+    </ng-container>
+  </swiper>
+  <div *ngIf="showNavigation" class="flex items-center justify-start space-x-3"
+       [attr.data-breakpoint]="swiper?.currentBreakpoint | json">
+    <button primaryButton size="sm" class="rounded-full" (click)="prevSlide()" [disabled]="swiper?.isBeginning">
+      <rmx-icon name="arrow-left-line" class="text-white icon-lg"></rmx-icon>
+    </button>
+    <button primaryButton size="sm" class="rounded-full" (click)="nextSlide()" [disabled]="swiper?.isEnd">
+      <rmx-icon name="arrow-right-line" class="text-white icon-lg"></rmx-icon>
+    </button>
+  </div>
+</div>

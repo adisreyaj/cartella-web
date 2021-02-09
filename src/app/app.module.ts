@@ -22,6 +22,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BookmarkFolderState } from './pages/dashboard/bookmarks/shared/store/states/bookmark-folders.state';
 import { BookmarkState } from './pages/dashboard/bookmarks/shared/store/states/bookmarks.state';
+import { HomeState } from './pages/dashboard/home/shared/store/states/home.state';
 import { PackageFolderState } from './pages/dashboard/packages/store/states/package-folders.state';
 import { PackageState } from './pages/dashboard/packages/store/states/package.state';
 import { SnippetFolderState } from './pages/dashboard/snippets/store/states/snippet-folders.state';
@@ -71,6 +72,7 @@ const firebaseConfig = {
     NgxsModule.forRoot(
       [
         UserState,
+        HomeState,
         TechnologyState,
         TagState,
         SnippetState,
@@ -86,7 +88,6 @@ const firebaseConfig = {
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
-    // NgxsLoggerPluginModule.forRoot(),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

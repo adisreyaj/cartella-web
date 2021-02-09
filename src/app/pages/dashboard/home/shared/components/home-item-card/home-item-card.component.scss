@@ -1,0 +1,11 @@
+:host {
+  width: 100%;
+}
+
+.item-card {
+  &.hovered {
+    .item-label {
+      @apply text-primary;
+    }
+  }
+}

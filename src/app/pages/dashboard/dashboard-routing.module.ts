@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { DashboardComponent } from './dashboard.component';
-import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [
   {
@@ -13,7 +12,8 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: HomeComponent,
+        loadChildren: () =>
+          import('./home/home.module').then((m) => m.HomeModule),
       },
       {
         path: 'snippets',
