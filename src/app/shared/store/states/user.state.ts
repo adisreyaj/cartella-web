@@ -67,6 +67,5 @@ export class UserState {
       ...state,
       user: null,
     });
-    this.auth.returnToLogin();
   }
 }

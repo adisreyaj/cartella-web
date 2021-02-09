@@ -1,4 +1,4 @@
-<section class="flex flex-col items-center h-screen md:flex-row bg-white">
+<section class="flex flex-col items-center h-screen bg-white md:flex-row">
   <div class="relative hidden w-full h-screen lg:block md:w-1/3 xl:w-1/3">
     <img src="../../../assets/images/auth-bg.svg" alt="" class="absolute object-cover w-full h-full">
     <div class="relative z-10 m-12 text-left">
@@ -6,14 +6,14 @@
     </div>
   </div>
   <div class="flex w-full h-screen px-6 md:mx-auto lg:px-16 xl:px-12 items-left justify-left" style="max-width: 600px;">
-    <div class="w-full py-32 lg:py-6 lg:h-100 grid place-items-center">
+    <div class="grid w-full py-32 lg:py-6 lg:h-100 place-items-center">
       <div class="w-full sm:w-3/4">
         <!-- <div class="flex items-center">
           <img src="../../../assets/images/cartella.svg" alt="Cartella" style="height: 50px;">
-          <h1 class="font-bold text-3xl ml-2">Cartella</h1>
+          <h1 class="ml-2 text-3xl font-bold">Cartella</h1>
         </div> -->
-        <h2 class="mb-8 my-8 text-xl font-semibold tracking-tighter text-gray-700 sm:text-2xl">Create an account</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-6">
+        <h2 class="my-8 mb-8 text-xl font-semibold tracking-tighter text-gray-700 sm:text-2xl">Create an account</h2>
+        <div class="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-6">
           <button type="button" secondaryButton class="py-2 ring-default" (click)="signUpWithGoogle()">
             <div class="flex items-center justify-center">
               <img src="../../../assets/images/google.svg" alt="Sign In with Google" style="height: 25px;">
@@ -53,7 +53,7 @@
           <div class="mb-4 text-right">
             <a class="text-sm leading-relaxed text-gray-700 hover:text-primary focus:text-primary">Forgot Password?</a>
           </div>
-          <button primaryButton class="w-full grid items-center" [disabled]="signUpForm.invalid">Signup</button>
+          <button primaryButton class="grid items-center w-full" [disabled]="signUpForm?.invalid">Signup</button>
         </form>
         <p class="mt-8 text-center">Already have an account?
           <a class="font-semibold text-primary" routerLink="/auth/login">Login</a>
