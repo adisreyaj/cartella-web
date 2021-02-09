@@ -1,7 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { LoggedUser } from '@app/interfaces/user.interface';
+import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { AuthService } from '@app/services/auth/auth.service';
-import { GetLoggedInUser } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -70,7 +69,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
       size: 'sm',
       data: {
         folder,
-        owner: this.store.selectSnapshot<LoggedUser>(GetLoggedInUser)?.id,
+        owner: this.store.selectSnapshot<User>(UserState.getLoggedInUser)?.id,
       },
       enableClose: false,
     });
@@ -79,7 +78,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
     this.dialog.open(PackagesAddFolderComponent, {
       size: 'sm',
       data: {
-        owner: this.store.selectSnapshot<LoggedUser>(GetLoggedInUser)?.id,
+        owner: this.store.selectSnapshot<User>(UserState.getLoggedInUser)?.id,
       },
       enableClose: false,
     });
