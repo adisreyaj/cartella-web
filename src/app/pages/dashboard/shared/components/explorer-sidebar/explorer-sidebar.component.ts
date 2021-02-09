@@ -26,6 +26,9 @@ export class ExplorerSidebarComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  trackBy(_, { id }: { id: string }) {
+    return id;
+  }
   handleSelectFolder(folder) {
     this.folderSelected.emit(folder);
   }

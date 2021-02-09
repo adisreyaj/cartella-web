@@ -11,7 +11,7 @@
   </header>
   <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
     <section class="bookmarks-grid grid gap-4">
-      <ng-container *ngFor="let bookmark of bookmarks">
+      <ng-container *ngFor="let bookmark of bookmarks;trackBy: trackBy">
         <app-bookmarks-list-card [bookmark]="bookmark" (cardEvent)="handleCardEvent($event)">
         </app-bookmarks-list-card>
       </ng-container>

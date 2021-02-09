@@ -6,6 +6,7 @@ export const AUTH_ENDPOINTS = {
 };
 
 export const CARTELLA_ENDPOINTS = {
+  tags: 'tags',
   technology: 'technology',
   users: 'users',
   snippets: 'snippets',

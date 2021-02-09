@@ -1,0 +1,49 @@
+<header class="flex items-center justify-between mb-8">
+  <div>
+    <p class="text-xl font-bold text-gray-700">Hi {{(user$ | async)?.firstname}}</p>
+    <p class="text-sm text-gray-500">Manage your profile details</p>
+  </div>
+</header>
+<section class="flex justify-center">
+  <form class="max-w-5xl mt-6 bg-white" [style.maxWidth.px]="500" [formGroup]="userForm" (ngSubmit)="saveUser()">
+    <div class="flex items-center justify-center mb-8">
+      <img class="w-40 h-40 rounded-full" [src]="(user$ | async)?.picture || '../../../../assets/images/user.svg'"
+           default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="160px"
+           height="160px">
+    </div>
+    <div class="grid grid-cols-2 gap-4">
+      <section>
+        <div class="form-group">
+          <label for="firstname">First Name</label>
+          <input type="text" name="firstname" id="firstname" formControlName="firstname" autocomplete="given-name">
+        </div>
+        <div class="form-group">
+          <label for="lastname">Last Name</label>
+          <input type="text" name="lastname" id="lastname" formControlName="lastname" autocomplete="family-name">
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" formControlName="email">
+        </div>
+      </section>
+      <section>
+        <div class="form-group">
+          <label for="github">Github</label>
+          <input type="url" name="github" id="github" formControlName="github" autocomplete="url">
+        </div>
+        <div class="form-group">
+          <label for="twitter">Twitter</label>
+          <input type="url" name="twitter" id="twitter" formControlName="twitter" autocomplete="url">
+        </div>
+        <div class="form-group">
+          <label for="website">Website</label>
+          <input type="url" name="website" id="website" formControlName="website" autocomplete="url">
+        </div>
+      </section>
+    </div>
+    <footer class="flex justify-end space-x-2">
+      <button primaryButton [disabled]="!userForm.dirty || userForm.invalid">Save
+        Changes</button>
+    </footer>
+  </form>
+</section>

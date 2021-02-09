@@ -9,7 +9,7 @@ export class SecondaryButtonDirective {
     return `btn-secondary rounded-md
      border border-transparent
      flex items-center
-     bg-white
+     bg-gray-50
      ${BUTTON_SIZE_PADDINGS[this.size]}
      ${this.size === 'sm' ? 'text-sm' : 'text-base'}
      text-gray-600

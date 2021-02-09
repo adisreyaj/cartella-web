@@ -1,15 +1,15 @@
-<div class="explorer-sidebar w-full py-4 ">
+<div class="w-full py-4 explorer-sidebar">
   <section>
-    <header class="mb-4 text-gray-500 px-4">
+    <header class="px-4 mb-4 text-gray-500">
       <h4 class="text-sm">Library</h4>
     </header>
     <ul>
-      <li class="explorer-sidebar__item flex items-center mb-3" [class.active]="activeFolder?.id === 'all'"
+      <li class="flex items-center mb-3 explorer-sidebar__item" [class.active]="activeFolder?.id === 'all'"
           (click)="handleSelectFolder({id: 'all'})">
         <rmx-icon name="folders-line" class="mr-2 icon-lg"></rmx-icon>
         <p>All {{type | titlecase}}</p>
       </li>
-      <li class="explorer-sidebar__item flex items-center" [class.active]="activeFolder?.id === 'starred'"
+      <li class="flex items-center explorer-sidebar__item" [class.active]="activeFolder?.id === 'starred'"
           (click)="handleSelectFolder({id:'starred'})">
         <rmx-icon name="star-line" class="mr-2 icon-lg"></rmx-icon>
         <p>Starred</p>
@@ -17,22 +17,23 @@
     </ul>
   </section>
   <section class="mt-6">
-    <header class="flex justify-between items-center mb-4 px-4 text-gray-500">
+    <header class="flex items-center justify-between px-4 mb-4 text-gray-500">
       <h4 class="text-sm">Folders</h4>
-      <button (click)="handleCreateFolder()" class="default-ring rounded-full hover:text-primary"
-              tippy="Create new folder">
+      <button (click)="handleCreateFolder()" class="rounded-full default-ring hover:text-primary"
+              tippy="Create new folder" aria-label="Create New Folder">
         <rmx-icon name="add-circle-line" class="icon-sm"></rmx-icon>
       </button>
     </header>
     <ul>
-      <ng-container *ngFor="let folder of folders">
+      <ng-container *ngFor="let folder of folders;trackBy:trackBy">
         <li class="explorer-sidebar__item user-item" (click)="handleSelectFolder(folder)"
             [class.active]="activeFolder?.id === folder?.id" appHovered>
           <span class="line-clamp-2">
             {{folder?.name}}
           </span>
-          <button (click)="handleEditFolder(folder);$event.stopPropagation()" class="edit-button default-ring rounded-full text-gray-500 p-1 hover:bg-gray-300 hover:text-primary
-            opacity-0 duration-75 transition-opacity" tippy="Edit folder">
+          <button (click)="handleEditFolder(folder);$event.stopPropagation()"
+                  class="p-1 text-gray-500 transition-opacity duration-75 rounded-full opacity-0 edit-button default-ring hover:bg-gray-300 hover:text-primary"
+                  tippy="Edit folder" aria-label="Edit Folder">
             <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
           </button>
         </li>
