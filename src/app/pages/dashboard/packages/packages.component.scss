@@ -1,5 +1,5 @@
 .packages {
-  height: calc(100vh - var(--header-height) - 2px);
+  height: calc(100vh - var(--header-height));
   padding-top: 2px;
   display: grid;
   grid-template-columns: 200px 1fr;
