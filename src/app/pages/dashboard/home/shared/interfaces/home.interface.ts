@@ -16,3 +16,9 @@ export interface HomeCardInput {
   updatedAt: string;
   views?: number;
 }
+
+export interface HomeItemCounts {
+  bookmarks: number;
+  snippets: number;
+  packages: number;
+}

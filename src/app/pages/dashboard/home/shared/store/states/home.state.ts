@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
+import { HomeItemCounts } from '../../interfaces/home.interface';
 import { HomeService } from '../../services/home.service';
-import { GetLatestItems, GetTopItems } from '../actions/home.action';
+import { GetCounts, GetLatestItems, GetTopItems } from '../actions/home.action';
 
 export class HomeStateModel {
   latest: any[];
   top: any[];
   latestUpdatedAt: Date;
   topUpdatedAt: Date;
+  counts: HomeItemCounts;
+  countsFetched: boolean = false;
 }
 @State({
   name: 'home',
@@ -33,6 +36,10 @@ export class HomeState {
   static getTopItems(state: HomeStateModel) {
     return state.top;
   }
+  @Selector()
+  static getItemsCount(state: HomeStateModel) {
+    return { items: state.counts, fetched: state.countsFetched };
+  }
 
   @Action(GetTopItems)
   getTopItems({ getState, setState }: StateContext<HomeStateModel>) {
@@ -43,6 +50,19 @@ export class HomeState {
           ...state,
           top: result,
           topUpdatedAt: new Date(),
+        });
+      })
+    );
+  }
+  @Action(GetCounts)
+  getCounts({ getState, setState }: StateContext<HomeStateModel>) {
+    return this.homeService.getItemsCount().pipe(
+      tap((result) => {
+        const state = getState();
+        setState({
+          ...state,
+          counts: result,
+          countsFetched: true,
         });
       })
     );
