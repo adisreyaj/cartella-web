@@ -32,10 +32,6 @@ export class AuthService implements OnDestroy {
     this.subs.unsubscribe();
   }
 
-  returnToLogin() {
-    this.router.navigate(['/auth/login']);
-  }
-
   signInWithGoogle() {
     const url = `${this.apiUrl}/${AUTH_ENDPOINTS.loginWithGoogle}`;
     window.open(url, '_self');

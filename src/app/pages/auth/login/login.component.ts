@@ -17,11 +17,11 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private toast: ToastService
-  ) {}
-
-  ngOnInit(): void {
+  ) {
     this.initForm();
   }
+
+  ngOnInit(): void {}
 
   signInWithCredentials() {
     if (this.loginForm.valid) {
