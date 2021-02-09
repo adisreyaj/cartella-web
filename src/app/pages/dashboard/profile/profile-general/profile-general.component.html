@@ -1,4 +1,4 @@
-<header class="flex items-center justify-between mb-8">
+<header class="flex items-center justify-between mb-4">
   <div>
     <p class="text-xl font-bold text-gray-700">Hi {{(user$ | async)?.firstname}}</p>
     <p class="text-sm text-gray-500">Manage your profile details</p>
@@ -7,9 +7,9 @@
 <section class="flex justify-center">
   <form class="max-w-5xl mt-6 bg-white" [style.maxWidth.px]="500" [formGroup]="userForm" (ngSubmit)="saveUser()">
     <div class="flex items-center justify-center mb-8">
-      <img class="w-40 h-40 rounded-full" [src]="(user$ | async)?.picture || '../../../../assets/images/user.svg'"
-           default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="160px"
-           height="160px">
+      <img class="rounded-full w-36 h-3w-36" [src]="(user$ | async)?.picture || '../../../../assets/images/user.svg'"
+           default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="144px"
+           height="144px">
     </div>
     <div class="grid grid-cols-2 gap-4">
       <section>
