@@ -11,7 +11,14 @@ export interface HomeItems {
 
 export interface HomeCardInput {
   label: string;
+  description?: string;
   type: FeatureType;
   updatedAt: string;
   views?: number;
+}
+
+export interface HomeItemCounts {
+  bookmarks: number;
+  snippets: number;
+  packages: number;
 }

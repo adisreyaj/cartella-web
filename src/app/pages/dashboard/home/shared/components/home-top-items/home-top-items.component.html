@@ -5,7 +5,7 @@
     <ng-container *ngFor="let item of (top$ | async)">
       <ng-template swiperSlide>
         <app-home-item-card
-                            [data]="{label: item?.data?.name, type: item?.type, updatedAt: item?.data?.updatedAt, views: item?.views}">
+                            [data]="{label: item?.data?.name,description: item?.data?.description, type: item?.type, updatedAt: item?.data?.updatedAt, views: item?.views}">
           {{item?.views}} Views
         </app-home-item-card>
       </ng-template>

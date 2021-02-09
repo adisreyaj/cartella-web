@@ -5,7 +5,9 @@ import { Select, Store } from '@ngxs/store';
 import dayjs from 'dayjs';
 import { Observable } from 'rxjs';
 import { HOME_ITEMS_EXPIRY } from './shared/config/home.config';
+import { HomeItemCounts } from './shared/interfaces/home.interface';
 import {
+  GetCounts,
   GetLatestItems,
   GetTopItems,
 } from './shared/store/actions/home.action';
@@ -19,10 +21,14 @@ import { HomeState } from './shared/store/states/home.state';
 export class HomeComponent implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
+  @Select(HomeState.getItemsCount)
+  counts$: Observable<{ items: HomeItemCounts; fetched: boolean }>;
+
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.checkAndGetItems();
+    this.store.dispatch(new GetCounts());
   }
 
   checkAndGetItems() {

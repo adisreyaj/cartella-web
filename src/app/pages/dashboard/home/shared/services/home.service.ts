@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
 import { environment } from 'src/environments/environment';
-import { HomeItems } from '../interfaces/home.interface';
+import { HomeItemCounts, HomeItems } from '../interfaces/home.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,9 @@ export class HomeService {
 
   constructor(private http: HttpClient) {}
 
+  getItemsCount() {
+    return this.http.get<HomeItemCounts>(`${this.bffUrl}/home/count`);
+  }
   getLatestItemsInAllCategories() {
     return this.http.get<HomeItems[]>(`${this.bffUrl}/home/latest`);
   }
