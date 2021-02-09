@@ -4,10 +4,13 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import Swiper, { SwiperOptions } from 'swiper';
+import { HomeState } from '../../store/states/home.state';
 
 @Component({
-  selector: 'app-home-stop-items',
+  selector: 'app-home-top-items',
   templateUrl: './home-top-items.component.html',
   styleUrls: ['./home-top-items.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,6 +38,9 @@ export class HomeTopItemsComponent implements OnInit {
   swiperPagination: SwiperOptions['pagination'] = false;
   swiper: Swiper = null;
   showNavigation = true;
+
+  @Select(HomeState.getTopItems)
+  top$: Observable<any[]>;
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {}
@@ -45,6 +51,14 @@ export class HomeTopItemsComponent implements OnInit {
   }
 
   onAfterInit(swiper: Swiper) {
+    this.updateNavigation(swiper);
+  }
+
+  onBreakpoint(swiper: Swiper) {
+    // this.updateNavigation(swiper);
+  }
+
+  private updateNavigation(swiper: Swiper) {
     if (swiper.isEnd && swiper.isBeginning) {
       this.showNavigation = false;
       this.cdr.detectChanges();

@@ -3,6 +3,7 @@
 :host {
   height: calc(100vh - var(--header-height));
   display: block;
+  @apply bg-gray-50;
 }
 
 .container {

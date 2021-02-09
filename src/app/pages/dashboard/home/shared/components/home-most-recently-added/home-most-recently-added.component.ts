@@ -4,8 +4,11 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { Select } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import Swiper, { SwiperOptions } from 'swiper';
 import SwiperCore, { A11y, Pagination, Scrollbar } from 'swiper/core';
+import { HomeState } from '../../store/states/home.state';
 
 // install Swiper modules
 SwiperCore.use([Pagination, Scrollbar, A11y]);
@@ -34,10 +37,13 @@ export class HomeMostRecentlyAddedComponent implements OnInit {
       spaceBetween: 20,
     },
   };
-
   swiperPagination: SwiperOptions['pagination'] = false;
   swiper: Swiper = null;
   showNavigation = true;
+
+  @Select(HomeState.getLatestItems)
+  recent$: Observable<any[]>;
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {}
@@ -46,13 +52,23 @@ export class HomeMostRecentlyAddedComponent implements OnInit {
     this.swiper = swiper;
     this.cdr.detectChanges();
   }
-
   onAfterInit(swiper: Swiper) {
+    this.updateNavigation(swiper);
+  }
+
+  onBreakpoint(swiper: Swiper) {
+    // setTimeout(() => {
+    //   this.updateNavigation(swiper);
+    // }, 100);
+  }
+
+  private updateNavigation(swiper: Swiper) {
     if (swiper.isEnd && swiper.isBeginning) {
       this.showNavigation = false;
       this.cdr.detectChanges();
     }
   }
+
   nextSlide() {
     if (this.swiper) {
       this.swiper.slideNext();

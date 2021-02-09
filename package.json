@@ -7,8 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e",
-    "firebase:emulate": "firebase emulators:start --import=data"
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +31,7 @@
     "@ngxs/logger-plugin": "^3.7.1",
     "@ngxs/store": "^3.7.1",
     "angular-remix-icon": "^1.1.0",
+    "dayjs": "^1.10.4",
     "dom-to-image": "^2.6.0",
     "emmet": "^2.3.0",
     "file-saver": "^2.0.5",

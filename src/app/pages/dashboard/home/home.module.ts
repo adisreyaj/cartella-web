@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
+import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
+import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { SwiperModule } from 'swiper/angular';
 import { HomeRoutingModule } from './home-routing.module';
@@ -24,6 +26,8 @@ import { StatsCardComponent } from './shared/components/stats-card/stats-card.co
     IconModule,
     ButtonsModule,
     SwiperModule,
+    HoveredDirectiveModule,
+    TimeAgoPipeModule,
   ],
 })
 export class HomeModule {}
