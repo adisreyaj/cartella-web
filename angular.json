@@ -64,7 +64,9 @@
                 "inject": false
               }
             ],
-            "scripts": [],
+            "scripts": [
+              "src/scripts/heap.js"
+            ],
             "customWebpackConfig": {
               "path": "webpack.config.js"
             }
@@ -77,7 +79,9 @@
                   "with": "src/environments/environment.prod.ts"
                 }
               ],
-              "optimization": true,
+              "optimization": {
+                "styles": true
+              },
               "outputHashing": "all",
               "sourceMap": false,
               "namedChunks": false,
@@ -95,6 +99,9 @@
                   "maximumWarning": "6kb",
                   "maximumError": "10kb"
                 }
+              ],
+              "scripts": [
+                "src/scripts/heap.prod.js"
               ],
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
