@@ -21,6 +21,7 @@ import {
   distinctUntilChanged,
   map,
   switchMap,
+  take,
 } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import {
@@ -103,6 +104,7 @@ export class SnippetsSidebarComponent
   createNewSnippet(technologyId: string) {
     this.activeFolder$
       .pipe(
+        take(1),
         switchMap((activeFolder) => {
           const data: SnippetRequest = {
             ...SNIPPET_TEMPLATE,

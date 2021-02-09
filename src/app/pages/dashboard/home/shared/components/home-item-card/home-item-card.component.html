@@ -1,0 +1,15 @@
+<div class="p-2 bg-white rounded-md shadow-md cursor-pointer item-card hover:shadow-lg" appHovered>
+  <header class="mb-1">
+    <p class="-mt-1 text-xs text-gray-400">{{data?.type | titlecase}}</p>
+  </header>
+
+  <div class="text-sm text-left item-label">
+    <p class="mb-1 line-clamp-1">{{data?.label}}</p>
+    <p class="text-xs text-gray-500 line-clamp-2">{{data?.description}}</p>
+  </div>
+  <footer class="mt-4">
+    <p class="text-xs text-gray-400">
+      <ng-content></ng-content>
+    </p>
+  </footer>
+</div>
