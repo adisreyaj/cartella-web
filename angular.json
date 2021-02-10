@@ -64,9 +64,6 @@
                 "inject": false
               }
             ],
-            "scripts": [
-              "src/scripts/heap.js"
-            ],
             "customWebpackConfig": {
               "path": "webpack.config.js"
             }

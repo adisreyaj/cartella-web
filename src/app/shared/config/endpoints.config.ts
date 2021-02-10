@@ -3,6 +3,7 @@ export const AUTH_ENDPOINTS = {
   signup: 'users/signup',
   loginWithGoogle: 'auth/google',
   loginWithGithub: 'auth/github',
+  updateMethod: 'auth/methods',
 };
 
 export const CARTELLA_ENDPOINTS = {

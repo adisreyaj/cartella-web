@@ -87,13 +87,18 @@ export class AuthService implements OnDestroy {
     } else return new Error('User token not valid!');
   }
 
-  getUserWithId(id: string) {
+  updateUserLoginMethod(id: string, methods: { [key: string]: boolean }) {
+    const url = `${this.apiUrl}/${AUTH_ENDPOINTS.updateMethod}`;
+    return this.http.post<User>(url, methods);
+  }
+
+  private getUserWithId(id: string) {
     return this.http.get<User>(
       `${this.apiUrl}/${CARTELLA_ENDPOINTS.users}/${id}`
     );
   }
 
-  decodeAccessToken(token: string) {
+  private decodeAccessToken(token: string) {
     try {
       return helper.decodeToken(token);
     } catch (error) {
