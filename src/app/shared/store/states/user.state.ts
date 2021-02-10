@@ -71,7 +71,7 @@ export class UserState {
   }
 
   @Action(UpdateUserLoginMethod)
-  updateUserLogin(
+  updateUserLoginMethod(
     { getState, setState }: StateContext<UserStateModel>,
     { id, payload }: UpdateUserLoginMethod
   ) {

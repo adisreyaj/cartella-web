@@ -9,7 +9,7 @@ export class SetLoggedInUser {
   constructor(public payload: LoggedUser) {}
 }
 export class UpdateUserLoginMethod {
-  static readonly type = '[User] Set';
+  static readonly type = '[User] Update Login Method';
   constructor(public id: string, public payload: { [key: string]: boolean }) {}
 }
 
