@@ -1,10 +1,16 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { User } from '@app/interfaces/user.interface';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
+import { LoginMethods, User } from '@app/interfaces/user.interface';
+import { UpdateUserLoginMethod } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -18,12 +24,16 @@ export class ProfileGeneralComponent implements OnInit {
   user$: Observable<User>;
 
   userForm: FormGroup;
+  loginWithGithub = new FormControl();
+  loginWithGoogle = new FormControl();
+
   private subs = new SubSink();
   constructor(private store: Store, private fb: FormBuilder) {}
 
   ngOnInit(): void {
     this.initForm();
     this.listenToUserChange();
+    this.listenToSocialLoginMethodsChanges();
   }
 
   ngOnDestroy() {
@@ -50,16 +60,55 @@ export class ProfileGeneralComponent implements OnInit {
         .pipe(
           tap((user) => {
             if (user) {
-              const { firstname, lastname, email } = user;
+              const { firstname, lastname, email, loginMethods } = user;
               this.userForm.patchValue({
                 firstname,
                 lastname,
                 email,
               });
+              this.loginWithGoogle.setValue(
+                loginMethods.includes(LoginMethods.GOOGLE),
+                { emitEvent: false }
+              );
+              this.loginWithGithub.setValue(
+                loginMethods.includes(LoginMethods.GITHUB),
+                { emitEvent: false }
+              );
             }
           })
         )
         .subscribe()
+    );
+  }
+
+  private listenToSocialLoginMethodsChanges() {
+    this.subs.add(
+      this.loginWithGoogle.valueChanges
+        .pipe(
+          switchMap((isEnabled) => {
+            const user = this.store.selectSnapshot(UserState.getLoggedInUser);
+            return this.store.dispatch(
+              new UpdateUserLoginMethod(user.id, { GOOGLE: isEnabled })
+            );
+          })
+        )
+        .subscribe((value) => {
+          console.log('Google', value);
+        })
+    );
+    this.subs.add(
+      this.loginWithGithub.valueChanges
+        .pipe(
+          switchMap((isEnabled) => {
+            const user = this.store.selectSnapshot(UserState.getLoggedInUser);
+            return this.store.dispatch(
+              new UpdateUserLoginMethod(user.id, { GITHUB: isEnabled })
+            );
+          })
+        )
+        .subscribe((value) => {
+          console.log('Github', value);
+        })
     );
   }
 }

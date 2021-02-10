@@ -8,6 +8,7 @@ import {
   GetLoggedInUser,
   LogoutUser,
   SetLoggedInUser,
+  UpdateUserLoginMethod,
 } from '../actions/user.action';
 
 export class UserStateModel {
@@ -67,5 +68,24 @@ export class UserState {
       ...state,
       user: null,
     });
+  }
+
+  @Action(UpdateUserLoginMethod)
+  updateUserLogin(
+    { getState, setState }: StateContext<UserStateModel>,
+    { id, payload }: UpdateUserLoginMethod
+  ) {
+    return this.auth.updateUserLoginMethod(id, payload).pipe(
+      tap((result) => {
+        const state = getState();
+        setState({
+          ...state,
+          user: {
+            ...state.user,
+            loginMethods: result.loginMethods,
+          },
+        });
+      })
+    );
   }
 }
