@@ -1,11 +1,7 @@
-const defaultTheme = require('tailwindcss/defaultTheme');
-require('dotenv').config();
-const enablePurge = (process.env.ENABLE_PURGE || 'false') === 'true';
-console.log({ enablePurge });
 module.exports = {
   prefix: '',
   purge: {
-    enabled: enablePurge,
+    enabled: process.env.NODE_ENV === 'production',
     content: ['./src/app/**/*.{html,ts}', './projects/ui/**/*.{html,ts}'],
   },
   darkMode: 'class',
@@ -17,7 +13,7 @@ module.exports = {
         'primary-10': 'var(--primary-10)',
       },
       fontFamily: {
-        sans: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', ...require('tailwindcss/defaultTheme').fontFamily.sans],
       },
       typography: {
         DEFAULT: {
