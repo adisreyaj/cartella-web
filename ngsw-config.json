@@ -7,7 +7,6 @@
       "installMode": "prefetch",
       "resources": {
         "files": [
-          "/favicon.ico",
           "/index.html",
           "/manifest.webmanifest",
           "/*.css",
@@ -32,7 +31,7 @@
     {
       "name": "technologies",
       "urls": [
-        "*/api/technologies"
+        "https://srv.sreyaj.dev/cartella/api/technologies"
       ],
       "version": 1,
       "cacheConfig": {
@@ -43,12 +42,52 @@
       }
     },
     {
-      "name": "main-items",
+      "name": "snippets",
       "urls": [
-        "*/api/snippets",
-        "*/api/bookmarks",
-        "*/api/packages",
-        "*/api/repos"
+        "https://srv.sreyaj.dev/cartella/api/snippets",
+        "https://srv.sreyaj.dev/cartella/api/snippet-folders"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxAge": "7d",
+        "maxSize": 100,
+        "strategy": "freshness",
+        "timeout": "0u"
+      }
+    },
+    {
+      "name": "bookmarks",
+      "urls": [
+        "https://srv.sreyaj.dev/cartella/api/bookmarks",
+        "https://srv.sreyaj.dev/cartella/api/bookmark-folders"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxAge": "7d",
+        "maxSize": 100,
+        "strategy": "freshness",
+        "timeout": "0u"
+      }
+    },
+    {
+      "name": "packages",
+      "urls": [
+        "https://srv.sreyaj.dev/cartella/api/packages",
+        "https://srv.sreyaj.dev/cartella/api/package-folders"
+      ],
+      "version": 1,
+      "cacheConfig": {
+        "maxAge": "7d",
+        "maxSize": 100,
+        "strategy": "freshness",
+        "timeout": "0u"
+      }
+    },
+    {
+      "name": "repos",
+      "urls": [
+        "https://srv.sreyaj.dev/cartella/api/repos",
+        "https://srv.sreyaj.dev/cartella/api/repo-folders"
       ],
       "version": 1,
       "cacheConfig": {
