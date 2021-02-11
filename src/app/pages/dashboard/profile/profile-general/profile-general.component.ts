@@ -6,11 +6,12 @@ import {
   Validators,
 } from '@angular/forms';
 import { LoginMethods, User } from '@app/interfaces/user.interface';
+import { ToastService } from '@app/services/toast/toast.service';
 import { UpdateUserLoginMethod } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { switchMap, tap } from 'rxjs/operators';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 
 @Component({
@@ -28,7 +29,11 @@ export class ProfileGeneralComponent implements OnInit {
   loginWithGoogle = new FormControl();
 
   private subs = new SubSink();
-  constructor(private store: Store, private fb: FormBuilder) {}
+  constructor(
+    private store: Store,
+    private fb: FormBuilder,
+    private toast: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.initForm();
@@ -87,13 +92,17 @@ export class ProfileGeneralComponent implements OnInit {
         .pipe(
           switchMap((isEnabled) => {
             const user = this.store.selectSnapshot(UserState.getLoggedInUser);
-            return this.store.dispatch(
-              new UpdateUserLoginMethod(user.id, { GOOGLE: isEnabled })
-            );
+            return this.store
+              .dispatch(
+                new UpdateUserLoginMethod(user.id, { GOOGLE: isEnabled })
+              )
+              .pipe(map(() => isEnabled));
           })
         )
-        .subscribe((value) => {
-          console.log('Google', value);
+        .subscribe((isEnabled) => {
+          this.toast.showSuccessToast(
+            `Login with Google is ${isEnabled ? 'enabled' : 'disabled'}`
+          );
         })
     );
     this.subs.add(
@@ -101,13 +110,17 @@ export class ProfileGeneralComponent implements OnInit {
         .pipe(
           switchMap((isEnabled) => {
             const user = this.store.selectSnapshot(UserState.getLoggedInUser);
-            return this.store.dispatch(
-              new UpdateUserLoginMethod(user.id, { GITHUB: isEnabled })
-            );
+            return this.store
+              .dispatch(
+                new UpdateUserLoginMethod(user.id, { GITHUB: isEnabled })
+              )
+              .pipe(map(() => isEnabled));
           })
         )
-        .subscribe((value) => {
-          console.log('Github', value);
+        .subscribe((isEnabled) => {
+          this.toast.showSuccessToast(
+            `Login with Github is ${isEnabled ? 'enabled' : 'disabled'}`
+          );
         })
     );
   }
