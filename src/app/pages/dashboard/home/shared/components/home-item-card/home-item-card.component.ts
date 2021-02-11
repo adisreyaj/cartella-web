@@ -1,8 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  EventEmitter,
   Input,
-  OnInit,
+  Output,
 } from '@angular/core';
 import { HomeCardInput } from '../../interfaces/home.interface';
 
@@ -12,9 +13,12 @@ import { HomeCardInput } from '../../interfaces/home.interface';
   styleUrls: ['./home-item-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeItemCardComponent implements OnInit {
-  @Input() data: HomeCardInput;
-  constructor() {}
+export class HomeItemCardComponent {
+  @Input() item: HomeCardInput;
 
-  ngOnInit(): void {}
+  @Output() clicked = new EventEmitter<HomeCardInput>();
+
+  handleClick(item: HomeCardInput) {
+    this.clicked.emit(item);
+  }
 }

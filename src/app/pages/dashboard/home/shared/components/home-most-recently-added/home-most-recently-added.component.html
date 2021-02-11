@@ -4,8 +4,7 @@
           (init)="onAfterInit($event)" (breakpoint)="onBreakpoint($event)">
     <ng-container *ngFor="let item of (recent$ | async)">
       <ng-template swiperSlide>
-        <app-home-item-card
-                            [data]="{label: item?.data?.name, description: item?.data?.description,type: item?.type, updatedAt: item?.data?.updatedAt}">
+        <app-home-item-card (clicked)="handleClick($event)" [item]="item | homeCardDataFormat">
           {{item?.data?.updatedAt | timeAgo}}
         </app-home-item-card>
       </ng-template>
