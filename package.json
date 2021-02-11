@@ -49,8 +49,8 @@
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "11.0.0",
-    "@angular-devkit/build-angular": "~0.1101.4",
-    "@angular/cli": "~11.1.4",
+    "@angular-devkit/build-angular": "~0.1102.0-rc.1",
+    "@angular/cli": "~11.2.0-rc.1",
     "@angular/compiler-cli": "~11.2.0",
     "@commitlint/cli": "^11.0.0",
     "@commitlint/config-conventional": "^11.0.0",
