@@ -59,6 +59,7 @@ export class SnippetFolderState {
         const state = getState();
         patchState({
           snippetFolders: [...state.snippetFolders, result],
+          activeSnippetFolder: result,
         });
       })
     );

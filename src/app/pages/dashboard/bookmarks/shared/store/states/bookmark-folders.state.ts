@@ -59,6 +59,7 @@ export class BookmarkFolderState {
         const state = getState();
         patchState({
           bookmarkFolders: [...state.bookmarkFolders, result],
+          activeBookmarkFolder: result,
         });
       })
     );
