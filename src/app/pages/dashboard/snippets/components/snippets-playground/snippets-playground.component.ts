@@ -48,6 +48,7 @@ import { SnippetsService } from '../../services/snippet/snippets.service';
 import {
   DeleteSnippet,
   SetActiveSnippet,
+  UpdateSnippet,
 } from '../../store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
 
@@ -185,9 +186,11 @@ export class SnippetsPlaygroundComponent
         element.value = 'Untitled Snippet';
       } else {
         if (element.value.trim() !== this.activeSnippet.name) {
-          this.snippetService.updateSnippet(this.activeSnippet.id, {
-            name: element?.value?.trim() ?? 'Untitled Snippet',
-          });
+          this.store.dispatch(
+            new UpdateSnippet(this.activeSnippet.id, {
+              name: element?.value?.trim() ?? 'Untitled Snippet',
+            })
+          );
         }
       }
     }

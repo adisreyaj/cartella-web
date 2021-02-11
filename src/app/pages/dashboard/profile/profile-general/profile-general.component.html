@@ -1,15 +1,15 @@
-<header class="flex items-center justify-between mb-8">
+<header class="flex items-center justify-between mb-4">
   <div>
     <p class="text-xl font-bold text-gray-700">Hi {{(user$ | async)?.firstname}}</p>
-    <p class="text-sm text-gray-500">Manage your profile details</p>
+    <p class="text-xs text-gray-500">Manage your profile details</p>
   </div>
 </header>
-<section class="flex justify-center">
+<section class="flex justify-start">
   <form class="max-w-5xl mt-6 bg-white" [style.maxWidth.px]="500" [formGroup]="userForm" (ngSubmit)="saveUser()">
-    <div class="flex items-center justify-center mb-8">
-      <img class="w-40 h-40 rounded-full" [src]="(user$ | async)?.picture || '../../../../assets/images/user.svg'"
-           default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="160px"
-           height="160px">
+    <div class="flex items-center justify-start mb-8">
+      <img class="rounded-full w-36 h-3w-36" [src]="(user$ | async)?.picture || '../../../../assets/images/user.svg'"
+           default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="144px"
+           height="144px">
     </div>
     <div class="grid grid-cols-2 gap-4">
       <section>
@@ -41,9 +41,50 @@
         </div>
       </section>
     </div>
-    <footer class="flex justify-end space-x-2">
+    <footer class="flex justify-start">
       <button primaryButton [disabled]="!userForm.dirty || userForm.invalid">Save
         Changes</button>
     </footer>
   </form>
+</section>
+
+<section class="my-8">
+  <header class="mb-6">
+    <h4 class="text-lg font-semibold text-gray-800 ">Manage Social Logins</h4>
+    <p class="text-xs text-gray-500">Enable/disable social login methods</p>
+  </header>
+  <div class="">
+    <div class="flex items-center mb-6 space-x-4">
+      <div class="flex items-center justify-center">
+        <img src="../../../assets/images/google.svg" alt="Sign In with Google" style="height: 25px;">
+        <span class="ml-2 text-xs font-semibold">
+          Log in with Google
+        </span>
+      </div>
+      <div class="relative w-8 h-4 transition duration-200 ease-linear rounded-full"
+           [ngClass]="loginWithGoogle.value ? 'bg-primary' : 'bg-gray-300'">
+        <label for="loginWithGoogle"
+               class="absolute left-0 w-4 h-4 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer"
+               [ngClass]="[loginWithGoogle.value ? 'translate-x-full border-primary' : 'translate-x-0 border-gray-300']"></label>
+        <input type="checkbox" id="loginWithGoogle" name="loginWithGoogle" [formControl]="loginWithGoogle"
+               class="w-full h-full appearance-none cursor-pointer active:outline-none focus:outline-none" />
+      </div>
+    </div>
+    <div class="flex items-center space-x-4">
+      <div class="flex items-center justify-center">
+        <img src="../../../assets/images/github.svg" alt="Sign In with Github" style="height: 25px;">
+        <span class="ml-2 text-xs font-semibold">
+          Log in with Github
+        </span>
+      </div>
+      <div class="relative w-8 h-4 transition duration-200 ease-linear rounded-full"
+           [ngClass]="loginWithGithub.value ? 'bg-primary' : 'bg-gray-300'">
+        <label for="loginWithGithub"
+               class="absolute left-0 w-4 h-4 mb-2 transition duration-100 ease-linear transform bg-white border-2 rounded-full cursor-pointer"
+               [ngClass]="[loginWithGithub.value ? 'translate-x-full border-primary' : 'translate-x-0 border-gray-300']"></label>
+        <input type="checkbox" id="loginWithGithub" name="loginWithGithub" [formControl]="loginWithGithub"
+               class="w-full h-full appearance-none cursor-pointer active:outline-none focus:outline-none" />
+      </div>
+    </div>
+  </div>
 </section>

@@ -5,6 +5,7 @@ export interface User {
   email: string;
   password?: string;
   picture?: string;
+  loginMethods?: LoginMethods;
 }
 
 export interface LoggedUser {
@@ -16,4 +17,10 @@ export interface LoggedUser {
   lastname: string;
   role: string;
   accessToken: string;
+}
+
+export enum LoginMethods {
+  CREDENTIALS = 'CREDENTIALS',
+  GOOGLE = 'GOOGLE',
+  GITHUB = 'GITHUB',
 }

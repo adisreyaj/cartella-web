@@ -12,6 +12,7 @@ import { AuthService } from '../../../shared/services/auth/auth.service';
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
+
   constructor(
     private auth: AuthService,
     private fb: FormBuilder,
@@ -40,7 +41,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/']);
           },
           (error) => {
-            this.toast.showErrorToast(error.message);
+            this.toast.showErrorToast(error.error.message);
           }
         );
     }
