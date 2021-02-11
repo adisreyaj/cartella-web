@@ -11,6 +11,7 @@ import { HomeItemCardComponent } from './shared/components/home-item-card/home-i
 import { HomeMostRecentlyAddedComponent } from './shared/components/home-most-recently-added/home-most-recently-added.component';
 import { HomeTopItemsComponent } from './shared/components/home-top-items/home-top-items.component';
 import { StatsCardComponent } from './shared/components/stats-card/stats-card.component';
+import { HomeCardDataFormatPipe } from './shared/pipes/home-card-data-format.pipe';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { StatsCardComponent } from './shared/components/stats-card/stats-card.co
     HomeMostRecentlyAddedComponent,
     HomeItemCardComponent,
     HomeTopItemsComponent,
+    HomeCardDataFormatPipe,
   ],
   imports: [
     CommonModule,
