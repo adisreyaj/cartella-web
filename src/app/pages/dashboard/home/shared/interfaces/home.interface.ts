@@ -13,8 +13,9 @@ export interface HomeCardInput {
   label: string;
   description?: string;
   type: FeatureType;
-  updatedAt: string;
+  updatedAt: Date | string;
   views?: number;
+  data: Partial<Bookmark | Package | Snippet>;
 }
 
 export interface HomeItemCounts {
