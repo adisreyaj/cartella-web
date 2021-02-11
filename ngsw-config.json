@@ -36,6 +36,22 @@
       ],
       "version": 1,
       "cacheConfig": {
+        "maxAge": "30d",
+        "maxSize": 100,
+        "strategy": "performance",
+        "timeout": "500u"
+      }
+    },
+    {
+      "name": "main-items",
+      "urls": [
+        "*/api/snippets",
+        "*/api/bookmarks",
+        "*/api/packages",
+        "*/api/repos"
+      ],
+      "version": 1,
+      "cacheConfig": {
         "maxAge": "7d",
         "maxSize": 100,
         "strategy": "freshness",
