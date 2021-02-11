@@ -4,10 +4,16 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { FeatureType } from '@app/interfaces/general.interface';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { Bookmark } from 'src/app/pages/dashboard/bookmarks/shared/interfaces/bookmarks.interface';
+import { Package } from 'src/app/pages/dashboard/packages/shared/interfaces/packages.interface';
+import { Snippet } from 'src/app/pages/dashboard/snippets/interfaces/snippets.interface';
 import Swiper, { SwiperOptions } from 'swiper';
 import SwiperCore, { A11y, Pagination, Scrollbar } from 'swiper/core';
+import { HomeCardInput } from '../../interfaces/home.interface';
 import { HomeState } from '../../store/states/home.state';
 
 // install Swiper modules
@@ -44,9 +50,28 @@ export class HomeMostRecentlyAddedComponent implements OnInit {
   @Select(HomeState.getLatestItems)
   recent$: Observable<any[]>;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {}
+
+  handleClick(item: HomeCardInput) {
+    switch (item.type) {
+      case FeatureType.BOOKMARK:
+        window.open((item.data as Partial<Bookmark>).url, '_blank');
+        break;
+      case FeatureType.SNIPPET:
+        this.router.navigate([
+          '/snippets',
+          (item.data as Partial<Snippet>)?.slug,
+        ]);
+        break;
+      case FeatureType.PACKAGE:
+        window.open((item.data as Partial<Package>)?.repo, '_blank');
+        break;
+      default:
+        break;
+    }
+  }
 
   onSwiper(swiper: Swiper) {
     this.swiper = swiper;
@@ -56,11 +81,7 @@ export class HomeMostRecentlyAddedComponent implements OnInit {
     this.updateNavigation(swiper);
   }
 
-  onBreakpoint(swiper: Swiper) {
-    // setTimeout(() => {
-    //   this.updateNavigation(swiper);
-    // }, 100);
-  }
+  onBreakpoint(swiper: Swiper) {}
 
   private updateNavigation(swiper: Swiper) {
     if (swiper.isEnd && swiper.isBeginning) {

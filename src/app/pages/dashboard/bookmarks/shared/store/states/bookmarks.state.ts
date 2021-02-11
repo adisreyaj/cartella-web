@@ -91,6 +91,7 @@ export class BookmarkState {
         patchState({
           allBookmarks: [...state.allBookmarks, result],
           bookmarksShown: [...state.bookmarksShown, result],
+          activeBookmark: result,
         });
       })
     );

@@ -59,6 +59,7 @@ export class PackageFolderState {
         const state = getState();
         patchState({
           packageFolders: [...state.packageFolders, result],
+          activePackageFolder: result,
         });
       })
     );

@@ -91,6 +91,7 @@ export class SnippetState {
         patchState({
           allSnippets: [...state.allSnippets, result],
           snippetsShown: [...state.snippetsShown, result],
+          activeSnippet: result,
         });
       })
     );
@@ -145,7 +146,7 @@ export class SnippetState {
   }
 
   @Action(SetActiveSnippet)
-  setSelectedSnippetId(
+  setSelectedSnippet(
     { getState, setState }: StateContext<SnippetStateModel>,
     { payload }: SetActiveSnippet
   ) {

@@ -15,7 +15,7 @@ import { Technology } from '@app/interfaces/technology.interface';
 import { NameGeneratorService } from '@app/services/name-generator/name-generator.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { Select, Store } from '@ngxs/store';
-import { fromEvent, Observable, of, Subject } from 'rxjs';
+import { fromEvent, Observable, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -29,7 +29,6 @@ import {
   SnippetFolder,
   SnippetRequest,
 } from '../../interfaces/snippets.interface';
-import { SnippetsService } from '../../services/snippet/snippets.service';
 import {
   AddSnippet,
   SetActiveSnippet,
@@ -64,7 +63,6 @@ export class SnippetsSidebarComponent
 
   @ViewChild('searchRef') searchRef: ElementRef;
   constructor(
-    private snippetsService: SnippetsService,
     private store: Store,
     private nameGeneratorService: NameGeneratorService
   ) {}
@@ -112,8 +110,7 @@ export class SnippetsSidebarComponent
             technologyId,
             folderId: activeFolder.id,
           };
-          this.store.dispatch(new AddSnippet(data));
-          return of(data);
+          return this.store.dispatch(new AddSnippet(data));
         })
       )
       .subscribe(() => {});

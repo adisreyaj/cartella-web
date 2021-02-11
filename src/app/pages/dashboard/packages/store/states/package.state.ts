@@ -91,6 +91,7 @@ export class PackageState {
         patchState({
           allPackages: [...state.allPackages, result],
           packagesShown: [...state.packagesShown, result],
+          activePackage: result,
         });
       })
     );
