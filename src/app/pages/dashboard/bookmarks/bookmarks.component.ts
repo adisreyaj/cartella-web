@@ -1,4 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -10,7 +11,6 @@ import {
   Bookmark,
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
-  ModalOperationType,
 } from './shared/interfaces/bookmarks.interface';
 import {
   GetBookmarkFolders,

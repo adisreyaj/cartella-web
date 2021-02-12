@@ -2,6 +2,7 @@ import {
   FolderBaseRequest,
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
+import { ModalOperationType } from '@app/interfaces/general.interface';
 
 export interface BookmarkFolderRequest extends FolderBaseRequest {}
 export interface BookmarkFolder extends FolderBaseResponse {}
@@ -78,9 +79,4 @@ export interface BookmarkAddModalPayload {
 export interface BookmarkFolderAddModalPayload {
   folder?: BookmarkFolder;
   type: ModalOperationType;
-}
-
-export enum ModalOperationType {
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
 }

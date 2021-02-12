@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { ModalOperationType } from '@app/interfaces/general.interface';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, Subject } from 'rxjs';
@@ -16,7 +17,6 @@ import {
   BookmarkAddModalPayload,
   BookmarkMetaData,
   BookmarkRequest,
-  ModalOperationType,
 } from '../../../shared/interfaces/bookmarks.interface';
 import { MetaExtractorService } from '../../../shared/services/meta-extractor.service';
 import {
