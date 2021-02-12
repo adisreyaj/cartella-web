@@ -15,8 +15,30 @@
              class="absolute right-2 bottom-2" style="height: 25px;width: 25px;">
       </div>
     </div>
+    <div class="relative form-group">
+      <label for="tags">Tags</label>
+      <div class="relative w-1/2">
+        <input type="text" name="tags" id="tags" autocomplete="off" class="w-full" [formControl]="tagSearchInput"
+               #tagNameRef="tippy" [tippy]="tags" placement="bottom-start" variation="menu" [zIndex]="9999999">
+        <img *ngIf="tagSuggestionsLoading$ | async" src="../../../../../assets/images/loading.svg" alt="loading"
+             class="absolute right-2 bottom-2" style="height: 25px;width: 25px;">
+      </div>
+      <div class="flex flex-wrap items-center mt-2 -ml-1 -mr-1">
+        <ng-container *ngFor="let tag of tagsSelected">
+          <div class="flex items-center px-2 py-2 m-1 space-x-2 border rounded-md cursor-pointer">
+            <div class="flex items-center space-x-2">
+              <div class="w-4 h-4 rounded-full" [style.backgroundColor]="tag?.color"></div>
+              <p class="text-sm text-gray-800 line-clamp-1">{{tag?.name}}</p>
+            </div>
+            <button class="rounded-full default-ring focus:ring-1 hover:bg-gray-100" (click)="removeTag(tag)">
+              <rmx-icon name="close-line" class="text-red-600 icon-md"></rmx-icon>
+            </button>
+          </div>
+        </ng-container>
+      </div>
+    </div>
   </form>
-  <footer class="flex justify-end mt-6">
+  <footer class="flex justify-end mt-2">
     <button dialogClose secondaryButton class="mr-2">Cancel</button>
     <button primaryButton [disabled]="packageName.invalid || (saving$ | async)" (click)="addPackage()">
       <ng-container *ngIf="saving$ | async">
@@ -39,10 +61,23 @@
 <ng-template #suggestions let-hide>
   <div *ngIf="searchSuggestions$ | async as searchSuggestions" class="flex flex-col overflow-y-auto"
        [style.maxHeight.px]="350">
-    <div *ngFor="let suggestion of searchSuggestions" (click)="selectFromSuggestion(suggestion);hide()"
+    <div *ngFor="let suggestion of searchSuggestions" (click)="selectPackageFromSuggestion(suggestion);hide()"
          class="px-2 py-1 cursor-pointer hover:bg-primary-10">
       <p class="font-semibold text-gray-800 line-clamp-1">{{suggestion?.name}}</p>
       <p class="text-xs text-gray-500 line-clamp-1">{{suggestion?.description}}</p>
     </div>
+  </div>
+</ng-template>
+
+<ng-template #tags let-hide>
+  <div *ngIf="tagSuggestions$ | async as tagSuggestions" class="flex flex-col overflow-y-auto"
+       [style.maxHeight.px]="350" [style.minWidth.px]="200">
+    <ng-container *ngFor="let suggestion of tagSuggestions">
+      <div (click)="addTag(suggestion);hide()"
+           class="flex items-center px-2 py-2 space-x-2 cursor-pointer hover:bg-primary-10">
+        <div class="w-4 h-4 rounded-full" [style.backgroundColor]="suggestion?.color"></div>
+        <p class="font-semibold text-gray-800 line-clamp-1">{{suggestion?.name}}</p>
+      </div>
+    </ng-container>
   </div>
 </ng-template>

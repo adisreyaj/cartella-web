@@ -20,3 +20,7 @@ export const CARTELLA_ENDPOINTS = {
   packageFolders: 'package-folders',
   metaExtractor: 'metadata',
 };
+
+export const EXTERNAL_ENDPOINTS = {
+  packageSuggestions: 'https://api.npms.io/v2/search/suggestions',
+};
