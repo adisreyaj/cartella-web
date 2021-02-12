@@ -15,6 +15,7 @@ import { BookmarksListCardComponent } from './components/bookmarks-list/bookmark
 import { BookmarksListComponent } from './components/bookmarks-list/bookmarks-list.component';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmarks-add.component';
+import { BookmarkAddPreviewComponent } from './components/modals/bookmarks-add/bookmark-add-preview/bookmark-add-preview.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmar
     BookmarksAddComponent,
     BookmarksListComponent,
     BookmarksListCardComponent,
+    BookmarkAddPreviewComponent,
   ],
   imports: [
     CommonModule,
