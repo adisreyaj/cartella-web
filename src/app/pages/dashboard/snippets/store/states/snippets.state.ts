@@ -151,7 +151,10 @@ export class SnippetState {
     { payload }: SetActiveSnippet
   ) {
     const state = getState();
-    if (state.activeSnippet.id !== payload.id) {
+    if (
+      !state.activeSnippet ||
+      (state.activeSnippet && state.activeSnippet.id !== payload.id)
+    ) {
       setState({
         ...state,
         activeSnippet: payload,
