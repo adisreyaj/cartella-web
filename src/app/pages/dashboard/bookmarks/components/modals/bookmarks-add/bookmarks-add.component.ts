@@ -63,11 +63,19 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.ref.data.type === ModalOperationType.UPDATE) {
-      const { description, name, image, site, url } = this.ref.data.bookmark;
+      const {
+        description,
+        name,
+        image,
+        site,
+        url,
+        favicon,
+      } = this.ref.data.bookmark;
       this.metaDataSubject.next({
         description,
         title: name,
         image,
+        favicon,
         site,
       });
       this.bookmarkFormControls.url.disable();
@@ -138,7 +146,7 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
       description: this.bookmarkFormControls.description.value,
       image: data?.image,
       site: this.bookmarkFormControls.site.value,
-      favicon: data?.icon,
+      favicon: data?.favicon,
       url: this.bookmarkFormControls.url.value,
       folderId: this.ref.data.folder.id,
       favorite: false,

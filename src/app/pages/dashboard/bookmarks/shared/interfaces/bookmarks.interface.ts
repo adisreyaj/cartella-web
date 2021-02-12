@@ -52,7 +52,7 @@ export interface BookmarkMetaData {
   image: string;
   description: string;
   twitter?: string;
-  icon?: string;
+  favicon?: string;
   domain?: string;
   site?: string;
 }
