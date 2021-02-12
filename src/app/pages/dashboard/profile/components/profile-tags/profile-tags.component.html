@@ -8,9 +8,9 @@
   </div>
 </header>
 <section>
-  <ul class="flex space-x-2">
+  <ul class="flex flex-wrap">
     <ng-container *ngFor="let tag of (tags$ | async); trackBy: trackBy">
-      <li class="shadow-md tag-item hover:shadow-lg" appHovered>
+      <li class="m-2 shadow-md tag-item hover:shadow-lg" appHovered>
         <div class="flex items-center space-x-2">
           <div class="w-4 h-4 rounded-full" [style.backgroundColor]="tag?.color"></div>
           <p>{{tag?.name}}</p>
