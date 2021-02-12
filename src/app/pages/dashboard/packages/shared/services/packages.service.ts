@@ -66,6 +66,10 @@ export class PackagesService
     );
   }
 
+  updateViews(id: string) {
+    return this.http.put(`${this.packageUrl}/views/${id}`, {});
+  }
+
   createNewFolder(data: PackageFolderRequest) {
     return this.http.post<PackageFolder>(this.packageFolderUrl, data);
   }
