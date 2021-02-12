@@ -24,8 +24,8 @@
       </div>
       <button secondaryButton size="sm" class="mr-2" [tippy]="cardOptions" placement="bottom-start"
               variation="menu">More</button>
-      <a primaryButton size="sm" target="_blank" [href]="package.metadata.links.homepage"
-         rel="noopener noreferrer">View</a>
+      <a primaryButton size="sm" target="_blank" [href]="package.metadata.links.homepage" rel="noopener noreferrer"
+         (click)="updateView(package)">View</a>
     </div>
   </footer>
 </div>

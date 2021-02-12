@@ -41,6 +41,10 @@ export class BookmarksService {
     return this.http.put<Bookmark>(`${this.bookmarkUrl}/${id}`, data);
   }
 
+  updateViews(id: string) {
+    return this.http.put(`${this.bookmarkUrl}/views/${id}`, {});
+  }
+
   deleteBookmark(id: string) {
     return this.http.delete(`${this.bookmarkUrl}/${id}`);
   }
@@ -69,6 +73,4 @@ export class BookmarksService {
   getBookmarksInAFolder(folderId: string) {
     return this.http.get<Bookmark[]>(`${this.bookmarkUrl}/folder/${folderId}`);
   }
-
-  updateBookmarkAndFolderBasedOnSlug(slug: string) {}
 }

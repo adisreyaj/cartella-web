@@ -34,7 +34,8 @@
       </div>
       <button secondaryButton size="sm" class="mr-2" [tippy]="cardOptions" placement="bottom-start"
               variation="menu">More</button>
-      <a primaryButton size="sm" [href]="bookmark?.url" target="_blank" rel="noopener noreferrer">View</a>
+      <a primaryButton size="sm" [href]="bookmark?.url" target="_blank" rel="noopener noreferrer"
+         (click)="updateView(bookmark)">View</a>
     </div>
   </footer>
 </div>

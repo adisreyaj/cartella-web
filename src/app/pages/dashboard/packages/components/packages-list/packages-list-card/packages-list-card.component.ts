@@ -6,11 +6,13 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { take } from 'rxjs/operators';
 import {
   Package,
   PackageCardEvent,
   PackageCardEventType,
 } from '../../../shared/interfaces/packages.interface';
+import { PackagesService } from '../../../shared/services/packages.service';
 
 @Component({
   selector: 'app-packages-list-card',
@@ -22,7 +24,7 @@ export class PackagesListCardComponent implements OnInit {
   @Input() package: Package;
 
   @Output() cardEvent = new EventEmitter<PackageCardEvent>();
-  constructor() {}
+  constructor(private packageService: PackagesService) {}
 
   ngOnInit(): void {}
   handleFavoriteToggle(packageData: Package) {
@@ -48,5 +50,9 @@ export class PackagesListCardComponent implements OnInit {
       type: PackageCardEventType.share,
       package: packageData,
     });
+  }
+
+  updateView(packageData: Package) {
+    this.packageService.updateViews(packageData.id).pipe(take(1)).subscribe();
   }
 }

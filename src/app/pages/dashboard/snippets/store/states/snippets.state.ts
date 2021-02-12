@@ -151,9 +151,15 @@ export class SnippetState {
     { payload }: SetActiveSnippet
   ) {
     const state = getState();
-    setState({
-      ...state,
-      activeSnippet: payload,
-    });
+    if (
+      !state.activeSnippet ||
+      (state.activeSnippet && state.activeSnippet.id !== payload.id)
+    ) {
+      setState({
+        ...state,
+        activeSnippet: payload,
+      });
+      return this.snippetService.updateViews(payload.id);
+    }
   }
 }
