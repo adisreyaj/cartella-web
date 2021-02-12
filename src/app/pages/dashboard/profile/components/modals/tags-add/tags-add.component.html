@@ -1,0 +1,31 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold">
+      {{ref?.data?.tag ? 'Update Tag':'Create New Tag'}}
+    </p>
+  </header>
+  <form class="w-100" (ngSubmit)="createOrUpdateTag(ref?.data?.tag)">
+    <div class="form-group">
+      <label for="name">Tag Name</label>
+      <input type="text" name="name" id="name" autocomplete="off" [formControl]="tagName" #tagNameRef>
+    </div>
+    <div class="form-group">
+      <label for="color">Color</label>
+      <color-twitter class="basic" [color]="tagColor" [colors]="colors" triangle="hide" id="color" width="100%"
+                     (onChange)="handleColorChange($event)">
+      </color-twitter>
+    </div>
+    <footer class="flex items-center mt-6" [class]="ref?.data?.tag ? 'justify-between':'justify-end'">
+      <button *ngIf="ref?.data?.tag" type="button" class="p-1 text-red-500 rounded-full default-ring"
+              (click)="deleteTag(ref.data.tag)">
+        <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
+      </button>
+      <div class="flex items-center">
+        <button dialogClose secondaryButton class="mr-2" type="button">Cancel</button>
+        <button primaryButton [disabled]="tagName.invalid" type="submit">
+          {{ref?.data?.tag ? 'Update':'Create'}}
+        </button>
+      </div>
+    </footer>
+  </form>
+</div>

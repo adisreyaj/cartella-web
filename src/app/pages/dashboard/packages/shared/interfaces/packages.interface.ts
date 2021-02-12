@@ -2,6 +2,7 @@ import {
   FolderBaseRequest,
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
+import { ModalOperationType } from '@app/interfaces/general.interface';
 import { PackageLinks, packageScore } from './package-details.interface';
 
 export interface PackageFolderRequest extends FolderBaseRequest {}
@@ -54,11 +55,6 @@ export interface PackageAddModalPayload {
 export interface PackageFolderAddModalPayload {
   folder?: PackageFolder;
   type: ModalOperationType;
-}
-
-export enum ModalOperationType {
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
 }
 
 export interface PackageMetaData {

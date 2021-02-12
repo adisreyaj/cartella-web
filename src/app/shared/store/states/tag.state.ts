@@ -56,7 +56,7 @@ export class TagState {
   }
 
   @Action(UpdateTag)
-  updateSnippet(
+  updateTag(
     { getState, setState }: StateContext<TagStateModel>,
     { payload, id }: UpdateTag
   ) {
@@ -75,7 +75,7 @@ export class TagState {
   }
 
   @Action(DeleteTag)
-  deleteSnippet(
+  deleteTag(
     { getState, setState }: StateContext<TagStateModel>,
     { id }: DeleteTag
   ) {
