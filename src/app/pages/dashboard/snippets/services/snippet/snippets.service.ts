@@ -47,6 +47,10 @@ export class SnippetsService
     return this.http.delete(`${this.snippetUrl}/${id}`);
   }
 
+  updateViews(id: string) {
+    return this.http.put(`${this.snippetUrl}/views/${id}`, {});
+  }
+
   createNewFolder(data: SnippetFolderRequest) {
     return this.http.post<SnippetFolder>(this.snippetFolderUrl, data);
   }

@@ -41,6 +41,7 @@ export class HomeTopItemsComponent implements OnInit {
 
   @Select(HomeState.getTopItems)
   top$: Observable<any[]>;
+
   constructor(private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {}

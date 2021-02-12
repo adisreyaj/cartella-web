@@ -6,6 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
+import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
@@ -17,7 +18,6 @@ import {
   BookmarkCardEvent,
   BookmarkCardEventType,
   BookmarkFolder,
-  ModalOperationType,
 } from '../../shared/interfaces/bookmarks.interface';
 import { BookmarksService } from '../../shared/services/bookmarks.service';
 import {

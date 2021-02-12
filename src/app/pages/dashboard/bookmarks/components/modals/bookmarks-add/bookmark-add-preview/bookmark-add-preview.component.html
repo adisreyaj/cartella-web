@@ -1,0 +1,22 @@
+<h3 class="mb-3 text-sm font-semibold">Preview</h3>
+<div class="grid grid-cols-5 gap-4 px-3 py-2 rounded-md shadow-lg" style="height: 150px;">
+  <img [src]="meta?.image" default="../../../../../../../assets/images/bookmark-placeholder.svg" style="height: 130px;"
+       class="object-cover col-span-2 rounded-md">
+  <div class="col-span-3">
+    <p class="mb-2 text-sm font-semibold line-clamp-2">{{title}}</p>
+    <p class="text-xs text-gray-600 line-clamp-3">{{description}}</p>
+    <div class="flex items-center mt-2 space-x-2">
+      <div>
+        <ng-container *ngIf="meta?.favicon;else defaultFavicon">
+          <img [src]="meta?.favicon" default="../../../../../../../assets/images/cartella.svg"
+               [alt]="meta?.site || 'favicon'" height=" 20px" width="20px" class="w-5 h-5 rounded-full">
+        </ng-container>
+        <ng-template #defaultFavicon>
+          <img src="../../../../../../../assets/images/cartella.svg" alt="favicon" height=" 20px" width="20px"
+               class="w-5 h-5 rounded-full">
+        </ng-template>
+      </div>
+      <a class="text-xs text-gray-500 hover:underline hover:text-primary">{{meta?.site}}</a>
+    </div>
+  </div>
+</div>

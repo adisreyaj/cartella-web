@@ -7,11 +7,13 @@ import {
   OnInit,
   Output,
 } from '@angular/core';
+import { take } from 'rxjs/operators';
 import {
   Bookmark,
   BookmarkCardEvent,
   BookmarkCardEventType,
 } from '../../../shared/interfaces/bookmarks.interface';
+import { BookmarksService } from '../../../shared/services/bookmarks.service';
 
 @Component({
   selector: 'app-bookmarks-list-card',
@@ -23,7 +25,10 @@ export class BookmarksListCardComponent implements OnInit {
   @Input() bookmark: Bookmark;
 
   @Output() cardEvent = new EventEmitter<BookmarkCardEvent>();
-  constructor(private clipboard: Clipboard) {}
+  constructor(
+    private clipboard: Clipboard,
+    private bookmarkService: BookmarksService
+  ) {}
 
   ngOnInit(): void {}
 
@@ -41,6 +46,10 @@ export class BookmarksListCardComponent implements OnInit {
   }
   handleShare(bookmark: Bookmark) {
     this.cardEvent.emit({ type: BookmarkCardEventType.share, bookmark });
+  }
+
+  updateView(bookmark: Bookmark) {
+    this.bookmarkService.updateViews(bookmark.id).pipe(take(1)).subscribe();
   }
 
   handleCopyToClipboard(bookmark: Bookmark) {

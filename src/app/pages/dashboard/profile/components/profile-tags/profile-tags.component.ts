@@ -2,10 +2,11 @@ import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
-import { Tag } from '@app/interfaces/tag.interface';
+import { ModalOperationType } from '@app/interfaces/general.interface';
+import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
 import { DeleteTag } from '@app/store/actions/tag.action';
 import { TagState } from '@app/store/states/tag.state';
 import { DialogService } from '@ngneat/dialog';
@@ -13,6 +14,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { TagsAddComponent } from '../modals/tags-add/tags-add.component';
 
 @Component({
   selector: 'app-profile-tags',
@@ -37,7 +39,26 @@ export class ProfileTagsComponent implements OnInit, OnDestroy {
     return tag?.id;
   }
 
-  editTag(id: string) {}
+  handleCreateTag() {
+    this.dialog.open<TagAddModalPayload>(TagsAddComponent, {
+      size: 'sm',
+      data: {
+        type: ModalOperationType.CREATE,
+      },
+      enableClose: false,
+    });
+  }
+
+  editTag(tag: Tag) {
+    this.dialog.open<TagAddModalPayload>(TagsAddComponent, {
+      size: 'sm',
+      data: {
+        type: ModalOperationType.UPDATE,
+        tag,
+      },
+      enableClose: false,
+    });
+  }
 
   deleteTag(id: string) {
     const dialogRef = this.dialog.open(DeletePromptComponent, {

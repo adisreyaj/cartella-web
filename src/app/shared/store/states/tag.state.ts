@@ -12,15 +12,24 @@ import {
 
 export class TagStateModel {
   customTags: Tag[];
+  defaultTags: Tag[];
 }
 
 @State({
   name: 'tags',
+  defaults: {
+    customTags: [],
+    defaultTags: [],
+  },
 })
 @Injectable()
 export class TagState {
   constructor(private tagService: TagService) {}
 
+  @Selector()
+  static getTagsList(state: TagStateModel) {
+    return [...state.customTags, ...state.defaultTags];
+  }
   @Selector()
   static getCustomTagsList(state: TagStateModel) {
     return state.customTags;
@@ -56,7 +65,7 @@ export class TagState {
   }
 
   @Action(UpdateTag)
-  updateSnippet(
+  updateTag(
     { getState, setState }: StateContext<TagStateModel>,
     { payload, id }: UpdateTag
   ) {
@@ -75,7 +84,7 @@ export class TagState {
   }
 
   @Action(DeleteTag)
-  deleteSnippet(
+  deleteTag(
     { getState, setState }: StateContext<TagStateModel>,
     { id }: DeleteTag
   ) {

@@ -13,8 +13,14 @@
   <section>
     <a [href]="'https://' + bookmark.domain" class="flex items-center justify-start space-x-2" target="_blank"
        rel="noopener noreferrer">
-      <img [src]="bookmark?.favicon" default="../../../../../../../assets/images/cartella.svg"
-           [alt]="bookmark?.site || 'n/a'" height="20px" width="20px" class="rounded-full">
+      <ng-container *ngIf="bookmark?.favicon;else defaultFavicon">
+        <img [src]="bookmark?.favicon" default="../../../../../../../assets/images/cartella.svg"
+             [alt]="bookmark?.site || 'favicon'" height=" 20px" width="20px" class="w-5 h-5 rounded-full">
+      </ng-container>
+      <ng-template #defaultFavicon>
+        <img src="../../../../../../../assets/images/cartella.svg" alt="favicon" height=" 20px" width="20px"
+             class="w-5 h-5 rounded-full">
+      </ng-template>
       <a class="text-xs text-gray-500 hover:underline hover:text-primary">{{bookmark?.site}}</a>
     </a>
   </section>
@@ -28,7 +34,8 @@
       </div>
       <button secondaryButton size="sm" class="mr-2" [tippy]="cardOptions" placement="bottom-start"
               variation="menu">More</button>
-      <a primaryButton size="sm" [href]="bookmark?.url" target="_blank" rel="noopener noreferrer">View</a>
+      <a primaryButton size="sm" [href]="bookmark?.url" target="_blank" rel="noopener noreferrer"
+         (click)="updateView(bookmark)">View</a>
     </div>
   </footer>
 </div>

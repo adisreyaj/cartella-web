@@ -4,3 +4,7 @@ export enum FeatureType {
   PACKAGE = 'PACKAGE',
   REPO = 'REPO',
 }
+export enum ModalOperationType {
+  CREATE = 'CREATE',
+  UPDATE = 'UPDATE',
+}
