@@ -1,13 +1,16 @@
 <div class="pt-4">
-  <ng-container *ngIf="(counts$| async) as counts">
-    <section class="container flex items-center mt-8 space-x-4" *ngIf="counts.fetched">
-      <app-stats-card label="Packages" [value]="counts?.items?.packages" class="w-100 sm:w-48">
+  <ng-container>
+    <section class="container flex items-center mt-8 space-x-4">
+      <app-stats-card label="Packages" [value]="(counts$ | async)?.items?.packages" [isLoading]="countLoading$ | async"
+                      class="w-100 sm:w-48">
         <rmx-icon name="archive-line" class="icon-lg"></rmx-icon>
       </app-stats-card>
-      <app-stats-card label="Bookmarks" [value]="counts?.items?.bookmarks" class="w-100 sm:w-48">
+      <app-stats-card label="Bookmarks" [value]="(counts$ | async)?.items?.bookmarks"
+                      [isLoading]="countLoading$ | async" class="w-100 sm:w-48">
         <rmx-icon name="bookmark-line" class="icon-lg"></rmx-icon>
       </app-stats-card>
-      <app-stats-card label="Snippets" [value]="counts?.items?.snippets" class="w-100 sm:w-48">
+      <app-stats-card label="Snippets" [value]="(counts$ | async)?.items?.snippets" [isLoading]="countLoading$ | async"
+                      class="w-100 sm:w-48">
         <rmx-icon name="code-s-slash-line" class="icon-lg"></rmx-icon>
       </app-stats-card>
     </section>

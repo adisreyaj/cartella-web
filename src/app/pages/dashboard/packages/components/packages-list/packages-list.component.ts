@@ -10,6 +10,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Package,
   PackageCardEvent,
@@ -34,6 +35,11 @@ export class PackagesListComponent implements OnInit {
   @Input() activeFolder: PackageFolder;
   @Input() folders: PackageFolder[];
   @Input() packages: Package[] = [];
+  @Input() isLoading = false;
+
+  packagesCount = new Array(
+    this.store.selectSnapshot(HomeState.getItemsCount).items.packages
+  ).fill('');
 
   private subs = new SubSink();
   constructor(
