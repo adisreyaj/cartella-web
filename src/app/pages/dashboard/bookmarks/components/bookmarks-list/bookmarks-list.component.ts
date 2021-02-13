@@ -9,7 +9,8 @@ import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prom
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import {
@@ -19,11 +20,11 @@ import {
   BookmarkCardEventType,
   BookmarkFolder,
 } from '../../shared/interfaces/bookmarks.interface';
-import { BookmarksService } from '../../shared/services/bookmarks.service';
 import {
   DeleteBookmark,
   UpdateBookmark,
 } from '../../shared/store/actions/bookmarks.action';
+import { BookmarkState } from '../../shared/store/states/bookmarks.state';
 import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.component';
 
 @Component({
@@ -38,12 +39,13 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   @Input() folders: BookmarkFolder[];
   @Input() bookmarks: Bookmark[] = [];
 
+  @Input() isLoading = false;
+
+  @Select(BookmarkState.getBookmarkFetched)
+  bookmarkFetched$: Observable<boolean>;
+
   private subs = new SubSink();
-  constructor(
-    private bookmarkService: BookmarksService,
-    private dialog: DialogService,
-    private store: Store
-  ) {}
+  constructor(private dialog: DialogService, private store: Store) {}
 
   ngOnInit(): void {}
   ngOnDestroy() {

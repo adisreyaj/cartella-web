@@ -13,10 +13,16 @@ import {
 
 export class BookmarkFolderStateModel {
   bookmarkFolders: BookmarkFolder[];
+  fetched: boolean;
   activeBookmarkFolder: BookmarkFolder;
 }
 @State({
   name: 'bookmarkFolders',
+  defaults: {
+    bookmarkFolders: [],
+    fetched: false,
+    activeBookmarkFolder: null,
+  },
 })
 @Injectable()
 export class BookmarkFolderState {
@@ -27,6 +33,10 @@ export class BookmarkFolderState {
     return state.bookmarkFolders;
   }
 
+  @Selector()
+  static getBookmarkFolderFetched(state: BookmarkFolderStateModel) {
+    return state.fetched;
+  }
   @Selector()
   static getActiveBookmarkFolder(state: BookmarkFolderStateModel) {
     return state.activeBookmarkFolder;
@@ -44,6 +54,7 @@ export class BookmarkFolderState {
         setState({
           ...state,
           bookmarkFolders: result,
+          fetched: true,
         });
       })
     );
