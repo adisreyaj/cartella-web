@@ -68,17 +68,15 @@
 
 <ng-template #shimmerLoading>
   <ul>
-    <li class="px-2" [style.heigh.px]="58">
-      <div class="w-full">
-        <span class="w-full h-4 mb-1 shimmer"></span>
-      </div>
+    <li class="flex flex-col justify-center px-3 py-2" [style.height.px]="58">
+      <div class="w-full h-6 mb-1 shimmer"></div>
       <div class="grid grid-cols-6">
         <div class="flex items-center col-span-4 space-x-2">
           <span class="w-4 h-4 rounded-md shimmer"></span>
-          <span class="w-16 h-4 shimmer"></span>
+          <span class="w-16 h-3 shimmer"></span>
         </div>
         <div class="col-span-2">
-          <span class="w-full h-4 shimmer"></span>
+          <span class="w-full h-3 shimmer"></span>
         </div>
       </div>
     </li>
