@@ -26,6 +26,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
   @Select(UserState.getLoggedInUser)
   user$: Observable<LoggedUser>;
 
+  @Select(PackageState.isPackageFetched)
+  packageFetched$: Observable<Package[]>;
+
   @Select(PackageState.getAllPackages)
   allPackages$: Observable<Package[]>;
 

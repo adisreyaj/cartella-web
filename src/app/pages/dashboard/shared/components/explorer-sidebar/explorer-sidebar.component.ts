@@ -18,6 +18,7 @@ export class ExplorerSidebarComponent implements OnInit {
   @Input() folders: any[];
   @Input() activeFolder: any;
   @Input() isLoading = false;
+  @Input() isFetched = false;
 
   @Output() folderSelected = new EventEmitter();
   @Output() createFolder = new EventEmitter<void>();

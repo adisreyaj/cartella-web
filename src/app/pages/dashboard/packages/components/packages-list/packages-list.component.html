@@ -10,7 +10,7 @@
     </div>
   </header>
   <section class="grid gap-4 packages-grid">
-    <ng-container *ngIf="!isLoading;else shimmerLoader">
+    <ng-container *ngIf="!isLoading || (fetched$ | async);else shimmerLoader">
       <ng-container *ngIf="packages?.length > 0;else noPackages">
         <app-packages-list-card *ngFor="let package of packages;trackBy: trackBy" [package]="package"
                                 (cardEvent)="handleCardEvent($event)">

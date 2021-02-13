@@ -1,8 +1,9 @@
 <div class="packages">
   <aside>
     <app-explorer-sidebar type="packages" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
-                          [isLoading]="packageFolderLoading$ | async" (createFolder)="handleCreateFolder()"
-                          (editFolder)="handleEditFolder($event)" (folderSelected)="handleSelectFolder($event)">
+                          [isLoading]="packageFolderLoading$ | async" [isFetched]="packageFetched$ | async"
+                          (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
+                          (folderSelected)="handleSelectFolder($event)">
     </app-explorer-sidebar>
   </aside>
   <main class="overflow-y-auto packages__main">
