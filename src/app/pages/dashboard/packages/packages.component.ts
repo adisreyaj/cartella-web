@@ -4,7 +4,7 @@ import { AuthService } from '@app/services/auth/auth.service';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SubSink } from 'subsink';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
@@ -26,6 +26,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
   @Select(UserState.getLoggedInUser)
   user$: Observable<LoggedUser>;
 
+  @Select(PackageState.isPackageFetched)
+  packageFetched$: Observable<Package[]>;
+
   @Select(PackageState.getAllPackages)
   allPackages$: Observable<Package[]>;
 
@@ -41,6 +44,8 @@ export class PackagesComponent implements OnInit, OnDestroy {
   @Select(PackageFolderState.getActivePackageFolder)
   activeFolder$: Observable<PackageFolder>;
 
+  private packageFolderLoadingSubject = new BehaviorSubject(false);
+  packageFolderLoading$ = this.packageFolderLoadingSubject.pipe();
   private subs = new SubSink();
   constructor(
     private store: Store,
@@ -88,7 +93,16 @@ export class PackagesComponent implements OnInit, OnDestroy {
     this.store.dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id));
   }
   private getPackageFolders() {
-    this.store.dispatch(new GetPackageFolders());
+    this.packageFolderLoadingSubject.next(true);
+    const sub = this.store.dispatch(new GetPackageFolders()).subscribe(
+      () => {
+        this.packageFolderLoadingSubject.next(false);
+      },
+      () => {
+        this.packageFolderLoadingSubject.next(false);
+      }
+    );
+    this.subs.add(sub);
     this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER));
   }
 }

@@ -24,7 +24,7 @@
         <rmx-icon name="add-circle-line" class="icon-sm"></rmx-icon>
       </button>
     </header>
-    <ul>
+    <ul *ngIf="!isLoading || isFetched; else loading">
       <ng-container *ngFor="let folder of folders;trackBy:trackBy">
         <li class="explorer-sidebar__item user-item" (click)="handleSelectFolder(folder)"
             [class.active]="activeFolder?.id === folder?.id" appHovered>
@@ -39,5 +39,15 @@
         </li>
       </ng-container>
     </ul>
+    <ng-template #loading>
+      <ul>
+        <li class="explorer-sidebar__item user-item" [style.paddingRight.rem]="1.2" [style.minHeight.px]="48">
+          <span class="w-full h-5 shimmer dark"></span>
+        </li>
+        <li class="explorer-sidebar__item user-item" [style.paddingRight.rem]="1.2" [style.minHeight.px]="48">
+          <span class="w-full h-5 shimmer dark"></span>
+        </li>
+      </ul>
+    </ng-template>
   </section>
 </div>

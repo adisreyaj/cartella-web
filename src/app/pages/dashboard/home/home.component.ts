@@ -3,7 +3,7 @@ import { User } from '@app/interfaces/user.interface';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import dayjs from 'dayjs';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { HOME_ITEMS_EXPIRY } from './shared/config/home.config';
 import { HomeItemCounts } from './shared/interfaces/home.interface';
 import {
@@ -24,11 +24,16 @@ export class HomeComponent implements OnInit {
   @Select(HomeState.getItemsCount)
   counts$: Observable<{ items: HomeItemCounts; fetched: boolean }>;
 
+  countLoadingSubject = new BehaviorSubject<boolean>(false);
+  countLoading$ = this.countLoadingSubject.pipe();
   constructor(private store: Store) {}
 
   ngOnInit(): void {
     this.checkAndGetItems();
-    this.store.dispatch(new GetCounts());
+    this.countLoadingSubject.next(true);
+    this.store.dispatch(new GetCounts()).subscribe(() => {
+      this.countLoadingSubject.next(false);
+    });
   }
 
   checkAndGetItems() {

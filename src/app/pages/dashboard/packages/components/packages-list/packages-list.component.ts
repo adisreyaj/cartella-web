@@ -7,20 +7,22 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { User } from '@app/interfaces/user.interface';
 import { DialogService } from '@ngneat/dialog';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Package,
   PackageCardEvent,
   PackageCardEventType,
   PackageFolder,
 } from '../../shared/interfaces/packages.interface';
-import { PackagesService } from '../../shared/services/packages.service';
 import {
   DeletePackage,
   UpdatePackage,
 } from '../../store/actions/package.action';
+import { PackageState } from '../../store/states/package.state';
 import { PackagesAddComponent } from '../modals/packages-add/packages-add.component';
 
 @Component({
@@ -34,13 +36,17 @@ export class PackagesListComponent implements OnInit {
   @Input() activeFolder: PackageFolder;
   @Input() folders: PackageFolder[];
   @Input() packages: Package[] = [];
+  @Input() isLoading = false;
+
+  packagesCount = new Array(
+    this.store.selectSnapshot(HomeState.getItemsCount).items.packages
+  ).fill('');
+
+  @Select(PackageState.isPackageFetched)
+  fetched$: Observable<boolean>;
 
   private subs = new SubSink();
-  constructor(
-    private dialog: DialogService,
-    private store: Store,
-    private packageService: PackagesService
-  ) {}
+  constructor(private dialog: DialogService, private store: Store) {}
 
   ngOnInit(): void {}
 

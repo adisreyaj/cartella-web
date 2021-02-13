@@ -28,6 +28,7 @@ import { PackageState } from './pages/dashboard/packages/store/states/package.st
 import { SnippetFolderState } from './pages/dashboard/snippets/store/states/snippet-folders.state';
 import { SnippetState } from './pages/dashboard/snippets/store/states/snippets.state';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { DelayApiInterceptor } from './shared/interceptors/delay-api.interceptor';
 
 const tippyConfig: Partial<TippyConfig> = {
   defaultVariation: 'tooltip',
@@ -91,6 +92,11 @@ const firebaseConfig = {
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: DelayApiInterceptor,
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

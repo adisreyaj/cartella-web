@@ -13,15 +13,27 @@ import {
 
 export class PackageStateModel {
   allPackages: Package[];
+  packageFetched: boolean;
   packagesShown: Package[];
   activePackage: Package;
 }
 @State({
   name: 'packages',
+  defaults: {
+    allPackages: [],
+    packageFetched: false,
+    packagesShown: [],
+    activePackage: [],
+  },
 })
 @Injectable()
 export class PackageState {
   constructor(private packageService: PackagesService) {}
+
+  @Selector()
+  static isPackageFetched(state: PackageStateModel) {
+    return state.packageFetched;
+  }
 
   @Selector()
   static getAllPackages(state: PackageStateModel) {
@@ -50,6 +62,7 @@ export class PackageState {
             const state = getState();
             setState({
               ...state,
+              packageFetched: true,
               allPackages: result,
               packagesShown: result,
             });
