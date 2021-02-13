@@ -13,11 +13,18 @@ import {
 
 export class BookmarkStateModel {
   allBookmarks: Bookmark[];
+  fetched: boolean;
   bookmarksShown: Bookmark[];
   activeBookmark: Bookmark;
 }
 @State({
   name: 'bookmarks',
+  defaults: {
+    allBookmarks: [],
+    fetched: false,
+    bookmarksShown: [],
+    activeBookmark: null,
+  },
 })
 @Injectable()
 export class BookmarkState {
@@ -27,6 +34,12 @@ export class BookmarkState {
   static getAllBookmarks(state: BookmarkStateModel) {
     return state.allBookmarks;
   }
+
+  @Selector()
+  static getBookmarkFetched(state: BookmarkStateModel) {
+    return state.fetched;
+  }
+
   @Selector()
   static getBookmarksShown(state: BookmarkStateModel) {
     return state.bookmarksShown;

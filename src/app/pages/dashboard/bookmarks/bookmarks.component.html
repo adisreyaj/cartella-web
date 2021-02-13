@@ -1,13 +1,14 @@
 <div class="bookmarks">
   <aside>
     <app-explorer-sidebar type="bookmarks" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
+                          [isFetched]="bookmarkFolderFetched$ | async" [isLoading]="bookmarkFolderLoading$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           (folderSelected)="handleSelectFolder($event)">
     </app-explorer-sidebar>
   </aside>
   <main class="overflow-y-auto bookmarks__main bg-gray-50">
     <app-bookmarks-list [user]="user" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
-                        [bookmarks]="bookmarksShown$ | async">
+                        [bookmarks]="bookmarksShown$ | async" [isLoading]="bookmarkLoading$ | async">
     </app-bookmarks-list>
   </main>
 </div>
