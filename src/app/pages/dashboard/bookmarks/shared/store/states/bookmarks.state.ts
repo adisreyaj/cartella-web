@@ -50,7 +50,7 @@ export class BookmarkState {
     return state.activeBookmark;
   }
 
-  @Action(GetBookmarks)
+  @Action(GetBookmarks, { cancelUncompleted: true })
   getBookmarks(
     { getState, setState }: StateContext<BookmarkStateModel>,
     { id }: GetBookmarks
@@ -160,7 +160,7 @@ export class BookmarkState {
     );
   }
 
-  @Action(SetActiveBookmark)
+  @Action(SetActiveBookmark, { cancelUncompleted: true })
   setSelectedBookmarkId(
     { getState, setState }: StateContext<BookmarkStateModel>,
     { payload }: SetActiveBookmark

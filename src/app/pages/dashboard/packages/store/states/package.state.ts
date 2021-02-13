@@ -49,7 +49,7 @@ export class PackageState {
     return state.activePackage;
   }
 
-  @Action(GetPackages)
+  @Action(GetPackages, { cancelUncompleted: true })
   getPackages(
     { getState, setState }: StateContext<PackageStateModel>,
     { id }: GetPackages
@@ -158,7 +158,7 @@ export class PackageState {
     );
   }
 
-  @Action(SetActivePackage)
+  @Action(SetActivePackage, { cancelUncompleted: true })
   setSelectedPackageId(
     { getState, setState }: StateContext<PackageStateModel>,
     { payload }: SetActivePackage

@@ -115,7 +115,7 @@ export class SnippetFolderState {
     );
   }
 
-  @Action(SetActiveSnippetFolder)
+  @Action(SetActiveSnippetFolder, { cancelUncompleted: true })
   setSelectedSnippetId(
     { getState, setState }: StateContext<SnippetFolderStateModel>,
     { payload }: SetActiveSnippetFolder
