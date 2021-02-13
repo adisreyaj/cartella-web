@@ -39,15 +39,17 @@
         </li>
       </ng-container>
     </ul>
-    <ng-template #loading>
-      <ul>
-        <li class="explorer-sidebar__item user-item" [style.paddingRight.rem]="1.2" [style.minHeight.px]="48">
-          <span class="w-full h-5 shimmer dark"></span>
-        </li>
-        <li class="explorer-sidebar__item user-item" [style.paddingRight.rem]="1.2" [style.minHeight.px]="48">
-          <span class="w-full h-5 shimmer dark"></span>
-        </li>
-      </ul>
-    </ng-template>
   </section>
 </div>
+
+
+<ng-template #loading>
+  <ul>
+    <li class="explorer-sidebar__item user-item" [style.paddingRight.rem]="1.2" [style.minHeight.px]="48">
+      <span class="w-full h-5 shimmer dark"></span>
+    </li>
+    <li class="explorer-sidebar__item user-item" [style.paddingRight.rem]="1.2" [style.minHeight.px]="48">
+      <span class="w-full h-5 shimmer dark"></span>
+    </li>
+  </ul>
+</ng-template>

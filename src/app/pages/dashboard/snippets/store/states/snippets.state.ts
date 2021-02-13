@@ -15,9 +15,16 @@ export class SnippetStateModel {
   allSnippets: Snippet[];
   snippetsShown: Snippet[];
   activeSnippet: Snippet;
+  fetched: boolean;
 }
 @State({
   name: 'snippets',
+  defaults: {
+    allSnippets: [],
+    snippetsShown: [],
+    activeSnippet: null,
+    fetched: false,
+  },
 })
 @Injectable()
 export class SnippetState {
@@ -27,6 +34,12 @@ export class SnippetState {
   static getAllSnippets(state: SnippetStateModel) {
     return state.allSnippets;
   }
+
+  @Selector()
+  static getSnippetFetched(state: SnippetStateModel) {
+    return state.fetched;
+  }
+
   @Selector()
   static getSnippetsShown(state: SnippetStateModel) {
     return state.snippetsShown;
@@ -52,6 +65,7 @@ export class SnippetState {
               ...state,
               allSnippets: result,
               snippetsShown: result,
+              fetched: true,
             });
           })
         );
@@ -150,16 +164,18 @@ export class SnippetState {
     { getState, setState }: StateContext<SnippetStateModel>,
     { payload }: SetActiveSnippet
   ) {
-    const state = getState();
-    if (
-      !state.activeSnippet ||
-      (state.activeSnippet && state.activeSnippet.id !== payload.id)
-    ) {
-      setState({
-        ...state,
-        activeSnippet: payload,
-      });
-      return this.snippetService.updateViews(payload.id);
+    if (payload) {
+      const state = getState();
+      if (
+        !state.activeSnippet ||
+        (state.activeSnippet && state.activeSnippet.id !== payload.id)
+      ) {
+        setState({
+          ...state,
+          activeSnippet: payload,
+        });
+        return this.snippetService.updateViews(payload.id);
+      }
     }
   }
 }

@@ -2,11 +2,12 @@
   <aside>
     <app-explorer-sidebar type="snippets" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
+                          [isLoading]="snippetFolderLoading$ | async" [isFetched]="snippetFolderFetched$ | async"
                           (folderSelected)="handleSelectFolder($event)">
     </app-explorer-sidebar>
   </aside>
   <main class="grid snippets__main" style="grid-template-columns: 300px 1fr;">
-    <app-snippets-sidebar [snippets]="snippetsShown$ | async">
+    <app-snippets-sidebar [snippets]="snippetsShown$ | async" [isLoading]="snippetLoading$ | async">
     </app-snippets-sidebar>
     <app-snippets-playground [activeSnippet]="activeSnippet$ | async" [technologies]="technologies$ | async">
     </app-snippets-playground>
