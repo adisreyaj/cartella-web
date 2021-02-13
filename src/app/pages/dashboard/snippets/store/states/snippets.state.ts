@@ -50,13 +50,19 @@ export class SnippetState {
     return state.activeSnippet;
   }
 
-  @Action(GetSnippets)
+  @Action(GetSnippets, { cancelUncompleted: true })
   getSnippets(
-    { getState, setState }: StateContext<SnippetStateModel>,
+    { getState, setState, patchState }: StateContext<SnippetStateModel>,
     { id }: GetSnippets
   ) {
     switch (id) {
       case 'all':
+        const state = getState();
+        if (state.fetched) {
+          patchState({
+            snippetsShown: state.allSnippets,
+          });
+        }
         return this.snippetService.getSnippets().pipe(
           map(({ payload }) => payload),
           tap((result) => {
@@ -74,8 +80,7 @@ export class SnippetState {
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
-            setState({
-              ...state,
+            patchState({
               snippetsShown: result,
             });
           })
@@ -85,8 +90,7 @@ export class SnippetState {
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
-            setState({
-              ...state,
+            patchState({
               snippetsShown: result,
             });
           })
@@ -159,7 +163,7 @@ export class SnippetState {
     );
   }
 
-  @Action(SetActiveSnippet)
+  @Action(SetActiveSnippet, { cancelUncompleted: true })
   setSelectedSnippet(
     { getState, setState }: StateContext<SnippetStateModel>,
     { payload }: SetActiveSnippet
