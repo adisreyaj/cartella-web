@@ -13,6 +13,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Bookmark,
   BookmarkAddModalPayload,
@@ -43,6 +44,10 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
 
   @Select(BookmarkState.getBookmarkFetched)
   bookmarkFetched$: Observable<boolean>;
+
+  packagesCount = new Array(
+    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
+  ).fill('');
 
   private subs = new SubSink();
   constructor(private dialog: DialogService, private store: Store) {}
