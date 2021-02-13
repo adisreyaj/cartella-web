@@ -39,7 +39,7 @@ export class PackagesListComponent implements OnInit {
   @Input() isLoading = false;
 
   packagesCount = new Array(
-    this.store.selectSnapshot(HomeState.getItemsCount).items.packages
+    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
   ).fill('');
 
   @Select(PackageState.isPackageFetched)
