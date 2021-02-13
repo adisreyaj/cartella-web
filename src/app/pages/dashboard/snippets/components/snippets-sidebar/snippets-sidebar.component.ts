@@ -51,6 +51,9 @@ export class SnippetsSidebarComponent
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
 
+  @Select(SnippetState.getSnippetFetched)
+  snippetFetched$: Observable<boolean>;
+
   @Select(SnippetFolderState.getActiveSnippetFolder)
   activeFolder$: Observable<SnippetFolder>;
 
