@@ -34,6 +34,7 @@ export class ExplorerSidebarComponent implements OnInit {
   }
   handleSelectFolder(folder) {
     this.folderSelected.emit(folder);
+    this.closeMenu();
   }
   handleEditFolder(folder) {
     this.editFolder.emit(folder);
