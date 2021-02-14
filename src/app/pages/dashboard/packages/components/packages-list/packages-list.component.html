@@ -9,15 +9,19 @@
         New</button>
     </div>
   </header>
-  <section class="grid gap-4 packages-grid">
-    <ng-container *ngIf="!isLoading || (fetched$ | async);else shimmerLoader">
-      <ng-container *ngIf="packages?.length > 0;else noPackages">
+  <ng-container *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (fetched$ | async));else shimmerLoader">
+    <ng-container *ngIf="packages?.length > 0;else noPackages">
+      <section class="grid gap-4 pb-6 packages-grid">
         <app-packages-list-card *ngFor="let package of packages;trackBy: trackBy" [package]="package"
                                 (cardEvent)="handleCardEvent($event)">
         </app-packages-list-card>
-      </ng-container>
+      </section>
     </ng-container>
-  </section>
+  </ng-container>
+  <button class="fixed flex p-4 rounded-full bottom-4 left-4 bg-primary shadow-floating md:hidden default-ring"
+          (click)="toggleMenu()">
+    <rmx-icon name="folders-line" class="text-white icon-3xl"></rmx-icon>
+  </button>
 </div>
 
 
@@ -31,22 +35,24 @@
 </ng-template>
 
 <ng-template #shimmerLoader>
-  <ng-container *ngFor="let item of packagesCount">
-    <div class="relative flex flex-col p-2 bg-white rounded-md shadow-md hover:shadow-lg">
-      <header class="flex items-center justify-start w-full h-20 space-x-4">
-        <div class="w-12 h-12 rounded-full shimmer"></div>
-        <div class="flex flex-col flex-1">
-          <span class="w-full h-4 mb-2 shimmer"></span>
-          <span class="w-full h-2 mb-1 shimmer"></span>
-          <span class="w-full h-2 shimmer"></span>
-        </div>
-      </header>
-      <section class="w-full h-12 mb-4 shimmer">
-      </section>
-      <section class="w-full h-12 mb-4 shimmer">
-      </section>
-      <footer class="w-full h-8 shimmer">
-      </footer>
-    </div>
-  </ng-container>
+  <section class="grid gap-4 pb-6 packages-grid">
+    <ng-container *ngFor="let item of packagesCount">
+      <div class="relative flex flex-col p-2 bg-white rounded-md shadow-md hover:shadow-lg">
+        <header class="flex items-center justify-start w-full h-20 space-x-4">
+          <div class="w-12 h-12 rounded-full shimmer"></div>
+          <div class="flex flex-col flex-1">
+            <span class="w-full h-4 mb-2 shimmer"></span>
+            <span class="w-full h-2 mb-1 shimmer"></span>
+            <span class="w-full h-2 shimmer"></span>
+          </div>
+        </header>
+        <section class="w-full h-12 mb-4 shimmer">
+        </section>
+        <section class="w-full h-12 mb-4 shimmer">
+        </section>
+        <footer class="w-full h-8 shimmer">
+        </footer>
+      </div>
+    </ng-container>
+  </section>
 </ng-template>

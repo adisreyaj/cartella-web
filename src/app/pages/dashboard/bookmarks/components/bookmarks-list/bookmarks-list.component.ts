@@ -8,11 +8,13 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
+import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Bookmark,
   BookmarkAddModalPayload,
@@ -24,6 +26,7 @@ import {
   DeleteBookmark,
   UpdateBookmark,
 } from '../../shared/store/actions/bookmarks.action';
+import { BookmarkFolderState } from '../../shared/store/states/bookmark-folders.state';
 import { BookmarkState } from '../../shared/store/states/bookmarks.state';
 import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.component';
 
@@ -41,16 +44,32 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
 
   @Input() isLoading = false;
 
+  @Select(BookmarkFolderState.getActiveBookmarkFolder)
+  activeFolder$: Observable<BookmarkFolder>;
+
   @Select(BookmarkState.getBookmarkFetched)
   bookmarkFetched$: Observable<boolean>;
 
+  packagesCount = new Array(
+    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
+  ).fill('');
+
   private subs = new SubSink();
-  constructor(private dialog: DialogService, private store: Store) {}
+  constructor(
+    private dialog: DialogService,
+    private store: Store,
+    private menu: MenuService
+  ) {}
 
   ngOnInit(): void {}
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
+
+  toggleMenu() {
+    this.menu.toggleMenu();
+  }
+
   trackBy(_, { id }: { id: string }) {
     return id;
   }

@@ -1,5 +1,5 @@
-<div class="p-4 h-full flex flex-col">
-  <header class="flex justify-between items-center mb-8">
+<div class="flex flex-col h-full p-4">
+  <header class="flex items-center justify-between mb-8">
     <div>
       <p class="text-xl font-bold text-gray-700">Bookmarks</p>
       <p class="text-sm text-gray-500">Manage your bookmarks</p>
@@ -9,22 +9,50 @@
         New</button>
     </div>
   </header>
-  <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
-    <section class="bookmarks-grid grid gap-4">
-      <ng-container *ngFor="let bookmark of bookmarks;trackBy: trackBy">
-        <app-bookmarks-list-card [bookmark]="bookmark" (cardEvent)="handleCardEvent($event)">
+  <ng-container
+                *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (bookmarkFetched$ | async));else shimmerLoader">
+    <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
+      <section class="grid gap-4 bookmarks-grid">
+        <app-bookmarks-list-card *ngFor="let bookmark of bookmarks;trackBy: trackBy" [bookmark]="bookmark"
+                                 (cardEvent)="handleCardEvent($event)">
         </app-bookmarks-list-card>
-      </ng-container>
-    </section>
+      </section>
+    </ng-container>
   </ng-container>
+  <button class="fixed flex p-4 rounded-full bottom-4 left-4 bg-primary shadow-floating md:hidden default-ring"
+          (click)="toggleMenu()">
+    <rmx-icon name="folders-line" class="text-white icon-3xl"></rmx-icon>
+  </button>
 </div>
 
 
 <ng-template #noBookmarks>
-  <div class="grid place-items-center flex-1">
+  <div class="grid flex-1 place-items-center">
     <div class="flex flex-col items-center justify-center">
       <img src="../../../../../../assets/images/add-file.svg" alt="No Bookmarks" class="" height="150px" width="150px">
-      <p class="text-sm text-gray-500 mt-4">No Bookmarks Found!</p>
+      <p class="mt-4 text-sm text-gray-500">No Bookmarks Found!</p>
     </div>
   </div>
+</ng-template>
+
+<ng-template #shimmerLoader>
+  <section class="grid gap-4 bookmarks-grid">
+    <ng-container *ngFor="let item of packagesCount">
+      <div class="relative flex flex-col p-2 bg-white rounded-md shadow-md hover:shadow-lg">
+        <header class="w-full mb-4 rounded-sm shimmer" [style.height.px]="150">
+        </header>
+        <section class="w-full h-12 mb-2 shimmer">
+        </section>
+        <section class="w-full h-12 mb-4 shimmer">
+        </section>
+        <footer class="flex justify-between w-full h-8">
+          <span class="w-10 h-full shimmer"></span>
+          <div>
+            <span class="h-full mr-2 w-14 shimmer"></span>
+            <span class="h-full w-14 shimmer"></span>
+          </div>
+        </footer>
+      </div>
+    </ng-container>
+  </section>
 </ng-template>

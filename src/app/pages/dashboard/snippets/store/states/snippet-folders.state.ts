@@ -14,9 +14,15 @@ import {
 export class SnippetFolderStateModel {
   snippetFolders: SnippetFolder[];
   activeSnippetFolder: SnippetFolder;
+  fetched: boolean;
 }
 @State({
   name: 'snippetFolders',
+  defaults: {
+    snippetFolders: [],
+    activeSnippetFolder: null,
+    fetched: false,
+  },
 })
 @Injectable()
 export class SnippetFolderState {
@@ -25,6 +31,11 @@ export class SnippetFolderState {
   @Selector()
   static getSnippetFoldersList(state: SnippetFolderStateModel) {
     return state.snippetFolders;
+  }
+
+  @Selector()
+  static getSnippetFolderFetched(state: SnippetFolderStateModel) {
+    return state.fetched;
   }
 
   @Selector()
@@ -44,6 +55,7 @@ export class SnippetFolderState {
         setState({
           ...state,
           snippetFolders: result,
+          fetched: true,
         });
       })
     );
@@ -103,7 +115,7 @@ export class SnippetFolderState {
     );
   }
 
-  @Action(SetActiveSnippetFolder)
+  @Action(SetActiveSnippetFolder, { cancelUncompleted: true })
   setSelectedSnippetId(
     { getState, setState }: StateContext<SnippetFolderStateModel>,
     { payload }: SetActiveSnippetFolder

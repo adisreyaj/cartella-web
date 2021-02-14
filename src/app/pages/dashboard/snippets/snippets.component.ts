@@ -11,7 +11,7 @@ import { User } from '@app/interfaces/user.interface';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { SubSink } from 'subsink';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import { Snippet, SnippetFolder } from './interfaces/snippets.interface';
@@ -52,6 +52,18 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   @Select(TechnologyState.getTechnologiesList)
   technologies$: Observable<Technology[]>;
 
+  @Select(SnippetState.getSnippetFetched)
+  snippetsFetched$: Observable<boolean>;
+
+  @Select(SnippetFolderState.getSnippetFolderFetched)
+  snippetFolderFetched$: Observable<boolean>;
+
+  private snippetFolderLoadingSubject = new BehaviorSubject(false);
+  snippetFolderLoading$ = this.snippetFolderLoadingSubject.pipe();
+
+  private snippetLoadingSubject = new BehaviorSubject(false);
+  snippetLoading$ = this.snippetLoadingSubject.pipe();
+
   constructor(
     private editorService: CodeEditorService,
     private activatedRoute: ActivatedRoute,
@@ -62,21 +74,29 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getSnippetFolders();
     this.getSnippets();
-    this.editorService.injectCustomScripts();
   }
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
 
   get snippetSlug() {
-    return this.activatedRoute.snapshot.paramMap.get('slug') ?? null;
+    return this.activatedRoute.snapshot.paramMap.get('slug');
   }
 
   handleSelectFolder(folder: SnippetFolder) {
     if (folder) {
+      this.snippetLoadingSubject.next(true);
       this.store.dispatch(new SetActiveSnippetFolder(folder));
       this.store.dispatch(new SetActiveSnippet(null));
-      this.store.dispatch(new GetSnippets(folder.id));
+      const sub = this.store.dispatch(new GetSnippets(folder.id)).subscribe(
+        () => {
+          this.snippetLoadingSubject.next(false);
+        },
+        () => {
+          this.snippetLoadingSubject.next(false);
+        }
+      );
+      this.subs.add(sub);
     }
   }
   handleEditFolder(folder: SnippetFolder) {
@@ -101,13 +121,32 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   }
 
   private getSnippets() {
+    this.snippetLoadingSubject.next(true);
     const folderState = this.store.selectSnapshot(
       (state) => state.snippetFolders
     );
-    this.store.dispatch(new GetSnippets(folderState?.activeSnippetFolder?.id));
+    this.store
+      .dispatch(new GetSnippets(folderState?.activeSnippetFolder?.id))
+      .subscribe(
+        () => {
+          this.snippetLoadingSubject.next(false);
+        },
+        () => {
+          this.snippetLoadingSubject.next(false);
+        }
+      );
   }
   private getSnippetFolders() {
-    this.store.dispatch(new GetSnippetFolders());
+    this.snippetFolderLoadingSubject.next(true);
+    const sub = this.store.dispatch(new GetSnippetFolders()).subscribe(
+      () => {
+        this.snippetFolderLoadingSubject.next(false);
+      },
+      () => {
+        this.snippetFolderLoadingSubject.next(false);
+      }
+    );
+    this.subs.add(sub);
     this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER));
   }
 }

@@ -9,12 +9,13 @@
   <div></div>
 </header>
 <section class="relative overflow-y-auto snippets-sidebar__list">
-  <ng-container *ngIf="(snippetsToShow$ | async) as snippets">
-    <ul *ngIf="snippets?.length > 0;else noSnippets" role="list">
-      <ng-container *ngFor="let snippet of snippets;trackBy:trackBy">
+  <ng-container
+                *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (snippetFetched$ | async)); else shimmerLoading">
+    <ul *ngIf="(snippetsToShow$ | async)?.length > 0;else noSnippets">
+      <ng-container *ngFor="let snippet of (snippetsToShow$ | async);trackBy:trackBy">
         <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
             (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id" appHovered
-            role="listitem" #snippetListItem>
+            #snippetListItem>
           <div>
             <p class="mb-1">{{snippet?.name}}</p>
             <div class="flex items-center">
@@ -36,12 +37,8 @@
       </ng-container>
     </ul>
   </ng-container>
-  <ng-template #noSnippets>
-    <div class="grid mt-10 place-items-center">
-      <img src="../../../../../../assets/images/add-file.svg" alt="Add Snippet" height="150px" width="150px">
-      <p class="mt-6 text-sm text-gray-400">No Snippets found</p>
-    </div>
-  </ng-template>
+
+
 </section>
 <div class="absolute bottom-4 right-4">
   <button iconButton class="flex items-center justify-center w-12 h-12 rounded-full shadow-2xl focus:outline-none"
@@ -50,7 +47,6 @@
     <rmx-icon name="add-line" class="icon-xl"></rmx-icon>
   </button>
 </div>
-
 
 <ng-template #createSnippetSelector let-hide>
   <div class="flex flex-col w-44">
@@ -61,4 +57,29 @@
       </div>
     </ng-container>
   </div>
+</ng-template>
+
+
+<ng-template #noSnippets>
+  <div class="grid mt-10 place-items-center">
+    <img src="../../../../../../assets/images/add-file.svg" alt="Add Snippet" height="150px" width="150px">
+    <p class="mt-6 text-sm text-gray-400">No Snippets found</p>
+  </div>
+</ng-template>
+
+<ng-template #shimmerLoading>
+  <ul>
+    <li class="flex flex-col justify-center px-3 py-2" [style.height.px]="58">
+      <div class="w-full h-6 mb-1 shimmer"></div>
+      <div class="grid grid-cols-6">
+        <div class="flex items-center col-span-4 space-x-2">
+          <span class="w-4 h-4 rounded-md shimmer"></span>
+          <span class="w-16 h-3 shimmer"></span>
+        </div>
+        <div class="col-span-2">
+          <span class="w-full h-3 shimmer"></span>
+        </div>
+      </div>
+    </li>
+  </ul>
 </ng-template>

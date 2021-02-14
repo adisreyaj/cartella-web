@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -53,21 +54,40 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   private bookmarkLoadingSubject = new BehaviorSubject(false);
   bookmarkLoading$ = this.bookmarkLoadingSubject.pipe();
 
+  isMenuOpen$: Observable<boolean>;
   private subs = new SubSink();
-  constructor(private store: Store, private dialog: DialogService) {}
+  constructor(
+    private store: Store,
+    private dialog: DialogService,
+    private menu: MenuService
+  ) {}
 
   ngOnInit(): void {
     this.getBookmarkFolders();
     this.getBookmarks();
+    this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
 
+  closeMenu() {
+    this.menu.closeMenu();
+  }
+
   handleSelectFolder(folder: BookmarkFolder) {
     if (folder) {
+      this.bookmarkLoadingSubject.next(true);
       this.store.dispatch(new SetActiveBookmarkFolder(folder));
-      this.store.dispatch(new GetBookmarks(folder.id));
+      const sub = this.store.dispatch(new GetBookmarks(folder.id)).subscribe(
+        () => {
+          this.bookmarkLoadingSubject.next(false);
+        },
+        () => {
+          this.bookmarkLoadingSubject.next(false);
+        }
+      );
+      this.subs.add(sub);
     }
   }
   handleEditFolder(folder: BookmarkFolder) {

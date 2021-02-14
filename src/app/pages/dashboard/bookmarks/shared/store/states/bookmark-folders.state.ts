@@ -114,8 +114,8 @@ export class BookmarkFolderState {
     );
   }
 
-  @Action(SetActiveBookmarkFolder)
-  setSelectedBookmarkId(
+  @Action(SetActiveBookmarkFolder, { cancelUncompleted: true })
+  setSelectedBookmark(
     { getState, setState }: StateContext<BookmarkFolderStateModel>,
     { payload }: SetActiveBookmarkFolder
   ) {

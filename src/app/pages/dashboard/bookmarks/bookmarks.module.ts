@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefaultImageModule } from '@app/directives/default-image/default-image.module';
 import { IconModule } from '@app/modules/icon/icon.module';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { ButtonsModule } from 'projects/ui/src/public-api';
@@ -14,8 +15,8 @@ import { BookmarksComponent } from './bookmarks.component';
 import { BookmarksListCardComponent } from './components/bookmarks-list/bookmarks-list-card/bookmarks-list-card.component';
 import { BookmarksListComponent } from './components/bookmarks-list/bookmarks-list.component';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
-import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmarks-add.component';
 import { BookmarkAddPreviewComponent } from './components/modals/bookmarks-add/bookmark-add-preview/bookmark-add-preview.component';
+import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmarks-add.component';
 
 @NgModule({
   declarations: [
@@ -40,5 +41,6 @@ import { BookmarkAddPreviewComponent } from './components/modals/bookmarks-add/b
     ExplorerSidebarModule,
     DefaultImageModule,
   ],
+  providers: [MenuService],
 })
 export class BookmarksModule {}

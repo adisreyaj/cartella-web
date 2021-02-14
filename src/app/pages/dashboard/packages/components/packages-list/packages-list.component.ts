@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { User } from '@app/interfaces/user.interface';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -22,6 +23,7 @@ import {
   DeletePackage,
   UpdatePackage,
 } from '../../store/actions/package.action';
+import { PackageFolderState } from '../../store/states/package-folders.state';
 import { PackageState } from '../../store/states/package.state';
 import { PackagesAddComponent } from '../modals/packages-add/packages-add.component';
 
@@ -42,13 +44,24 @@ export class PackagesListComponent implements OnInit {
     this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
   ).fill('');
 
+  @Select(PackageFolderState.getActivePackageFolder)
+  activeFolder$: Observable<PackageFolder>;
+
   @Select(PackageState.isPackageFetched)
   fetched$: Observable<boolean>;
 
   private subs = new SubSink();
-  constructor(private dialog: DialogService, private store: Store) {}
+  constructor(
+    private dialog: DialogService,
+    private store: Store,
+    private menu: MenuService
+  ) {}
 
   ngOnInit(): void {}
+
+  toggleMenu() {
+    this.menu.toggleMenu();
+  }
 
   trackBy(_, { id }: { id: string }) {
     return id;

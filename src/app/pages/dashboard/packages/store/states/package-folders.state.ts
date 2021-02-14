@@ -103,8 +103,8 @@ export class PackageFolderState {
     );
   }
 
-  @Action(SetActivePackageFolder)
-  setSelectedPackageId(
+  @Action(SetActivePackageFolder, { cancelUncompleted: true })
+  setSelectedPackage(
     { getState, setState }: StateContext<PackageFolderStateModel>,
     { payload }: SetActivePackageFolder
   ) {

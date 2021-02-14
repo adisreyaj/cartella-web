@@ -15,7 +15,8 @@ import { Technology } from '@app/interfaces/technology.interface';
 import { NameGeneratorService } from '@app/services/name-generator/name-generator.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { Select, Store } from '@ngxs/store';
-import { fromEvent, Observable, Subject } from 'rxjs';
+import { has } from 'lodash-es';
+import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -50,18 +51,22 @@ export class SnippetsSidebarComponent
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
 
+  @Select(SnippetState.getSnippetFetched)
+  snippetFetched$: Observable<boolean>;
+
   @Select(SnippetFolderState.getActiveSnippetFolder)
   activeFolder$: Observable<SnippetFolder>;
 
   @Select(TechnologyState.getTechnologiesList)
   technologies$: Observable<Technology[]>;
 
-  private snippetsToShowSubject = new Subject<Snippet[]>();
+  private snippetsToShowSubject = new BehaviorSubject<Snippet[]>([]);
   snippetsToShow$ = this.snippetsToShowSubject.pipe();
 
   private subs = new SubSink();
 
   @ViewChild('searchRef') searchRef: ElementRef;
+
   constructor(
     private store: Store,
     private nameGeneratorService: NameGeneratorService
@@ -69,7 +74,7 @@ export class SnippetsSidebarComponent
 
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
-    if (Object.prototype.hasOwnProperty.call(changes, 'snippets')) {
+    if (has(changes, 'snippets')) {
       if (changes.snippets.currentValue) {
         this.snippetsToShowSubject.next(changes.snippets.currentValue);
       }

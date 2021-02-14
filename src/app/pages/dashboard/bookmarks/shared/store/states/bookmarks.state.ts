@@ -50,13 +50,19 @@ export class BookmarkState {
     return state.activeBookmark;
   }
 
-  @Action(GetBookmarks)
+  @Action(GetBookmarks, { cancelUncompleted: true })
   getBookmarks(
-    { getState, setState }: StateContext<BookmarkStateModel>,
+    { getState, setState, patchState }: StateContext<BookmarkStateModel>,
     { id }: GetBookmarks
   ) {
     switch (id) {
       case 'all':
+        const state = getState();
+        if (state.fetched) {
+          patchState({
+            bookmarksShown: state.allBookmarks,
+          });
+        }
         return this.bookmarkService.getBookmarks().pipe(
           map(({ payload }) => payload),
           tap((result) => {
@@ -65,6 +71,7 @@ export class BookmarkState {
               ...state,
               allBookmarks: result,
               bookmarksShown: result,
+              fetched: true,
             });
           })
         );
@@ -73,8 +80,7 @@ export class BookmarkState {
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
-            setState({
-              ...state,
+            patchState({
               bookmarksShown: result,
             });
           })
@@ -84,8 +90,7 @@ export class BookmarkState {
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
-            setState({
-              ...state,
+            patchState({
               bookmarksShown: result,
             });
           })
@@ -112,7 +117,7 @@ export class BookmarkState {
 
   @Action(UpdateBookmark)
   updateBookmark(
-    { getState, setState }: StateContext<BookmarkStateModel>,
+    { getState, patchState }: StateContext<BookmarkStateModel>,
     { payload, id }: UpdateBookmark
   ) {
     return this.bookmarkService.updateBookmark(id, payload).pipe(
@@ -128,8 +133,7 @@ export class BookmarkState {
           (item) => item.id === id
         );
         shownBookmarkList[shownBookmarkIndex] = result;
-        setState({
-          ...state,
+        patchState({
           allBookmarks: allBookmarkList,
           bookmarksShown: shownBookmarkList,
         });
@@ -139,7 +143,7 @@ export class BookmarkState {
 
   @Action(DeleteBookmark)
   deleteBookmark(
-    { getState, setState }: StateContext<BookmarkStateModel>,
+    { getState, patchState }: StateContext<BookmarkStateModel>,
     { id }: DeleteBookmark
   ) {
     return this.bookmarkService.deleteBookmark(id).pipe(
@@ -151,8 +155,7 @@ export class BookmarkState {
         const filteredVisibleBookmarks = state.bookmarksShown.filter(
           (item) => item.id !== id
         );
-        setState({
-          ...state,
+        patchState({
           allBookmarks: filteredAllBookmarks,
           bookmarksShown: filteredVisibleBookmarks,
         });
@@ -160,14 +163,13 @@ export class BookmarkState {
     );
   }
 
-  @Action(SetActiveBookmark)
+  @Action(SetActiveBookmark, { cancelUncompleted: true })
   setSelectedBookmarkId(
-    { getState, setState }: StateContext<BookmarkStateModel>,
+    { getState, patchState }: StateContext<BookmarkStateModel>,
     { payload }: SetActiveBookmark
   ) {
     const state = getState();
-    setState({
-      ...state,
+    patchState({
       activeBookmark: payload,
     });
   }
