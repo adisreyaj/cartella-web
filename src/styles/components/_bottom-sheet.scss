@@ -1,0 +1,19 @@
+@mixin bottom-sheet() {
+  @apply transition-transform;
+  @apply transform-gpu;
+  @apply duration-500;
+  @apply ease-in-out;
+  @apply fixed;
+  @apply left-2;
+  @apply z-50;
+  @apply rounded-tl-md;
+  @apply rounded-tr-md;
+  @apply bg-white;
+  transform: translateY(100vh);
+  width: calc(100% - 1rem);
+  height: 70%;
+  bottom: 0;
+  &.open {
+    transform: translateY(0px);
+  }
+}

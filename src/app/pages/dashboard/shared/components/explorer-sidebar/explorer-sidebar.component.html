@@ -1,7 +1,10 @@
 <div class="w-full py-4 explorer-sidebar">
   <section>
-    <header class="px-4 mb-4 text-gray-500">
+    <header class="flex items-center justify-between px-4 mb-4 text-gray-500">
       <h4 class="text-sm">Library</h4>
+      <button (click)="closeMenu()">
+        <rmx-icon name="close-line" class="icon-xl"></rmx-icon>
+      </button>
     </header>
     <ul>
       <li class="flex items-center mb-3 explorer-sidebar__item" [class.active]="activeFolder?.id === 'all'"
@@ -32,7 +35,7 @@
             {{folder?.name}}
           </span>
           <button (click)="handleEditFolder(folder);$event.stopPropagation()"
-                  class="p-1 text-gray-500 transition-opacity duration-75 rounded-full opacity-0 edit-button default-ring hover:bg-gray-300 hover:text-primary"
+                  class="p-1 text-gray-500 transition-opacity duration-75 rounded-full opacity-100 md:opacity-0 edit-button default-ring hover:bg-gray-300 hover:text-primary"
                   tippy="Edit folder" aria-label="Edit Folder">
             <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
           </button>

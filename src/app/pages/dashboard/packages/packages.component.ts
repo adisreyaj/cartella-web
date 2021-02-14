@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
-import { AuthService } from '@app/services/auth/auth.service';
+import { MenuService } from '@app/services/menu/menu.service';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -47,22 +47,28 @@ export class PackagesComponent implements OnInit, OnDestroy {
   private packageFolderLoadingSubject = new BehaviorSubject(false);
   packageFolderLoading$ = this.packageFolderLoadingSubject.pipe();
 
+  isMenuOpen$: Observable<boolean>;
+
   private subs = new SubSink();
   constructor(
     private store: Store,
-    private auth: AuthService,
+    private menu: MenuService,
     private dialog: DialogService
   ) {}
 
   ngOnInit(): void {
     this.getPackageFolders();
     this.getPackages();
+    this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
 
+  closeMenu() {
+    this.menu.closeMenu();
+  }
   handleSelectFolder(folder: PackageFolder) {
     if (folder) {
       this.store.dispatch(new SetActivePackageFolder(folder));

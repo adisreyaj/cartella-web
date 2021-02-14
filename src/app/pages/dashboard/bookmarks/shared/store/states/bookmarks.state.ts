@@ -65,6 +65,7 @@ export class BookmarkState {
               ...state,
               allBookmarks: result,
               bookmarksShown: result,
+              fetched: true,
             });
           })
         );

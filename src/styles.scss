@@ -29,3 +29,8 @@ a {
 .swiper-wrapper {
   padding-bottom: 1rem;
 }
+
+button,
+a {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}

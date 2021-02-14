@@ -9,7 +9,7 @@
         New</button>
     </div>
   </header>
-  <section class="grid gap-4 packages-grid">
+  <section class="grid gap-4 pb-6 packages-grid">
     <ng-container *ngIf="!isLoading || (fetched$ | async);else shimmerLoader">
       <ng-container *ngIf="packages?.length > 0;else noPackages">
         <app-packages-list-card *ngFor="let package of packages;trackBy: trackBy" [package]="package"
@@ -18,6 +18,10 @@
       </ng-container>
     </ng-container>
   </section>
+  <button class="fixed flex p-4 rounded-full bottom-4 left-4 bg-primary shadow-floating md:hidden default-ring"
+          (click)="toggleMenu()">
+    <rmx-icon name="folders-line" class="text-white icon-3xl"></rmx-icon>
+  </button>
 </div>
 
 

@@ -5,7 +5,8 @@
 
     </div>
   </div>
-  <div class="flex w-full h-screen px-6 md:mx-auto lg:px-16 xl:px-12 items-left justify-left" style="max-width: 600px;">
+  <div class="flex items-center justify-center w-full h-screen px-6 md:mx-auto lg:px-16 xl:px-12"
+       style="max-width: 600px;">
     <div class="grid w-full py-32 lg:py-6 lg:h-100 place-items-center">
       <div class="w-full sm:w-3/4">
         <div class="flex items-center">
@@ -14,22 +15,20 @@
         </div>
         <h2 class="my-8 mb-12 text-xl font-semibold tracking-tighter text-gray-700 sm:text-2xl">Login to access you
           collection.</h2>
-        <div class="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-6">
-          <button type="button" secondaryButton class="py-2 ring-default" (click)="signInWithGoogle()">
-            <div class="flex items-center justify-center">
-              <img src="../../../assets/images/google.svg" alt="Sign In with Google" style="height: 25px;">
-              <span class="ml-2 text-xs font-semibold">
-                Log in with Google
-              </span>
-            </div>
+        <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-6">
+          <button type="button" secondaryButton class="flex items-center justify-center py-2 ring-default"
+                  (click)="signInWithGoogle()">
+            <img src="../../../assets/images/google.svg" alt="Sign In with Google" style="height: 25px;">
+            <span class="ml-2 text-xs font-semibold">
+              Log in with Google
+            </span>
           </button>
-          <button type="button" secondaryButton class="py-2 ring-default" (click)="signInWithGithub()">
-            <div class="flex items-center justify-center">
-              <img src="../../../assets/images/github.svg" alt="Sign In with Github" style="height: 25px;">
-              <span class="ml-2 text-xs font-semibold">
-                Log in with Github
-              </span>
-            </div>
+          <button type="button" secondaryButton class="flex items-center justify-center py-2 ring-default"
+                  (click)="signInWithGithub()">
+            <img src="../../../assets/images/github.svg" alt="Sign In with Github" style="height: 25px;">
+            <span class="ml-2 text-xs font-semibold">
+              Log in with Github
+            </span>
           </button>
         </div>
         <form class="mt-6" [formGroup]="loginForm" (ngSubmit)="signInWithCredentials()">

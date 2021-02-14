@@ -19,6 +19,8 @@ import {
   RiFullscreenExitLine,
   RiFullscreenLine,
   RiHashtag,
+  RiHomeLine,
+  RiMenu4Line,
   RiMoreLine,
   RiPaletteLine,
   RiPencilLine,
@@ -66,6 +68,8 @@ const icons = {
   RiArchiveLine,
   RiArrowRightLine,
   RiArrowLeftLine,
+  RiMenu4Line,
+  RiHomeLine,
 };
 @NgModule({
   declarations: [],

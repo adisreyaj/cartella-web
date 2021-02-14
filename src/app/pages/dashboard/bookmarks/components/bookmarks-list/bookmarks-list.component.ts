@@ -8,6 +8,7 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -50,12 +51,21 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   ).fill('');
 
   private subs = new SubSink();
-  constructor(private dialog: DialogService, private store: Store) {}
+  constructor(
+    private dialog: DialogService,
+    private store: Store,
+    private menu: MenuService
+  ) {}
 
   ngOnInit(): void {}
   ngOnDestroy() {
     this.subs.unsubscribe();
   }
+
+  toggleMenu() {
+    this.menu.toggleMenu();
+  }
+
   trackBy(_, { id }: { id: string }) {
     return id;
   }

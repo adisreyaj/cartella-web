@@ -1,5 +1,7 @@
 :host {
-  min-height: calc(100vh - var(--header-height));
+  height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  padding-bottom: 1rem;
 }
 
 .packages-grid {

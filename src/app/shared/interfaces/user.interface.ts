@@ -4,7 +4,7 @@ export interface User {
   lastname: string;
   email: string;
   password?: string;
-  picture?: string;
+  image?: string;
   loginMethods?: LoginMethods;
 }
 

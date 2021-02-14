@@ -1,3 +1,5 @@
+@import 'bottom-sheet';
+
 .bookmarks {
   height: calc(100vh - var(--header-height));
   padding-top: 2px;
@@ -8,4 +10,25 @@
     @apply bg-white;
     box-shadow: 0 5.5px 10px rgb(0 0 0 / 12%), 0 100px 80px rgb(0 0 0 / 10%);
   }
+
+  aside {
+    @apply relative;
+  }
+  @media screen and (max-width: 767px) {
+    grid-template-columns: 1fr;
+    aside {
+      @include bottom-sheet();
+    }
+  }
+}
+
+.overlay {
+  @apply fixed;
+  @apply left-0;
+  @apply z-40;
+  @apply w-screen;
+  @apply bg-black;
+  @apply bg-opacity-50;
+  top: 0;
+  height: 100vh;
 }

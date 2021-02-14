@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  api: 'http://localhost:3222/cartella/api',
+  api: 'http://192.168.18.10:3222/cartella/api',
 };
 
 /*

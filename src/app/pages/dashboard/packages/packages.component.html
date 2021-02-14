@@ -1,9 +1,9 @@
 <div class="packages">
-  <aside>
+  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()">
     <app-explorer-sidebar type="packages" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           [isLoading]="packageFolderLoading$ | async" [isFetched]="packageFetched$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
-                          (folderSelected)="handleSelectFolder($event)">
+                          (folderSelected)="handleSelectFolder($event)" (menuClosed)="closeMenu()">
     </app-explorer-sidebar>
   </aside>
   <main class="overflow-y-auto packages__main">
@@ -11,4 +11,6 @@
                        [isLoading]="packageFolderLoading$ | async" [packages]="packagesShown$ | async">
     </app-packages-list>
   </main>
+
+  <div *ngIf="(isMenuOpen$ | async)" (click)="closeMenu()" class="overlay"></div>
 </div>
