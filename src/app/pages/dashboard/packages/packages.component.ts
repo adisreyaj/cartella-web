@@ -47,9 +47,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
   private packageFolderLoadingSubject = new BehaviorSubject(false);
   packageFolderLoading$ = this.packageFolderLoadingSubject.pipe();
 
-  private subs = new SubSink();
-
   isMenuOpen$: Observable<boolean>;
+
+  private subs = new SubSink();
   constructor(
     private store: Store,
     private menu: MenuService,

@@ -1,3 +1,5 @@
+@import 'bottom-sheet';
+
 .bookmarks {
   height: calc(100vh - var(--header-height));
   padding-top: 2px;
@@ -15,19 +17,7 @@
   @media screen and (max-width: 767px) {
     grid-template-columns: 1fr;
     aside {
-      @apply hidden;
-      &.menu-open {
-        @apply block;
-        @apply fixed;
-        @apply left-2;
-        @apply z-50;
-        @apply rounded-tl-md;
-        @apply rounded-tr-md;
-        @apply bg-white;
-        width: calc(100% - 1rem);
-        height: 70%;
-        bottom: 0;
-      }
+      @include bottom-sheet();
     }
   }
 }
@@ -40,5 +30,5 @@
   @apply bg-black;
   @apply bg-opacity-50;
   top: 0;
-  height: calc(100vh - var(--header-height));
+  height: 100vh;
 }
