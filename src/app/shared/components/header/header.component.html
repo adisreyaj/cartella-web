@@ -6,8 +6,8 @@
     <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-10 h-10" width="2.5rem" height="2.5rem">
     <p class="hidden ml-2 text-lg font-bold text-gray-700 md:block">CARTELLA</p>
   </div>
-  <div class="flex items-center h-full">
-    <nav class="relative items-center hidden h-full mr-10 text-gray-500 menu md:flex"
+  <div class="flex items-center h-full space-x-4">
+    <nav class="relative items-center h-full mr-10 text-gray-500 menu md:flex"
          [class.menu--open]="(isMenuOpen$ | async)">
       <ng-container *ngIf="(isMenuOpen$ | async)">
         <header class="left-0 flex items-center justify-between w-full px-6 top-2">
@@ -47,9 +47,6 @@
         </a>
       </div>
     </nav>
-    <div>
-
-    </div>
     <div class="flex items-center" *ngIf="user$ | async as user">
       <div class="relative dropdown">
         <button class="flex items-center btn btn-secondary dropdown-toggle focus:outline-none" type="button"

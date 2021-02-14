@@ -9,8 +9,8 @@
 
 header {
   height: var(--header-height);
-  .menu {
-    @media screen and (min-width: 768px) {
+  @media screen and (min-width: 768px) {
+    .menu {
       .menu__container {
         @apply flex;
         @apply items-center;
@@ -42,48 +42,60 @@ header {
         }
       }
     }
+  }
 
-    @media screen and (max-width: 768px) {
+  @media screen and (max-width: 768px) {
+    .menu {
+      opacity: 0;
+      width: calc(100% - 2rem);
+      height: auto;
+      min-height: 200px;
+      max-height: 500px;
+      display: flex !important;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      left: -5rem;
+      transform: scale(0);
+      @apply transition-transform;
+      @apply duration-300;
+      @apply ease-in-out;
+      @apply rounded-lg;
+      @apply shadow-xl;
+      @apply bg-white;
+      @apply z-50;
+      @apply items-center;
+      @apply justify-center;
+      &__container {
+        @apply mt-2;
+        @apply mb-4;
+        width: 70%;
+        @apply flex;
+        @apply flex-col;
+      }
+      &__item {
+        @apply flex;
+        @apply items-center;
+        @apply py-3;
+        @apply h-auto;
+        &-icon {
+          @apply p-2;
+          @apply rounded-full;
+        }
+        &.active {
+          @apply text-primary;
+          .menu__item-icon {
+            @apply bg-primary;
+            @apply text-white;
+          }
+        }
+      }
       &.menu--open {
-        width: calc(100% - 2rem);
-        height: auto;
-        min-height: 200px;
-        max-height: 500px;
-        display: flex !important;
-        flex-direction: column;
+        transform: scale(1) translateY(0px) translateX(0px);
         position: fixed;
+        opacity: 1;
         top: 1rem;
         left: 1rem;
-        @apply rounded-lg;
-        @apply shadow-xl;
-        @apply bg-white;
-        @apply z-50;
-        @apply items-center;
-        @apply justify-center;
-        .menu__container {
-          @apply mt-2;
-          @apply mb-2;
-          width: 70%;
-          @apply flex;
-          @apply flex-col;
-        }
-        .menu__item {
-          @apply flex;
-          @apply items-center;
-          @apply py-3;
-          @apply h-auto;
-          &-icon {
-            @apply p-2;
-            @apply rounded-full;
-          }
-          &.active {
-            @apply text-primary;
-            .menu__item-icon {
-              @apply bg-primary;
-              @apply text-white;
-            }
-          }
-        }
       }
     }
   }
