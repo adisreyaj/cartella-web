@@ -3,7 +3,7 @@
   --editor-header-height: 80px;
   --editor-footer-height: 36px;
   display: block;
-  height: 100%;
+  height: calc(100vh - var(--header-height) - 2px);
   width: 100%;
   overflow: hidden;
   @apply bg-gray-50;

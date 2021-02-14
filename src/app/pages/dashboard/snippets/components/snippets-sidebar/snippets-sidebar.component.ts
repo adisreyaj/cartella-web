@@ -3,10 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -29,6 +31,7 @@ import {
   Snippet as Snippet,
   SnippetFolder,
   SnippetRequest,
+  SNIPPET_MODES,
 } from '../../interfaces/snippets.interface';
 import {
   AddSnippet,
@@ -47,6 +50,10 @@ export class SnippetsSidebarComponent
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() snippets: Snippet[] = [];
   @Input() isLoading = false;
+  @Input() isLargeScreen = true;
+  @Input() mode = SNIPPET_MODES.EXPLORER;
+
+  @Output() modeChanged = new EventEmitter<SNIPPET_MODES>();
 
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
@@ -93,6 +100,9 @@ export class SnippetsSidebarComponent
   }
   selectSnippet(data: Snippet) {
     if (data) {
+      if (!this.isLargeScreen) {
+        this.modeChanged.emit(SNIPPET_MODES.EDITOR);
+      }
       this.store.dispatch(new SetActiveSnippet(data));
     }
   }

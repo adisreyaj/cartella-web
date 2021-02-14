@@ -1,37 +1,25 @@
 <div class="relative playground" #playground>
-  <header class="flex items-center justify-between px-4 bg-white playground__header rounded-tl-md"
-          [class]="themeFormControl.value">
-    <div *ngIf="activeSnippet">
-      <input type="text" name="snippet" class="px-2 py-1 mb-1 rounded-md" id="snippet-name" autocomplete="off"
-             [formControl]="snippetNameFormControl" #snippetNameRef (blur)="updateSnippetName()"
-             (keyup.enter)="updateSnippetName()">
-      <p class="ml-2 text-sm text-gray-500 playground__header-meta">Last updated: {{activeSnippet?.updatedAt |
-        date:'medium'}}</p>
+  <header class="flex items-center justify-between px-4 bg-white playground__header"
+          [class.rounded-tl-lg]="isLargeScreen" [class]="themeFormControl.value">
+    <div class="flex items-center space-x-2">
+      <button class="playground__header-button md:hidden" (click)="goBack()">
+        <rmx-icon name="arrow-left-line" class="icon-lg"></rmx-icon>
+      </button>
+      <div *ngIf="activeSnippet">
+        <input type="text" name="snippet" class="px-2 py-1 mb-1 rounded-md" id="snippet-name" autocomplete="off"
+               [formControl]="snippetNameFormControl" #snippetNameRef (blur)="updateSnippetName()"
+               (keyup.enter)="updateSnippetName()">
+        <p class="ml-2 text-sm text-gray-500 playground__header-meta">Updated: {{activeSnippet?.updatedAt | timeAgo}}
+        </p>
+      </div>
     </div>
-
-    <div class="grid grid-cols-6 gap-3">
-      <button class="playground__header-button" (click)="save()" tippy="Save Snippet" aria-label="Save Snippet">
-        <rmx-icon name="save-2-line" class="icon-lg"></rmx-icon>
-      </button>
-      <button class="playground__header-button" (click)="exportAsImage()" tippy="Export as Image"
-              aria-label="Export as Image">
-        <rmx-icon name="camera-3-line" class="icon-lg"></rmx-icon>
-      </button>
-      <button class="playground__header-button" tippy="Share" aria-label="Share">
-        <rmx-icon name="share-circle-line" class="icon-lg"></rmx-icon>
-      </button>
-      <button class="playground__header-button" [cdkCopyToClipboard]="currentCode" tippy="Copy Code"
-              aria-label="Copy Code">
-        <rmx-icon name="clipboard-line" class="icon-lg"></rmx-icon>
-      </button>
-      <button class="playground__header-button" (click)="toggleFullScreen()" [class.active]="fullScreen$ | async"
-              tippy="Toggle Fullscreen" aria-label="Toggle Fullscreen">
-        <rmx-icon [name]="(fullScreen$ | async) ? 'fullscreen-exit-line' : 'fullscreen-line'" class="icon-lg">
-        </rmx-icon>
-      </button>
-      <button class="text-red-600 playground__header-button custom-color" (click)="delete()" tippy="Delete Snippet"
-              aria-label="Delete Snippet">
-        <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
+    <div class="hidden xl:block">
+      <ng-container *ngTemplateOutlet="editorActions; context:{ $implicit: emptyFunction }"></ng-container>
+    </div>
+    <div class="xl:hidden">
+      <button [tippy]="editorActionsDropDown" placement="bottom-start" variation="menu"
+              class="playground__header-button" aria-label="More options">
+        <rmx-icon name="more-line" class="icon-lg"></rmx-icon>
       </button>
     </div>
   </header>
@@ -62,3 +50,38 @@
     </div>
   </div>
 </div>
+
+<ng-template #editorActionsDropDown let-hide>
+  <div class="p-4">
+    <ng-container *ngTemplateOutlet="editorActions;context:{$implicit: hide}"></ng-container>
+  </div>
+</ng-template>
+
+
+<ng-template #editorActions let-hide>
+  <div class="grid grid-cols-6 gap-3">
+    <button class="playground__header-button" (click)="save();hide()" tippy="Save Snippet" aria-label="Save Snippet">
+      <rmx-icon name="save-2-line" class="icon-lg"></rmx-icon>
+    </button>
+    <button class="playground__header-button" (click)="exportAsImage();hide()" tippy="Export as Image"
+            aria-label="Export as Image">
+      <rmx-icon name="camera-3-line" class="icon-lg"></rmx-icon>
+    </button>
+    <button class="playground__header-button" tippy="Share" aria-label="Share">
+      <rmx-icon name="share-circle-line" class="icon-lg"></rmx-icon>
+    </button>
+    <button class="playground__header-button" [cdkCopyToClipboard]="currentCode" tippy="Copy Code"
+            aria-label="Copy Code" (click)="hide()">
+      <rmx-icon name="clipboard-line" class="icon-lg"></rmx-icon>
+    </button>
+    <button class="playground__header-button" (click)="toggleFullScreen();hide()" [class.active]="fullScreen$ | async"
+            tippy="Toggle Fullscreen" aria-label="Toggle Fullscreen">
+      <rmx-icon [name]="(fullScreen$ | async) ? 'fullscreen-exit-line' : 'fullscreen-line'" class="icon-lg">
+      </rmx-icon>
+    </button>
+    <button class="text-red-600 playground__header-button custom-color" (click)="delete();hide()" tippy="Delete Snippet"
+            aria-label="Delete Snippet">
+      <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
+    </button>
+  </div>
+</ng-template>

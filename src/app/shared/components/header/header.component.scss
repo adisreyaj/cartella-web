@@ -1,5 +1,5 @@
 @mixin link-active() {
-  content: '';
+  // content: '';
   width: 100%;
   height: 2px;
   position: absolute;
@@ -9,13 +9,13 @@
 
 header {
   height: var(--header-height);
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 767px) {
     .menu {
       .menu__container {
         @apply flex;
         @apply items-center;
         @apply h-full;
-        @apply space-x-8;
+        @apply space-x-2;
       }
       .menu__item {
         @apply px-4;
@@ -23,10 +23,19 @@ header {
         @apply flex;
         @apply items-center;
         @apply h-full;
+        @apply text-sm;
+        &-icon {
+          @apply rounded-full;
+          @apply p-2;
+        }
 
         &.active {
           @apply text-primary;
-          background: var(--primary-10);
+          @apply bg-primary-10;
+          .menu__item-icon {
+            @apply bg-primary;
+            @apply text-white;
+          }
           &:after {
             @apply bg-primary;
             @include link-active();

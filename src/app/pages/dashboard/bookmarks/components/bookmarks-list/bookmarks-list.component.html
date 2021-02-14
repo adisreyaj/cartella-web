@@ -5,8 +5,9 @@
       <p class="text-sm text-gray-500">Manage your bookmarks</p>
     </div>
     <div>
-      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewBookmark()">Add
-        New</button>
+      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewBookmark()">
+        <rmx-icon name="add-line"></rmx-icon>
+      </button>
     </div>
   </header>
   <ng-container

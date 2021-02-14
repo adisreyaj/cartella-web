@@ -5,8 +5,9 @@
       <p class="text-sm text-gray-500">Manage your saved packages</p>
     </div>
     <div>
-      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewPackage()">Add
-        New</button>
+      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewPackage()">
+        <rmx-icon name="add-line"></rmx-icon>
+      </button>
     </div>
   </header>
   <ng-container *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (fetched$ | async));else shimmerLoader">

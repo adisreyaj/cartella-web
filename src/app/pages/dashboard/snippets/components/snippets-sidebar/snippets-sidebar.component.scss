@@ -1,10 +1,14 @@
 :host {
-  height: 100%;
+  height: calc(100vh - var(--header-height) - 2px);
   @apply bg-gray-50;
   display: flex;
   flex-direction: column;
-  @apply rounded-tl-lg;
   position: relative;
+}
+@media screen and (min-width: 768px) {
+  :host {
+    @apply rounded-tl-lg;
+  }
 }
 
 .snippets-sidebar {

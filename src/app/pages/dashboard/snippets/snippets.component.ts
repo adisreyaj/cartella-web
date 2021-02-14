@@ -1,3 +1,4 @@
+import { BreakpointObserver } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,14 +9,19 @@ import { ActivatedRoute } from '@angular/router';
 import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
+import { MenuService } from '@app/services/menu/menu.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
-import { Snippet, SnippetFolder } from './interfaces/snippets.interface';
-import { CodeEditorService } from './services/code-editor/code-editor.service';
+import {
+  Snippet,
+  SnippetFolder,
+  SNIPPET_MODES,
+} from './interfaces/snippets.interface';
 import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
@@ -23,6 +29,7 @@ import {
 import { GetSnippets, SetActiveSnippet } from './store/actions/snippets.action';
 import { SnippetFolderState } from './store/states/snippet-folders.state';
 import { SnippetState } from './store/states/snippets.state';
+
 @Component({
   selector: 'app-snippets',
   templateUrl: './snippets.component.html',
@@ -30,8 +37,6 @@ import { SnippetState } from './store/states/snippets.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnippetsComponent implements OnInit, OnDestroy {
-  private subs = new SubSink();
-
   user: User;
 
   @Select(SnippetState.getAllSnippets)
@@ -64,16 +69,32 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   private snippetLoadingSubject = new BehaviorSubject(false);
   snippetLoading$ = this.snippetLoadingSubject.pipe();
 
+  isLargeScreen = true;
+  private isLargeScreenSubject = new BehaviorSubject(this.isLargeScreen);
+  isLargeScree$ = this.isLargeScreenSubject.pipe(
+    tap((data) => (this.isLargeScreen = data))
+  );
+
+  private modeSubject = new BehaviorSubject(SNIPPET_MODES.EXPLORER);
+  mode$ = this.modeSubject.pipe();
+  availableModes = SNIPPET_MODES;
+
+  isMenuOpen$: Observable<boolean>;
+
+  private subs = new SubSink();
   constructor(
-    private editorService: CodeEditorService,
     private activatedRoute: ActivatedRoute,
     private store: Store,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private menu: MenuService,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
     this.getSnippetFolders();
     this.getSnippets();
+    this.observeLayoutChanges();
+    this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
   ngOnDestroy() {
     this.subs.unsubscribe();
@@ -81,6 +102,18 @@ export class SnippetsComponent implements OnInit, OnDestroy {
 
   get snippetSlug() {
     return this.activatedRoute.snapshot.paramMap.get('slug');
+  }
+
+  closeMenu() {
+    this.menu.closeMenu();
+  }
+
+  toggleMenu() {
+    this.menu.toggleMenu();
+  }
+
+  changeMode(mode: SNIPPET_MODES) {
+    this.modeSubject.next(mode);
   }
 
   handleSelectFolder(folder: SnippetFolder) {
@@ -148,5 +181,15 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     );
     this.subs.add(sub);
     this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER));
+  }
+
+  private observeLayoutChanges() {
+    this.subs.add(
+      this.breakpointObserver
+        .observe(['(min-width: 768px)'])
+        .subscribe((result) => {
+          this.isLargeScreenSubject.next(result.matches);
+        })
+    );
   }
 }
