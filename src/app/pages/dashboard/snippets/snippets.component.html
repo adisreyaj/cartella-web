@@ -1,15 +1,29 @@
 <div class="snippets">
-  <aside>
+  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()">
     <app-explorer-sidebar type="snippets" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           [isLoading]="snippetFolderLoading$ | async" [isFetched]="snippetFolderFetched$ | async"
-                          (folderSelected)="handleSelectFolder($event)">
+                          (folderSelected)="handleSelectFolder($event)" (menuClosed)="closeMenu()">
     </app-explorer-sidebar>
   </aside>
-  <main class="grid snippets__main" style="grid-template-columns: 300px 1fr;">
-    <app-snippets-sidebar [snippets]="snippetsShown$ | async" [isLoading]="snippetLoading$ | async">
-    </app-snippets-sidebar>
-    <app-snippets-playground [activeSnippet]="activeSnippet$ | async" [technologies]="technologies$ | async">
-    </app-snippets-playground>
+  <main class="grid snippets__main">
+    <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EXPLORER">
+      <app-snippets-sidebar [snippets]="snippetsShown$ | async" [isLoading]="snippetLoading$ | async"
+                            [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
+                            (modeChanged)="changeMode($event)">
+      </app-snippets-sidebar>
+    </ng-container>
+    <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EDITOR">
+      <app-snippets-playground [activeSnippet]="activeSnippet$ | async" [technologies]="technologies$ | async"
+                               [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
+                               (modeChanged)="changeMode($event)">
+      </app-snippets-playground>
+    </ng-container>
   </main>
+  <div *ngIf="(isMenuOpen$ | async)" (click)="closeMenu()" class="overlay"></div>
+  <button *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EXPLORER"
+          class="fixed flex p-4 rounded-full bottom-4 left-4 bg-primary shadow-floating lg:hidden default-ring"
+          (click)="toggleMenu()">
+    <rmx-icon name="folders-line" class="text-white icon-3xl"></rmx-icon>
+  </button>
 </div>

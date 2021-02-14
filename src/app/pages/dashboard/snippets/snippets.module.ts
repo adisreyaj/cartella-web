@@ -1,4 +1,5 @@
 import { ClipboardModule } from '@angular/cdk/clipboard';
+import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -6,6 +7,7 @@ import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directiv
 import { IconModule } from '@app/modules/icon/icon.module';
 import { LanguagePipeModule } from '@app/pipes/language-pipe/language-pipe.module';
 import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
+import { MenuService } from '@app/services/menu/menu.service';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
@@ -17,6 +19,7 @@ import { SnippetsPlaygroundComponent } from './components/snippets-playground/sn
 import { SnippetsSidebarComponent } from './components/snippets-sidebar/snippets-sidebar.component';
 import { SnippetsRoutingModule } from './snippets-routing.module';
 import { SnippetsComponent } from './snippets.component';
+
 @NgModule({
   declarations: [
     SnippetsComponent,
@@ -40,6 +43,8 @@ import { SnippetsComponent } from './snippets.component';
     ExplorerSidebarModule,
     TippyModule,
     TimeAgoPipeModule,
+    LayoutModule,
   ],
+  providers: [MenuService],
 })
 export class SnippetsModule {}

@@ -1,5 +1,17 @@
 <header class="rounded-tl-lg bg-gray-50">
-  <div class="relative">
+  <header class="flex items-center justify-between p-4 mb-2 pb -1">
+    <div>
+      <p class="text-xl font-bold text-gray-700">Snippets</p>
+      <p class="text-sm text-gray-500">Manage your snippets</p>
+    </div>
+    <div>
+      <button primaryButton [tippy]="createSnippetSelector" placement="top-start" variation="menu"
+              [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)">
+        <rmx-icon name="add-line"></rmx-icon>
+      </button>
+    </div>
+  </header>
+  <div class="relative hidden">
     <div class="absolute grid items-center h-full left-2">
       <rmx-icon name="search-line" class="icon-sm"></rmx-icon>
     </div>
@@ -37,16 +49,7 @@
       </ng-container>
     </ul>
   </ng-container>
-
-
 </section>
-<div class="absolute bottom-4 right-4">
-  <button iconButton class="flex items-center justify-center w-12 h-12 rounded-full shadow-2xl focus:outline-none"
-          [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)" tippy="Create new snippet"
-          [tippy]="createSnippetSelector" placement="top-start" variation="menu">
-    <rmx-icon name="add-line" class="icon-xl"></rmx-icon>
-  </button>
-</div>
 
 <ng-template #createSnippetSelector let-hide>
   <div class="flex flex-col w-44">

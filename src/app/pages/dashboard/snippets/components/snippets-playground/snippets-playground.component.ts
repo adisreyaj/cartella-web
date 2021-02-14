@@ -3,10 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
+  EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
+  Output,
   Renderer2,
   SimpleChanges,
   ViewChild,
@@ -25,7 +27,6 @@ import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
-import 'codemirror/addon/scroll/simplescrollbars';
 import 'codemirror/keymap/sublime';
 import 'codemirror/mode/css/css.js';
 import 'codemirror/mode/dart/dart';
@@ -38,11 +39,12 @@ import 'codemirror/mode/sass/sass';
 import 'codemirror/mode/shell/shell';
 import 'codemirror/mode/vue/vue';
 import 'codemirror/mode/yaml/yaml';
+import { has } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
 import { SubSink } from 'subsink';
-import { Snippet } from '../../interfaces/snippets.interface';
+import { Snippet, SNIPPET_MODES } from '../../interfaces/snippets.interface';
 import { CodeEditorService } from '../../services/code-editor/code-editor.service';
 import { SnippetsService } from '../../services/snippet/snippets.service';
 import {
@@ -62,6 +64,10 @@ export class SnippetsPlaygroundComponent
   implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Input() activeSnippet: Snippet;
   @Input() technologies: Technology[] = [];
+  @Input() isLargeScreen = true;
+  @Input() mode = SNIPPET_MODES.EXPLORER;
+
+  @Output() modeChanged = new EventEmitter<SNIPPET_MODES>();
 
   @ViewChild('editor', { static: true }) editorRef: ElementRef;
   @ViewChild('playground') playgroundRef: ElementRef;
@@ -91,29 +97,41 @@ export class SnippetsPlaygroundComponent
   }
 
   ngAfterViewInit(): void {
-    this.initializeEditor();
+    if (this.isLargeScreen) {
+      this.initializeEditor();
+    }
     this.listenToLanguageChanges();
     this.listenToThemeChanges();
     this.listenToSnippetChanges();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (Object.prototype.hasOwnProperty.call(changes, 'activeSnippet')) {
+    if (has(changes, 'activeSnippet')) {
       const data: Snippet = changes.activeSnippet.currentValue;
       if (data) {
         this.activeSnippet = data;
         if (this.editor) {
-          const {
-            code,
-            technology: { name: technologyName, mode, id },
-            name,
-          } = data;
-          this.setEditorValue(code);
-          this.setSnippetName(name);
-          this.languageFormControl.setValue(id);
+          this.populateEditorData(data);
         }
       }
     }
+    if (has(changes, 'mode') && !this.editor && !this.isLargeScreen) {
+      this.initializeEditor();
+      if (this.activeSnippet) {
+        this.populateEditorData(this.activeSnippet);
+      }
+    }
+  }
+
+  private populateEditorData(data: Snippet) {
+    const {
+      code,
+      technology: { id },
+      name,
+    } = data;
+    this.setEditorValue(code);
+    this.setSnippetName(name);
+    this.languageFormControl.setValue(id);
   }
 
   ngOnDestroy() {
@@ -124,12 +142,16 @@ export class SnippetsPlaygroundComponent
     );
   }
 
+  emptyFunction() {}
+
   get currentCode() {
     if (this.editor) {
       return this.editor.getValue();
     }
     return '';
   }
+
+  goBack() {}
 
   save() {
     if (this.editor && this.activeSnippet) {
@@ -289,6 +311,7 @@ export class SnippetsPlaygroundComponent
     if (this.editorRef) {
       this.editor = codemirror.fromTextArea(this.editorRef.nativeElement, {
         ...DEFAULT_EDITOR_OPTIONS,
+        scrollbarStyle: 'null',
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
     }

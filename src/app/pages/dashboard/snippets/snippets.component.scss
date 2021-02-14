@@ -1,3 +1,5 @@
+@import 'bottom-sheet';
+
 .snippets {
   height: calc(100vh - var(--header-height));
   padding-top: 2px;
@@ -5,6 +7,25 @@
   grid-template-columns: 200px 1fr;
   &__main {
     @apply rounded-tl-md;
+    grid-template-columns: 300px 1fr;
     box-shadow: 0 5.5px 10px rgb(0 0 0 / 12%), 0 100px 80px rgb(0 0 0 / 10%);
+
+    @media screen and (max-width: 768px) {
+      grid-template-columns: 1fr;
+    }
   }
+
+  aside {
+    @apply relative;
+  }
+  @media screen and (max-width: 1024px) {
+    grid-template-columns: 1fr;
+    aside {
+      @include bottom-sheet();
+    }
+  }
+}
+
+.overlay {
+  @include bottoms-sheet-overlay;
 }

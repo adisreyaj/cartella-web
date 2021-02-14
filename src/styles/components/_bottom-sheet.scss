@@ -1,4 +1,4 @@
-@mixin bottom-sheet() {
+@mixin bottom-sheet {
   @apply transition-transform;
   @apply transform-gpu;
   @apply duration-500;
@@ -16,4 +16,15 @@
   &.open {
     transform: translateY(0px);
   }
+}
+
+@mixin bottoms-sheet-overlay {
+  @apply fixed;
+  @apply left-0;
+  @apply z-40;
+  @apply w-screen;
+  @apply bg-black;
+  @apply bg-opacity-50;
+  top: 0;
+  height: 100vh;
 }

@@ -9,13 +9,13 @@
 
 header {
   height: var(--header-height);
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 767px) {
     .menu {
       .menu__container {
         @apply flex;
         @apply items-center;
         @apply h-full;
-        @apply space-x-8;
+        @apply space-x-2;
       }
       .menu__item {
         @apply px-4;
@@ -23,6 +23,7 @@ header {
         @apply flex;
         @apply items-center;
         @apply h-full;
+        @apply text-sm;
 
         &.active {
           @apply text-primary;
