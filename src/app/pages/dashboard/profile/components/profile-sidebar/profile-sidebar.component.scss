@@ -3,6 +3,13 @@
   @apply bg-gray-100;
   height: 100%;
 }
+@media screen and (max-width: 768px) {
+  :host {
+    @apply bg-white;
+    @apply rounded-tl-md;
+    @apply rounded-tr-md;
+  }
+}
 
 .profile-sidebar {
   &__item {

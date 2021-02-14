@@ -1,6 +1,11 @@
-<aside>
-  <app-profile-sidebar></app-profile-sidebar>
+<aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()">
+  <app-profile-sidebar (menuClosed)="closeMenu()"></app-profile-sidebar>
 </aside>
-<main class="px-4">
+<main class="p-4">
   <router-outlet></router-outlet>
 </main>
+<div *ngIf="(isMenuOpen$ | async)" (click)="closeMenu()" class="overlay"></div>
+<button class="fixed flex p-4 rounded-full bottom-4 right-4 bg-primary shadow-floating md:hidden default-ring"
+        (click)="toggleMenu()">
+  <rmx-icon name="settings-line" class="text-white icon-3xl"></rmx-icon>
+</button>

@@ -27,6 +27,7 @@ import {
   RiRestartLine,
   RiSave2Line,
   RiSearchLine,
+  RiSettingsLine,
   RiShareBoxLine,
   RiShareCircleLine,
   RiShutDownLine,
@@ -70,6 +71,7 @@ const icons = {
   RiArrowLeftLine,
   RiMenu4Line,
   RiHomeLine,
+  RiSettingsLine,
 };
 @NgModule({
   declarations: [],

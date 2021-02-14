@@ -1,15 +1,19 @@
 <div class="py-4 profile-sidebar">
   <section>
-    <header class="px-4 mb-4 text-gray-500">
+    <header class="flex items-center justify-between px-4 mb-4 text-gray-500">
       <h4 class="text-sm">Settings</h4>
+      <button class="block md:hidden" (click)="closeMenu()">
+        <rmx-icon name="close-line" class="icon-xl"></rmx-icon>
+      </button>
     </header>
     <ul>
       <li class="flex items-center mb-3 profile-sidebar__item" routerLink="/profile" routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact:true}">
+          [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
         <rmx-icon name="user-3-line" class="mr-2 icon-lg"></rmx-icon>
         <p>General</p>
       </li>
-      <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags" routerLinkActive="active">
+      <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags" routerLinkActive="active"
+          (click)="closeMenu()">
         <rmx-icon name="hashtag" class="mr-2 icon-lg"></rmx-icon>
         <p>Tags</p>
       </li>

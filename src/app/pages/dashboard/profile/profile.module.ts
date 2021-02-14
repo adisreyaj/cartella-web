@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '@app/components/components.module';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogModule } from '@ngneat/dialog';
 import { ColorTwitterModule } from 'ngx-color/twitter';
 import { ButtonsModule } from 'projects/ui/src/public-api';
@@ -34,5 +35,6 @@ import { ProfileComponent } from './profile.component';
     ComponentsModule,
     ColorTwitterModule,
   ],
+  providers: [MenuService],
 })
 export class ProfileModule {}
