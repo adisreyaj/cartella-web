@@ -1,7 +1,10 @@
 <div class="w-full py-4 explorer-sidebar">
   <section>
-    <header class="px-4 mb-4 text-gray-500">
+    <header class="flex items-center justify-between px-4 mb-4 text-gray-500">
       <h4 class="text-sm">Library</h4>
+      <button (click)="closeMenu()">
+        <rmx-icon name="close-line" class="icon-xl"></rmx-icon>
+      </button>
     </header>
     <ul>
       <li class="flex items-center mb-3 explorer-sidebar__item" [class.active]="activeFolder?.id === 'all'"

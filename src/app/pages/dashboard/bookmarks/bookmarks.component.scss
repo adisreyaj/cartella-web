@@ -8,4 +8,37 @@
     @apply bg-white;
     box-shadow: 0 5.5px 10px rgb(0 0 0 / 12%), 0 100px 80px rgb(0 0 0 / 10%);
   }
+
+  aside {
+    @apply relative;
+  }
+  @media screen and (max-width: 767px) {
+    grid-template-columns: 1fr;
+    aside {
+      @apply hidden;
+      &.menu-open {
+        @apply block;
+        @apply fixed;
+        @apply left-2;
+        @apply z-50;
+        @apply rounded-tl-md;
+        @apply rounded-tr-md;
+        @apply bg-white;
+        width: calc(100% - 1rem);
+        height: 70%;
+        bottom: 0;
+      }
+    }
+  }
+}
+
+.overlay {
+  @apply fixed;
+  @apply left-0;
+  @apply z-40;
+  @apply w-screen;
+  @apply bg-black;
+  @apply bg-opacity-50;
+  top: 0;
+  height: calc(100vh - var(--header-height));
 }

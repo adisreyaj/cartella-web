@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { CountPipeModule } from '@app/pipes/count-pipe/count-pipe.module';
+import { MenuService } from '@app/services/menu/menu.service';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxFilesizeModule } from 'ngx-filesize';
@@ -36,5 +37,6 @@ import { PackagesComponent } from './packages.component';
     NgxFilesizeModule,
     CountPipeModule,
   ],
+  providers: [MenuService],
 })
 export class PackagesModule {}

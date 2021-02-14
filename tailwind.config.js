@@ -10,6 +10,9 @@ module.exports = {
       screens: {
         xs: '460px',
       },
+      boxShadow: {
+        floating: '-13px 14px 40px -16px rgb(0 0 0 / 89%)',
+      },
       colors: {
         primary: 'var(--primary)',
         'primary-dark': 'var(--primary-dark)',

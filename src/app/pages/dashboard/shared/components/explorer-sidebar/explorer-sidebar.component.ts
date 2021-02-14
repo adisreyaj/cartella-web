@@ -23,6 +23,7 @@ export class ExplorerSidebarComponent implements OnInit {
   @Output() folderSelected = new EventEmitter();
   @Output() createFolder = new EventEmitter<void>();
   @Output() editFolder = new EventEmitter();
+  @Output() menuClosed = new EventEmitter<void>();
   constructor() {}
 
   ngOnInit(): void {}
@@ -38,5 +39,9 @@ export class ExplorerSidebarComponent implements OnInit {
   }
   handleCreateFolder() {
     this.createFolder.emit();
+  }
+
+  closeMenu() {
+    this.menuClosed.emit();
   }
 }
