@@ -24,10 +24,18 @@ header {
         @apply items-center;
         @apply h-full;
         @apply text-sm;
+        &-icon {
+          @apply rounded-full;
+          @apply p-2;
+        }
 
         &.active {
           @apply text-primary;
-          background: var(--primary-10);
+          @apply bg-primary-10;
+          .menu__item-icon {
+            @apply bg-primary;
+            @apply text-white;
+          }
           &:after {
             @apply bg-primary;
             @include link-active();
