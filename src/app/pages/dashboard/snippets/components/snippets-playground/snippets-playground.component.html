@@ -2,7 +2,7 @@
   <header class="flex items-center justify-between px-4 bg-white playground__header"
           [class.rounded-tl-lg]="isLargeScreen" [class]="themeFormControl.value">
     <div class="flex items-center space-x-2">
-      <button class="playground__header-button" (click)="goBack()">
+      <button class="playground__header-button md:hidden" (click)="goBack()">
         <rmx-icon name="arrow-left-line" class="icon-lg"></rmx-icon>
       </button>
       <div *ngIf="activeSnippet">
