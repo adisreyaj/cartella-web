@@ -9,24 +9,80 @@
 
 header {
   height: var(--header-height);
-  nav {
-    a {
-      @apply px-4;
-      position: relative;
-      &.active {
-        @apply text-primary;
-        background: var(--primary-10);
-        &:after {
-          @apply bg-primary;
-          @include link-active();
+  .menu {
+    @media screen and (min-width: 768px) {
+      .menu__container {
+        @apply flex;
+        @apply items-center;
+        @apply h-full;
+        @apply space-x-8;
+      }
+      .menu__item {
+        @apply px-4;
+        position: relative;
+        @apply flex;
+        @apply items-center;
+        @apply h-full;
+
+        &.active {
+          @apply text-primary;
+          background: var(--primary-10);
+          &:after {
+            @apply bg-primary;
+            @include link-active();
+          }
+        }
+        &:not(.active):focus {
+          @apply text-gray-800;
+          @apply bg-gray-100;
+          &:after {
+            @apply bg-gray-600;
+            @include link-active();
+          }
         }
       }
-      &:not(.active):focus {
-        @apply text-gray-800;
-        @apply bg-gray-100;
-        &:after {
-          @apply bg-gray-600;
-          @include link-active();
+    }
+
+    @media screen and (max-width: 768px) {
+      &.menu--open {
+        width: calc(100% - 2rem);
+        height: auto;
+        min-height: 200px;
+        max-height: 500px;
+        display: flex !important;
+        flex-direction: column;
+        position: fixed;
+        top: 1rem;
+        left: 1rem;
+        @apply rounded-lg;
+        @apply shadow-xl;
+        @apply bg-white;
+        @apply z-50;
+        @apply items-center;
+        @apply justify-center;
+        .menu__container {
+          @apply mt-2;
+          @apply mb-2;
+          width: 70%;
+          @apply flex;
+          @apply flex-col;
+        }
+        .menu__item {
+          @apply flex;
+          @apply items-center;
+          @apply py-3;
+          @apply h-auto;
+          &-icon {
+            @apply p-2;
+            @apply rounded-full;
+          }
+          &.active {
+            @apply text-primary;
+            .menu__item-icon {
+              @apply bg-primary;
+              @apply text-white;
+            }
+          }
         }
       }
     }

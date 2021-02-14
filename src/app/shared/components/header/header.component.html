@@ -1,15 +1,51 @@
 <header class="flex items-center justify-between px-4 bg-white">
   <div class="flex items-center">
+    <button class="flex p-1 mr-4 rounded-full md:hidden default-ring" (click)="toggleMenu()">
+      <rmx-icon name="menu-4-line" class="icon-2xl"></rmx-icon>
+    </button>
     <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-10 h-10" width="2.5rem" height="2.5rem">
-    <p class="ml-2 text-lg font-bold text-gray-700">CARTELLA</p>
+    <p class="hidden ml-2 text-lg font-bold text-gray-700 md:block">CARTELLA</p>
   </div>
   <div class="flex items-center h-full">
-    <nav class="flex items-center h-full mr-10 text-gray-500">
-      <a class="flex items-center h-full mr-8" routerLink="/" routerLinkActive="active"
-         [routerLinkActiveOptions]="{exact:true}">Home</a>
-      <a class="flex items-center h-full mr-8 " routerLink="/packages" routerLinkActive="active">Packages</a>
-      <a class="flex items-center h-full mr-8" routerLink="/bookmarks" routerLinkActive="active">Bookmarks</a>
-      <a class="flex items-center h-full" routerLink="/snippets" routerLinkActive="active">Snippets</a>
+    <nav class="relative items-center hidden h-full mr-10 text-gray-500 menu md:flex"
+         [class.menu--open]="(isMenuOpen$ | async)">
+      <ng-container *ngIf="(isMenuOpen$ | async)">
+        <header class="left-0 flex items-center justify-between w-full px-6 top-2">
+          <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-8 h-8" width="2rem" height="2rem">
+          <button (click)="closeMenu()">
+            <rmx-icon name="close-line" class="icon-xl"></rmx-icon>
+          </button>
+        </header>
+      </ng-container>
+      <div class="menu__container">
+        <a class=" menu__item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
+           (click)="closeMenu()">
+          <div class="mr-2 menu__item-icon">
+            <rmx-icon name="home-line" class="icon-md"></rmx-icon>
+          </div>
+          <span>
+            Home
+          </span>
+        </a>
+        <a class=" menu__item" routerLink="/packages" routerLinkActive="active" (click)="closeMenu()">
+          <div class="mr-2 menu__item-icon">
+            <rmx-icon name="archive-line" class="icon-md"></rmx-icon>
+          </div>
+          <span>Packages</span>
+        </a>
+        <a class=" menu__item" routerLink="/bookmarks" routerLinkActive="active" (click)="closeMenu()">
+          <div class="mr-2 menu__item-icon">
+            <rmx-icon name="bookmark-line" class="icon-md"></rmx-icon>
+          </div>
+          <span>Bookmarks</span>
+        </a>
+        <a class="menu__item" routerLink="/snippets" routerLinkActive="active" (click)="closeMenu()">
+          <div class="mr-2 menu__item-icon">
+            <rmx-icon name="code-s-slash-line" class="icon-md"></rmx-icon>
+          </div>
+          <span>Snippets</span>
+        </a>
+      </div>
     </nav>
     <div>
 
@@ -26,7 +62,7 @@
             <img src="../../../../assets/images/user.svg" [alt]="user?.firstname" class="w-10 h-10 rounded-full"
                  height="40px" width="40px">
           </ng-template>
-          <div class="flex flex-col items-end">
+          <div class="flex-col items-end hidden md:flex">
             <p class="mx-2 text-sm font-medium text-gray-500">{{user?.firstname}}</p>
             <div class="grid items-center px-2 mt-1 text-white bg-green-700 rounded-full"
                  style="padding-top: 2px; padding-bottom: 2px;">

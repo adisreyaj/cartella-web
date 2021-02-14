@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@app/interfaces/user.interface';
+import { MenuService } from '@app/services/menu/menu.service';
 import { LogoutUser } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
@@ -16,9 +17,16 @@ export class HeaderComponent implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
 
-  constructor(private store: Store, private router: Router) {}
+  isMenuOpen$: Observable<boolean>;
+  constructor(
+    private store: Store,
+    private router: Router,
+    private menu: MenuService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isMenuOpen$ = this.menu.isMenuOpen$;
+  }
 
   logout() {
     this.store
@@ -27,5 +35,13 @@ export class HeaderComponent implements OnInit {
       .subscribe(() => {
         this.router.navigate(['/auth/login']);
       });
+  }
+
+  toggleMenu() {
+    this.menu.toggleMenu();
+  }
+
+  closeMenu() {
+    this.menu.closeMenu();
   }
 }
