@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 
 @Component({
   selector: 'app-profile-sidebar',
@@ -6,4 +11,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrls: ['./profile-sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileSidebarComponent {}
+export class ProfileSidebarComponent {
+  @Output() menuClosed = new EventEmitter<void>();
+  closeMenu() {
+    this.menuClosed.emit();
+  }
+}
