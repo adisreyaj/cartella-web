@@ -123,17 +123,6 @@ export class SnippetsPlaygroundComponent
     }
   }
 
-  private populateEditorData(data: Snippet) {
-    const {
-      code,
-      technology: { id },
-      name,
-    } = data;
-    this.setEditorValue(code);
-    this.setSnippetName(name);
-    this.languageFormControl.setValue(id);
-  }
-
   ngOnDestroy() {
     this.subs.unsubscribe();
     (screenfull as screenfull.Screenfull).off(
@@ -151,7 +140,9 @@ export class SnippetsPlaygroundComponent
     return '';
   }
 
-  goBack() {}
+  goBack() {
+    this.modeChanged.emit(SNIPPET_MODES.EXPLORER);
+  }
 
   save() {
     if (this.editor && this.activeSnippet) {
@@ -315,5 +306,16 @@ export class SnippetsPlaygroundComponent
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
     }
+  }
+
+  private populateEditorData(data: Snippet) {
+    const {
+      code,
+      technology: { id },
+      name,
+    } = data;
+    this.setEditorValue(code);
+    this.setSnippetName(name);
+    this.languageFormControl.setValue(id);
   }
 }
