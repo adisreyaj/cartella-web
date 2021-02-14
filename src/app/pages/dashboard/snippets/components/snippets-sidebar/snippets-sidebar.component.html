@@ -1,4 +1,4 @@
-<header class="rounded-tl-lg bg-gray-50">
+<header class="bg-gray-50" [class.rounded-tl-lg]="isLargeScreen">
   <header class="flex items-center justify-between p-4 mb-2 pb -1">
     <div>
       <p class="text-xl font-bold text-gray-700">Snippets</p>
@@ -15,8 +15,8 @@
     <div class="absolute grid items-center h-full left-2">
       <rmx-icon name="search-line" class="icon-sm"></rmx-icon>
     </div>
-    <input class="w-full py-2 pl-8 bg-transparent rounded-tl-lg focus:outline-none" type="text" name="search"
-           id="search" placeholder="Search snippets" aria-label="Search snippets" #searchRef>
+    <input class="w-full py-2 pl-8 bg-transparent focus:outline-none" type="text" name="search" id="search"
+           placeholder="Search snippets" aria-label="Search snippets" #searchRef>
   </div>
   <div></div>
 </header>
