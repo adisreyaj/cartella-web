@@ -7,6 +7,10 @@ import { Technology } from '@app/interfaces/technology.interface';
 export interface SnippetFolderRequest extends FolderBaseRequest {}
 export interface SnippetFolder extends FolderBaseResponse {}
 
+export enum SNIPPET_MODES {
+  EXPLORER = 'EXPLORER',
+  EDITOR = 'EDITOR',
+}
 export interface SnippetBase {
   name: string;
   slug: string;

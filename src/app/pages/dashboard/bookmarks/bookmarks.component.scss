@@ -23,12 +23,5 @@
 }
 
 .overlay {
-  @apply fixed;
-  @apply left-0;
-  @apply z-40;
-  @apply w-screen;
-  @apply bg-black;
-  @apply bg-opacity-50;
-  top: 0;
-  height: 100vh;
+  @include bottoms-sheet-overlay;
 }
