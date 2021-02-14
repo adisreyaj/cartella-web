@@ -13,7 +13,7 @@ import {
 
 export class PackageStateModel {
   allPackages: Package[];
-  packageFetched: boolean;
+  fetched: boolean;
   packagesShown: Package[];
   activePackage: Package;
 }
@@ -32,7 +32,7 @@ export class PackageState {
 
   @Selector()
   static isPackageFetched(state: PackageStateModel) {
-    return state.packageFetched;
+    return state.fetched;
   }
 
   @Selector()
@@ -51,18 +51,24 @@ export class PackageState {
 
   @Action(GetPackages, { cancelUncompleted: true })
   getPackages(
-    { getState, setState }: StateContext<PackageStateModel>,
+    { getState, setState, patchState }: StateContext<PackageStateModel>,
     { id }: GetPackages
   ) {
     switch (id) {
       case 'all':
+        const state = getState();
+        if (state.fetched) {
+          patchState({
+            packagesShown: state.allPackages,
+          });
+        }
         return this.packageService.getPackages().pipe(
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
             setState({
               ...state,
-              packageFetched: true,
+              fetched: true,
               allPackages: result,
               packagesShown: result,
             });
@@ -73,10 +79,7 @@ export class PackageState {
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
-            setState({
-              ...state,
-              packagesShown: result,
-            });
+            patchState({ packagesShown: result });
           })
         );
       default:
@@ -84,8 +87,7 @@ export class PackageState {
           map(({ payload }) => payload),
           tap((result) => {
             const state = getState();
-            setState({
-              ...state,
+            patchState({
               packagesShown: result,
             });
           })
@@ -112,7 +114,7 @@ export class PackageState {
 
   @Action(UpdatePackage)
   updatePackage(
-    { getState, setState }: StateContext<PackageStateModel>,
+    { getState, patchState }: StateContext<PackageStateModel>,
     { payload, id }: UpdatePackage
   ) {
     return this.packageService.updatePackage(id, payload).pipe(
@@ -126,8 +128,7 @@ export class PackageState {
           (item) => item.id === id
         );
         shownPackageList[shownPackageIndex] = result;
-        setState({
-          ...state,
+        patchState({
           allPackages: allPackageList,
           packagesShown: shownPackageList,
         });
@@ -137,7 +138,7 @@ export class PackageState {
 
   @Action(DeletePackage)
   deletePackage(
-    { getState, setState }: StateContext<PackageStateModel>,
+    { getState, patchState }: StateContext<PackageStateModel>,
     { id }: DeletePackage
   ) {
     return this.packageService.deletePackage(id).pipe(
@@ -149,8 +150,7 @@ export class PackageState {
         const filteredVisiblePackages = state.packagesShown.filter(
           (item) => item.id !== id
         );
-        setState({
-          ...state,
+        patchState({
           allPackages: filteredAllPackages,
           packagesShown: filteredVisiblePackages,
         });
@@ -160,12 +160,11 @@ export class PackageState {
 
   @Action(SetActivePackage, { cancelUncompleted: true })
   setSelectedPackageId(
-    { getState, setState }: StateContext<PackageStateModel>,
+    { getState, patchState }: StateContext<PackageStateModel>,
     { payload }: SetActivePackage
   ) {
     const state = getState();
-    setState({
-      ...state,
+    patchState({
       activePackage: payload,
     });
   }

@@ -9,15 +9,16 @@
         New</button>
     </div>
   </header>
-  <section class="grid gap-4 bookmarks-grid">
-    <ng-container *ngIf="!isLoading || (bookmarkFetched$ | async);else shimmerLoader">
-      <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
+  <ng-container
+                *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (bookmarkFetched$ | async));else shimmerLoader">
+    <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
+      <section class="grid gap-4 bookmarks-grid">
         <app-bookmarks-list-card *ngFor="let bookmark of bookmarks;trackBy: trackBy" [bookmark]="bookmark"
                                  (cardEvent)="handleCardEvent($event)">
         </app-bookmarks-list-card>
-      </ng-container>
+      </section>
     </ng-container>
-  </section>
+  </ng-container>
   <button class="fixed flex p-4 rounded-full bottom-4 left-4 bg-primary shadow-floating md:hidden default-ring"
           (click)="toggleMenu()">
     <rmx-icon name="folders-line" class="text-white icon-3xl"></rmx-icon>
@@ -35,21 +36,23 @@
 </ng-template>
 
 <ng-template #shimmerLoader>
-  <ng-container *ngFor="let item of packagesCount">
-    <div class="relative flex flex-col p-2 bg-white rounded-md shadow-md hover:shadow-lg">
-      <header class="w-full mb-4 rounded-sm shimmer" [style.height.px]="150">
-      </header>
-      <section class="w-full h-12 mb-2 shimmer">
-      </section>
-      <section class="w-full h-12 mb-4 shimmer">
-      </section>
-      <footer class="flex justify-between w-full h-8">
-        <span class="w-10 h-full shimmer"></span>
-        <div>
-          <span class="h-full mr-2 w-14 shimmer"></span>
-          <span class="h-full w-14 shimmer"></span>
-        </div>
-      </footer>
-    </div>
-  </ng-container>
+  <section class="grid gap-4 bookmarks-grid">
+    <ng-container *ngFor="let item of packagesCount">
+      <div class="relative flex flex-col p-2 bg-white rounded-md shadow-md hover:shadow-lg">
+        <header class="w-full mb-4 rounded-sm shimmer" [style.height.px]="150">
+        </header>
+        <section class="w-full h-12 mb-2 shimmer">
+        </section>
+        <section class="w-full h-12 mb-4 shimmer">
+        </section>
+        <footer class="flex justify-between w-full h-8">
+          <span class="w-10 h-full shimmer"></span>
+          <div>
+            <span class="h-full mr-2 w-14 shimmer"></span>
+            <span class="h-full w-14 shimmer"></span>
+          </div>
+        </footer>
+      </div>
+    </ng-container>
+  </section>
 </ng-template>

@@ -77,8 +77,17 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
   handleSelectFolder(folder: BookmarkFolder) {
     if (folder) {
+      this.bookmarkLoadingSubject.next(true);
       this.store.dispatch(new SetActiveBookmarkFolder(folder));
-      this.store.dispatch(new GetBookmarks(folder.id));
+      const sub = this.store.dispatch(new GetBookmarks(folder.id)).subscribe(
+        () => {
+          this.bookmarkLoadingSubject.next(false);
+        },
+        () => {
+          this.bookmarkLoadingSubject.next(false);
+        }
+      );
+      this.subs.add(sub);
     }
   }
   handleEditFolder(folder: BookmarkFolder) {

@@ -23,6 +23,7 @@ import {
   DeletePackage,
   UpdatePackage,
 } from '../../store/actions/package.action';
+import { PackageFolderState } from '../../store/states/package-folders.state';
 import { PackageState } from '../../store/states/package.state';
 import { PackagesAddComponent } from '../modals/packages-add/packages-add.component';
 
@@ -42,6 +43,9 @@ export class PackagesListComponent implements OnInit {
   packagesCount = new Array(
     this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
   ).fill('');
+
+  @Select(PackageFolderState.getActivePackageFolder)
+  activeFolder$: Observable<PackageFolder>;
 
   @Select(PackageState.isPackageFetched)
   fetched$: Observable<boolean>;

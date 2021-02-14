@@ -8,7 +8,7 @@
   </aside>
   <main class="overflow-y-auto packages__main">
     <app-packages-list [user]="user$ | async" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
-                       [isLoading]="packageFolderLoading$ | async" [packages]="packagesShown$ | async">
+                       [isLoading]="packageLoading$ | async" [packages]="packagesShown$ | async">
     </app-packages-list>
   </main>
 

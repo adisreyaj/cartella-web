@@ -26,6 +26,7 @@ import {
   DeleteBookmark,
   UpdateBookmark,
 } from '../../shared/store/actions/bookmarks.action';
+import { BookmarkFolderState } from '../../shared/store/states/bookmark-folders.state';
 import { BookmarkState } from '../../shared/store/states/bookmarks.state';
 import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.component';
 
@@ -42,6 +43,9 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   @Input() bookmarks: Bookmark[] = [];
 
   @Input() isLoading = false;
+
+  @Select(BookmarkFolderState.getActiveBookmarkFolder)
+  activeFolder$: Observable<BookmarkFolder>;
 
   @Select(BookmarkState.getBookmarkFetched)
   bookmarkFetched$: Observable<boolean>;

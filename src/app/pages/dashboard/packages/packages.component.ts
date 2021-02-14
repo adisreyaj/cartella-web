@@ -47,6 +47,9 @@ export class PackagesComponent implements OnInit, OnDestroy {
   private packageFolderLoadingSubject = new BehaviorSubject(false);
   packageFolderLoading$ = this.packageFolderLoadingSubject.pipe();
 
+  private packageLoadingSubject = new BehaviorSubject(false);
+  packageLoading$ = this.packageLoadingSubject.pipe();
+
   isMenuOpen$: Observable<boolean>;
 
   private subs = new SubSink();
@@ -71,8 +74,17 @@ export class PackagesComponent implements OnInit, OnDestroy {
   }
   handleSelectFolder(folder: PackageFolder) {
     if (folder) {
+      this.packageLoadingSubject.next(true);
       this.store.dispatch(new SetActivePackageFolder(folder));
-      this.store.dispatch(new GetPackages(folder.id));
+      const sub = this.store.dispatch(new GetPackages(folder.id)).subscribe(
+        () => {
+          this.packageLoadingSubject.next(false);
+        },
+        () => {
+          this.packageLoadingSubject.next(false);
+        }
+      );
+      this.subs.add(sub);
     }
   }
 
@@ -97,7 +109,18 @@ export class PackagesComponent implements OnInit, OnDestroy {
   }
 
   private getPackages() {
-    this.store.dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id));
+    this.packageLoadingSubject.next(true);
+    const sub = this.store
+      .dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id))
+      .subscribe(
+        () => {
+          this.packageLoadingSubject.next(false);
+        },
+        () => {
+          this.packageLoadingSubject.next(false);
+        }
+      );
+    this.subs.add(sub);
   }
   private getPackageFolders() {
     this.packageFolderLoadingSubject.next(true);

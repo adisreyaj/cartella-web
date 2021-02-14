@@ -117,7 +117,7 @@ export class SnippetState {
 
   @Action(UpdateSnippet)
   updateSnippet(
-    { getState, setState }: StateContext<SnippetStateModel>,
+    { getState, patchState }: StateContext<SnippetStateModel>,
     { payload, id }: UpdateSnippet
   ) {
     return this.snippetService.updateSnippet(id, payload).pipe(
@@ -131,8 +131,7 @@ export class SnippetState {
           (item) => item.id === id
         );
         shownSnippetList[shownSnippetIndex] = result;
-        setState({
-          ...state,
+        patchState({
           allSnippets: allSnippetList,
           snippetsShown: shownSnippetList,
         });
@@ -142,7 +141,7 @@ export class SnippetState {
 
   @Action(DeleteSnippet)
   deleteSnippet(
-    { getState, setState }: StateContext<SnippetStateModel>,
+    { getState, patchState }: StateContext<SnippetStateModel>,
     { id }: DeleteSnippet
   ) {
     return this.snippetService.deleteSnippet(id).pipe(
@@ -154,8 +153,7 @@ export class SnippetState {
         const filteredVisibleSnippets = state.snippetsShown.filter(
           (item) => item.id !== id
         );
-        setState({
-          ...state,
+        patchState({
           allSnippets: filteredAllSnippets,
           snippetsShown: filteredVisibleSnippets,
         });
@@ -165,7 +163,7 @@ export class SnippetState {
 
   @Action(SetActiveSnippet, { cancelUncompleted: true })
   setSelectedSnippet(
-    { getState, setState }: StateContext<SnippetStateModel>,
+    { getState, patchState }: StateContext<SnippetStateModel>,
     { payload }: SetActiveSnippet
   ) {
     if (payload) {
@@ -174,8 +172,7 @@ export class SnippetState {
         !state.activeSnippet ||
         (state.activeSnippet && state.activeSnippet.id !== payload.id)
       ) {
-        setState({
-          ...state,
+        patchState({
           activeSnippet: payload,
         });
         return this.snippetService.updateViews(payload.id);
