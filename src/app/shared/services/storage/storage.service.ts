@@ -20,7 +20,7 @@ export class StorageService {
     Object.keys(STORAGE_INSTANCE).forEach((key) => {
       this.instances.set(
         key,
-        dif.createNgForage({ name: key, storeName: 'data' })
+        dif.createNgForage({ name: 'cartella', storeName: key })
       );
     });
   }

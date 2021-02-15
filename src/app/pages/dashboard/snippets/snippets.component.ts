@@ -225,7 +225,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
       .pipe(
         filter((res) => res.length > 0),
         tap((snippets) => {
-          this.storage.setItem(STORAGE_INSTANCE.FOLDERS, 'packages', snippets);
+          this.storage.setItem(STORAGE_INSTANCE.FOLDERS, 'snippets', snippets);
         })
       )
       .subscribe();

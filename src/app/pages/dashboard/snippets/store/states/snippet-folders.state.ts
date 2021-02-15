@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
+import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
+import {
+  StorageService,
+  STORAGE_INSTANCE,
+} from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { SnippetFolder } from '../../interfaces/snippets.interface';
 import { SnippetsService } from '../../services/snippet/snippets.service';
 import {
@@ -26,7 +32,10 @@ export class SnippetFolderStateModel {
 })
 @Injectable()
 export class SnippetFolderState {
-  constructor(private snippetService: SnippetsService) {}
+  constructor(
+    private snippetService: SnippetsService,
+    private storage: StorageService
+  ) {}
 
   @Selector()
   static getAllSnippetFolders(state: SnippetFolderStateModel) {
@@ -46,19 +55,43 @@ export class SnippetFolderState {
   @Action(GetSnippetFolders)
   getSnippetFolders({
     getState,
+    patchState,
     setState,
   }: StateContext<SnippetFolderStateModel>) {
-    return this.snippetService.getFolders().pipe(
-      map(({ payload }) => payload),
-      tap((result) => {
-        const state = getState();
-        setState({
-          ...state,
-          snippetFolders: result,
-          fetched: true,
-        });
-      })
-    );
+    const state = getState();
+    if (state.fetched) {
+      return this.storage.getItem(STORAGE_INSTANCE.FOLDERS, 'snippets').pipe(
+        switchMap((snippetFolders) => {
+          if (!snippetFolders) {
+            return this.snippetService.getFolders().pipe(
+              map(({ payload }) => payload),
+              tap((result) => {
+                patchState({
+                  snippetFolders: result,
+                });
+              })
+            );
+          } else {
+            patchState({
+              snippetFolders,
+            });
+            return of(snippetFolders);
+          }
+        })
+      );
+    } else {
+      return this.snippetService.getFolders().pipe(
+        map(({ payload }) => payload),
+        tap((result) => {
+          setState({
+            ...state,
+            snippetFolders: result,
+            fetched: true,
+            activeSnippetFolder: ALL_SNIPPETS_FOLDER,
+          });
+        })
+      );
+    }
   }
 
   @Action(AddSnippetFolder)
