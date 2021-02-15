@@ -10,11 +10,15 @@ import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
+import {
+  StorageService,
+  STORAGE_INSTANCE,
+} from '@app/services/storage/storage.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
@@ -42,13 +46,16 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   @Select(SnippetState.getAllSnippets)
   allSnippets$: Observable<Snippet[]>;
 
+  @Select(SnippetFolderState.getAllSnippetFolders)
+  allSnippetFolders$: Observable<Snippet[]>;
+
   @Select(SnippetState.getSnippetsShown)
   snippetsShown$: Observable<Snippet[]>;
 
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
 
-  @Select(SnippetFolderState.getSnippetFoldersList)
+  @Select(SnippetFolderState.getAllSnippetFolders)
   folders$: Observable<SnippetFolder[]>;
 
   @Select(SnippetFolderState.getActiveSnippetFolder)
@@ -87,13 +94,16 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private storage: StorageService
   ) {}
 
   ngOnInit(): void {
     this.getSnippetFolders();
     this.getSnippets();
     this.observeLayoutChanges();
+    this.updateSnippetFoldersInIDB();
+    this.updateSnippetsInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
   ngOnDestroy() {
@@ -191,5 +201,34 @@ export class SnippetsComponent implements OnInit, OnDestroy {
           this.isLargeScreenSubject.next(result.matches);
         })
     );
+  }
+
+  private updateSnippetsInIDB() {
+    const sub = this.allSnippets$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((snippets) => {
+          snippets.forEach((data) => {
+            this.storage.setItem(
+              STORAGE_INSTANCE.SNIPPETS,
+              data.folder.id,
+              snippets.filter(({ folder: { id } }) => id === data.folder.id)
+            );
+          });
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
+  }
+  private updateSnippetFoldersInIDB() {
+    const sub = this.allSnippetFolders$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((snippets) => {
+          this.storage.setItem(STORAGE_INSTANCE.FOLDERS, 'packages', snippets);
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
   }
 }

@@ -29,7 +29,7 @@ export class SnippetFolderState {
   constructor(private snippetService: SnippetsService) {}
 
   @Selector()
-  static getSnippetFoldersList(state: SnippetFolderStateModel) {
+  static getAllSnippetFolders(state: SnippetFolderStateModel) {
     return state.snippetFolders;
   }
 
