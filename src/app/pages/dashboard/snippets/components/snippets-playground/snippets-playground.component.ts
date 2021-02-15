@@ -146,12 +146,12 @@ export class SnippetsPlaygroundComponent
 
   save() {
     if (this.editor && this.activeSnippet) {
-      this.snippetService
-        .updateSnippet(this.activeSnippet.id, {
+      this.store.dispatch(
+        new UpdateSnippet(this.activeSnippet.id, {
           code: this.editor.getValue(),
           technologyId: this.languageFormControl.value,
         })
-        .subscribe();
+      );
     }
   }
 
