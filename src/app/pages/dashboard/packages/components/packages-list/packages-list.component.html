@@ -10,7 +10,7 @@
       </button>
     </div>
   </header>
-  <ng-container *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (fetched$ | async));else shimmerLoader">
+  <ng-container *ngIf="!isLoading || (fetched$ | async);else shimmerLoader">
     <ng-container *ngIf="packages?.length > 0;else noPackages">
       <section class="grid gap-4 pb-6 packages-grid">
         <app-packages-list-card *ngFor="let package of packages;trackBy: trackBy" [package]="package"

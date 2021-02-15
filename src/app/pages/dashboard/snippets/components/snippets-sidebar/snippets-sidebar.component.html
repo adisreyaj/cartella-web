@@ -21,8 +21,7 @@
   <div></div>
 </header>
 <section class="relative overflow-y-auto snippets-sidebar__list">
-  <ng-container
-                *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (snippetFetched$ | async)); else shimmerLoading">
+  <ng-container *ngIf="!isLoading || (snippetFetched$ | async); else shimmerLoading">
     <ul *ngIf="(snippetsToShow$ | async)?.length > 0;else noSnippets">
       <ng-container *ngFor="let snippet of (snippetsToShow$ | async);trackBy:trackBy">
         <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
