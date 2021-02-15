@@ -3,8 +3,8 @@ import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
 import {
+  StorageInstanceTypes,
   StorageService,
-  STORAGE_INSTANCE,
 } from '@app/services/storage/storage.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -168,7 +168,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
         tap((bookmarks) => {
           bookmarks.forEach((data) => {
             this.storage.setItem(
-              STORAGE_INSTANCE.BOOKMARKS,
+              StorageInstanceTypes.bookmarks,
               data.folder.id,
               bookmarks.filter(({ folder: { id } }) => id === data.folder.id)
             );
@@ -184,7 +184,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
         filter((res) => res.length > 0),
         tap((bookmarks) => {
           this.storage.setItem(
-            STORAGE_INSTANCE.FOLDERS,
+            StorageInstanceTypes.folders,
             'bookmarks',
             bookmarks
           );

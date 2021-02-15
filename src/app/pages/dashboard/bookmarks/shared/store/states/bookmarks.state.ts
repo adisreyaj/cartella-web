@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  StorageInstanceTypes,
   StorageService,
-  STORAGE_INSTANCE,
 } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -68,7 +68,7 @@ export class BookmarkState {
         const state = getState();
         if (state.fetched) {
           return this.storage
-            .getAllItems<Bookmark>(STORAGE_INSTANCE.BOOKMARKS)
+            .getAllItems<Bookmark>(StorageInstanceTypes.bookmarks)
             .pipe(
               switchMap((bookmarks) => {
                 if (!bookmarks) {
@@ -111,7 +111,7 @@ export class BookmarkState {
           })
         );
       default: {
-        return this.storage.getItem(STORAGE_INSTANCE.BOOKMARKS, id).pipe(
+        return this.storage.getItem(StorageInstanceTypes.bookmarks, id).pipe(
           switchMap((bookmarks) => {
             if (!bookmarks) {
               return this.bookmarkService.getBookmarksInFolder(id).pipe(

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  StorageInstanceTypes,
   StorageService,
-  STORAGE_INSTANCE,
 } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
@@ -15,7 +15,7 @@ export class HomeStateModel {
   latestUpdatedAt: Date;
   topUpdatedAt: Date;
   counts: HomeItemCounts;
-  countsFetched: boolean = false;
+  countsFetched = false;
 }
 @State({
   name: 'home',
@@ -71,7 +71,7 @@ export class HomeState {
           counts: result,
           countsFetched: true,
         });
-        this.storage.setItem(STORAGE_INSTANCE.COUNT, 'count', result);
+        this.storage.setItem(StorageInstanceTypes.count, 'count', result);
       })
     );
   }

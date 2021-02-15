@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  StorageInstanceTypes,
   StorageService,
-  STORAGE_INSTANCE,
 } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -67,7 +67,7 @@ export class PackageState {
         const state = getState();
         if (state.fetched) {
           return this.storage
-            .getAllItems<Package>(STORAGE_INSTANCE.PACKAGES)
+            .getAllItems<Package>(StorageInstanceTypes.packages)
             .pipe(
               switchMap((packages) => {
                 if (!packages) {
@@ -108,7 +108,7 @@ export class PackageState {
           })
         );
       default: {
-        return this.storage.getItem(STORAGE_INSTANCE.PACKAGES, id).pipe(
+        return this.storage.getItem(StorageInstanceTypes.packages, id).pipe(
           switchMap((packages) => {
             if (!packages) {
               return this.packageService.getPackagesInFolder(id).pipe(

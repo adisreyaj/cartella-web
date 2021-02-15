@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  StorageInstanceTypes,
   StorageService,
-  STORAGE_INSTANCE,
 } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -59,25 +59,27 @@ export class BookmarkFolderState {
   }: StateContext<BookmarkFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
-      return this.storage.getItem(STORAGE_INSTANCE.FOLDERS, 'bookmarks').pipe(
-        switchMap((bookmarkFolders) => {
-          if (!bookmarkFolders) {
-            return this.bookmarkService.getFolders().pipe(
-              map(({ payload }) => payload),
-              tap((result) => {
-                patchState({
-                  bookmarkFolders: result,
-                });
-              })
-            );
-          } else {
-            patchState({
-              bookmarkFolders,
-            });
-            return of(bookmarkFolders);
-          }
-        })
-      );
+      return this.storage
+        .getItem(StorageInstanceTypes.folders, 'bookmarks')
+        .pipe(
+          switchMap((bookmarkFolders) => {
+            if (!bookmarkFolders) {
+              return this.bookmarkService.getFolders().pipe(
+                map(({ payload }) => payload),
+                tap((result) => {
+                  patchState({
+                    bookmarkFolders: result,
+                  });
+                })
+              );
+            } else {
+              patchState({
+                bookmarkFolders,
+              });
+              return of(bookmarkFolders);
+            }
+          })
+        );
     } else {
       return this.bookmarkService.getFolders().pipe(
         map(({ payload }) => payload),

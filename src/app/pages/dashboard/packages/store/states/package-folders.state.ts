@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {
+  StorageInstanceTypes,
   StorageService,
-  STORAGE_INSTANCE,
 } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
@@ -55,25 +55,27 @@ export class PackageFolderState {
   }: StateContext<PackageFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
-      return this.storage.getItem(STORAGE_INSTANCE.FOLDERS, 'packages').pipe(
-        switchMap((packageFolders) => {
-          if (!packageFolders) {
-            return this.packageService.getFolders().pipe(
-              map(({ payload }) => payload),
-              tap((result) => {
-                patchState({
-                  packageFolders: result,
-                });
-              })
-            );
-          } else {
-            patchState({
-              packageFolders,
-            });
-            return of(packageFolders);
-          }
-        })
-      );
+      return this.storage
+        .getItem(StorageInstanceTypes.folders, 'packages')
+        .pipe(
+          switchMap((packageFolders) => {
+            if (!packageFolders) {
+              return this.packageService.getFolders().pipe(
+                map(({ payload }) => payload),
+                tap((result) => {
+                  patchState({
+                    packageFolders: result,
+                  });
+                })
+              );
+            } else {
+              patchState({
+                packageFolders,
+              });
+              return of(packageFolders);
+            }
+          })
+        );
     } else {
       return this.packageService.getFolders().pipe(
         map(({ payload }) => payload),

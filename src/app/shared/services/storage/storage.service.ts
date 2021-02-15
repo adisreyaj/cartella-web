@@ -3,12 +3,12 @@ import { DedicatedInstanceFactory, NgForage } from 'ngforage';
 import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 
-export enum STORAGE_INSTANCE {
-  COUNT = 'COUNT',
-  FOLDERS = 'FOLDERS',
-  SNIPPETS = 'SNIPPETS',
-  BOOKMARKS = 'BOOKMARKS',
-  PACKAGES = 'PACKAGES',
+export enum StorageInstanceTypes {
+  count = 'COUNT',
+  folders = 'FOLDERS',
+  snippets = 'SNIPPETS',
+  bookmarks = 'BOOKMARKS',
+  packages = 'PACKAGES',
 }
 
 @Injectable({
@@ -17,7 +17,7 @@ export enum STORAGE_INSTANCE {
 export class StorageService {
   instances = new Map<string, NgForage>();
   constructor(private readonly ngf: NgForage, dif: DedicatedInstanceFactory) {
-    Object.keys(STORAGE_INSTANCE).forEach((key) => {
+    Object.keys(StorageInstanceTypes).forEach((key) => {
       this.instances.set(
         key,
         dif.createNgForage({ name: 'cartella', storeName: key })
@@ -26,24 +26,28 @@ export class StorageService {
   }
 
   setItem<DataType = any>(
-    type: STORAGE_INSTANCE,
+    type: StorageInstanceTypes,
     key: string,
     value: DataType
   ) {
     return from(this.instances.get(type).setItem(key, value));
   }
-  getItem<DataType = any>(type: STORAGE_INSTANCE, key: string) {
+  getItem<DataType = any>(type: StorageInstanceTypes, key: string) {
     return from(this.instances.get(type).getItem<DataType>(key));
   }
 
-  getAllItems<DataType = any>(type: STORAGE_INSTANCE) {
+  getAllItems<DataType = any>(type: StorageInstanceTypes) {
     const items = from(this.instances.get(type).keys());
     return items.pipe(
-      map((keys: string[]) => {
-        return keys.reduce((acc, curr) => {
-          return [...acc, this.instances.get(type).getItem<DataType[]>(curr)];
-        }, []);
-      }),
+      map((keys: string[]) =>
+        keys.reduce(
+          (acc, curr) => [
+            ...acc,
+            this.instances.get(type).getItem<DataType[]>(curr),
+          ],
+          []
+        )
+      ),
       map((promises: Promise<DataType[]>[]) => Promise.all(promises)),
       switchMap((promise: Promise<DataType[][]>) => from(promise)),
       map((items) =>
@@ -51,7 +55,7 @@ export class StorageService {
       )
     );
   }
-  deleteItem(type: STORAGE_INSTANCE, key: string) {
+  deleteItem(type: StorageInstanceTypes, key: string) {
     return from(this.instances.get(type).removeItem(key));
   }
 }

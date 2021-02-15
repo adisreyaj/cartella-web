@@ -30,8 +30,8 @@ import { SubSink } from 'subsink';
 import {
   Snippet as Snippet,
   SnippetFolder,
+  SnippetModes,
   SnippetRequest,
-  SNIPPET_MODES,
 } from '../../interfaces/snippets.interface';
 import {
   AddSnippet,
@@ -51,9 +51,9 @@ export class SnippetsSidebarComponent
   @Input() snippets: Snippet[] = [];
   @Input() isLoading = false;
   @Input() isLargeScreen = true;
-  @Input() mode = SNIPPET_MODES.EXPLORER;
+  @Input() mode = SnippetModes.EXPLORER;
 
-  @Output() modeChanged = new EventEmitter<SNIPPET_MODES>();
+  @Output() modeChanged = new EventEmitter<SnippetModes>();
 
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
@@ -101,7 +101,7 @@ export class SnippetsSidebarComponent
   selectSnippet(data: Snippet) {
     if (data) {
       if (!this.isLargeScreen) {
-        this.modeChanged.emit(SNIPPET_MODES.EDITOR);
+        this.modeChanged.emit(SnippetModes.EDITOR);
       }
       this.store.dispatch(new SetActiveSnippet(data));
     }

@@ -4,8 +4,8 @@ import {
 } from '@app/interfaces/folder.interface';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 
-export interface BookmarkFolderRequest extends FolderBaseRequest {}
-export interface BookmarkFolder extends FolderBaseResponse {}
+export type BookmarkFolderRequest = FolderBaseRequest;
+export type BookmarkFolder = FolderBaseResponse;
 
 export interface BookmarkBase {
   name: string;

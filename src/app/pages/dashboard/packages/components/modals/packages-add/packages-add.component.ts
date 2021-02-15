@@ -231,11 +231,9 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private filterOutTagNames(query: string) {
     return this.tags$.pipe(
-      map((tags) => {
-        return tags.filter(({ name }) =>
+      map((tags) => tags.filter(({ name }) =>
           name.toLowerCase().includes(query.toLowerCase())
-        );
-      })
+        ))
     );
   }
 }
