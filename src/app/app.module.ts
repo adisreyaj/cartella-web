@@ -57,15 +57,6 @@ export class MyHammerConfig extends HammerGestureConfig {
     pan: { direction: DIRECTION_ALL },
   };
 }
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyAgVpSqG91sy8ZZpYfTHjwlF5ydxZWUzJc',
-  authDomain: 'cartella-2021.firebaseapp.com',
-  projectId: 'cartella-2021',
-  storageBucket: 'cartella-2021.appspot.com',
-  messagingSenderId: '359576304939',
-  appId: '1:359576304939:web:5db0dc5cb8013bfb87196e',
-};
 @NgModule({
   declarations: [AppComponent],
   imports: [

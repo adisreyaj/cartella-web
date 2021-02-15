@@ -21,7 +21,6 @@ import {
 } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { EditorThemeService } from '@app/services/theme/editor-theme.service';
-import emmet from '@emmetio/codemirror-plugin';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
@@ -92,9 +91,7 @@ export class SnippetsPlaygroundComponent
     private codeEditorService: CodeEditorService
   ) {}
 
-  ngOnInit(): void {
-    emmet(codemirror);
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     if (this.isLargeScreen) {

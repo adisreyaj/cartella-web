@@ -38,21 +38,21 @@ export const THEMES_SUPPORTED = [
 export const DEFAULT_EDITOR_OPTIONS: EditorConfiguration & {
   [key: string]: any;
 } = {
-  theme: 'one-light',
+  theme: 'one-dark',
   mode: 'javascript',
   tabSize: 2,
   lineNumbers: true,
-  extraKeys: {
-    Tab: 'emmetExpandAbbreviation',
-    Esc: 'emmetResetAbbreviation',
-    Enter: 'emmetInsertLineBreak',
-    'Ctrl-Space': 'emmetCaptureAbbreviation',
-  },
-  emmet: {
-    mark: true,
-    markTagPairs: true,
-    previewOpenTag: false,
-  },
+  // extraKeys: {
+  //   Tab: 'emmetExpandAbbreviation',
+  //   Esc: 'emmetResetAbbreviation',
+  //   Enter: 'emmetInsertLineBreak',
+  //   'Ctrl-Space': 'emmetCaptureAbbreviation',
+  // },
+  // emmet: {
+  //   mark: true,
+  //   markTagPairs: true,
+  //   previewOpenTag: false,
+  // },
 };
 
 export const ALL_SNIPPETS_FOLDER = {
