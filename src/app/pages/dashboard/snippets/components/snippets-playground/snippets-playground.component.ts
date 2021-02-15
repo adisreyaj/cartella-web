@@ -26,7 +26,6 @@ import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
-import 'codemirror/keymap/sublime';
 import 'codemirror/mode/css/css.js';
 import 'codemirror/mode/dart/dart';
 import 'codemirror/mode/htmlmixed/htmlmixed';
