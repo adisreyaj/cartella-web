@@ -6,7 +6,7 @@
     </div>
     <div>
       <button primaryButton [tippy]="createSnippetSelector" placement="top-start" variation="menu"
-              [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)">
+              [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)" aria-label="Create new snippet">
         <rmx-icon name="add-line"></rmx-icon>
       </button>
     </div>
