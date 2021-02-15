@@ -10,8 +10,7 @@
       </button>
     </div>
   </header>
-  <ng-container
-                *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (bookmarkFetched$ | async));else shimmerLoader">
+  <ng-container *ngIf="!isLoading || (bookmarkFetched$ | async);else shimmerLoader">
     <ng-container *ngIf="bookmarks?.length > 0;else noBookmarks">
       <section class="grid gap-4 bookmarks-grid">
         <app-bookmarks-list-card *ngFor="let bookmark of bookmarks;trackBy: trackBy" [bookmark]="bookmark"
