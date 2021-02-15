@@ -35,7 +35,9 @@ export const THEMES_SUPPORTED = [
   },
 ];
 
-export const DEFAULT_EDITOR_OPTIONS: EditorConfiguration & any = {
+export const DEFAULT_EDITOR_OPTIONS: EditorConfiguration & {
+  [key: string]: any;
+} = {
   theme: 'one-light',
   mode: 'javascript',
   tabSize: 2,

@@ -48,3 +48,6 @@ Thumbs.db
 *.log
 
 test.json
+#Sonarqube
+.scannerwork
+*.properties
