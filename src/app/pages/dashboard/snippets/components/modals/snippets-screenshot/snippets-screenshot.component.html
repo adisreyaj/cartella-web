@@ -4,17 +4,18 @@
       Export as Image
     </p>
   </header>
-  <section #codeContainerRef [class]="ref?.data?.theme" class="screenshot-container overflow-y-auto rounded-md">
-    <div class="py-3 pl-2 pr-4 relative" style="max-height: 70vh;">
-      <header class="screenshot-header flex items-center justify-between mb-2 pl-2 text-sm">
+  <section #codeContainerRef [class]="ref?.data?.theme" class="overflow-y-auto rounded-md screenshot-container">
+    <div class="relative py-3 pl-2 pr-4" style="max-height: 70vh;">
+      <header class="flex items-center justify-between pl-2 mb-2 text-sm screenshot-header">
         <p>{{ref?.data?.name}}</p>
         <div class="flex items-center">
-          <img [src]="ref?.data?.language?.icon" class="rounded-md" style="height: 20px;">
+          <img [src]="ref?.data?.language?.icon" class="rounded-md" style="height: 20px;"
+               [alt]="ref?.data?.language?.name">
           <p class="ml-1">{{ref?.data?.language?.name}}</p>
         </div>
       </header>
       <textarea #editor class="w-full h-full"></textarea>
-      <footer class="screenshot-footer text-xs text-right pb-2">
+      <footer class="pb-2 text-xs text-right screenshot-footer">
         <p>cartella.sreyaj.dev</p>
       </footer>
     </div>
