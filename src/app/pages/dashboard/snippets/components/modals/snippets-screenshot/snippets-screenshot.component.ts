@@ -45,12 +45,9 @@ export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
   }
   async exportCode() {
     if (this.codeContainerRef) {
-      // this.attachWatermark(this.codeContainerRef.nativeElement);
       this.generateImage(this.codeContainerRef.nativeElement).then((blob) => {
         this.download(blob);
       });
-      // setTimeout(() => {
-      // }, 100);
     }
   }
 
@@ -98,6 +95,7 @@ export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
       this.editor = codemirror.fromTextArea(this.editorRef.nativeElement, {
         ...DEFAULT_EDITOR_OPTIONS,
         readOnly: 'nocursor',
+        scrollbarStyle: 'null',
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
 

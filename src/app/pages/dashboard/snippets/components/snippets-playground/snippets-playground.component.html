@@ -59,14 +59,14 @@
 
 
 <ng-template #editorActions let-hide>
-  <div class="grid grid-cols-6 gap-3">
+  <div class="grid grid-cols-5 gap-3">
     <button class="playground__header-button" (click)="save();hide()" tippy="Save Snippet" aria-label="Save Snippet">
       <rmx-icon name="save-2-line" class="icon-lg"></rmx-icon>
     </button>
-    <button class="playground__header-button" (click)="exportAsImage();hide()" tippy="Export as Image"
+    <!-- <button class="playground__header-button" (click)="exportAsImage();hide()" tippy="Export as Image"
             aria-label="Export as Image">
       <rmx-icon name="camera-3-line" class="icon-lg"></rmx-icon>
-    </button>
+    </button> -->
     <button class="playground__header-button" tippy="Share" aria-label="Share">
       <rmx-icon name="share-circle-line" class="icon-lg"></rmx-icon>
     </button>
