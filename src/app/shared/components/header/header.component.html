@@ -7,7 +7,8 @@
     <p class="hidden ml-2 text-lg font-bold text-gray-700 dark:text-white lg:block">CARTELLA</p>
   </div>
   <div class="flex items-center h-full space-x-8">
-    <nav class="relative items-center h-full text-gray-500 menu md:flex" [class.menu--open]="(isMenuOpen$ | async)">
+    <nav class="relative items-center h-full text-gray-500 menu bg-dark-700 md:bg-transparent md:flex"
+         [class.menu--open]="(isMenuOpen$ | async)">
       <ng-container *ngIf="(isMenuOpen$ | async)">
         <header class="left-0 flex items-center justify-between w-full px-6 top-2">
           <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-8 h-8" width="2rem" height="2rem">

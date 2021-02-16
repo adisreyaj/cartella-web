@@ -41,12 +41,6 @@ header {
           }
         }
         &:not(.active):focus {
-          @apply text-gray-800;
-          @apply bg-gray-100;
-          &:after {
-            @apply bg-gray-600;
-            @include link-active();
-          }
         }
       }
     }
@@ -70,14 +64,15 @@ header {
       @apply ease-in-out;
       @apply rounded-lg;
       @apply shadow-xl;
-      @apply bg-white;
+
       @apply z-50;
       @apply items-center;
       @apply justify-center;
       &__container {
         @apply mt-2;
         @apply mb-4;
-        width: 70%;
+        @apply w-full;
+        @apply px-6;
         @apply flex;
         @apply flex-col;
       }
@@ -91,7 +86,6 @@ header {
           @apply rounded-full;
         }
         &.active {
-          @apply text-primary;
           .menu__item-icon {
             @apply bg-primary;
             @apply text-white;
