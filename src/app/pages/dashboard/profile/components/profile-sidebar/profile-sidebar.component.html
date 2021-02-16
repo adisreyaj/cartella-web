@@ -8,13 +8,13 @@
     </header>
     <ul>
       <li class="flex items-center mb-3 profile-sidebar__item" routerLink="/profile"
-          routerLinkActive="active text-primary dark:text-dark-50" [routerLinkActiveOptions]="{exact:true}"
-          (click)="closeMenu()">
+          routerLinkActive="active text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800"
+          [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
         <rmx-icon name="user-3-line" class="mr-2 icon-lg"></rmx-icon>
         <p>General</p>
       </li>
       <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags"
-          routerLinkActive="text-primary dark:text-dark-50" (click)="closeMenu()">
+          routerLinkActive="text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800" (click)="closeMenu()">
         <rmx-icon name="hashtag" class="mr-2 icon-lg"></rmx-icon>
         <p>Tags</p>
       </li>

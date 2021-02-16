@@ -2,7 +2,7 @@
   display: block;
 }
 .tag-item {
-  @apply flex items-center justify-between px-3 py-2 space-x-4 text-gray-800 border border-gray-100 rounded-md;
+  @apply flex items-center justify-between px-3 py-2 space-x-4 text-gray-800 border border-gray-100 dark:border-dark-800 rounded-md;
   &.hovered {
     .tag-item__buttons {
       opacity: 1;
