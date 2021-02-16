@@ -13,3 +13,18 @@
     }
   }
 }
+
+body.mode-dark {
+  .cartella-dialog {
+    .ngneat-dialog-content {
+      @apply bg-dark-500;
+    }
+
+    input[type='text'],
+    input[type='email'],
+    input[type='url'],
+    input[type='password'] {
+      @apply dark:bg-dark-700;
+    }
+  }
+}

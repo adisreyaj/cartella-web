@@ -7,3 +7,17 @@ color-twitter.basic {
     padding: 0;
   }
 }
+
+body.mode-dark {
+  color-twitter {
+    .twitter-body {
+      @apply bg-dark-500;
+    }
+
+    input,
+    .twitter-hash {
+      @apply bg-dark-800;
+      border-color: var(--dark-700) !important;
+    }
+  }
+}
