@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -168,7 +166,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
         tap((bookmarks) => {
           bookmarks.forEach((data) => {
             this.storage.setItem(
-              StorageInstanceTypes.bookmarks,
+              StorageFolders.bookmarks,
               data.folder.id,
               bookmarks.filter(({ folder: { id } }) => id === data.folder.id)
             );
@@ -183,11 +181,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
       .pipe(
         filter((res) => res.length > 0),
         tap((bookmarks) => {
-          this.storage.setItem(
-            StorageInstanceTypes.folders,
-            'bookmarks',
-            bookmarks
-          );
+          this.storage.setItem(StorageFolders.folders, 'bookmarks', bookmarks);
         })
       )
       .subscribe();

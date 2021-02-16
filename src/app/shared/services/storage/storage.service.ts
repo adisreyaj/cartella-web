@@ -2,22 +2,15 @@ import { Injectable } from '@angular/core';
 import { DedicatedInstanceFactory, NgForage } from 'ngforage';
 import { from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
-
-export enum StorageInstanceTypes {
-  count = 'COUNT',
-  folders = 'FOLDERS',
-  snippets = 'SNIPPETS',
-  bookmarks = 'BOOKMARKS',
-  packages = 'PACKAGES',
-}
+import { StorageFolders } from './storage.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageService {
   instances = new Map<string, NgForage>();
-  constructor(private readonly ngf: NgForage, dif: DedicatedInstanceFactory) {
-    Object.keys(StorageInstanceTypes).forEach((key) => {
+  constructor(dif: DedicatedInstanceFactory) {
+    Object.values(StorageFolders).forEach((key) => {
       this.instances.set(
         key,
         dif.createNgForage({ name: 'cartella', storeName: key })
@@ -25,18 +18,14 @@ export class StorageService {
     });
   }
 
-  setItem<DataType = any>(
-    type: StorageInstanceTypes,
-    key: string,
-    value: DataType
-  ) {
+  setItem<DataType = any>(type: StorageFolders, key: string, value: DataType) {
     return from(this.instances.get(type).setItem(key, value));
   }
-  getItem<DataType = any>(type: StorageInstanceTypes, key: string) {
+  getItem<DataType = any>(type: StorageFolders, key: string) {
     return from(this.instances.get(type).getItem<DataType>(key));
   }
 
-  getAllItems<DataType = any>(type: StorageInstanceTypes) {
+  getAllItems<DataType = any>(type: StorageFolders) {
     const items = from(this.instances.get(type).keys());
     return items.pipe(
       map((keys: string[]) =>
@@ -50,12 +39,12 @@ export class StorageService {
       ),
       map((promises: Promise<DataType[]>[]) => Promise.all(promises)),
       switchMap((promise: Promise<DataType[][]>) => from(promise)),
-      map((items) =>
-        items.reduce((acc, curr: DataType[]) => [...acc, ...curr], [])
+      map((values) =>
+        values.reduce((acc, curr: DataType[]) => [...acc, ...curr], [])
       )
     );
   }
-  deleteItem(type: StorageInstanceTypes, key: string) {
+  deleteItem(type: StorageFolders, key: string) {
     return from(this.instances.get(type).removeItem(key));
   }
 }

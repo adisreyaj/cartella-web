@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -60,27 +58,25 @@ export class SnippetFolderState {
   }: StateContext<SnippetFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
-      return this.storage
-        .getItem(StorageInstanceTypes.folders, 'snippets')
-        .pipe(
-          switchMap((snippetFolders) => {
-            if (!snippetFolders) {
-              return this.snippetService.getFolders().pipe(
-                map(({ payload }) => payload),
-                tap((result) => {
-                  patchState({
-                    snippetFolders: result,
-                  });
-                })
-              );
-            } else {
-              patchState({
-                snippetFolders,
-              });
-              return of(snippetFolders);
-            }
-          })
-        );
+      return this.storage.getItem(StorageFolders.folders, 'snippets').pipe(
+        switchMap((snippetFolders) => {
+          if (!snippetFolders) {
+            return this.snippetService.getFolders().pipe(
+              map(({ payload }) => payload),
+              tap((result) => {
+                patchState({
+                  snippetFolders: result,
+                });
+              })
+            );
+          } else {
+            patchState({
+              snippetFolders,
+            });
+            return of(snippetFolders);
+          }
+        })
+      );
     } else {
       return this.snippetService.getFolders().pipe(
         map(({ payload }) => payload),

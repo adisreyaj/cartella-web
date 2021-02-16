@@ -2,12 +2,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import {
   BrowserModule,
-  HammerGestureConfig,
   HammerModule,
   HAMMER_GESTURE_CONFIG,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { CartellaHammerConfig } from '@app/config/hammer.config';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { TagState } from '@app/store/states/tag.state';
 import { TechnologyState } from '@app/store/states/technology.state';
@@ -21,7 +21,6 @@ import {
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { DIRECTION_ALL } from 'hammerjs';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,12 +50,6 @@ const tippyConfig: Partial<TippyConfig> = {
   },
 };
 
-export class MyHammerConfig extends HammerGestureConfig {
-  overrides = <any>{
-    swipe: { direction: DIRECTION_ALL },
-    pan: { direction: DIRECTION_ALL },
-  };
-}
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -104,7 +97,7 @@ export class MyHammerConfig extends HammerGestureConfig {
     },
     {
       provide: HAMMER_GESTURE_CONFIG,
-      useClass: MyHammerConfig,
+      useClass: CartellaHammerConfig,
     },
   ],
   bootstrap: [AppComponent],

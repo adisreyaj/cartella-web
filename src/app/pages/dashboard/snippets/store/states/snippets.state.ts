@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -68,7 +66,7 @@ export class SnippetState {
         const state = getState();
         if (state.fetched) {
           return this.storage
-            .getAllItems<Snippet>(StorageInstanceTypes.snippets)
+            .getAllItems<Snippet>(StorageFolders.snippets)
             .pipe(
               switchMap((snippets) => {
                 if (!snippets) {
@@ -109,7 +107,7 @@ export class SnippetState {
           })
         );
       default: {
-        return this.storage.getItem(StorageInstanceTypes.snippets, id).pipe(
+        return this.storage.getItem(StorageFolders.snippets, id).pipe(
           switchMap((snippets) => {
             if (!snippets) {
               return this.snippetService.getSnippetsInFolder(id).pipe(

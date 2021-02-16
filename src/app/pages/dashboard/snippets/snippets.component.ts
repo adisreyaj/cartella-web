@@ -10,10 +10,8 @@ import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -208,7 +206,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
         tap((snippets) => {
           snippets.forEach((data) => {
             this.storage.setItem(
-              StorageInstanceTypes.snippets,
+              StorageFolders.snippets,
               data.folder.id,
               snippets.filter(({ folder: { id } }) => id === data.folder.id)
             );
@@ -223,11 +221,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
       .pipe(
         filter((res) => res.length > 0),
         tap((snippets) => {
-          this.storage.setItem(
-            StorageInstanceTypes.folders,
-            'snippets',
-            snippets
-          );
+          this.storage.setItem(StorageFolders.folders, 'snippets', snippets);
         })
       )
       .subscribe();

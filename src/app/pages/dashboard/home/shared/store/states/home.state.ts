@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { HomeItemCounts } from '../../interfaces/home.interface';
@@ -71,7 +69,7 @@ export class HomeState {
           counts: result,
           countsFetched: true,
         });
-        this.storage.setItem(StorageInstanceTypes.count, 'count', result);
+        this.storage.setItem(StorageFolders.count, 'count', result);
       })
     );
   }

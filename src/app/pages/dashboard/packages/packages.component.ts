@@ -1,10 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -154,7 +152,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
         tap((packages) => {
           packages.forEach((data) => {
             this.storage.setItem(
-              StorageInstanceTypes.packages,
+              StorageFolders.packages,
               data.folder.id,
               packages.filter(({ folder: { id } }) => id === data.folder.id)
             );
@@ -169,11 +167,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
       .pipe(
         filter((res) => res.length > 0),
         tap((packages) => {
-          this.storage.setItem(
-            StorageInstanceTypes.folders,
-            'packages',
-            packages
-          );
+          this.storage.setItem(StorageFolders.folders, 'packages', packages);
         })
       )
       .subscribe();

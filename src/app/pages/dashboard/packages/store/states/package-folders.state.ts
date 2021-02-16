@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  StorageInstanceTypes,
-  StorageService,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -55,27 +53,25 @@ export class PackageFolderState {
   }: StateContext<PackageFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
-      return this.storage
-        .getItem(StorageInstanceTypes.folders, 'packages')
-        .pipe(
-          switchMap((packageFolders) => {
-            if (!packageFolders) {
-              return this.packageService.getFolders().pipe(
-                map(({ payload }) => payload),
-                tap((result) => {
-                  patchState({
-                    packageFolders: result,
-                  });
-                })
-              );
-            } else {
-              patchState({
-                packageFolders,
-              });
-              return of(packageFolders);
-            }
-          })
-        );
+      return this.storage.getItem(StorageFolders.folders, 'packages').pipe(
+        switchMap((packageFolders) => {
+          if (!packageFolders) {
+            return this.packageService.getFolders().pipe(
+              map(({ payload }) => payload),
+              tap((result) => {
+                patchState({
+                  packageFolders: result,
+                });
+              })
+            );
+          } else {
+            patchState({
+              packageFolders,
+            });
+            return of(packageFolders);
+          }
+        })
+      );
     } else {
       return this.packageService.getFolders().pipe(
         map(({ payload }) => payload),
