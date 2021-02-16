@@ -16,6 +16,7 @@
     @apply form-input;
     @apply focus:ring-1;
     @apply focus:ring-primary;
+    @apply dark:bg-dark-900;
     &:disabled {
       @apply text-gray-400;
     }
