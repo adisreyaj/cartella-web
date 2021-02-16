@@ -1,7 +1,5 @@
 :host {
   display: block;
-  @apply bg-gray-100;
-  @apply dark:bg-dark-500;
   height: 100%;
 }
 @media screen and (max-width: 768px) {
@@ -22,7 +20,6 @@
     position: relative;
     @apply focus:outline-none;
     &.active {
-      @apply bg-primary-10;
       &::before {
         @apply bg-primary;
         content: '';
