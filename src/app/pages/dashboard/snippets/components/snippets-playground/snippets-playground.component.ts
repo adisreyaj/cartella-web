@@ -11,23 +11,21 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
-  THEMES_SUPPORTED,
+  THEMES_SUPPORTED
 } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { EditorThemeService } from '@app/services/theme/editor-theme.service';
-import emmet from '@emmetio/codemirror-plugin';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
-import 'codemirror/keymap/sublime';
 import 'codemirror/mode/css/css.js';
 import 'codemirror/mode/dart/dart';
 import 'codemirror/mode/htmlmixed/htmlmixed';
@@ -44,13 +42,13 @@ import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
 import { SubSink } from 'subsink';
-import { Snippet, SNIPPET_MODES } from '../../interfaces/snippets.interface';
+import { Snippet, SnippetModes } from '../../interfaces/snippets.interface';
 import { CodeEditorService } from '../../services/code-editor/code-editor.service';
 import { SnippetsService } from '../../services/snippet/snippets.service';
 import {
   DeleteSnippet,
   SetActiveSnippet,
-  UpdateSnippet,
+  UpdateSnippet
 } from '../../store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
 
@@ -65,9 +63,9 @@ export class SnippetsPlaygroundComponent
   @Input() activeSnippet: Snippet;
   @Input() technologies: Technology[] = [];
   @Input() isLargeScreen = true;
-  @Input() mode = SNIPPET_MODES.EXPLORER;
+  @Input() mode = SnippetModes.EXPLORER;
 
-  @Output() modeChanged = new EventEmitter<SNIPPET_MODES>();
+  @Output() modeChanged = new EventEmitter<SnippetModes>();
 
   @ViewChild('editor', { static: true }) editorRef: ElementRef;
   @ViewChild('playground') playgroundRef: ElementRef;
@@ -92,9 +90,7 @@ export class SnippetsPlaygroundComponent
     private codeEditorService: CodeEditorService
   ) {}
 
-  ngOnInit(): void {
-    emmet(codemirror);
-  }
+  ngOnInit(): void {}
 
   ngAfterViewInit(): void {
     if (this.isLargeScreen) {
@@ -141,7 +137,7 @@ export class SnippetsPlaygroundComponent
   }
 
   goBack() {
-    this.modeChanged.emit(SNIPPET_MODES.EXPLORER);
+    this.modeChanged.emit(SnippetModes.EXPLORER);
   }
 
   save() {

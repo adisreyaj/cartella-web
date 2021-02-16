@@ -5,8 +5,8 @@ import {
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { PackageLinks, packageScore } from './package-details.interface';
 
-export interface PackageFolderRequest extends FolderBaseRequest {}
-export interface PackageFolder extends FolderBaseResponse {}
+export type PackageFolderRequest = FolderBaseRequest;
+export type PackageFolder = FolderBaseResponse;
 
 export interface PackageBase {
   name: string;

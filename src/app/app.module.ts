@@ -2,12 +2,12 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import {
   BrowserModule,
-  HammerGestureConfig,
   HammerModule,
   HAMMER_GESTURE_CONFIG,
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { CartellaHammerConfig } from '@app/config/hammer.config';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { TagState } from '@app/store/states/tag.state';
 import { TechnologyState } from '@app/store/states/technology.state';
@@ -21,7 +21,6 @@ import {
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
-import { DIRECTION_ALL } from 'hammerjs';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -51,21 +50,6 @@ const tippyConfig: Partial<TippyConfig> = {
   },
 };
 
-export class MyHammerConfig extends HammerGestureConfig {
-  overrides = <any>{
-    swipe: { direction: DIRECTION_ALL },
-    pan: { direction: DIRECTION_ALL },
-  };
-}
-
-const firebaseConfig = {
-  apiKey: 'AIzaSyAgVpSqG91sy8ZZpYfTHjwlF5ydxZWUzJc',
-  authDomain: 'cartella-2021.firebaseapp.com',
-  projectId: 'cartella-2021',
-  storageBucket: 'cartella-2021.appspot.com',
-  messagingSenderId: '359576304939',
-  appId: '1:359576304939:web:5db0dc5cb8013bfb87196e',
-};
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -113,7 +97,7 @@ const firebaseConfig = {
     },
     {
       provide: HAMMER_GESTURE_CONFIG,
-      useClass: MyHammerConfig,
+      useClass: CartellaHammerConfig,
     },
   ],
   bootstrap: [AppComponent],

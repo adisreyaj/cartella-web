@@ -8,9 +8,7 @@ import {
 } from '@angular/core';
 import { DEFAULT_EDITOR_OPTIONS } from '@app/config/snippets.config';
 import { DialogRef } from '@ngneat/dialog';
-import * as codemirror from 'codemirror';
-import 'codemirror/addon/edit/closebrackets';
-import 'codemirror/keymap/sublime';
+import codemirror from 'codemirror';
 import 'codemirror/mode/css/css';
 import 'codemirror/mode/htmlmixed/htmlmixed';
 import 'codemirror/mode/javascript/javascript';

@@ -1,6 +1,7 @@
 :host {
   height: calc(100vh - var(--header-height) - 2px);
   @apply bg-gray-50;
+  @apply dark:bg-dark-700;
   display: flex;
   flex-direction: column;
   position: relative;

@@ -7,6 +7,7 @@
   width: 100%;
   overflow: hidden;
   @apply bg-gray-50;
+  @apply dark:bg-dark-900;
 }
 .playground {
   height: 100%;

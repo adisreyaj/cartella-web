@@ -1,14 +1,16 @@
-<div class="relative flex flex-col p-2 bg-white rounded-md shadow-md hover:shadow-lg">
-  <button class="absolute p-1 bg-white rounded-lg cursor-pointer focus:outline-none" style="top: 2px;right: 2px;"
-          tippy="Toggle Favorite" (click)="handleFavoriteToggle(bookmark)" aria-label="Toggle Favorite">
-    <rmx-icon [name]="bookmark?.favorite ? 'star-fill' : 'star-line'" class="text-gray-500 icon-md"
+<div class="relative flex flex-col p-2 bg-white rounded-md shadow-md dark:bg-dark-700 hover:shadow-lg">
+  <button class="absolute p-1 bg-white rounded-lg cursor-pointer dark:bg-dark-700 focus:outline-none"
+          style="top: 2px;right: 2px;" tippy="Toggle Favorite" (click)="handleFavoriteToggle(bookmark)"
+          aria-label="Toggle Favorite">
+    <rmx-icon [name]="bookmark?.favorite ? 'star-fill' : 'star-line'" class="text-gray-500 dark:text-gray-50 icon-md"
               [class.text-primary]="bookmark?.favorite"></rmx-icon>
   </button>
   <img [src]="bookmark?.image" default="../../../../../../../assets/images/bookmark-placeholder.svg"
        style="height: 150px;" class="object-cover mb-3 rounded-sm" height="150px" width="100%" [alt]="bookmark?.name">
   <div>
-    <p class="mb-2 text-sm font-semibold line-clamp-2" [style.minHeight.px]="37">{{bookmark?.name}}</p>
-    <p class="mb-2 text-xs line-clamp-2 to-gray-500" [style.minHeight.px]="35">{{bookmark?.description}}</p>
+    <p class="mb-2 text-sm font-semibold line-clamp-2 dark:text-white" [style.minHeight.px]="37">{{bookmark?.name}}</p>
+    <p class="mb-2 text-xs text-gray-500 line-clamp-2 dark:text-gray-50" [style.minHeight.px]="35">
+      {{bookmark?.description}}</p>
   </div>
   <section>
     <a [href]="'https://' + bookmark.domain" class="flex items-center justify-start space-x-2" target="_blank"
@@ -21,13 +23,13 @@
         <img src="../../../../../../../assets/images/cartella.svg" alt="favicon" height=" 20px" width="20px"
              class="w-5 h-5 rounded-full">
       </ng-template>
-      <a class="text-xs text-gray-500 hover:underline hover:text-primary">{{bookmark?.site}}</a>
+      <a class="text-xs text-gray-500 dark:text-gray-50 hover:underline hover:text-primary">{{bookmark?.site}}</a>
     </a>
   </section>
   <footer class="flex items-center justify-between pb-1 mt-3">
     <div class="flex items-center">
-      <rmx-icon name="time-line" class="mr-1 text-gray-500 icon-xs"></rmx-icon>
-      <p class="text-xs text-gray-500">{{bookmark.updatedAt | date: 'MMM d'}}</p>
+      <rmx-icon name="time-line" class="mr-1 text-gray-500 dark:text-gray-50 icon-xs"></rmx-icon>
+      <p class="text-xs text-gray-500 dark:text-gray-50">{{bookmark.updatedAt | date: 'MMM d'}}</p>
     </div>
     <div class="flex items-center">
       <div class="relative dropdown">

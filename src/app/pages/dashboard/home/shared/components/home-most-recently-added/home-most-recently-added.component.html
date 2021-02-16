@@ -1,4 +1,4 @@
-<h1 class="text-xl font-semibold to-gray-800">Recently Added</h1>
+<h1 class="text-xl font-semibold text-gray-800 dark:text-white">Recently Added</h1>
 <ng-container *ngIf="recent$ | async as recentItems">
   <div class="relative mt-4 home__recent">
     <swiper [pagination]="swiperPagination" [breakpoints]="swiperBreakPoints" (swiper)="onSwiper($event)"

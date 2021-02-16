@@ -1,13 +1,14 @@
-<header class="flex items-center justify-between px-4 bg-white">
+<header class="flex items-center justify-between px-4 bg-white dark:bg-dark-500">
   <div class="flex items-center">
     <button class="flex p-1 mr-4 rounded-full md:hidden default-ring" (click)="toggleMenu()">
-      <rmx-icon name="menu-4-line" class="icon-2xl"></rmx-icon>
+      <rmx-icon name="menu-4-line" class="icon-2xl dark:text-gray-50"></rmx-icon>
     </button>
     <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-10 h-10" width="2.5rem" height="2.5rem">
-    <p class="hidden ml-2 text-lg font-bold text-gray-700 lg:block">CARTELLA</p>
+    <p class="hidden ml-2 text-lg font-bold text-gray-700 dark:text-white lg:block">CARTELLA</p>
   </div>
   <div class="flex items-center h-full space-x-8">
-    <nav class="relative items-center h-full text-gray-500 menu md:flex" [class.menu--open]="(isMenuOpen$ | async)">
+    <nav class="relative items-center h-full text-gray-500 menu bg-dark-700 md:bg-transparent md:flex"
+         [class.menu--open]="(isMenuOpen$ | async)">
       <ng-container *ngIf="(isMenuOpen$ | async)">
         <header class="left-0 flex items-center justify-between w-full px-6 top-2">
           <img src="../../../../assets/images/cartella.svg" alt="Cartella" class="w-8 h-8" width="2rem" height="2rem">
@@ -17,8 +18,8 @@
         </header>
       </ng-container>
       <div class="menu__container">
-        <a class=" menu__item" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}"
-           (click)="closeMenu()">
+        <a class=" menu__item" routerLink="/" routerLinkActive="active text-primary dark:text-white"
+           [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="home-line" class="icon-md"></rmx-icon>
           </div>
@@ -26,19 +27,22 @@
             Home
           </span>
         </a>
-        <a class=" menu__item" routerLink="/packages" routerLinkActive="active" (click)="closeMenu()">
+        <a class=" menu__item" routerLink="/packages" routerLinkActive="active text-primary dark:text-white"
+           (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="archive-line" class="icon-md"></rmx-icon>
           </div>
           <span>Packages</span>
         </a>
-        <a class=" menu__item" routerLink="/bookmarks" routerLinkActive="active" (click)="closeMenu()">
+        <a class=" menu__item" routerLink="/bookmarks" routerLinkActive="active text-primary dark:text-white"
+           (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="bookmark-line" class="icon-md"></rmx-icon>
           </div>
           <span>Bookmarks</span>
         </a>
-        <a class="menu__item" routerLink="/snippets" routerLinkActive="active" (click)="closeMenu()">
+        <a class="menu__item" routerLink="/snippets" routerLinkActive="active text-primary dark:text-white"
+           (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="code-s-slash-line" class="icon-md"></rmx-icon>
           </div>
@@ -59,13 +63,13 @@
                  height="40px" width="40px">
           </ng-template>
           <div class="flex-col items-end hidden ml-2 md:flex">
-            <p class="text-sm font-medium text-gray-500">{{user?.firstname}}</p>
+            <p class="text-sm font-medium text-gray-500 dark:text-white">{{user?.firstname}}</p>
             <div class="grid items-center px-2 mt-1 text-white bg-green-700 rounded-full"
                  style="padding-top: 2px; padding-bottom: 2px;">
               <p class="" style="font-size: 10px;line-height: 10px;">Free</p>
             </div>
           </div>
-          <rmx-icon name="arrow-down-s-line" class="text-gray-500 icon-sm"></rmx-icon>
+          <rmx-icon name="arrow-down-s-line" class="ml-2 text-gray-500 icon-sm"></rmx-icon>
         </button>
       </div>
     </div>
@@ -75,7 +79,7 @@
 <ng-template #userDropdown let-hide>
   <div class="flex flex-col w-48">
     <div class="dropdown-item" routerLink="/profile" (click)="hide()">Preferences</div>
-    <div class="dropdown-item">What's New</div>
+    <div class="dropdown-item" (click)="toggleTheme();hide()">{{isDarkMode ? 'Light':'Dark'}} Mode</div>
     <div class="text-red-600 dropdown-item" (click)="logout();hide()">Logout</div>
   </div>
 </ng-template>

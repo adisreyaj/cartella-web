@@ -18,7 +18,7 @@ export class EditorThemeService {
 
   loadTheme(name: string) {
     const themeUrl = `assets/styles/themes/${name}.css`;
-    let themeLink = this.document.getElementById(
+    const themeLink = this.document.getElementById(
       'editor-theme'
     ) as HTMLLinkElement;
     if (themeLink) {

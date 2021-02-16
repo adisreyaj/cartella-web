@@ -10,10 +10,8 @@ import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import {
-  StorageService,
-  STORAGE_INSTANCE,
-} from '@app/services/storage/storage.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
@@ -24,7 +22,7 @@ import { SnippetsAddFolderComponent } from './components/modals/snippets-add-fol
 import {
   Snippet,
   SnippetFolder,
-  SNIPPET_MODES,
+  SnippetModes,
 } from './interfaces/snippets.interface';
 import {
   GetSnippetFolders,
@@ -41,8 +39,6 @@ import { SnippetState } from './store/states/snippets.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnippetsComponent implements OnInit, OnDestroy {
-  user: User;
-
   @Select(SnippetState.getAllSnippets)
   allSnippets$: Observable<Snippet[]>;
 
@@ -70,23 +66,23 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   @Select(SnippetFolderState.getSnippetFolderFetched)
   snippetFolderFetched$: Observable<boolean>;
 
+  user: User;
+  isLargeScreen = true;
+  isMenuOpen$: Observable<boolean>;
+
   private snippetFolderLoadingSubject = new BehaviorSubject(false);
   snippetFolderLoading$ = this.snippetFolderLoadingSubject.pipe();
 
   private snippetLoadingSubject = new BehaviorSubject(false);
   snippetLoading$ = this.snippetLoadingSubject.pipe();
-
-  isLargeScreen = true;
   private isLargeScreenSubject = new BehaviorSubject(this.isLargeScreen);
   isLargeScree$ = this.isLargeScreenSubject.pipe(
     tap((data) => (this.isLargeScreen = data))
   );
 
-  private modeSubject = new BehaviorSubject(SNIPPET_MODES.EXPLORER);
+  private modeSubject = new BehaviorSubject(SnippetModes.EXPLORER);
   mode$ = this.modeSubject.pipe();
-  availableModes = SNIPPET_MODES;
-
-  isMenuOpen$: Observable<boolean>;
+  availableModes = SnippetModes;
 
   private subs = new SubSink();
   constructor(
@@ -122,7 +118,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     this.menu.toggleMenu();
   }
 
-  changeMode(mode: SNIPPET_MODES) {
+  changeMode(mode: SnippetModes) {
     this.modeSubject.next(mode);
   }
 
@@ -210,7 +206,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
         tap((snippets) => {
           snippets.forEach((data) => {
             this.storage.setItem(
-              STORAGE_INSTANCE.SNIPPETS,
+              StorageFolders.snippets,
               data.folder.id,
               snippets.filter(({ folder: { id } }) => id === data.folder.id)
             );
@@ -225,7 +221,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
       .pipe(
         filter((res) => res.length > 0),
         tap((snippets) => {
-          this.storage.setItem(STORAGE_INSTANCE.FOLDERS, 'snippets', snippets);
+          this.storage.setItem(StorageFolders.folders, 'snippets', snippets);
         })
       )
       .subscribe();
