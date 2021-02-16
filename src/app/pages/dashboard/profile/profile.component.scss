@@ -4,7 +4,7 @@
   padding-top: 2px;
   display: grid;
   @apply bg-gray-100;
-  @apply dark:bg-dark-800;
+  @apply dark:bg-dark-500;
   grid-template-columns: 200px 1fr;
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -13,7 +13,7 @@
 aside {
   @apply relative;
 }
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 768px) {
   aside {
     @include bottom-sheet();
   }
