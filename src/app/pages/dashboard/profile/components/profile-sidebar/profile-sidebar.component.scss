@@ -1,11 +1,13 @@
 :host {
   display: block;
   @apply bg-gray-100;
+  @apply dark:bg-dark-500;
   height: 100%;
 }
 @media screen and (max-width: 768px) {
   :host {
     @apply bg-white;
+    @apply dark:bg-dark-500;
     @apply rounded-tl-md;
     @apply rounded-tr-md;
   }
@@ -20,8 +22,7 @@
     position: relative;
     @apply focus:outline-none;
     &.active {
-      @apply text-primary;
-      background-color: var(--primary-10);
+      @apply bg-primary-10;
       &::before {
         @apply bg-primary;
         content: '';

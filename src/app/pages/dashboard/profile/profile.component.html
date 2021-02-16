@@ -1,7 +1,7 @@
-<aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()">
+<aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()" class="bg-white dark:bg-dark-500">
   <app-profile-sidebar (menuClosed)="closeMenu()"></app-profile-sidebar>
 </aside>
-<main class="p-4">
+<main class="p-4 dark:bg-dark-800">
   <router-outlet></router-outlet>
 </main>
 <div *ngIf="(isMenuOpen$ | async)" (click)="closeMenu()" class="overlay"></div>

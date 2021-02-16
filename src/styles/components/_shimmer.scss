@@ -1,4 +1,4 @@
-.shimmer {
+body:not(.mode-dark) .shimmer {
   background-image: linear-gradient(
     to right,
     #e7e8e9 0%,
@@ -25,6 +25,25 @@
       #e6e6e6 100%
     );
   }
+}
+body.mode-dark .shimmer {
+  background-image: linear-gradient(
+    to right,
+    var(--dark-500) 0%,
+    var(--dark-700) 20%,
+    var(--dark-800) 40%,
+    var(--dark-900) 100%
+  );
+  background-repeat: no-repeat;
+  background-size: 500px 300px;
+  display: inline-block;
+  position: relative;
+
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  animation-iteration-count: infinite;
+  animation-name: placeholderShimmer;
+  animation-timing-function: linear;
 }
 
 @keyframes placeholderShimmer {

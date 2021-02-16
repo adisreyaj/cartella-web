@@ -4,6 +4,7 @@
   padding-top: 2px;
   display: grid;
   @apply bg-gray-100;
+  @apply dark:bg-dark-800;
   grid-template-columns: 200px 1fr;
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -18,7 +19,6 @@ aside {
   }
 }
 main {
-  @apply bg-white;
   @apply rounded-tl-md;
   box-shadow: 0 5.5px 10px rgb(0 0 0 / 12%), 0 100px 80px rgb(0 0 0 / 10%);
 }
