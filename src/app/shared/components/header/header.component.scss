@@ -30,7 +30,6 @@ header {
         }
 
         &.active {
-          @apply text-primary;
           @apply bg-primary-10;
           .menu__item-icon {
             @apply bg-primary;

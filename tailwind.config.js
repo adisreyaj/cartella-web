@@ -17,6 +17,12 @@ module.exports = {
         primary: 'var(--primary)',
         'primary-dark': 'var(--primary-dark)',
         'primary-10': 'var(--primary-10)',
+        dark: {
+          500: 'var(--dark-500)',
+          700: 'var(--dark-700)',
+          800: 'var(--dark-800)',
+          900: 'var(--dark-900)',
+        },
       },
       fontFamily: {
         sans: ['Inter', ...require('tailwindcss/defaultTheme').fontFamily.sans],

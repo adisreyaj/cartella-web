@@ -1,16 +1,16 @@
-<div class="p-2 bg-white rounded-md shadow-md cursor-pointer item-card hover:shadow-lg" appHovered
+<div class="p-2 bg-white rounded-md shadow-md cursor-pointer dark:bg-dark-500 item-card hover:shadow-lg" appHovered
      (click)="handleClick(item)">
   <header class="mb-1">
-    <p class="-mt-1 text-xs text-gray-400">{{item?.type | titlecase}}</p>
+    <p class="-mt-1 text-xs text-gray-400 dark:text-gray-100">{{item?.type | titlecase}}</p>
   </header>
 
   <div class="text-sm text-left item-label">
-    <p class="mb-1 line-clamp-1">{{item?.label}}</p>
+    <p class="mb-1 font-medium line-clamp-1 dark:text-white">{{item?.label}}</p>
     <ng-container *ngIf="item?.type === 'SNIPPET'">
-      <p class="text-xs text-gray-500 line-clamp-1">{{item?.data?.technology?.name}}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-50 line-clamp-1">{{item?.data?.technology?.name}}</p>
     </ng-container>
     <ng-container *ngIf="item?.type !== 'SNIPPET'">
-      <p class="text-xs text-gray-500 line-clamp-1">{{item?.description}}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-100 line-clamp-1">{{item?.description}}</p>
     </ng-container>
   </div>
   <footer class="mt-4">
