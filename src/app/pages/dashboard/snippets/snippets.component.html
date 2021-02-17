@@ -6,7 +6,7 @@
                           (folderSelected)="handleSelectFolder($event)" (menuClosed)="closeMenu()">
     </app-explorer-sidebar>
   </aside>
-  <main class="grid snippets__main dark:bg-dark-800">
+  <main class="grid snippets__main dark:bg-dark-700">
     <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EXPLORER">
       <app-snippets-sidebar [snippets]="snippetsShown$ | async" [isLoading]="snippetLoading$ | async"
                             [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
