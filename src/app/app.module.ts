@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import {
   BrowserModule,
   HammerModule,
@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { CartellaHammerConfig } from '@app/config/hammer.config';
 import { IconModule } from '@app/modules/icon/icon.module';
+import { ConfigurationService } from '@app/services/configuration/configuration.service';
 import { TagState } from '@app/store/states/tag.state';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { UserState } from '@app/store/states/user.state';
@@ -50,6 +51,10 @@ const tippyConfig: Partial<TippyConfig> = {
   },
 };
 
+const configurationFactory = (
+  configurationService: ConfigurationService
+) => () => configurationService.loadConfig();
+
 @NgModule({
   declarations: [AppComponent],
   imports: [
@@ -89,6 +94,12 @@ const tippyConfig: Partial<TippyConfig> = {
     }),
   ],
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: configurationFactory,
+      deps: [ConfigurationService],
+      multi: true,
+    },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     {
       provide: HTTP_INTERCEPTORS,

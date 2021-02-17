@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '@app/components/components.module';
+import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { MenuService } from '@app/services/menu/menu.service';
@@ -34,6 +35,7 @@ import { ProfileComponent } from './profile.component';
     HoveredDirectiveModule,
     ComponentsModule,
     ColorTwitterModule,
+    FeatureDirectiveModule,
   ],
   providers: [MenuService],
 })

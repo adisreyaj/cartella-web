@@ -13,11 +13,13 @@
         <rmx-icon name="user-3-line" class="mr-2 icon-lg"></rmx-icon>
         <p>General</p>
       </li>
-      <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags"
-          routerLinkActive="text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800" (click)="closeMenu()">
-        <rmx-icon name="hashtag" class="mr-2 icon-lg"></rmx-icon>
-        <p>Tags</p>
-      </li>
+      <ng-container *feature="'modules.tags.enabled'">
+        <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags"
+            routerLinkActive="text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800" (click)="closeMenu()">
+          <rmx-icon name="hashtag" class="mr-2 icon-lg"></rmx-icon>
+          <p>Tags</p>
+        </li>
+      </ng-container>
     </ul>
   </section>
 </div>

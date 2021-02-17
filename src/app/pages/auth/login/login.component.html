@@ -48,9 +48,11 @@
           <button primaryButton class="grid items-center w-full"
                   [disabled]="loginForm?.touched && loginForm?.invalid">Login</button>
         </form>
-        <p class="mt-8 text-center dark:text-white">Need an account?
-          <a class="font-semibold text-primary dark:text-dark-50" routerLink="/auth/signup">Sign Up</a>
-        </p>
+        <ng-container *feature="'modules.signup.enabled'">
+          <p class="mt-8 text-center dark:text-white">Need an account?
+            <a class="font-semibold text-primary dark:text-dark-50" routerLink="/auth/signup">Sign Up</a>
+          </p>
+        </ng-container>
       </div>
     </div>
   </div>
