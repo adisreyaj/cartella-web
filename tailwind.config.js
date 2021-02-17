@@ -1,3 +1,4 @@
+var defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
   prefix: '',
   purge: {
@@ -26,7 +27,7 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['Inter', ...require('tailwindcss/defaultTheme').fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       typography: (theme) => ({
         DEFAULT: {

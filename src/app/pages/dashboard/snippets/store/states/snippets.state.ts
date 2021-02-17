@@ -4,8 +4,8 @@ import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { Snippet } from '../../interfaces/snippets.interface';
-import { SnippetsService } from '../../services/snippet/snippets.service';
+import { Snippet } from '../../shared/interfaces/snippets.interface';
+import { SnippetsService } from '../../shared/services/snippet/snippets.service';
 import {
   AddSnippet,
   DeleteSnippet,

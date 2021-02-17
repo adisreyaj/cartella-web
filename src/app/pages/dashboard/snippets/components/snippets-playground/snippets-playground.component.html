@@ -38,7 +38,8 @@
       <rmx-icon class="mr-2 icon-lg" name="palette-line"></rmx-icon>
       <ng-select [formControl]="themeFormControl" [clearable]="false" [searchable]="false" class="w-40"
                  aria-label="Choose theme">
-        <ng-option *ngFor="let theme of availableThemes" [value]="theme.value">{{theme.label}}</ng-option>
+        <ng-option *ngFor="let theme of availableThemes | themeVariant: (isDarkMode$ | async)" [value]="theme.value">
+          {{theme.label}}</ng-option>
       </ng-select>
     </div>
   </footer>

@@ -8,8 +8,8 @@ export type SnippetFolderRequest = FolderBaseRequest;
 export type SnippetFolder = FolderBaseResponse;
 
 export enum SnippetModes {
-  EXPLORER = 'EXPLORER',
-  EDITOR = 'EDITOR',
+  explorer = 'EXPLORER',
+  editor = 'EDITOR',
 }
 export interface SnippetBase {
   name: string;

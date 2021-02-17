@@ -18,7 +18,7 @@ import 'codemirror/mode/sass/sass';
 import 'codemirror/mode/shell/shell';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
-import { ScreenShotDialogPayload } from '../../../interfaces/snippets.interface';
+import { ScreenShotDialogPayload } from '../../../shared/interfaces/snippets.interface';
 
 @Component({
   selector: 'app-snippets-screenshot',

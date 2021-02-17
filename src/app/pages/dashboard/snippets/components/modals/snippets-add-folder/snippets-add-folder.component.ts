@@ -16,8 +16,8 @@ import { SubSink } from 'subsink';
 import {
   SnippetFolder,
   SnippetFolderRequest,
-} from '../../../interfaces/snippets.interface';
-import { SnippetsService } from '../../../services/snippet/snippets.service';
+} from '../../../shared/interfaces/snippets.interface';
+import { SnippetsService } from '../../../shared/services/snippet/snippets.service';
 import {
   AddSnippetFolder,
   DeleteSnippetFolder,

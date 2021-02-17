@@ -19,6 +19,7 @@ import { SnippetsPlaygroundComponent } from './components/snippets-playground/sn
 import { SnippetsSidebarComponent } from './components/snippets-sidebar/snippets-sidebar.component';
 import { SnippetsRoutingModule } from './snippets-routing.module';
 import { SnippetsComponent } from './snippets.component';
+import { ThemeVariantPipe } from './shared/pipes/theme-variant.pipe';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { SnippetsComponent } from './snippets.component';
     SnippetsPlaygroundComponent,
     SnippetsAddFolderComponent,
     SnippetsScreenshotComponent,
+    ThemeVariantPipe,
   ],
   imports: [
     CommonModule,

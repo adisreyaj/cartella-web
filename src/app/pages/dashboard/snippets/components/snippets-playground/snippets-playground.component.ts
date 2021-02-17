@@ -11,15 +11,16 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
-  THEMES_SUPPORTED
+  THEMES_SUPPORTED,
 } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
+import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@app/services/theme/editor-theme.service';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
@@ -38,17 +39,19 @@ import 'codemirror/mode/shell/shell';
 import 'codemirror/mode/vue/vue';
 import 'codemirror/mode/yaml/yaml';
 import { has } from 'lodash-es';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
 import { SubSink } from 'subsink';
-import { Snippet, SnippetModes } from '../../interfaces/snippets.interface';
-import { CodeEditorService } from '../../services/code-editor/code-editor.service';
-import { SnippetsService } from '../../services/snippet/snippets.service';
+import {
+  Snippet,
+  SnippetModes,
+} from '../../shared/interfaces/snippets.interface';
+import { CodeEditorService } from '../../shared/services/code-editor/code-editor.service';
 import {
   DeleteSnippet,
   SetActiveSnippet,
-  UpdateSnippet
+  UpdateSnippet,
 } from '../../store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
 
@@ -63,7 +66,7 @@ export class SnippetsPlaygroundComponent
   @Input() activeSnippet: Snippet;
   @Input() technologies: Technology[] = [];
   @Input() isLargeScreen = true;
-  @Input() mode = SnippetModes.EXPLORER;
+  @Input() mode = SnippetModes.explorer;
 
   @Output() modeChanged = new EventEmitter<SnippetModes>();
 
@@ -78,19 +81,22 @@ export class SnippetsPlaygroundComponent
     localStorage.getItem('editor-theme') ?? 'one-light'
   );
   fullScreen$ = new BehaviorSubject(false);
+  isDarkMode$: Observable<boolean>;
 
   snippetNameFormControl = new FormControl('');
   private subs = new SubSink();
   constructor(
     private editorThemeService: EditorThemeService,
-    private snippetService: SnippetsService,
+    private darkMode: DarkModeService,
     private renderer: Renderer2,
     private dialog: DialogService,
     private store: Store,
     private codeEditorService: CodeEditorService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.isDarkMode$ = this.darkMode.isDarkMode$;
+  }
 
   ngAfterViewInit(): void {
     if (this.isLargeScreen) {
@@ -137,7 +143,7 @@ export class SnippetsPlaygroundComponent
   }
 
   goBack() {
-    this.modeChanged.emit(SnippetModes.EXPLORER);
+    this.modeChanged.emit(SnippetModes.explorer);
   }
 
   save() {

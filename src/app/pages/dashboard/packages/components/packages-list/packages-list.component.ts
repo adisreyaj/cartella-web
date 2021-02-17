@@ -41,7 +41,7 @@ export class PackagesListComponent implements OnInit {
   @Input() isLoading = false;
 
   packagesCount = new Array(
-    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
+    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages || 1
   ).fill('');
 
   @Select(PackageFolderState.getActivePackageFolder)

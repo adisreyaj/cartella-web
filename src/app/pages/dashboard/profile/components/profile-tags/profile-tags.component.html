@@ -12,7 +12,8 @@
 <section>
   <ul class="flex flex-wrap">
     <ng-container *ngFor="let tag of (tags$ | async); trackBy: trackBy">
-      <li class="m-2 shadow-md tag-item hover:shadow-lg dark:bg-dark-700" appHovered>
+      <li class="m-2 border-gray-100 shadow-md tag-item hover:shadow-lg dark:bg-dark-700 dark:border-dark-800"
+          appHovered>
         <div class="flex items-center space-x-2">
           <div class="w-4 h-4 rounded-full" [style.backgroundColor]="tag?.color"></div>
           <p class="dark:text-white">{{tag?.name}}</p>
