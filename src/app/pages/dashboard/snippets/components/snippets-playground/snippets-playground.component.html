@@ -61,17 +61,21 @@
 
 
 <ng-template #editorActions let-hide>
-  <div class="grid grid-cols-6 gap-3">
+  <div class="flex space-x-2 flex-nowrap">
     <button class="playground__header-button" (click)="save();hide()" tippy="Save Snippet" aria-label="Save Snippet">
       <rmx-icon name="save-2-line" class="icon-lg"></rmx-icon>
     </button>
-    <button class="playground__header-button" (click)="exportAsImage();hide()" tippy="Export as Image"
-            aria-label="Export as Image">
-      <rmx-icon name="camera-3-line" class="icon-lg"></rmx-icon>
-    </button>
-    <button class="playground__header-button" tippy="Share" aria-label="Share">
-      <rmx-icon name="share-circle-line" class="icon-lg"></rmx-icon>
-    </button>
+    <ng-container *feature="'modules.snippets.screenshot'">
+      <button class="playground__header-button" (click)="exportAsImage();hide()" tippy="Export as Image"
+              aria-label="Export as Image">
+        <rmx-icon name="camera-3-line" class="icon-lg"></rmx-icon>
+      </button>
+    </ng-container>
+    <ng-container *feature="'modules.snippets.share'">
+      <button class="playground__header-button" tippy="Share" aria-label="Share">
+        <rmx-icon name="share-circle-line" class="icon-lg"></rmx-icon>
+      </button>
+    </ng-container>
     <button class="playground__header-button" [cdkCopyToClipboard]="currentCode" tippy="Copy Code"
             aria-label="Copy Code" (click)="hide()">
       <rmx-icon name="clipboard-line" class="icon-lg"></rmx-icon>
