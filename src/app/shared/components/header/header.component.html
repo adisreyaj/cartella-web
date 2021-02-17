@@ -18,7 +18,8 @@
         </header>
       </ng-container>
       <div class="menu__container">
-        <a class=" menu__item" routerLink="/" routerLinkActive="active text-primary dark:text-white"
+        <a class="menu__item dark:text-gray-200" routerLink="/"
+           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10"
            [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="home-line" class="icon-md"></rmx-icon>
@@ -27,22 +28,22 @@
             Home
           </span>
         </a>
-        <a class=" menu__item" routerLink="/packages" routerLinkActive="active text-primary dark:text-white"
-           (click)="closeMenu()">
+        <a class="menu__item dark:text-gray-200" routerLink="/packages"
+           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10" (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="archive-line" class="icon-md"></rmx-icon>
           </div>
           <span>Packages</span>
         </a>
-        <a class=" menu__item" routerLink="/bookmarks" routerLinkActive="active text-primary dark:text-white"
-           (click)="closeMenu()">
+        <a class="menu__item dark:text-gray-200" routerLink="/bookmarks"
+           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10" (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="bookmark-line" class="icon-md"></rmx-icon>
           </div>
           <span>Bookmarks</span>
         </a>
-        <a class="menu__item" routerLink="/snippets" routerLinkActive="active text-primary dark:text-white"
-           (click)="closeMenu()">
+        <a class="menu__item dark:text-gray-200" routerLink="/snippets"
+           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10" (click)="closeMenu()">
           <div class="mr-2 menu__item-icon">
             <rmx-icon name="code-s-slash-line" class="icon-md"></rmx-icon>
           </div>
