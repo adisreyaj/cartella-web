@@ -80,7 +80,9 @@
 <ng-template #userDropdown let-hide>
   <div class="flex flex-col w-48">
     <div class="dropdown-item" routerLink="/profile" (click)="hide()">Preferences</div>
-    <div class="dropdown-item" (click)="toggleDarkMode();hide()">{{(isDarkMode$ | async) ? 'Light':'Dark'}} Mode</div>
+    <ng-container *feature="'darkMode'">
+      <div class="dropdown-item" (click)="toggleDarkMode();hide()">{{(isDarkMode$ | async) ? 'Light':'Dark'}} Mode</div>
+    </ng-container>
     <div class="text-red-600 dropdown-item" (click)="logout();hide()">Logout</div>
   </div>
 </ng-template>

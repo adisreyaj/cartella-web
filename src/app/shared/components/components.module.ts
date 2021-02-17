@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
@@ -18,6 +19,7 @@ import { HeaderComponent } from './header/header.component';
     RouterModule,
     DialogModule,
     ButtonsModule,
+    FeatureDirectiveModule,
   ],
   exports: [HeaderComponent],
 })
