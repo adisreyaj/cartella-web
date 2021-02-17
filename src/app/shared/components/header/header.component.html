@@ -18,37 +18,48 @@
         </header>
       </ng-container>
       <div class="menu__container">
-        <a class="menu__item dark:text-gray-200" routerLink="/"
-           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10"
-           [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
-          <div class="mr-2 menu__item-icon">
-            <rmx-icon name="home-line" class="icon-md"></rmx-icon>
-          </div>
-          <span>
-            Home
-          </span>
-        </a>
-        <a class="menu__item dark:text-gray-200" routerLink="/packages"
-           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10" (click)="closeMenu()">
-          <div class="mr-2 menu__item-icon">
-            <rmx-icon name="archive-line" class="icon-md"></rmx-icon>
-          </div>
-          <span>Packages</span>
-        </a>
-        <a class="menu__item dark:text-gray-200" routerLink="/bookmarks"
-           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10" (click)="closeMenu()">
-          <div class="mr-2 menu__item-icon">
-            <rmx-icon name="bookmark-line" class="icon-md"></rmx-icon>
-          </div>
-          <span>Bookmarks</span>
-        </a>
-        <a class="menu__item dark:text-gray-200" routerLink="/snippets"
-           routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10" (click)="closeMenu()">
-          <div class="mr-2 menu__item-icon">
-            <rmx-icon name="code-s-slash-line" class="icon-md"></rmx-icon>
-          </div>
-          <span>Snippets</span>
-        </a>
+        <ng-container *feature="'modules.home.enabled'">
+          <a class="menu__item dark:text-gray-200" routerLink="/"
+             routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10"
+             [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
+            <div class="mr-2 menu__item-icon">
+              <rmx-icon name="home-line" class="icon-md"></rmx-icon>
+            </div>
+            <span>
+              Home
+            </span>
+          </a>
+        </ng-container>
+        <ng-container *feature="'modules.packages.enabled'">
+          <a class="menu__item dark:text-gray-200" routerLink="/packages"
+             routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10"
+             (click)="closeMenu()">
+            <div class="mr-2 menu__item-icon">
+              <rmx-icon name="archive-line" class="icon-md"></rmx-icon>
+            </div>
+            <span>Packages</span>
+          </a>
+        </ng-container>
+        <ng-container *feature="'modules.bookmarks.enabled'">
+          <a class="menu__item dark:text-gray-200" routerLink="/bookmarks"
+             routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10"
+             (click)="closeMenu()">
+            <div class="mr-2 menu__item-icon">
+              <rmx-icon name="bookmark-line" class="icon-md"></rmx-icon>
+            </div>
+            <span>Bookmarks</span>
+          </a>
+        </ng-container>
+        <ng-container *feature="'modules.snippets.enabled'">
+          <a class="menu__item dark:text-gray-200" routerLink="/snippets"
+             routerLinkActive="active text-primary dark:text-white dark:bg-dark-700 bg-primary-10"
+             (click)="closeMenu()">
+            <div class="mr-2 menu__item-icon">
+              <rmx-icon name="code-s-slash-line" class="icon-md"></rmx-icon>
+            </div>
+            <span>Snippets</span>
+          </a>
+        </ng-container>
       </div>
     </nav>
     <div class="flex items-center" *ngIf="user$ | async as user">
