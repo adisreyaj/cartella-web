@@ -3,6 +3,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { LanguagePipeModule } from '@app/pipes/language-pipe/language-pipe.module';
@@ -17,9 +18,9 @@ import { SnippetsAddFolderComponent } from './components/modals/snippets-add-fol
 import { SnippetsScreenshotComponent } from './components/modals/snippets-screenshot/snippets-screenshot.component';
 import { SnippetsPlaygroundComponent } from './components/snippets-playground/snippets-playground.component';
 import { SnippetsSidebarComponent } from './components/snippets-sidebar/snippets-sidebar.component';
+import { ThemeVariantPipe } from './shared/pipes/theme-variant.pipe';
 import { SnippetsRoutingModule } from './snippets-routing.module';
 import { SnippetsComponent } from './snippets.component';
-import { ThemeVariantPipe } from './shared/pipes/theme-variant.pipe';
 
 @NgModule({
   declarations: [
@@ -46,6 +47,7 @@ import { ThemeVariantPipe } from './shared/pipes/theme-variant.pipe';
     TippyModule,
     TimeAgoPipeModule,
     LayoutModule,
+    FeatureDirectiveModule,
   ],
   providers: [MenuService],
 })
