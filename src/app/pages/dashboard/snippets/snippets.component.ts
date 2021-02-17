@@ -23,7 +23,7 @@ import {
   Snippet,
   SnippetFolder,
   SnippetModes,
-} from './interfaces/snippets.interface';
+} from './shared/interfaces/snippets.interface';
 import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
@@ -80,7 +80,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     tap((data) => (this.isLargeScreen = data))
   );
 
-  private modeSubject = new BehaviorSubject(SnippetModes.EXPLORER);
+  private modeSubject = new BehaviorSubject(SnippetModes.explorer);
   mode$ = this.modeSubject.pipe();
   availableModes = SnippetModes;
 

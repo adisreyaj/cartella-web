@@ -1,5 +1,6 @@
 <div class="bookmarks">
-  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()" class="bg-white dark:bg-dark-500">
+  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()"
+         class="bg-gray-100 dark:bg-dark-500">
     <app-explorer-sidebar type="bookmarks" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           [isFetched]="bookmarkFolderFetched$ | async" [isLoading]="bookmarkFolderLoading$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"

@@ -22,7 +22,11 @@
       "@app/components/*": ["src/app/shared/components/*"],
       "@app/pipes/*": ["src/app/shared/pipes/*"],
       "@app/directives/*": ["src/app/shared/directives/*"],
-      "@app/store/*": ["src/app/shared/store/*"]
+      "@app/store/*": ["src/app/shared/store/*"],
+      "@app/home/*": ["src/app/pages/dashboard/home/*"],
+      "@app/bookmarks/*": ["src/app/pages/dashboard/bookmarks/*"],
+      "@app/packages/*": ["src/app/pages/dashboard/packages/*"],
+      "@app/snippets/*": ["src/app/pages/dashboard/snippets/*"]
     }
   }
 }

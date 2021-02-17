@@ -1,7 +1,7 @@
 import {
   SnippetFolder,
   SnippetFolderRequest,
-} from '../../interfaces/snippets.interface';
+} from '../../shared/interfaces/snippets.interface';
 
 export class AddSnippetFolder {
   static readonly type = '[SnippetFolder] Add';

@@ -1,4 +1,7 @@
-import { Snippet, SnippetRequest } from '../../interfaces/snippets.interface';
+import {
+  Snippet,
+  SnippetRequest,
+} from '../../shared/interfaces/snippets.interface';
 
 export class AddSnippet {
   static readonly type = '[Snippet] Add';
