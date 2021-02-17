@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { Bookmark } from '@app/bookmarks/shared/interfaces/bookmarks.interface';
 import { FeatureType } from '@app/interfaces/general.interface';
-import { Bookmark } from '../../../bookmarks/shared/interfaces/bookmarks.interface';
-import { Package } from '../../../packages/shared/interfaces/packages.interface';
-import { Snippet } from '../../../snippets/interfaces/snippets.interface';
+import { Package } from '@app/packages/shared/interfaces/packages.interface';
+import { Snippet } from '@app/snippets/shared/interfaces/snippets.interface';
 import { HomeCardInput, HomeItems } from '../interfaces/home.interface';
 
 @Pipe({
@@ -30,6 +30,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
             description,
             views,
           };
+          break;
         }
         case FeatureType.SNIPPET: {
           const {
@@ -47,6 +48,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
             description,
             views,
           };
+          break;
         }
         case FeatureType.PACKAGE: {
           const {
@@ -64,6 +66,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
             description,
             views,
           };
+          break;
         }
       }
     }

@@ -1,5 +1,6 @@
 <div class="packages">
-  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()" class="bg-white dark:bg-dark-500">
+  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()"
+         class="bg-gray-100 dark:bg-dark-500">
     <app-explorer-sidebar type="packages" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           [isLoading]="packageFolderLoading$ | async" [isFetched]="packageFetched$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"

@@ -1,5 +1,6 @@
 <div class="snippets">
-  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()" class="bg-white dark:bg-dark-500">
+  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()"
+         class="bg-gray-100 dark:bg-dark-500">
     <app-explorer-sidebar type="snippets" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           [isLoading]="snippetFolderLoading$ | async" [isFetched]="snippetFolderFetched$ | async"
@@ -7,13 +8,13 @@
     </app-explorer-sidebar>
   </aside>
   <main class="grid snippets__main dark:bg-dark-700">
-    <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EXPLORER">
+    <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.explorer">
       <app-snippets-sidebar [snippets]="snippetsShown$ | async" [isLoading]="snippetLoading$ | async"
                             [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
                             (modeChanged)="changeMode($event)">
       </app-snippets-sidebar>
     </ng-container>
-    <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EDITOR">
+    <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.editor">
       <app-snippets-playground [activeSnippet]="activeSnippet$ | async" [technologies]="technologies$ | async"
                                [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
                                (modeChanged)="changeMode($event)">
@@ -21,7 +22,7 @@
     </ng-container>
   </main>
   <div *ngIf="(isMenuOpen$ | async)" (click)="closeMenu()" class="overlay"></div>
-  <button *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.EXPLORER"
+  <button *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.explorer"
           class="fixed flex p-4 rounded-full bottom-4 left-4 bg-primary shadow-floating lg:hidden default-ring"
           (click)="toggleMenu()">
     <rmx-icon name="folders-line" class="text-white icon-3xl"></rmx-icon>

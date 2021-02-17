@@ -1,12 +1,7 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@app/interfaces/user.interface';
+import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { LogoutUser } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
@@ -22,50 +17,23 @@ import { take } from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
-  isDarkMode = false;
+  isDarkMode$: Observable<boolean>;
 
   isMenuOpen$: Observable<boolean>;
   constructor(
     private store: Store,
     private router: Router,
     private menu: MenuService,
-    @Inject(DOCUMENT) private document: Document
+    private darkMode: DarkModeService
   ) {}
 
   ngOnInit(): void {
     this.isMenuOpen$ = this.menu.isMenuOpen$;
-    if (
-      localStorage.getItem('theme') === 'dark' ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
-    ) {
-      this.enableDarkMode();
-    } else {
-      this.enableLightMode();
-    }
+    this.isDarkMode$ = this.darkMode.isDarkMode$;
   }
 
-  get bodyElement() {
-    return this.document.querySelector('body');
-  }
-
-  toggleTheme() {
-    if (this.isDarkMode) {
-      this.enableLightMode();
-    } else {
-      this.enableDarkMode();
-    }
-  }
-
-  private enableDarkMode() {
-    this.bodyElement.classList.add('mode-dark');
-    this.isDarkMode = true;
-    localStorage.setItem('theme', 'dark');
-  }
-  private enableLightMode() {
-    this.bodyElement.classList.remove('mode-dark');
-    this.isDarkMode = false;
-    localStorage.setItem('theme', 'light');
+  toggleDarkMode() {
+    this.darkMode.toggle();
   }
 
   logout() {

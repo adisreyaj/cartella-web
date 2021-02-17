@@ -32,7 +32,7 @@ import {
   SnippetFolder,
   SnippetModes,
   SnippetRequest,
-} from '../../interfaces/snippets.interface';
+} from '../../shared/interfaces/snippets.interface';
 import {
   AddSnippet,
   SetActiveSnippet,
@@ -51,7 +51,7 @@ export class SnippetsSidebarComponent
   @Input() snippets: Snippet[] = [];
   @Input() isLoading = false;
   @Input() isLargeScreen = true;
-  @Input() mode = SnippetModes.EXPLORER;
+  @Input() mode = SnippetModes.explorer;
 
   @Output() modeChanged = new EventEmitter<SnippetModes>();
 
@@ -101,7 +101,7 @@ export class SnippetsSidebarComponent
   selectSnippet(data: Snippet) {
     if (data) {
       if (!this.isLargeScreen) {
-        this.modeChanged.emit(SnippetModes.EDITOR);
+        this.modeChanged.emit(SnippetModes.editor);
       }
       this.store.dispatch(new SetActiveSnippet(data));
     }
