@@ -1,7 +1,7 @@
 <header class="flex items-center justify-between mb-8">
   <div>
-    <p class="text-xl font-bold text-gray-700">Configure Custom Tags</p>
-    <p class="text-sm text-gray-500">Manage your tags</p>
+    <p class="text-xl font-bold text-gray-700 dark:text-white">Configure Custom Tags</p>
+    <p class="text-sm text-gray-500 dark:text-gray-50">Manage your tags</p>
   </div>
   <div>
     <button primaryButton (click)="handleCreateTag()">
@@ -12,10 +12,11 @@
 <section>
   <ul class="flex flex-wrap">
     <ng-container *ngFor="let tag of (tags$ | async); trackBy: trackBy">
-      <li class="m-2 shadow-md tag-item hover:shadow-lg" appHovered>
+      <li class="m-2 border-gray-100 shadow-md tag-item hover:shadow-lg dark:bg-dark-700 dark:border-dark-800"
+          appHovered>
         <div class="flex items-center space-x-2">
           <div class="w-4 h-4 rounded-full" [style.backgroundColor]="tag?.color"></div>
-          <p>{{tag?.name}}</p>
+          <p class="dark:text-white">{{tag?.name}}</p>
         </div>
         <div class="flex items-center space-x-2 opacity-0 tag-item__buttons">
           <button class="rounded-full default-ring focus:ring-1 hover:bg-gray-100" (click)="editTag(tag)">

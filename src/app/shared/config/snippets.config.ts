@@ -1,5 +1,5 @@
 import { EditorConfiguration } from 'codemirror';
-import { SnippetRequest } from 'src/app/pages/dashboard/snippets/interfaces/snippets.interface';
+import { SnippetRequest } from 'src/app/pages/dashboard/snippets/shared/interfaces/snippets.interface';
 
 export const LANGUAGES_SUPPORTED = [
   { label: 'Javascript', value: 'javascript' },
@@ -12,47 +12,58 @@ export const LANGUAGES_SUPPORTED = [
   { label: 'SCSS', value: 'sass' },
 ];
 
-export const THEMES_SUPPORTED = [
+export interface ThemesSupported {
+  label: string;
+  value: string;
+  type: string;
+}
+
+export const THEMES_SUPPORTED: ThemesSupported[] = [
   {
     label: 'Material Darker',
     value: 'material-darker',
+    type: 'dark',
   },
   {
     label: 'Material Palenight',
     value: 'material-palenight',
+    type: 'dark',
   },
   {
     label: 'Dracula',
     value: 'dracula',
+    type: 'dark',
   },
   {
     label: 'One Dark',
     value: 'one-dark',
+    type: 'dark',
   },
   {
     label: 'One Light',
     value: 'one-light',
+    type: 'light',
   },
 ];
 
 export const DEFAULT_EDITOR_OPTIONS: EditorConfiguration & {
   [key: string]: any;
 } = {
-  theme: 'one-light',
+  theme: 'one-dark',
   mode: 'javascript',
   tabSize: 2,
   lineNumbers: true,
-  extraKeys: {
-    Tab: 'emmetExpandAbbreviation',
-    Esc: 'emmetResetAbbreviation',
-    Enter: 'emmetInsertLineBreak',
-    'Ctrl-Space': 'emmetCaptureAbbreviation',
-  },
-  emmet: {
-    mark: true,
-    markTagPairs: true,
-    previewOpenTag: false,
-  },
+  // extraKeys: {
+  //   Tab: 'emmetExpandAbbreviation',
+  //   Esc: 'emmetResetAbbreviation',
+  //   Enter: 'emmetInsertLineBreak',
+  //   'Ctrl-Space': 'emmetCaptureAbbreviation',
+  // },
+  // emmet: {
+  //   mark: true,
+  //   markTagPairs: true,
+  //   previewOpenTag: false,
+  // },
 };
 
 export const ALL_SNIPPETS_FOLDER = {

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { Bookmark } from '../../interfaces/bookmarks.interface';
 import { BookmarksService } from '../../services/bookmarks.service';
 import {
@@ -28,7 +31,10 @@ export class BookmarkStateModel {
 })
 @Injectable()
 export class BookmarkState {
-  constructor(private bookmarkService: BookmarksService) {}
+  constructor(
+    private bookmarkService: BookmarksService,
+    private storage: StorageService
+  ) {}
 
   @Selector()
   static getAllBookmarks(state: BookmarkStateModel) {
@@ -59,42 +65,70 @@ export class BookmarkState {
       case 'all':
         const state = getState();
         if (state.fetched) {
-          patchState({
-            bookmarksShown: state.allBookmarks,
-          });
+          return this.storage
+            .getAllItems<Bookmark>(StorageFolders.bookmarks)
+            .pipe(
+              switchMap((bookmarks) => {
+                if (!bookmarks) {
+                  return this.bookmarkService.getBookmarks().pipe(
+                    map(({ payload }) => payload),
+                    tap((result) => {
+                      patchState({
+                        bookmarksShown: result,
+                      });
+                    })
+                  );
+                } else {
+                  patchState({
+                    bookmarksShown: bookmarks,
+                  });
+                  return of(bookmarks);
+                }
+              })
+            );
+        } else {
+          return this.bookmarkService.getBookmarks().pipe(
+            map(({ payload }) => payload),
+            tap((result) => {
+              setState({
+                ...state,
+                fetched: true,
+                allBookmarks: result,
+                bookmarksShown: result,
+              });
+            })
+          );
         }
-        return this.bookmarkService.getBookmarks().pipe(
-          map(({ payload }) => payload),
-          tap((result) => {
-            const state = getState();
-            setState({
-              ...state,
-              allBookmarks: result,
-              bookmarksShown: result,
-              fetched: true,
-            });
-          })
-        );
       case 'starred':
         return this.bookmarkService.getFavoriteBookmarks().pipe(
           map(({ payload }) => payload),
           tap((result) => {
-            const state = getState();
             patchState({
               bookmarksShown: result,
             });
           })
         );
-      default:
-        return this.bookmarkService.getBookmarksInFolder(id).pipe(
-          map(({ payload }) => payload),
-          tap((result) => {
-            const state = getState();
-            patchState({
-              bookmarksShown: result,
-            });
+      default: {
+        return this.storage.getItem(StorageFolders.bookmarks, id).pipe(
+          switchMap((bookmarks) => {
+            if (!bookmarks) {
+              return this.bookmarkService.getBookmarksInFolder(id).pipe(
+                map(({ payload }) => payload),
+                tap((result) => {
+                  patchState({
+                    bookmarksShown: result,
+                  });
+                })
+              );
+            } else {
+              patchState({
+                bookmarksShown: bookmarks,
+              });
+              return of(bookmarks);
+            }
           })
         );
+      }
     }
   }
 
@@ -165,10 +199,9 @@ export class BookmarkState {
 
   @Action(SetActiveBookmark, { cancelUncompleted: true })
   setSelectedBookmarkId(
-    { getState, patchState }: StateContext<BookmarkStateModel>,
+    { patchState }: StateContext<BookmarkStateModel>,
     { payload }: SetActiveBookmark
   ) {
-    const state = getState();
     patchState({
       activeBookmark: payload,
     });

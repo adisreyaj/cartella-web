@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { ALL_PACKAGES_FOLDER } from '../../shared/config/packages.config';
 import { PackageFolder } from '../../shared/interfaces/packages.interface';
 import { PackagesService } from '../../shared/services/packages.service';
 import {
@@ -13,17 +17,26 @@ import {
 
 export class PackageFolderStateModel {
   packageFolders: PackageFolder[];
+  fetched: boolean;
   activePackageFolder: PackageFolder;
 }
 @State({
   name: 'packageFolders',
+  defaults: {
+    packageFolders: [],
+    fetched: false,
+    activePackageFolder: null,
+  },
 })
 @Injectable()
 export class PackageFolderState {
-  constructor(private packageService: PackagesService) {}
+  constructor(
+    private packageService: PackagesService,
+    private storage: StorageService
+  ) {}
 
   @Selector()
-  static getPackageFoldersList(state: PackageFolderStateModel) {
+  static getAllPackageFolders(state: PackageFolderStateModel) {
     return state.packageFolders;
   }
 
@@ -36,17 +49,42 @@ export class PackageFolderState {
   getPackageFolders({
     getState,
     setState,
+    patchState,
   }: StateContext<PackageFolderStateModel>) {
-    return this.packageService.getFolders().pipe(
-      map(({ payload }) => payload),
-      tap((result) => {
-        const state = getState();
-        setState({
-          ...state,
-          packageFolders: result,
-        });
-      })
-    );
+    const state = getState();
+    if (state.fetched) {
+      return this.storage.getItem(StorageFolders.folders, 'packages').pipe(
+        switchMap((packageFolders) => {
+          if (!packageFolders) {
+            return this.packageService.getFolders().pipe(
+              map(({ payload }) => payload),
+              tap((result) => {
+                patchState({
+                  packageFolders: result,
+                });
+              })
+            );
+          } else {
+            patchState({
+              packageFolders,
+            });
+            return of(packageFolders);
+          }
+        })
+      );
+    } else {
+      return this.packageService.getFolders().pipe(
+        map(({ payload }) => payload),
+        tap((result) => {
+          setState({
+            ...state,
+            packageFolders: result,
+            fetched: true,
+            activePackageFolder: ALL_PACKAGES_FOLDER,
+          });
+        })
+      );
+    }
   }
 
   @Action(AddPackageFolder)

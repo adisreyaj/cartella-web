@@ -10,18 +10,20 @@ import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { filter, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
   SnippetFolder,
-  SNIPPET_MODES,
-} from './interfaces/snippets.interface';
+  SnippetModes,
+} from './shared/interfaces/snippets.interface';
 import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
@@ -37,10 +39,11 @@ import { SnippetState } from './store/states/snippets.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnippetsComponent implements OnInit, OnDestroy {
-  user: User;
-
   @Select(SnippetState.getAllSnippets)
   allSnippets$: Observable<Snippet[]>;
+
+  @Select(SnippetFolderState.getAllSnippetFolders)
+  allSnippetFolders$: Observable<Snippet[]>;
 
   @Select(SnippetState.getSnippetsShown)
   snippetsShown$: Observable<Snippet[]>;
@@ -48,7 +51,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
 
-  @Select(SnippetFolderState.getSnippetFoldersList)
+  @Select(SnippetFolderState.getAllSnippetFolders)
   folders$: Observable<SnippetFolder[]>;
 
   @Select(SnippetFolderState.getActiveSnippetFolder)
@@ -63,23 +66,23 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   @Select(SnippetFolderState.getSnippetFolderFetched)
   snippetFolderFetched$: Observable<boolean>;
 
+  user: User;
+  isLargeScreen = true;
+  isMenuOpen$: Observable<boolean>;
+
   private snippetFolderLoadingSubject = new BehaviorSubject(false);
   snippetFolderLoading$ = this.snippetFolderLoadingSubject.pipe();
 
   private snippetLoadingSubject = new BehaviorSubject(false);
   snippetLoading$ = this.snippetLoadingSubject.pipe();
-
-  isLargeScreen = true;
   private isLargeScreenSubject = new BehaviorSubject(this.isLargeScreen);
   isLargeScree$ = this.isLargeScreenSubject.pipe(
     tap((data) => (this.isLargeScreen = data))
   );
 
-  private modeSubject = new BehaviorSubject(SNIPPET_MODES.EXPLORER);
+  private modeSubject = new BehaviorSubject(SnippetModes.explorer);
   mode$ = this.modeSubject.pipe();
-  availableModes = SNIPPET_MODES;
-
-  isMenuOpen$: Observable<boolean>;
+  availableModes = SnippetModes;
 
   private subs = new SubSink();
   constructor(
@@ -87,13 +90,16 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private storage: StorageService
   ) {}
 
   ngOnInit(): void {
     this.getSnippetFolders();
     this.getSnippets();
     this.observeLayoutChanges();
+    this.updateSnippetFoldersInIDB();
+    this.updateSnippetsInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
   ngOnDestroy() {
@@ -112,7 +118,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     this.menu.toggleMenu();
   }
 
-  changeMode(mode: SNIPPET_MODES) {
+  changeMode(mode: SnippetModes) {
     this.modeSubject.next(mode);
   }
 
@@ -191,5 +197,34 @@ export class SnippetsComponent implements OnInit, OnDestroy {
           this.isLargeScreenSubject.next(result.matches);
         })
     );
+  }
+
+  private updateSnippetsInIDB() {
+    const sub = this.allSnippets$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((snippets) => {
+          snippets.forEach((data) => {
+            this.storage.setItem(
+              StorageFolders.snippets,
+              data.folder.id,
+              snippets.filter(({ folder: { id } }) => id === data.folder.id)
+            );
+          });
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
+  }
+  private updateSnippetFoldersInIDB() {
+    const sub = this.allSnippetFolders$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((snippets) => {
+          this.storage.setItem(StorageFolders.folders, 'snippets', snippets);
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
   }
 }

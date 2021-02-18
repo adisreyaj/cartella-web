@@ -2,9 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
@@ -30,6 +33,10 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   user: User;
   @Select(BookmarkState.getAllBookmarks)
   allBookmarks$: Observable<Bookmark[]>;
+
+  @Select(BookmarkFolderState.getAllBookmarkFolders)
+  allBookmarkFolders$: Observable<BookmarkFolder[]>;
+
   @Select(BookmarkState.getBookmarkFetched)
   bookmarkFetched$: Observable<boolean>;
 
@@ -42,7 +49,7 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   @Select(BookmarkState.getActiveBookmark)
   activeBookmark$: Observable<Bookmark>;
 
-  @Select(BookmarkFolderState.getBookmarkFoldersList)
+  @Select(BookmarkFolderState.getAllBookmarkFolders)
   folders$: Observable<BookmarkFolder[]>;
 
   @Select(BookmarkFolderState.getActiveBookmarkFolder)
@@ -59,12 +66,15 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private dialog: DialogService,
-    private menu: MenuService
+    private menu: MenuService,
+    private storage: StorageService
   ) {}
 
   ngOnInit(): void {
     this.getBookmarkFolders();
     this.getBookmarks();
+    this.updateBookmarksInIDB();
+    this.updateBookmarkFoldersInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
   ngOnDestroy() {
@@ -119,9 +129,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
 
   private getBookmarks() {
     this.bookmarkLoadingSubject.next(true);
-    const folderState = this.store.selectSnapshot(
-      (state) => state.snippetFolders
-    );
     const sub = this.store
       .dispatch(new GetBookmarks(ALL_BOOKMARKS_FOLDER.id))
       .subscribe(
@@ -149,6 +156,35 @@ export class BookmarksComponent implements OnInit, OnDestroy {
         }
       );
 
+    this.subs.add(sub);
+  }
+
+  private updateBookmarksInIDB() {
+    const sub = this.allBookmarks$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((bookmarks) => {
+          bookmarks.forEach((data) => {
+            this.storage.setItem(
+              StorageFolders.bookmarks,
+              data.folder.id,
+              bookmarks.filter(({ folder: { id } }) => id === data.folder.id)
+            );
+          });
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
+  }
+  private updateBookmarkFoldersInIDB() {
+    const sub = this.allBookmarkFolders$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((bookmarks) => {
+          this.storage.setItem(StorageFolders.folders, 'bookmarks', bookmarks);
+        })
+      )
+      .subscribe();
     this.subs.add(sub);
   }
 }

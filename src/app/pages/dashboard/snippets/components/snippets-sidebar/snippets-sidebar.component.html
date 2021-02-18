@@ -1,12 +1,12 @@
-<header class="bg-gray-50" [class.rounded-tl-lg]="isLargeScreen">
+<header [class.rounded-tl-lg]="isLargeScreen">
   <header class="flex items-center justify-between p-4 mb-2 pb -1">
     <div>
-      <p class="text-xl font-bold text-gray-700">Snippets</p>
-      <p class="text-sm text-gray-500">Manage your snippets</p>
+      <p class="text-xl font-bold text-gray-700 dark:text-white">Snippets</p>
+      <p class="text-sm text-gray-500 dark:text-gray-50">Manage your snippets</p>
     </div>
     <div>
       <button primaryButton [tippy]="createSnippetSelector" placement="top-start" variation="menu"
-              [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)">
+              [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)" aria-label="Create new snippet">
         <rmx-icon name="add-line"></rmx-icon>
       </button>
     </div>
@@ -21,19 +21,18 @@
   <div></div>
 </header>
 <section class="relative overflow-y-auto snippets-sidebar__list">
-  <ng-container
-                *ngIf="!isLoading || ((activeFolder$ | async)?.id === 'all' && (snippetFetched$ | async)); else shimmerLoading">
+  <ng-container *ngIf="!isLoading || (snippetFetched$ | async); else shimmerLoading">
     <ul *ngIf="(snippetsToShow$ | async)?.length > 0;else noSnippets">
       <ng-container *ngFor="let snippet of (snippetsToShow$ | async);trackBy:trackBy">
         <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
             (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id" appHovered
             #snippetListItem>
           <div>
-            <p class="mb-1">{{snippet?.name}}</p>
+            <p class="mb-1 font-medium dark:text-white">{{snippet?.name}}</p>
             <div class="flex items-center">
               <img class="w-4 h-4 mr-1 rounded-md" [src]="snippet?.technology?.icon" [alt]="snippet?.technology?.name"
                    height="16px" width="16px">
-              <p class="text-xs text-gray-500">{{snippet?.technology?.name}}</p>
+              <p class="text-xs text-gray-500 dark:text-gray-50">{{snippet?.technology?.name}}</p>
             </div>
           </div>
           <div class="flex flex-col items-end justify-center">

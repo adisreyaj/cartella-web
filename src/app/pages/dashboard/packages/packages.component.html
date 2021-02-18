@@ -1,12 +1,13 @@
 <div class="packages">
-  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()">
+  <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()"
+         class="bg-gray-100 dark:bg-dark-500">
     <app-explorer-sidebar type="packages" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           [isLoading]="packageFolderLoading$ | async" [isFetched]="packageFetched$ | async"
                           (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           (folderSelected)="handleSelectFolder($event)" (menuClosed)="closeMenu()">
     </app-explorer-sidebar>
   </aside>
-  <main class="overflow-y-auto packages__main">
+  <main class="overflow-y-auto bg-white packages__main dark:bg-dark-800">
     <app-packages-list [user]="user$ | async" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
                        [isLoading]="packageLoading$ | async" [packages]="packagesShown$ | async">
     </app-packages-list>

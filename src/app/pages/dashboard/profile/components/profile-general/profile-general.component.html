@@ -1,11 +1,11 @@
 <header class="flex items-center justify-between mb-4">
   <div>
-    <p class="text-xl font-bold text-gray-700">Hi {{(user$ | async)?.firstname}}</p>
-    <p class="text-xs text-gray-500">Manage your profile details</p>
+    <p class="text-xl font-bold text-gray-700 dark:text-white">Hi {{(user$ | async)?.firstname}}</p>
+    <p class="text-xs text-gray-500 dark:text-gray-50">Manage your profile details</p>
   </div>
 </header>
 <section class="flex justify-start">
-  <form class="w-full max-w-xl mt-6 bg-white" [formGroup]="userForm" (ngSubmit)="saveUser()">
+  <form class="w-full max-w-xl mt-6 " [formGroup]="userForm" (ngSubmit)="saveUser()">
     <div class="flex items-center justify-start mb-8">
       <img class="rounded-full w-36 h-3w-36" [src]="(user$ | async)?.image || '../../../../assets/images/user.svg'"
            default="../../../../assets/images/user.svg" [alt]="userForm.get('firstname')?.value" width="144px"
@@ -50,8 +50,8 @@
 
 <section class="my-8">
   <header class="mb-6">
-    <h4 class="text-lg font-semibold text-gray-800 ">Manage Social Logins</h4>
-    <p class="text-xs text-gray-500">Enable/disable social login methods</p>
+    <h4 class="text-lg font-semibold text-gray-800 dark:text-white">Manage Social Logins</h4>
+    <p class="text-xs text-gray-500 dark:text-gray-50">Enable/disable social login methods</p>
   </header>
   <div class="">
     <div class="flex items-center mb-6 space-x-4">

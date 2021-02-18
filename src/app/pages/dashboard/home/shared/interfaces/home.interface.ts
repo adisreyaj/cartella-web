@@ -1,7 +1,7 @@
 import { FeatureType } from '@app/interfaces/general.interface';
 import { Bookmark } from '../../../bookmarks/shared/interfaces/bookmarks.interface';
 import { Package } from '../../../packages/shared/interfaces/packages.interface';
-import { Snippet } from '../../../snippets/interfaces/snippets.interface';
+import { Snippet } from '../../../snippets/shared/interfaces/snippets.interface';
 
 export interface HomeItems {
   type: FeatureType;

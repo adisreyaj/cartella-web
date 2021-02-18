@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
+import { ALL_BOOKMARKS_FOLDER } from '../../config/bookmarks.config';
 import { BookmarkFolder } from '../../interfaces/bookmarks.interface';
 import { BookmarksService } from '../../services/bookmarks.service';
 import {
@@ -26,10 +30,13 @@ export class BookmarkFolderStateModel {
 })
 @Injectable()
 export class BookmarkFolderState {
-  constructor(private bookmarkService: BookmarksService) {}
+  constructor(
+    private bookmarkService: BookmarksService,
+    private storage: StorageService
+  ) {}
 
   @Selector()
-  static getBookmarkFoldersList(state: BookmarkFolderStateModel) {
+  static getAllBookmarkFolders(state: BookmarkFolderStateModel) {
     return state.bookmarkFolders;
   }
 
@@ -46,18 +53,42 @@ export class BookmarkFolderState {
   getBookmarkFolders({
     getState,
     setState,
+    patchState,
   }: StateContext<BookmarkFolderStateModel>) {
-    return this.bookmarkService.getFolders().pipe(
-      map(({ payload }) => payload),
-      tap((result) => {
-        const state = getState();
-        setState({
-          ...state,
-          bookmarkFolders: result,
-          fetched: true,
-        });
-      })
-    );
+    const state = getState();
+    if (state.fetched) {
+      return this.storage.getItem(StorageFolders.folders, 'bookmarks').pipe(
+        switchMap((bookmarkFolders) => {
+          if (!bookmarkFolders) {
+            return this.bookmarkService.getFolders().pipe(
+              map(({ payload }) => payload),
+              tap((result) => {
+                patchState({
+                  bookmarkFolders: result,
+                });
+              })
+            );
+          } else {
+            patchState({
+              bookmarkFolders,
+            });
+            return of(bookmarkFolders);
+          }
+        })
+      );
+    } else {
+      return this.bookmarkService.getFolders().pipe(
+        map(({ payload }) => payload),
+        tap((result) => {
+          setState({
+            ...state,
+            bookmarkFolders: result,
+            fetched: true,
+            activeBookmarkFolder: ALL_BOOKMARKS_FOLDER,
+          });
+        })
+      );
+    }
   }
 
   @Action(AddBookmarkFolder)

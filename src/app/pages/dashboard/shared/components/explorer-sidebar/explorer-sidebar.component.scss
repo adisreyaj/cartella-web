@@ -11,10 +11,9 @@
       align-items: center;
     }
     &.active {
-      @apply text-primary;
-      background-color: var(--primary-10);
       &::before {
         @apply bg-primary;
+        @apply bg-dark-500;
         content: '';
         position: absolute;
         width: 2px;

@@ -1,3 +1,4 @@
+var defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
   prefix: '',
   purge: {
@@ -17,11 +18,18 @@ module.exports = {
         primary: 'var(--primary)',
         'primary-dark': 'var(--primary-dark)',
         'primary-10': 'var(--primary-10)',
+        dark: {
+          50: 'var(--dark-50)',
+          500: 'var(--dark-500)',
+          700: 'var(--dark-700)',
+          800: 'var(--dark-800)',
+          900: 'var(--dark-900)',
+        },
       },
       fontFamily: {
-        sans: ['Inter', ...require('tailwindcss/defaultTheme').fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
-      typography: {
+      typography: (theme) => ({
         DEFAULT: {
           css: {
             color: '#333',
@@ -32,8 +40,17 @@ module.exports = {
               },
             },
           },
+          dark: {
+            color: theme('colors.gray.50'),
+            a: {
+              color: theme('colors.dark.50'),
+              '&:hover': {
+                color: theme('colors.white'),
+              },
+            },
+          },
         },
-      },
+      }),
     },
     customForms: (theme) => ({
       default: {
@@ -52,11 +69,15 @@ module.exports = {
     }),
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['dark-hover'],
+      textColor: ['dark-hover', 'dark-focus'],
+    },
   },
   plugins: [
     require('@tailwindcss/custom-forms'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
+    require('tailwindcss-dark-mode')(),
   ],
 };

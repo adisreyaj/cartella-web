@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@app/interfaces/user.interface';
+import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { LogoutUser } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
@@ -16,16 +17,23 @@ import { take } from 'rxjs/operators';
 export class HeaderComponent implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
+  isDarkMode$: Observable<boolean>;
 
   isMenuOpen$: Observable<boolean>;
   constructor(
     private store: Store,
     private router: Router,
-    private menu: MenuService
+    private menu: MenuService,
+    private darkMode: DarkModeService
   ) {}
 
   ngOnInit(): void {
     this.isMenuOpen$ = this.menu.isMenuOpen$;
+    this.isDarkMode$ = this.darkMode.isDarkMode$;
+  }
+
+  toggleDarkMode() {
+    this.darkMode.toggle();
   }
 
   logout() {

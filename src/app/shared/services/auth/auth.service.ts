@@ -84,7 +84,9 @@ export class AuthService implements OnDestroy {
     if (tokenDecoded) {
       const { sub } = tokenDecoded;
       return this.getUserWithId(sub);
-    } else return new Error('User token not valid!');
+    } else {
+      return new Error('User token not valid!');
+    }
   }
 
   updateUserLoginMethod(id: string, methods: { [key: string]: boolean }) {

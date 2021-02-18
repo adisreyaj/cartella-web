@@ -4,12 +4,12 @@ import {
 } from '@app/interfaces/folder.interface';
 import { Technology } from '@app/interfaces/technology.interface';
 
-export interface SnippetFolderRequest extends FolderBaseRequest {}
-export interface SnippetFolder extends FolderBaseResponse {}
+export type SnippetFolderRequest = FolderBaseRequest;
+export type SnippetFolder = FolderBaseResponse;
 
-export enum SNIPPET_MODES {
-  EXPLORER = 'EXPLORER',
-  EDITOR = 'EDITOR',
+export enum SnippetModes {
+  explorer = 'EXPLORER',
+  editor = 'EDITOR',
 }
 export interface SnippetBase {
   name: string;

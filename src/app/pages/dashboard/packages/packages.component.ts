@@ -1,10 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
+import { StorageFolders } from '@app/services/storage/storage.interface';
+import { StorageService } from '@app/services/storage/storage.service';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
@@ -26,11 +29,14 @@ export class PackagesComponent implements OnInit, OnDestroy {
   @Select(UserState.getLoggedInUser)
   user$: Observable<LoggedUser>;
 
-  @Select(PackageState.isPackageFetched)
-  packageFetched$: Observable<Package[]>;
-
   @Select(PackageState.getAllPackages)
   allPackages$: Observable<Package[]>;
+
+  @Select(PackageFolderState.getAllPackageFolders)
+  allPackageFolders$: Observable<Package[]>;
+
+  @Select(PackageState.isPackageFetched)
+  packageFetched$: Observable<Package[]>;
 
   @Select(PackageState.getPackagesShown)
   packagesShown$: Observable<Package[]>;
@@ -38,7 +44,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
   @Select(PackageState.getActivePackage)
   activePackage$: Observable<Package>;
 
-  @Select(PackageFolderState.getPackageFoldersList)
+  @Select(PackageFolderState.getAllPackageFolders)
   folders$: Observable<PackageFolder[]>;
 
   @Select(PackageFolderState.getActivePackageFolder)
@@ -56,12 +62,15 @@ export class PackagesComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store,
     private menu: MenuService,
-    private dialog: DialogService
+    private dialog: DialogService,
+    private storage: StorageService
   ) {}
 
   ngOnInit(): void {
     this.getPackageFolders();
     this.getPackages();
+    this.updatePackageFoldersInIDB();
+    this.updatePackagesInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
   }
 
@@ -134,5 +143,34 @@ export class PackagesComponent implements OnInit, OnDestroy {
     );
     this.subs.add(sub);
     this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER));
+  }
+
+  private updatePackagesInIDB() {
+    const sub = this.allPackages$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((packages) => {
+          packages.forEach((data) => {
+            this.storage.setItem(
+              StorageFolders.packages,
+              data.folder.id,
+              packages.filter(({ folder: { id } }) => id === data.folder.id)
+            );
+          });
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
+  }
+  private updatePackageFoldersInIDB() {
+    const sub = this.allPackageFolders$
+      .pipe(
+        filter((res) => res.length > 0),
+        tap((packages) => {
+          this.storage.setItem(StorageFolders.folders, 'packages', packages);
+        })
+      )
+      .subscribe();
+    this.subs.add(sub);
   }
 }

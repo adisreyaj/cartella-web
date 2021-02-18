@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { FeatureGuard } from 'src/app/shared/guards/feature.guard';
 import { ProfileGeneralComponent } from './components/profile-general/profile-general.component';
 import { ProfileTagsComponent } from './components/profile-tags/profile-tags.component';
 import { ProfileComponent } from './profile.component';
@@ -10,7 +11,14 @@ const routes: Routes = [
     component: ProfileComponent,
     children: [
       { path: '', pathMatch: 'full', component: ProfileGeneralComponent },
-      { path: 'tags', component: ProfileTagsComponent },
+      {
+        path: 'tags',
+        component: ProfileTagsComponent,
+        canActivate: [FeatureGuard],
+        data: {
+          feature: 'tags',
+        },
+      },
     ],
   },
 ];

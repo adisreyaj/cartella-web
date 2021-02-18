@@ -12,9 +12,11 @@ export interface Tag extends TagBase {
   ownerId: string;
 }
 
-export interface TagRequest extends TagBase {}
+export type TagRequest = TagBase;
 
-export interface Metadata {}
+export interface Metadata {
+  [key: string]: any;
+}
 
 export interface TagAddModalPayload {
   tag?: Tag;

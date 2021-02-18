@@ -51,7 +51,7 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
   bookmarkFetched$: Observable<boolean>;
 
   packagesCount = new Array(
-    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages
+    this.store.selectSnapshot(HomeState.getItemsCount)?.items?.bookmarks || 1
   ).fill('');
 
   private subs = new SubSink();

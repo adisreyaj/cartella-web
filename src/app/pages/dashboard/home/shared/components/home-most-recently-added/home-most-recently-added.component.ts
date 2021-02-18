@@ -5,12 +5,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Bookmark } from '@app/bookmarks/shared/interfaces/bookmarks.interface';
 import { FeatureType } from '@app/interfaces/general.interface';
+import { Package } from '@app/packages/shared/interfaces/packages.interface';
+import { Snippet } from '@app/snippets/shared/interfaces/snippets.interface';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { Bookmark } from 'src/app/pages/dashboard/bookmarks/shared/interfaces/bookmarks.interface';
-import { Package } from 'src/app/pages/dashboard/packages/shared/interfaces/packages.interface';
-import { Snippet } from 'src/app/pages/dashboard/snippets/interfaces/snippets.interface';
 import Swiper, { SwiperOptions } from 'swiper';
 import SwiperCore, { A11y, Pagination, Scrollbar } from 'swiper/core';
 import { HomeCardInput } from '../../interfaces/home.interface';

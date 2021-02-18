@@ -1,22 +1,25 @@
 <div class="py-4 profile-sidebar">
   <section>
     <header class="flex items-center justify-between px-4 mb-4 text-gray-500">
-      <h4 class="text-sm">Settings</h4>
+      <h4 class="text-sm dark:text-gray-50">Settings</h4>
       <button class="block md:hidden" (click)="closeMenu()">
         <rmx-icon name="close-line" class="icon-xl"></rmx-icon>
       </button>
     </header>
     <ul>
-      <li class="flex items-center mb-3 profile-sidebar__item" routerLink="/profile" routerLinkActive="active"
+      <li class="flex items-center mb-3 profile-sidebar__item" routerLink="/profile"
+          routerLinkActive="active text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800"
           [routerLinkActiveOptions]="{exact:true}" (click)="closeMenu()">
         <rmx-icon name="user-3-line" class="mr-2 icon-lg"></rmx-icon>
         <p>General</p>
       </li>
-      <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags" routerLinkActive="active"
-          (click)="closeMenu()">
-        <rmx-icon name="hashtag" class="mr-2 icon-lg"></rmx-icon>
-        <p>Tags</p>
-      </li>
+      <ng-container *feature="'modules.tags.enabled'">
+        <li class="flex items-center profile-sidebar__item" routerLink="/profile/tags"
+            routerLinkActive="text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800" (click)="closeMenu()">
+          <rmx-icon name="hashtag" class="mr-2 icon-lg"></rmx-icon>
+          <p>Tags</p>
+        </li>
+      </ng-container>
     </ul>
   </section>
 </div>
