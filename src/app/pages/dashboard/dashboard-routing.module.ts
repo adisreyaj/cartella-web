@@ -1,7 +1,9 @@
+/* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from 'src/app/shared/guards/auth.guard';
 import { FeatureGuard } from 'src/app/shared/guards/feature.guard';
+import { environment } from 'src/environments/environment';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
@@ -18,6 +20,10 @@ const routes: Routes = [
         canActivate: [FeatureGuard],
         data: {
           feature: 'home',
+          title: 'Cartella - All in one dev bookmark tool!',
+          description: `Bookmark your favorite articles, libraries, code snippets and more.
+          One place to collect them all.`,
+          ogUrl: `${environment.hostname}`,
         },
       },
       {
@@ -27,6 +33,9 @@ const routes: Routes = [
         canActivate: [FeatureGuard],
         data: {
           feature: 'snippets',
+          title: 'Snippets - Manage your code snippets! | Cartella',
+          description: `Saw a really cool code snippet on the internet or want to save those repetitive code snippets? Cartella has you covered. Save and share your favorite code snippets with ease.`,
+          ogUrl: `${environment.hostname}/snippets`,
         },
       },
       {
@@ -36,6 +45,9 @@ const routes: Routes = [
         canActivate: [FeatureGuard],
         data: {
           feature: 'bookmarks',
+          title: 'Bookmarks - Manage your articles and blogs! | Cartella',
+          description: `Save all your favorite articles and blogs in one place so that you will never miss those gems. Organize them in folders and add tags to easily find what you are looking for.`,
+          ogUrl: `${environment.hostname}/bookmarks`,
         },
       },
       {
@@ -45,6 +57,9 @@ const routes: Routes = [
         canActivate: [FeatureGuard],
         data: {
           feature: 'packages',
+          title: 'Package - Organize your favorite libraries | Cartella',
+          description: `Did you come across some awesome library someone shared on twitter, and want to save it for later so that you will never forget the name? Packages section can help you add your favorite libraries with ease`,
+          ogUrl: `${environment.hostname}/packages`,
         },
       },
       {
@@ -54,6 +69,10 @@ const routes: Routes = [
         canActivate: [FeatureGuard],
         data: {
           feature: 'profile',
+          title: 'Profile - Manage your profile  | Cartella',
+          description: `Bookmark your favorite articles, libraries, code snippets and more.
+          One place to collect them all.`,
+          ogUrl: `${environment.hostname}/profile`,
         },
       },
     ],
