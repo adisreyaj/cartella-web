@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DefaultImageModule } from '@app/directives/default-image/default-image.module';
+import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { MenuService } from '@app/services/menu/menu.service';
 import { DialogModule } from '@ngneat/dialog';
@@ -40,6 +41,7 @@ import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmar
     ClipboardModule,
     ExplorerSidebarModule,
     DefaultImageModule,
+    FeatureDirectiveModule,
   ],
   providers: [MenuService],
 })
