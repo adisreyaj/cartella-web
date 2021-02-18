@@ -45,9 +45,23 @@
 
 <ng-template #cardOptions let-hide>
   <div class="flex flex-col w-36">
-    <div class="dropdown-item" (click)="handleShare(bookmark);hide()">Share</div>
-    <div class="dropdown-item" (click)="handleCopyToClipboard(bookmark);hide()">Copy Link</div>
-    <div class="dropdown-item" (click)="handleEdit(bookmark);hide()">Edit</div>
-    <div class="text-red-600 dropdown-item" (click)="handleDelete(bookmark);hide()">Delete</div>
+    <ng-container *feature="'modules.bookmarks.sharing'">
+      <div class="dropdown-item" (click)="handleShare(bookmark);hide()">
+        <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
+        <p>Share</p>
+      </div>
+    </ng-container>
+    <div class="dropdown-item" (click)="handleCopyToClipboard(bookmark);hide()">
+      <rmx-icon name="clipboard-line" class="icon-sm"></rmx-icon>
+      <p>Copy Link</p>
+    </div>
+    <div class="dropdown-item" (click)="handleEdit(bookmark);hide()">
+      <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
+      <p>Edit</p>
+    </div>
+    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleDelete(bookmark);hide()">
+      <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
+      <p>Delete</p>
+    </div>
   </div>
 </ng-template>
