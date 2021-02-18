@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { NgModule } from '@angular/core';
 import {
   RemixIconModule,
@@ -15,6 +16,7 @@ import {
   RiCodeSSlashLine,
   RiDeleteBin2Line,
   RiErrorWarningLine,
+  RiFireFill,
   RiFoldersLine,
   RiFullscreenExitLine,
   RiFullscreenLine,
@@ -72,6 +74,7 @@ const icons = {
   RiMenu4Line,
   RiHomeLine,
   RiSettingsLine,
+  RiFireFill,
 };
 @NgModule({
   declarations: [],
