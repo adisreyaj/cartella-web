@@ -14,12 +14,20 @@ body.mode-dark {
     @apply text-white;
     box-shadow: none !important;
   }
+  .dropdown-item {
+    &:hover {
+      @apply bg-dark-800;
+    }
+  }
 }
 
 .dropdown-item {
   @apply px-4 py-2;
+  @apply flex;
+  @apply space-x-2;
+  @apply items-center;
   cursor: pointer;
   &:hover {
-    background-color: var(--primary-10);
+    @apply bg-primary-10;
   }
 }

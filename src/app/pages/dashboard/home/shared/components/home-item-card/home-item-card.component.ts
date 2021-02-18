@@ -15,6 +15,7 @@ import { HomeCardInput } from '../../interfaces/home.interface';
 })
 export class HomeItemCardComponent {
   @Input() item: HomeCardInput;
+  @Input() index: number;
 
   @Output() clicked = new EventEmitter<HomeCardInput>();
 

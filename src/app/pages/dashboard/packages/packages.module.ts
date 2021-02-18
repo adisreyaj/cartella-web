@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { CountPipeModule } from '@app/pipes/count-pipe/count-pipe.module';
 import { MenuService } from '@app/services/menu/menu.service';
@@ -36,6 +37,7 @@ import { PackagesComponent } from './packages.component';
     TippyModule,
     NgxFilesizeModule,
     CountPipeModule,
+    FeatureDirectiveModule,
   ],
   providers: [MenuService],
 })
