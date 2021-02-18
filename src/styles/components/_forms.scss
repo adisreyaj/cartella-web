@@ -26,6 +26,9 @@
   }
 
   textarea {
+    @apply dark:bg-dark-900;
+    @apply dark:border-dark-700;
+    @apply dark:text-white;
     @apply form-textarea;
     @apply focus:ring-1;
     @apply focus:ring-primary;
