@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
+import { TippyModule } from '@ngneat/helipopper';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { SwiperModule } from 'swiper/angular';
 import { HomeRoutingModule } from './home-routing.module';
@@ -30,6 +31,7 @@ import { HomeCardDataFormatPipe } from './shared/pipes/home-card-data-format.pip
     SwiperModule,
     HoveredDirectiveModule,
     TimeAgoPipeModule,
+    TippyModule,
   ],
 })
 export class HomeModule {}
