@@ -45,7 +45,7 @@
         <p>GZipped</p>
       </div>
     </div>
-    <a class="flex items-center rounded-sm default-ring text-primary hover:underline dark:text-gray-50" target="_blank"
+    <a class="flex items-center rounded-sm default-ring text-primary hover:underline dark:text-dark-50" target="_blank"
        rel="noopener noreferrer" [href]="'https://bundlephobia.com/result?p='+ package.name">
       <rmx-icon name="share-box-line" class="mr-1 icon-xs"></rmx-icon>
       <p>More Stats</p>
@@ -73,10 +73,10 @@
       <div>
         <div class="flex items-center">
           <p class="mr-1 font-semibold text-gray-700 dark:text-white">{{package?.metadata?.license}}</p>
-          <a target="_blank" rel="noopener noreferrer" class="dark:text-gray-50"
+          <a target="_blank" rel="noopener noreferrer" class="dark:text-dark-50"
              [href]="'https://choosealicense.com/licenses/' + (package?.metadata?.license | lowercase)"
              aria-label="License details">
-            <rmx-icon name="share-box-line" class="icon-xxs text-primary dark:text-gray-50"></rmx-icon>
+            <rmx-icon name="share-box-line" class="icon-xxs text-primary dark:text-dark-50"></rmx-icon>
           </a>
         </div>
         <p>License</p>
@@ -87,8 +87,19 @@
 
 <ng-template #cardOptions let-hide>
   <div class="flex flex-col w-36">
-    <div class="dropdown-item" (click)="handleShare(package);hide()">Share</div>
-    <div class="dropdown-item" (click)="handleEdit(package);hide()">Edit</div>
-    <div class="text-red-600 dropdown-item" (click)="handleDelete(package);hide()">Delete</div>
+    <ng-container *feature="'modules.packages.sharing'">
+      <div class="dropdown-item" (click)="handleShare(package);hide()">
+        <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
+        <p>Share</p>
+      </div>
+    </ng-container>
+    <div class="dropdown-item" (click)="handleEdit(package);hide()">
+      <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
+      <p>Edit</p>
+    </div>
+    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleDelete(package);hide()">
+      <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
+      <p>Delete</p>
+    </div>
   </div>
 </ng-template>
