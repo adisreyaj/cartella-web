@@ -3,9 +3,9 @@
   <div class="relative mt-4 home__recent">
     <swiper [pagination]="swiperPagination" [breakpoints]="swiperBreakPoints" (swiper)="onSwiper($event)"
             (init)="onAfterInit($event)" (breakpoint)="onBreakpoint($event)">
-      <ng-container *ngFor="let item of topItems">
+      <ng-container *ngFor="let item of topItems;index as i">
         <ng-template swiperSlide>
-          <app-home-item-card [item]="item | homeCardDataFormat">
+          <app-home-item-card [item]="item | homeCardDataFormat" [index]="i">
             {{item?.views}} Views
           </app-home-item-card>
         </ng-template>
