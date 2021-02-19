@@ -16,6 +16,7 @@
     "paths": {
       "ui": ["dist/ui/ui", "dist/ui"],
       "@app/services/*": ["src/app/shared/services/*"],
+      "@app/guards/*": ["src/app/shared/guards/*"],
       "@app/interfaces/*": ["src/app/shared/interfaces/*"],
       "@app/config/*": ["src/app/shared/config/*"],
       "@app/modules/*": ["src/app/shared/modules/*"],

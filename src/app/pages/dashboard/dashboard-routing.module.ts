@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AuthGuard } from 'src/app/shared/guards/auth.guard';
-import { FeatureGuard } from 'src/app/shared/guards/feature.guard';
+import { AuthGuard } from '@app/guards/auth.guard';
+import { FeatureGuard } from '@app/guards/feature.guard';
 import { environment } from 'src/environments/environment';
 import { DashboardComponent } from './dashboard.component';
 
@@ -17,7 +17,7 @@ const routes: Routes = [
         pathMatch: 'full',
         loadChildren: () =>
           import('./home/home.module').then((m) => m.HomeModule),
-        canActivate: [FeatureGuard],
+        canLoad: [FeatureGuard],
         data: {
           feature: 'home',
           title: 'Cartella - All in one dev bookmark tool!',
@@ -30,7 +30,7 @@ const routes: Routes = [
         path: 'snippets',
         loadChildren: () =>
           import('./snippets/snippets.module').then((m) => m.SnippetsModule),
-        canActivate: [FeatureGuard],
+        canLoad: [FeatureGuard],
         data: {
           feature: 'snippets',
           title: 'Snippets - Manage your code snippets! | Cartella',
@@ -42,7 +42,7 @@ const routes: Routes = [
         path: 'bookmarks',
         loadChildren: () =>
           import('./bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
-        canActivate: [FeatureGuard],
+        canLoad: [FeatureGuard],
         data: {
           feature: 'bookmarks',
           title: 'Bookmarks - Manage your articles and blogs! | Cartella',
@@ -54,7 +54,7 @@ const routes: Routes = [
         path: 'packages',
         loadChildren: () =>
           import('./packages/packages.module').then((m) => m.PackagesModule),
-        canActivate: [FeatureGuard],
+        canLoad: [FeatureGuard],
         data: {
           feature: 'packages',
           title: 'Package - Organize your favorite libraries | Cartella',
@@ -66,7 +66,7 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () =>
           import('./profile/profile.module').then((m) => m.ProfileModule),
-        canActivate: [FeatureGuard],
+        canLoad: [FeatureGuard],
         data: {
           feature: 'profile',
           title: 'Profile - Manage your profile  | Cartella',
