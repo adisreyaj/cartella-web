@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { FeatureGuard } from './feature.guard';
 
 describe('FeatureGuard', () => {
