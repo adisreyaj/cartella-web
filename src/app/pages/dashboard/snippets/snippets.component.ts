@@ -16,7 +16,7 @@ import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
@@ -43,7 +43,7 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   allSnippets$: Observable<Snippet[]>;
 
   @Select(SnippetFolderState.getAllSnippetFolders)
-  allSnippetFolders$: Observable<Snippet[]>;
+  allSnippetFolders$: Observable<SnippetFolder[]>;
 
   @Select(SnippetState.getSnippetsShown)
   snippetsShown$: Observable<Snippet[]>;
@@ -203,19 +203,20 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     const sub = this.allSnippets$
       .pipe(
         filter((res) => res.length > 0),
-        tap((snippets) => {
-          snippets.forEach((data) => {
-            this.storage.setItem(
-              StorageFolders.snippets,
-              data.folder.id,
-              snippets.filter(({ folder: { id } }) => id === data.folder.id)
-            );
-          });
+        tap((snippets: Snippet[]) => {
+          this.saveStarredSnippets(snippets);
+        }),
+        switchMap((snippets: Snippet[]) =>
+          this.groupSnippetsInFolders(snippets)
+        ),
+        tap((foldersWithSnippets) => {
+          this.saveSnippetsInIDB(foldersWithSnippets);
         })
       )
       .subscribe();
     this.subs.add(sub);
   }
+
   private updateSnippetFoldersInIDB() {
     const sub = this.allSnippetFolders$
       .pipe(
@@ -227,4 +228,37 @@ export class SnippetsComponent implements OnInit, OnDestroy {
       .subscribe();
     this.subs.add(sub);
   }
+
+  private groupSnippetsInFolders = (snippets: Snippet[]) =>
+    this.allSnippetFolders$.pipe(
+      map((folders: SnippetFolder[]) =>
+        folders.map(({ id }) => ({
+          [id]: snippets.filter(
+            ({ folder: { id: folderId } }) => folderId === id
+          ),
+        }))
+      )
+    );
+
+  private saveSnippetsInIDB = (
+    foldersWithSnippets: {
+      [key: string]: Snippet[];
+    }[]
+  ) => {
+    Object.keys(foldersWithSnippets).forEach((key) => {
+      this.storage.setItem(
+        StorageFolders.snippets,
+        key,
+        foldersWithSnippets[key]
+      );
+    });
+  };
+
+  private saveStarredSnippets = (snippets: Snippet[]) => {
+    this.storage.setItem(
+      StorageFolders.snippets,
+      'starred',
+      snippets.filter(({ favorite }) => favorite)
+    );
+  };
 }
