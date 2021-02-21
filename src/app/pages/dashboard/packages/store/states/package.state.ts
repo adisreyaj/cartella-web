@@ -99,10 +99,21 @@ export class PackageState {
           );
         }
       case 'starred':
-        return this.packageService.getFavoritePackages().pipe(
-          map(({ payload }) => payload),
-          tap((result) => {
-            patchState({ packagesShown: result });
+        return this.storage.getItem(StorageFolders.packages, id).pipe(
+          switchMap((packages) => {
+            if (!packages) {
+              return this.packageService.getFavoritePackages().pipe(
+                map(({ payload }) => payload),
+                tap((result) => {
+                  patchState({ packagesShown: result });
+                })
+              );
+            } else {
+              patchState({
+                packagesShown: packages,
+              });
+              return of(packages);
+            }
           })
         );
       default: {
