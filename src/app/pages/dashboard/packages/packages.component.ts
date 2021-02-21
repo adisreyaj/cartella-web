@@ -7,7 +7,7 @@ import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
@@ -33,7 +33,7 @@ export class PackagesComponent implements OnInit, OnDestroy {
   allPackages$: Observable<Package[]>;
 
   @Select(PackageFolderState.getAllPackageFolders)
-  allPackageFolders$: Observable<Package[]>;
+  allPackageFolders$: Observable<PackageFolder[]>;
 
   @Select(PackageState.isPackageFetched)
   packageFetched$: Observable<Package[]>;
@@ -149,14 +149,14 @@ export class PackagesComponent implements OnInit, OnDestroy {
     const sub = this.allPackages$
       .pipe(
         filter((res) => res.length > 0),
-        tap((packages) => {
-          packages.forEach((data) => {
-            this.storage.setItem(
-              StorageFolders.packages,
-              data.folder.id,
-              packages.filter(({ folder: { id } }) => id === data.folder.id)
-            );
-          });
+        tap((bookmarks: Package[]) => {
+          this.saveStarredPackages(bookmarks);
+        }),
+        switchMap((bookmarks: Package[]) =>
+          this.groupPackagesInFolders(bookmarks)
+        ),
+        tap((foldersWithPackages) => {
+          this.savePackagesInIDB(foldersWithPackages);
         })
       )
       .subscribe();
@@ -173,4 +173,39 @@ export class PackagesComponent implements OnInit, OnDestroy {
       .subscribe();
     this.subs.add(sub);
   }
+
+  private groupPackagesInFolders = (packages: Package[]) =>
+    this.allPackageFolders$.pipe(
+      map((folders: PackageFolder[]) =>
+        folders.reduce(
+          (acc, { id }) => ({
+            ...acc,
+            [id]: packages.filter(
+              ({ folder: { id: folderId } }) => folderId === id
+            ),
+          }),
+          {}
+        )
+      )
+    );
+
+  private savePackagesInIDB = (foldersWithPackages: {
+    [key: string]: Package[];
+  }) => {
+    Object.keys(foldersWithPackages).forEach((key) => {
+      this.storage.setItem(
+        StorageFolders.packages,
+        key,
+        foldersWithPackages[key]
+      );
+    });
+  };
+
+  private saveStarredPackages = (packages: Package[]) => {
+    this.storage.setItem(
+      StorageFolders.packages,
+      'starred',
+      packages.filter(({ favorite }) => favorite)
+    );
+  };
 }
