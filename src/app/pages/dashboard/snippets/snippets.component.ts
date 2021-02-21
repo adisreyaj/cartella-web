@@ -232,19 +232,21 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   private groupSnippetsInFolders = (snippets: Snippet[]) =>
     this.allSnippetFolders$.pipe(
       map((folders: SnippetFolder[]) =>
-        folders.map(({ id }) => ({
-          [id]: snippets.filter(
-            ({ folder: { id: folderId } }) => folderId === id
-          ),
-        }))
+        folders.reduce(
+          (acc, { id }) => ({
+            ...acc,
+            [id]: snippets.filter(
+              ({ folder: { id: folderId } }) => folderId === id
+            ),
+          }),
+          {}
+        )
       )
     );
 
-  private saveSnippetsInIDB = (
-    foldersWithSnippets: {
-      [key: string]: Snippet[];
-    }[]
-  ) => {
+  private saveSnippetsInIDB = (foldersWithSnippets: {
+    [key: string]: Snippet[];
+  }) => {
     Object.keys(foldersWithSnippets).forEach((key) => {
       this.storage.setItem(
         StorageFolders.snippets,

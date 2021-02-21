@@ -7,7 +7,7 @@ import { StorageService } from '@app/services/storage/storage.service';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, tap } from 'rxjs/operators';
+import { filter, map, switchMap, tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
@@ -163,14 +163,14 @@ export class BookmarksComponent implements OnInit, OnDestroy {
     const sub = this.allBookmarks$
       .pipe(
         filter((res) => res.length > 0),
-        tap((bookmarks) => {
-          bookmarks.forEach((data) => {
-            this.storage.setItem(
-              StorageFolders.bookmarks,
-              data.folder.id,
-              bookmarks.filter(({ folder: { id } }) => id === data.folder.id)
-            );
-          });
+        tap((bookmarks: Bookmark[]) => {
+          this.saveStarredBookmarks(bookmarks);
+        }),
+        switchMap((bookmarks: Bookmark[]) =>
+          this.groupBookmarksInFolders(bookmarks)
+        ),
+        tap((foldersWithBookmarks) => {
+          this.saveBookmarksInIDB(foldersWithBookmarks);
         })
       )
       .subscribe();
@@ -187,4 +187,39 @@ export class BookmarksComponent implements OnInit, OnDestroy {
       .subscribe();
     this.subs.add(sub);
   }
+
+  private groupBookmarksInFolders = (bookmarks: Bookmark[]) =>
+    this.allBookmarkFolders$.pipe(
+      map((folders: BookmarkFolder[]) =>
+        folders.reduce(
+          (acc, { id }) => ({
+            ...acc,
+            [id]: bookmarks.filter(
+              ({ folder: { id: folderId } }) => folderId === id
+            ),
+          }),
+          {}
+        )
+      )
+    );
+
+  private saveBookmarksInIDB = (foldersWithBookmarks: {
+    [key: string]: Bookmark[];
+  }) => {
+    Object.keys(foldersWithBookmarks).forEach((key) => {
+      this.storage.setItem(
+        StorageFolders.bookmarks,
+        key,
+        foldersWithBookmarks[key]
+      );
+    });
+  };
+
+  private saveStarredBookmarks = (bookmarks: Bookmark[]) => {
+    this.storage.setItem(
+      StorageFolders.bookmarks,
+      'starred',
+      bookmarks.filter(({ favorite }) => favorite)
+    );
+  };
 }
