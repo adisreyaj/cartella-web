@@ -100,12 +100,23 @@ export class BookmarkState {
           );
         }
       case 'starred':
-        return this.bookmarkService.getFavoriteBookmarks().pipe(
-          map(({ payload }) => payload),
-          tap((result) => {
-            patchState({
-              bookmarksShown: result,
-            });
+        return this.storage.getItem(StorageFolders.bookmarks, id).pipe(
+          switchMap((bookmarks) => {
+            if (!bookmarks) {
+              return this.bookmarkService.getFavoriteBookmarks().pipe(
+                map(({ payload }) => payload),
+                tap((result) => {
+                  patchState({
+                    bookmarksShown: result,
+                  });
+                })
+              );
+            } else {
+              patchState({
+                bookmarksShown: bookmarks,
+              });
+              return of(bookmarks);
+            }
           })
         );
       default: {
