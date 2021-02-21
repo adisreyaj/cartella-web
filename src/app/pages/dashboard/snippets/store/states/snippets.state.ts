@@ -100,10 +100,21 @@ export class SnippetState {
           );
         }
       case 'starred':
-        return this.snippetService.getFavoriteSnippets().pipe(
-          map(({ payload }) => payload),
-          tap((result) => {
-            patchState({ snippetsShown: result });
+        return this.storage.getItem(StorageFolders.snippets, id).pipe(
+          switchMap((snippets) => {
+            if (!snippets) {
+              return this.snippetService.getFavoriteSnippets().pipe(
+                map(({ payload }) => payload),
+                tap((result) => {
+                  patchState({ snippetsShown: result });
+                })
+              );
+            } else {
+              patchState({
+                snippetsShown: snippets,
+              });
+              return of(snippets);
+            }
           })
         );
       default: {
