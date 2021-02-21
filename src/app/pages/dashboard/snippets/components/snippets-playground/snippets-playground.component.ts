@@ -11,13 +11,13 @@ import {
   Output,
   Renderer2,
   SimpleChanges,
-  ViewChild,
+  ViewChild
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
-  THEMES_SUPPORTED,
+  THEMES_SUPPORTED
 } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
@@ -45,13 +45,13 @@ import screenfull from 'screenfull';
 import { SubSink } from 'subsink';
 import {
   Snippet,
-  SnippetModes,
+  SnippetModes
 } from '../../shared/interfaces/snippets.interface';
 import { CodeEditorService } from '../../shared/services/code-editor/code-editor.service';
 import {
   DeleteSnippet,
   SetActiveSnippet,
-  UpdateSnippet,
+  UpdateSnippet
 } from '../../store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
 
@@ -307,6 +307,9 @@ export class SnippetsPlaygroundComponent
         scrollbarStyle: 'null',
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
+    }
+    if (this.activeSnippet) {
+      this.populateEditorData(this.activeSnippet);
     }
   }
 

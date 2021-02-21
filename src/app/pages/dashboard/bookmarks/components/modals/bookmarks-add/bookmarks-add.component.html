@@ -1,6 +1,6 @@
 <div class="p-4">
   <header class="mb-4">
-    <p class="font-semibold">
+    <p class="font-semibold dark:text-white">
       {{ref?.data ? 'Update Bookmark':'Create New Bookmark'}}
     </p>
   </header>
@@ -27,14 +27,6 @@
       <div class="w-1/2 form-group">
         <label for="site">Site</label>
         <input type="text" name="site" id="site" autocomplete="off" [formControl]="bookmarkFormControls.site">
-      </div>
-      <app-bookmark-add-preview [meta]="meta" [title]="bookmarkFormControls.name?.value"
-                                [description]="bookmarkFormControls.description?.value"></app-bookmark-add-preview>
-    </section>
-    <section *ngIf="(isLoading$ | async)">
-      <h3 class="mb-3 text-sm font-semibold">Preview</h3>
-      <div class="flex px-3 py-2 rounded-md shadow-lg" style="height: 170px;">
-        <ng-container *ngTemplateOutlet="previewSkeletonLoader"></ng-container>
       </div>
     </section>
   </form>
@@ -65,34 +57,3 @@
     </div>
   </footer>
 </div>
-
-
-
-
-<ng-template #previewSkeletonLoader>
-  <svg width="400" height="160" aria-labelledby="loading-aria" preserveAspectRatio="none"
-       xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 160" style="width: 100%;height: 100%;">
-    <rect width="100%" height="100%" clip-path="url(#clip-path)" fill="url(&quot;#fill&quot;)" />
-    <defs>
-      <linearGradient id="fill">
-        <stop offset=".6" stop-color="#ededed">
-          <animate attributeName="offset" values="-2; -2; 1" keyTimes="0; 0.25; 1" dur="2s" repeatCount="indefinite" />
-        </stop>
-        <stop offset="1.6" stop-color="#ecebeb">
-          <animate attributeName="offset" values="-1; -1; 2" keyTimes="0; 0.25; 1" dur="2s" repeatCount="indefinite" />
-        </stop>
-        <stop offset="2.6" stop-color="#ededed">
-          <animate attributeName="offset" values="0; 0; 3" keyTimes="0; 0.25; 1" dur="2s" repeatCount="indefinite" />
-        </stop>
-      </linearGradient>
-      <clipPath id="clip-path">
-        <rect x="205" y="9" rx="3" ry="3" width="183" height="21" />
-        <rect x="206" y="44" rx="3" ry="3" width="177" height="9" />
-        <rect x="11" y="9" rx="3" ry="3" width="178" height="141" />
-        <rect x="205" y="61" rx="3" ry="3" width="177" height="9" />
-        <rect x="206" y="78" rx="3" ry="3" width="177" height="9" />
-        <rect x="204" y="126" rx="3" ry="3" width="183" height="21" />
-      </clipPath>
-    </defs>
-  </svg>
-</ng-template>
