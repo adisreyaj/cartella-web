@@ -1,25 +1,19 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
+import { CanLoad, Route, Router, UrlSegment, UrlTree } from '@angular/router';
 import { ConfigurationService } from '@app/services/configuration/configuration.service';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
-export class FeatureGuard implements CanActivate {
+export class FeatureGuard implements CanLoad {
   constructor(
     private configService: ConfigurationService,
     private router: Router
   ) {}
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
+  canLoad(
+    route: Route,
+    segments: UrlSegment[]
   ):
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FeatureGuard } from 'src/app/shared/guards/feature.guard';
+import { FeatureGuard } from '@app/guards/feature.guard';
 import { LoginHandlerComponent } from './login-handler/login-handler.component';
 import { LoginComponent } from './login/login.component';
 import { SignUpComponent } from './signup/signup.component';
@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignUpComponent,
-    canActivate: [FeatureGuard],
+    canLoad: [FeatureGuard],
     data: {
       feature: 'signup',
     },
