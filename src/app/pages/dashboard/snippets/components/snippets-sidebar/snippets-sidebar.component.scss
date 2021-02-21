@@ -15,9 +15,6 @@
 .snippets-sidebar {
   &__list {
     &-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
       @apply px-4;
       @apply py-2;
       @apply text-sm;
