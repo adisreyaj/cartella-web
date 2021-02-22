@@ -66,7 +66,7 @@ export class SnippetState {
         const state = getState();
         if (state.fetched) {
           return this.storage
-            .getAllItems<Snippet>(StorageFolders.snippets)
+            .getAllItemsFromUserFolder<Snippet>(StorageFolders.snippets)
             .pipe(
               switchMap((snippets) => {
                 if (!snippets) {

@@ -25,9 +25,11 @@ export class StorageService {
     return from(this.instances.get(type).getItem<DataType>(key));
   }
 
-  getAllItems<DataType = any>(type: StorageFolders) {
+  getAllItemsFromUserFolder<DataType = any>(type: StorageFolders) {
     const items = from(this.instances.get(type).keys());
     return items.pipe(
+      // Starred items should be removed as its duplicated already
+      map((keys) => keys.filter((key) => key !== 'starred')),
       map((keys: string[]) =>
         keys.reduce(
           (acc, curr) => [
