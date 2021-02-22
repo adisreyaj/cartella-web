@@ -65,7 +65,7 @@ export class PackageState {
         const state = getState();
         if (state.fetched) {
           return this.storage
-            .getAllItems<Package>(StorageFolders.packages)
+            .getAllItemsFromUserFolder<Package>(StorageFolders.packages)
             .pipe(
               switchMap((packages) => {
                 if (!packages) {
