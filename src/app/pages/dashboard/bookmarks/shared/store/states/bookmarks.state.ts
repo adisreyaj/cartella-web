@@ -66,7 +66,7 @@ export class BookmarkState {
         const state = getState();
         if (state.fetched) {
           return this.storage
-            .getAllItems<Bookmark>(StorageFolders.bookmarks)
+            .getAllItemsFromUserFolder<Bookmark>(StorageFolders.bookmarks)
             .pipe(
               switchMap((bookmarks) => {
                 if (!bookmarks) {
