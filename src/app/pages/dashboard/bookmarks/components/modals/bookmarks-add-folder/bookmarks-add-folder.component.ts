@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -11,7 +11,7 @@ import { ToastService } from '@app/services/toast/toast.service';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
@@ -28,26 +28,25 @@ import {
   styleUrls: ['./bookmarks-add-folder.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookmarksAddFolderComponent implements OnInit, OnDestroy {
+export class BookmarksAddFolderComponent
+  extends WithDestroy
+  implements OnInit, AfterViewInit {
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
   folderName = new FormControl('', [Validators.required]);
 
-  private subs = new SubSink();
   constructor(
     public ref: DialogRef<BookmarkFolderAddModalPayload>,
     private toaster: ToastService,
     private store: Store
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     if (has(this.ref.data, 'folder')) {
       const { folder } = this.ref.data;
       this.folderName.setValue(folder?.name);
     }
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewInit() {

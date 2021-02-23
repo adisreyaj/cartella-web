@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
@@ -8,7 +8,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import {
@@ -29,7 +29,7 @@ import { BookmarkState } from './shared/store/states/bookmarks.state';
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.scss'],
 })
-export class BookmarksComponent implements OnInit, OnDestroy {
+export class BookmarksComponent extends WithDestroy implements OnInit {
   user: User;
   @Select(BookmarkState.getAllBookmarks)
   allBookmarks$: Observable<Bookmark[]>;
@@ -62,13 +62,14 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   bookmarkLoading$ = this.bookmarkLoadingSubject.pipe();
 
   isMenuOpen$: Observable<boolean>;
-  private subs = new SubSink();
   constructor(
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
     private storage: StorageService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.getBookmarkFolders();
@@ -76,9 +77,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
     this.updateBookmarksInIDB();
     this.updateBookmarkFoldersInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
-  }
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   closeMenu() {

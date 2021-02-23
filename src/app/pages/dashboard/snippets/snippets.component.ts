@@ -1,10 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
@@ -17,7 +12,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
@@ -38,7 +33,7 @@ import { SnippetState } from './store/states/snippets.state';
   styleUrls: ['./snippets.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SnippetsComponent implements OnInit, OnDestroy {
+export class SnippetsComponent extends WithDestroy implements OnInit {
   @Select(SnippetState.getAllSnippets)
   allSnippets$: Observable<Snippet[]>;
 
@@ -83,8 +78,6 @@ export class SnippetsComponent implements OnInit, OnDestroy {
   private modeSubject = new BehaviorSubject(SnippetModes.explorer);
   mode$ = this.modeSubject.pipe();
   availableModes = SnippetModes;
-
-  private subs = new SubSink();
   constructor(
     private activatedRoute: ActivatedRoute,
     private store: Store,
@@ -92,7 +85,9 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     private menu: MenuService,
     private breakpointObserver: BreakpointObserver,
     private storage: StorageService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.getSnippetFolders();
@@ -101,9 +96,6 @@ export class SnippetsComponent implements OnInit, OnDestroy {
     this.updateSnippetFoldersInIDB();
     this.updateSnippetsInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
-  }
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   get snippetSlug() {

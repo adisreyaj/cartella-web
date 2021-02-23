@@ -17,7 +17,7 @@ import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { ColorEvent } from 'ngx-color';
 import { TwitterComponent } from 'ngx-color/twitter';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 
 @Component({
   selector: 'app-tags-add',
@@ -25,7 +25,9 @@ import { SubSink } from 'subsink';
   styleUrls: ['./tags-add.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TagsAddComponent implements OnInit, AfterViewInit {
+export class TagsAddComponent
+  extends WithDestroy
+  implements OnInit, AfterViewInit {
   @ViewChild('tagNameRef') tagNameRef: ElementRef;
   @ViewChild(TwitterComponent) colorPickerRef: TwitterComponent;
   tagName = new FormControl('', [Validators.required]);
@@ -43,13 +45,14 @@ export class TagsAddComponent implements OnInit, AfterViewInit {
     '#00c49a',
   ];
 
-  private subs = new SubSink();
   constructor(
     public ref: DialogRef<TagAddModalPayload>,
     private cdr: ChangeDetectorRef,
     private toaster: ToastService,
     private store: Store
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     if (this.ref?.data) {
@@ -60,9 +63,6 @@ export class TagsAddComponent implements OnInit, AfterViewInit {
         this.cdr.detectChanges();
       }
     }
-  }
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewInit() {
