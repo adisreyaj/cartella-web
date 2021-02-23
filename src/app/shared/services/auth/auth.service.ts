@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import {
   AUTH_ENDPOINTS,
@@ -12,24 +12,21 @@ import { Store } from '@ngxs/store';
 import { ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { SubSink } from 'subsink';
+import { WithDestroy } from '../../classes/with-destroy';
 const helper = new JwtHelperService();
 @Injectable({
   providedIn: 'root',
 })
-export class AuthService implements OnDestroy {
+export class AuthService extends WithDestroy {
   private userSubject = new ReplaySubject<LoggedUser>();
   user$ = this.userSubject.pipe();
   apiUrl = environment.api;
-  private subs = new SubSink();
   constructor(
     public router: Router,
     private http: HttpClient,
     private store: Store
-  ) {}
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
+  ) {
+    super();
   }
 
   signInWithGoogle() {

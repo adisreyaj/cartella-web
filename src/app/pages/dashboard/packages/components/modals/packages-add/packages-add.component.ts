@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -29,7 +28,7 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { PackageSuggestions } from '../../../shared/interfaces/package-details.interface';
 import {
   PackageAddModalPayload,
@@ -44,7 +43,9 @@ import { AddPackage } from '../../../store/actions/package.action';
   styleUrls: ['./packages-add.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
+export class PackagesAddComponent
+  extends WithDestroy
+  implements OnInit, AfterViewInit {
   packageName = new FormControl('');
   tagSearchInput = new FormControl([]);
 
@@ -73,20 +74,17 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
   @Select(TagState.getTagsList)
   tags$: Observable<Tag[]>;
 
-  private subs = new SubSink();
   constructor(
     public ref: DialogRef<PackageAddModalPayload>,
     private packageService: PackagesService,
     private toast: ToastService,
     private cdr: ChangeDetectorRef,
     private store: Store
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
 
   ngAfterViewInit() {
     this.listenToPackageNameInput();
@@ -231,9 +229,11 @@ export class PackagesAddComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private filterOutTagNames(query: string) {
     return this.tags$.pipe(
-      map((tags) => tags.filter(({ name }) =>
+      map((tags) =>
+        tags.filter(({ name }) =>
           name.toLowerCase().includes(query.toLowerCase())
-        ))
+        )
+      )
     );
   }
 }

@@ -25,6 +25,11 @@ export class StorageService {
     return from(this.instances.get(type).getItem<DataType>(key));
   }
 
+  /**
+   * Get all items from user saved folders. Since `starred` items are
+   * stored as a folder, when fetching all the items, there will be duplicated
+   * entry as same item can be in user folder as well as starred folder.
+   */
   getAllItemsFromUserFolder<DataType = any>(type: StorageFolders) {
     const items = from(this.instances.get(type).keys());
     return items.pipe(
