@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
@@ -13,7 +8,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { TagsAddComponent } from '../modals/tags-add/tags-add.component';
 
 @Component({
@@ -22,18 +17,15 @@ import { TagsAddComponent } from '../modals/tags-add/tags-add.component';
   styleUrls: ['./profile-tags.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileTagsComponent implements OnInit, OnDestroy {
+export class ProfileTagsComponent extends WithDestroy implements OnInit {
   @Select(TagState.getCustomTagsList)
   tags$: Observable<Tag[]>;
 
-  private subs = new SubSink();
-  constructor(private store: Store, private dialog: DialogService) {}
+  constructor(private store: Store, private dialog: DialogService) {
+    super();
+  }
 
   ngOnInit(): void {}
-
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
 
   trackBy(_, tag: Tag) {
     return tag?.id;

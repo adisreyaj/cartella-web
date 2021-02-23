@@ -11,7 +11,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Package,
@@ -33,7 +33,7 @@ import { PackagesAddComponent } from '../modals/packages-add/packages-add.compon
   styleUrls: ['./packages-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackagesListComponent implements OnInit {
+export class PackagesListComponent extends WithDestroy implements OnInit {
   @Input() user: User;
   @Input() activeFolder: PackageFolder;
   @Input() folders: PackageFolder[];
@@ -50,12 +50,13 @@ export class PackagesListComponent implements OnInit {
   @Select(PackageState.isPackageFetched)
   fetched$: Observable<boolean>;
 
-  private subs = new SubSink();
   constructor(
     private dialog: DialogService,
     private store: Store,
     private menu: MenuService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
 

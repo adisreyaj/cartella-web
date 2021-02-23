@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   Input,
-  OnDestroy,
   OnInit,
 } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
@@ -13,7 +12,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Bookmark,
@@ -36,7 +35,7 @@ import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.com
   styleUrls: ['./bookmarks-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookmarksListComponent implements OnInit, OnDestroy {
+export class BookmarksListComponent extends WithDestroy implements OnInit {
   @Input() user: User;
   @Input() activeFolder: BookmarkFolder;
   @Input() folders: BookmarkFolder[];
@@ -54,17 +53,15 @@ export class BookmarksListComponent implements OnInit, OnDestroy {
     this.store.selectSnapshot(HomeState.getItemsCount)?.items?.bookmarks || 1
   ).fill('');
 
-  private subs = new SubSink();
   constructor(
     private dialog: DialogService,
     private store: Store,
     private menu: MenuService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
 
   toggleMenu() {
     this.menu.toggleMenu();

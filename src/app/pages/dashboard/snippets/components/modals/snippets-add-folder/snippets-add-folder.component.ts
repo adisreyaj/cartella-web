@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -12,12 +11,11 @@ import { ToastService } from '@app/services/toast/toast.service';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   SnippetFolder,
   SnippetFolderRequest,
 } from '../../../shared/interfaces/snippets.interface';
-import { SnippetsService } from '../../../shared/services/snippet/snippets.service';
 import {
   AddSnippetFolder,
   DeleteSnippetFolder,
@@ -31,27 +29,24 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnippetsAddFolderComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+  extends WithDestroy
+  implements OnInit, AfterViewInit {
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
   folderName = new FormControl('', [Validators.required]);
 
-  private subs = new SubSink();
   constructor(
     public ref: DialogRef,
     private toaster: ToastService,
-    private store: Store,
-    private snippetService: SnippetsService
-  ) {}
+    private store: Store
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     if (this.ref?.data) {
       const { folder } = this.ref.data;
       this.folderName.setValue(folder?.name);
     }
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewInit() {

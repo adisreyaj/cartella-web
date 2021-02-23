@@ -1,8 +1,8 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
-  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -12,7 +12,7 @@ import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   BookmarkAddModalPayload,
   BookmarkMetaData,
@@ -30,7 +30,9 @@ import {
   styleUrls: ['./bookmarks-add.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookmarksAddComponent implements OnInit, OnDestroy {
+export class BookmarksAddComponent
+  extends WithDestroy
+  implements OnInit, AfterViewInit {
   @ViewChild('bookmarkURL') bookmarkURLRef: ElementRef;
 
   bookmarkFormControls = {
@@ -54,12 +56,13 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
   private isLoadingSubject = new Subject<boolean>();
   isLoading$ = this.isLoadingSubject.pipe();
 
-  private subs = new SubSink();
   constructor(
     public ref: DialogRef<BookmarkAddModalPayload>,
     private metaExtractorService: MetaExtractorService,
     private store: Store
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     if (this.ref.data.type === ModalOperationType.UPDATE) {
@@ -84,10 +87,6 @@ export class BookmarksAddComponent implements OnInit, OnDestroy {
       this.bookmarkFormControls.site.setValue(site);
       this.bookmarkFormControls.url.setValue(url);
     }
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   ngAfterViewInit() {

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
 import { StorageFolders } from '@app/services/storage/storage.interface';
@@ -8,7 +8,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';
@@ -25,7 +25,7 @@ import { PackageState } from './store/states/package.state';
   templateUrl: './packages.component.html',
   styleUrls: ['./packages.component.scss'],
 })
-export class PackagesComponent implements OnInit, OnDestroy {
+export class PackagesComponent extends WithDestroy implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<LoggedUser>;
 
@@ -58,13 +58,14 @@ export class PackagesComponent implements OnInit, OnDestroy {
 
   isMenuOpen$: Observable<boolean>;
 
-  private subs = new SubSink();
   constructor(
     private store: Store,
     private menu: MenuService,
     private dialog: DialogService,
     private storage: StorageService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.getPackageFolders();
@@ -72,10 +73,6 @@ export class PackagesComponent implements OnInit, OnDestroy {
     this.updatePackageFoldersInIDB();
     this.updatePackagesInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   closeMenu() {

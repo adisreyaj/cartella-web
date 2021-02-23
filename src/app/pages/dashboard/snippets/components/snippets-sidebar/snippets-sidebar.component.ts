@@ -26,7 +26,7 @@ import {
   switchMap,
   take,
 } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   Snippet as Snippet,
   SnippetFolder,
@@ -47,6 +47,7 @@ import { SnippetState } from '../../store/states/snippets.state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnippetsSidebarComponent
+  extends WithDestroy
   implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() snippets: Snippet[] = [];
   @Input() isLoading = false;
@@ -70,14 +71,14 @@ export class SnippetsSidebarComponent
   private snippetsToShowSubject = new BehaviorSubject<Snippet[]>([]);
   snippetsToShow$ = this.snippetsToShowSubject.pipe();
 
-  private subs = new SubSink();
-
   @ViewChild('searchRef') searchRef: ElementRef;
 
   constructor(
     private store: Store,
     private nameGeneratorService: NameGeneratorService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
   ngOnChanges(changes: SimpleChanges): void {
@@ -89,10 +90,6 @@ export class SnippetsSidebarComponent
   }
   ngAfterViewInit() {
     this.listenToSearchInput();
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   trackBy(_, { id }: { id: string }) {

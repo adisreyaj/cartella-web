@@ -12,7 +12,7 @@ import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { SubSink } from 'subsink';
+import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 
 @Component({
   selector: 'app-profile-general',
@@ -20,7 +20,7 @@ import { SubSink } from 'subsink';
   styleUrls: ['./profile-general.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ProfileGeneralComponent implements OnInit {
+export class ProfileGeneralComponent extends WithDestroy implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
 
@@ -28,21 +28,18 @@ export class ProfileGeneralComponent implements OnInit {
   loginWithGithub = new FormControl();
   loginWithGoogle = new FormControl();
 
-  private subs = new SubSink();
   constructor(
     private store: Store,
     private fb: FormBuilder,
     private toast: ToastService
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.initForm();
     this.listenToUserChange();
     this.listenToSocialLoginMethodsChanges();
-  }
-
-  ngOnDestroy() {
-    this.subs.unsubscribe();
   }
 
   initForm() {
