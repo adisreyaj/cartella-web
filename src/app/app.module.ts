@@ -1,5 +1,5 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import {
   BrowserModule,
   HammerModule,
@@ -22,6 +22,7 @@ import {
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
+import * as Sentry from '@sentry/angular';
 import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
@@ -94,6 +95,15 @@ const configurationFactory = (
     }),
   ],
   providers: [
+    environment.production
+      ? {
+          provide: ErrorHandler,
+          useValue: Sentry.createErrorHandler({
+            showDialog: false,
+            logErrors: !environment.production,
+          }),
+        }
+      : [],
     {
       provide: APP_INITIALIZER,
       useFactory: configurationFactory,

@@ -30,6 +30,8 @@
     "@ngxs/devtools-plugin": "^3.7.1",
     "@ngxs/logger-plugin": "^3.7.1",
     "@ngxs/store": "^3.7.1",
+    "@sentry/angular": "^6.2.0",
+    "@sentry/tracing": "^6.2.0",
     "angular-remix-icon": "^1.1.0",
     "dayjs": "^1.10.4",
     "dom-to-image": "^2.6.0",
