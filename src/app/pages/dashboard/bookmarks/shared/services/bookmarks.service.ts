@@ -1,7 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
+import { FolderOperations } from '@app/interfaces/folder.interface';
+import { MoveToFolder } from '@app/interfaces/move-to-folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import {
   Bookmark,
@@ -13,7 +16,10 @@ import {
 @Injectable({
   providedIn: 'root',
 })
-export class BookmarksService {
+export class BookmarksService
+  implements
+    MoveToFolder<Bookmark>,
+    FolderOperations<BookmarkFolderRequest, BookmarkFolder> {
   bookmarkUrl = `${environment.api}/${CARTELLA_ENDPOINTS.bookmarks}`;
   bookmarkFolderUrl = `${environment.api}/${CARTELLA_ENDPOINTS.bookmarkFolders}`;
 
@@ -38,6 +44,13 @@ export class BookmarksService {
     );
   }
   updateBookmark(id: string, data: Partial<BookmarkRequest>) {
+    return this.http.put<Bookmark>(`${this.bookmarkUrl}/${id}`, data);
+  }
+
+  moveToFolder(id: string, folderId: string): Observable<Bookmark> {
+    const data: Partial<BookmarkRequest> = {
+      folderId,
+    };
     return this.http.put<Bookmark>(`${this.bookmarkUrl}/${id}`, data);
   }
 

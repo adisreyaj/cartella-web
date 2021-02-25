@@ -8,11 +8,11 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalOperationType } from '@app/interfaces/general.interface';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   BookmarkAddModalPayload,
   BookmarkMetaData,
@@ -65,7 +65,7 @@ export class BookmarksAddComponent
   }
 
   ngOnInit(): void {
-    if (this.ref.data.type === ModalOperationType.UPDATE) {
+    if (this.ref.data.type === ModalOperationType.update) {
       const {
         description,
         name,
@@ -154,9 +154,9 @@ export class BookmarksAddComponent
       domain: data.domain,
       share: [],
     };
-    if (this.ref.data.type === ModalOperationType.CREATE) {
+    if (this.ref.data.type === ModalOperationType.create) {
       this.store.dispatch(new AddBookmark(bookmarkData));
-    } else if (this.ref.data.type === ModalOperationType.UPDATE) {
+    } else if (this.ref.data.type === ModalOperationType.update) {
       const bookmarkUpdatedData = {
         name: this.bookmarkFormControls.name.value,
         description: this.bookmarkFormControls.description.value,

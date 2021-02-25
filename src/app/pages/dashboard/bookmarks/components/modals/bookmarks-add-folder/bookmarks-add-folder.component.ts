@@ -8,10 +8,10 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from '@app/services/toast/toast.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
