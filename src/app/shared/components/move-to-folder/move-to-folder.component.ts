@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { ToastService } from '@app/services/toast/toast.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 
@@ -11,13 +12,15 @@ import { Store } from '@ngxs/store';
   styleUrls: ['./move-to-folder.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MoveToFolderComponent implements OnInit {
+export class MoveToFolderComponent extends WithDestroy implements OnInit {
   folderSelected = new FormControl('');
   constructor(
     public ref: DialogRef<MoveToFolderModalPayload>,
     private toaster: ToastService,
     private store: Store
-  ) {}
+  ) {
+    super();
+  }
 
   ngOnInit(): void {}
 
@@ -36,19 +39,21 @@ export class MoveToFolderComponent implements OnInit {
   }
 
   save() {
-    this.store
-      .dispatch(
-        new this.action(this.item.id, {
-          folderId: this.folderSelected.value,
-        })
-      )
-      .subscribe(
-        () => {
-          this.ref.close(this.folderSelected.value);
-        },
-        (err) => {
-          this.toaster.showErrorToast('Failed to move!');
-        }
-      );
+    this.subs.add(
+      this.store
+        .dispatch(
+          new this.action(this.item.id, {
+            folderId: this.folderSelected.value,
+          })
+        )
+        .subscribe(
+          () => {
+            this.ref.close(this.folderSelected.value);
+          },
+          (err) => {
+            this.toaster.showErrorToast('Failed to move!');
+          }
+        )
+    );
   }
 }
