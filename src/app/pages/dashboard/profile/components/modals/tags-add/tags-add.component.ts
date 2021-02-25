@@ -11,7 +11,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
 import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destory/with-destroy';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { AddTag, DeleteTag, UpdateTag } from '@app/store/actions/tag.action';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';

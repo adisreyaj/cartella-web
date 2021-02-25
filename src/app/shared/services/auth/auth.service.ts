@@ -12,7 +12,7 @@ import { Store } from '@ngxs/store';
 import { ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { WithDestroy } from '../with-destory/with-destroy';
+import { WithDestroy } from '../with-destroy/with-destroy';
 const helper = new JwtHelperService();
 @Injectable({
   providedIn: 'root',

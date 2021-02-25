@@ -3,7 +3,7 @@ import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
 import { StorageFolders } from '@app/services/storage/storage.interface';
 import { StorageService } from '@app/services/storage/storage.service';
-import { WithDestroy } from '@app/services/with-destory/with-destroy';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';

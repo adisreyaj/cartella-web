@@ -7,7 +7,7 @@ import {
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import { WithDestroy } from '@app/services/with-destory/with-destroy';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';

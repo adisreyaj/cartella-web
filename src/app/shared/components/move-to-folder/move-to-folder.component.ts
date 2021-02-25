@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destory/with-destroy';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 

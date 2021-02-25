@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalOperationType } from '@app/interfaces/general.interface';
-import { WithDestroy } from '@app/services/with-destory/with-destroy';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, Subject } from 'rxjs';
