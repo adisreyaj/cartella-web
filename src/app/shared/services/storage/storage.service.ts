@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DedicatedInstanceFactory, NgForage } from 'ngforage';
-import { from } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { from, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 import { StorageFolders } from './storage.interface';
 
 @Injectable({
@@ -19,10 +19,14 @@ export class StorageService {
   }
 
   setItem<DataType = any>(type: StorageFolders, key: string, value: DataType) {
-    return from(this.instances.get(type).setItem(key, value));
+    return from(this.instances.get(type).setItem(key, value)).pipe(
+      catchError(() => of(null))
+    );
   }
   getItem<DataType = any>(type: StorageFolders, key: string) {
-    return from(this.instances.get(type).getItem<DataType>(key));
+    return from(this.instances.get(type).getItem<DataType>(key)).pipe(
+      catchError(() => of(null))
+    );
   }
 
   /**
@@ -31,7 +35,9 @@ export class StorageService {
    * entry as same item can be in user folder as well as starred folder.
    */
   getAllItemsFromUserFolder<DataType = any>(type: StorageFolders) {
-    const items = from(this.instances.get(type).keys());
+    const items = from(this.instances.get(type).keys()).pipe(
+      catchError(() => of(null))
+    );
     return items.pipe(
       // Starred items should be removed as its duplicated already
       map((keys) => keys.filter((key) => key !== 'starred')),
@@ -45,13 +51,17 @@ export class StorageService {
         )
       ),
       map((promises: Promise<DataType[]>[]) => Promise.all(promises)),
-      switchMap((promise: Promise<DataType[][]>) => from(promise)),
+      switchMap((promise: Promise<DataType[][]>) =>
+        from(promise).pipe(catchError(() => of(null)))
+      ),
       map((values) =>
         values.reduce((acc, curr: DataType[]) => [...acc, ...curr], [])
       )
     );
   }
   deleteItem(type: StorageFolders, key: string) {
-    return from(this.instances.get(type).removeItem(key));
+    return from(this.instances.get(type).removeItem(key)).pipe(
+      catchError(() => of(null))
+    );
   }
 }

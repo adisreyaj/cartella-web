@@ -9,6 +9,7 @@ import {
 import { FormControl } from '@angular/forms';
 import { Tag } from '@app/interfaces/tag.interface';
 import { ToastService } from '@app/services/toast/toast.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { TagState } from '@app/store/states/tag.state';
 import { DialogRef } from '@ngneat/dialog';
 import { TippyInstance } from '@ngneat/helipopper';
@@ -28,7 +29,6 @@ import {
   switchMap,
   tap,
 } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { PackageSuggestions } from '../../../shared/interfaces/package-details.interface';
 import {
   PackageAddModalPayload,

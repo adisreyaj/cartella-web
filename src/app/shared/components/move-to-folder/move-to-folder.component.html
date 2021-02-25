@@ -1,0 +1,26 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold dark:text-white">
+      Move {{ref?.data?.type | titlecase}}
+    </p>
+  </header>
+  <form class="w-100" (ngSubmit)="save()">
+    <div class="form-group">
+      <label for="name">Folder Name</label>
+      <ng-select [formControl]="folderSelected" [clearable]="false" [searchable]="false" class="w-40"
+                 aria-label="Choose theme">
+        <ng-option *ngFor="let folder of (ref.data.folders | async)" [value]="folder.id">
+          {{folder?.name}}
+        </ng-option>
+      </ng-select>
+    </div>
+    <footer class="flex items-center justify-end mt-6">
+      <div class="flex items-center">
+        <button dialogClose secondaryButton class="mr-2" type="button">Cancel</button>
+        <button primaryButton [disabled]="folderSelected.invalid" type="submit">
+          Move
+        </button>
+      </div>
+    </footer>
+  </form>
+</div>
