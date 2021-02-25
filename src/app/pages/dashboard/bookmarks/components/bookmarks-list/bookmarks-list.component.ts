@@ -18,7 +18,7 @@ import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
-import { switchMap, take, tap } from 'rxjs/operators';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Bookmark,
@@ -159,7 +159,11 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
           type: FeatureType.bookmark,
           action: UpdateBookmark,
           item: bookmark,
-          folders: this.folders$,
+          folders: this.folders$.pipe(
+            map((folders) =>
+              folders.filter(({ id }) => id !== bookmark.folder.id)
+            )
+          ),
         },
         enableClose: false,
       }
