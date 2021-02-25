@@ -5,6 +5,7 @@ import {
   EXTERNAL_ENDPOINTS,
 } from '@app/config/endpoints.config';
 import { FolderOperations } from '@app/interfaces/folder.interface';
+import { MoveToFolder } from '@app/interfaces/move-to-folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';
 import { map } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -22,7 +23,9 @@ import {
   providedIn: 'root',
 })
 export class PackagesService
-  implements FolderOperations<PackageFolderRequest, PackageFolder> {
+  implements
+    MoveToFolder<Package>,
+    FolderOperations<PackageFolderRequest, PackageFolder> {
   packageUrl = `${environment.api}/${CARTELLA_ENDPOINTS.packages}`;
   packageFolderUrl = `${environment.api}/${CARTELLA_ENDPOINTS.packageFolders}`;
   packageMetaUrl = `${environment.api}/${CARTELLA_ENDPOINTS.packagesMeta}`;
@@ -47,7 +50,15 @@ export class PackagesService
       `${this.packageUrl}/folder/${folderId}`
     );
   }
+
   updatePackage(id: string, data: Partial<PackageRequest>) {
+    return this.http.put<Package>(`${this.packageUrl}/${id}`, data);
+  }
+
+  moveToFolder(id: string, folderId: string) {
+    const data: Partial<PackageRequest> = {
+      folderId,
+    };
     return this.http.put<Package>(`${this.packageUrl}/${id}`, data);
   }
 

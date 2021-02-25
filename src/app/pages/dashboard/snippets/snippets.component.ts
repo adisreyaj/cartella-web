@@ -7,12 +7,12 @@ import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
 import { StorageFolders } from '@app/services/storage/storage.interface';
 import { StorageService } from '@app/services/storage/storage.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,

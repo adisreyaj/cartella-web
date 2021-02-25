@@ -7,12 +7,12 @@ import {
 } from '@angular/forms';
 import { LoginMethods, User } from '@app/interfaces/user.interface';
 import { ToastService } from '@app/services/toast/toast.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { UpdateUserLoginMethod } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 
 @Component({
   selector: 'app-profile-general',

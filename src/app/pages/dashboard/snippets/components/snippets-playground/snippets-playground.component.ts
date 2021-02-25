@@ -22,6 +22,7 @@ import {
 import { Technology } from '@app/interfaces/technology.interface';
 import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@app/services/theme/editor-theme.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import codemirror from 'codemirror';
@@ -42,7 +43,6 @@ import { has } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   Snippet,
   SnippetModes,

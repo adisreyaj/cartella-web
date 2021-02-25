@@ -1,10 +1,10 @@
 export enum FeatureType {
-  BOOKMARK = 'BOOKMARK',
-  SNIPPET = 'SNIPPET',
-  PACKAGE = 'PACKAGE',
-  REPO = 'REPO',
+  bookmark = 'BOOKMARK',
+  snippet = 'SNIPPET',
+  package = 'PACKAGE',
+  repo = 'REPO',
 }
 export enum ModalOperationType {
-  CREATE = 'CREATE',
-  UPDATE = 'UPDATE',
+  create = 'CREATE',
+  update = 'UPDATE',
 }
