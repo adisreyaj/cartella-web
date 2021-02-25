@@ -13,6 +13,7 @@ import { ConfigurationService } from '@app/services/configuration/configuration.
 import { TagState } from '@app/store/states/tag.state';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { UserState } from '@app/store/states/user.state';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import {
   popperVariation,
@@ -67,6 +68,7 @@ const configurationFactory = (
     DialogModule.forRoot({
       windowClass: 'cartella-dialog',
     }),
+    NgSelectModule,
     TippyModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 2000,

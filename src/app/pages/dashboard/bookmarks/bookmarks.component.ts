@@ -2,13 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import { StorageFolders } from '@app/services/storage/storage.interface';
 import { StorageService } from '@app/services/storage/storage.service';
+import { WithDestroy } from '@app/services/with-destory/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
+import { filter, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import {
@@ -16,6 +15,7 @@ import {
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
 } from './shared/interfaces/bookmarks.interface';
+import { BookmarkHelperService } from './shared/services/bookmark-helper.service';
 import {
   GetBookmarkFolders,
   SetActiveBookmarkFolder,
@@ -66,7 +66,8 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
-    private storage: StorageService
+    private storage: StorageService,
+    private helper: BookmarkHelperService
   ) {
     super();
   }
@@ -74,6 +75,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   ngOnInit(): void {
     this.getBookmarkFolders();
     this.getBookmarks();
+    this.updateBookmarksWhenActiveFolderChanges();
     this.updateBookmarksInIDB();
     this.updateBookmarkFoldersInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
@@ -87,15 +89,6 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     if (folder) {
       this.bookmarkLoadingSubject.next(true);
       this.store.dispatch(new SetActiveBookmarkFolder(folder));
-      const sub = this.store.dispatch(new GetBookmarks(folder.id)).subscribe(
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        },
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        }
-      );
-      this.subs.add(sub);
     }
   }
   handleEditFolder(folder: BookmarkFolder) {
@@ -105,7 +98,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
         size: 'sm',
         data: {
           folder,
-          type: ModalOperationType.UPDATE,
+          type: ModalOperationType.update,
         },
         enableClose: false,
       }
@@ -118,11 +111,29 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
       {
         size: 'sm',
         data: {
-          type: ModalOperationType.CREATE,
+          type: ModalOperationType.create,
         },
         enableClose: false,
       }
     );
+  }
+
+  private updateBookmarksWhenActiveFolderChanges() {
+    const sub = this.activeFolder$
+      .pipe(
+        tap((folder) => console.log('Active Folder', folder)),
+        pluck('id'),
+        switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId)))
+      )
+      .subscribe(
+        () => {
+          this.bookmarkLoadingSubject.next(false);
+        },
+        () => {
+          this.bookmarkLoadingSubject.next(false);
+        }
+      );
+    this.subs.add(sub);
   }
 
   private getBookmarks() {
@@ -140,6 +151,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
 
     this.subs.add(sub);
   }
+
   private getBookmarkFolders() {
     this.bookmarkFolderLoadingSubject.next(true);
     this.store.dispatch(new GetBookmarkFolders());
@@ -161,15 +173,21 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     const sub = this.allBookmarks$
       .pipe(
         filter((res) => res.length > 0),
-        tap((bookmarks: Bookmark[]) => {
-          this.saveStarredBookmarks(bookmarks);
-        }),
-        switchMap((bookmarks: Bookmark[]) =>
-          this.groupBookmarksInFolders(bookmarks)
+        switchMap((bookmarks) =>
+          this.allBookmarkFolders$.pipe(
+            take(1),
+            map((folders) => ({ bookmarks, folders }))
+          )
         ),
-        tap((foldersWithBookmarks) => {
-          this.saveBookmarksInIDB(foldersWithBookmarks);
-        })
+        switchMap(
+          ({
+            bookmarks,
+            folders,
+          }: {
+            bookmarks: Bookmark[];
+            folders: BookmarkFolder[];
+          }) => this.helper.updateBookmarksInIDB(bookmarks, folders)
+        )
       )
       .subscribe();
     this.subs.add(sub);
@@ -178,46 +196,9 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     const sub = this.allBookmarkFolders$
       .pipe(
         filter((res) => res.length > 0),
-        tap((bookmarks) => {
-          this.storage.setItem(StorageFolders.folders, 'bookmarks', bookmarks);
-        })
+        switchMap((folders) => this.helper.updateBookmarkFoldersInDb(folders))
       )
       .subscribe();
     this.subs.add(sub);
   }
-
-  private groupBookmarksInFolders = (bookmarks: Bookmark[]) =>
-    this.allBookmarkFolders$.pipe(
-      map((folders: BookmarkFolder[]) =>
-        folders.reduce(
-          (acc, { id }) => ({
-            ...acc,
-            [id]: bookmarks.filter(
-              ({ folder: { id: folderId } }) => folderId === id
-            ),
-          }),
-          {}
-        )
-      )
-    );
-
-  private saveBookmarksInIDB = (foldersWithBookmarks: {
-    [key: string]: Bookmark[];
-  }) => {
-    Object.keys(foldersWithBookmarks).forEach((key) => {
-      this.storage.setItem(
-        StorageFolders.bookmarks,
-        key,
-        foldersWithBookmarks[key]
-      );
-    });
-  };
-
-  private saveStarredBookmarks = (bookmarks: Bookmark[]) => {
-    this.storage.setItem(
-      StorageFolders.bookmarks,
-      'starred',
-      bookmarks.filter(({ favorite }) => favorite)
-    );
-  };
 }

@@ -57,16 +57,16 @@ export interface BookmarkMetaData {
   site?: string;
 }
 
-export interface BookmarkCardEvent {
-  type: BookmarkCardEventType;
-  bookmark: Bookmark;
-}
-
 export enum BookmarkCardEventType {
   favorite,
   edit,
   delete,
   share,
+  move,
+}
+export interface BookmarkCardEvent {
+  type: BookmarkCardEventType;
+  bookmark: Bookmark;
 }
 
 export interface BookmarkAddModalPayload {

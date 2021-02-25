@@ -12,8 +12,8 @@ import {
   Bookmark,
   BookmarkCardEvent,
   BookmarkCardEventType,
-} from '../../../shared/interfaces/bookmarks.interface';
-import { BookmarksService } from '../../../shared/services/bookmarks.service';
+} from '../../shared/interfaces/bookmarks.interface';
+import { BookmarksService } from '../../shared/services/bookmarks.service';
 
 @Component({
   selector: 'app-bookmarks-list-card',
@@ -46,6 +46,10 @@ export class BookmarksListCardComponent implements OnInit {
   }
   handleShare(bookmark: Bookmark) {
     this.cardEvent.emit({ type: BookmarkCardEventType.share, bookmark });
+  }
+
+  handleMoveToFolder(bookmark: Bookmark) {
+    this.cardEvent.emit({ type: BookmarkCardEventType.move, bookmark });
   }
 
   updateView(bookmark: Bookmark) {
