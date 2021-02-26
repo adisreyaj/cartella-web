@@ -7,7 +7,7 @@ import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { filter, pluck, switchMap, take } from 'rxjs/operators';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import {
@@ -121,7 +121,6 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   private updateBookmarksWhenActiveFolderChanges() {
     const sub = this.activeFolder$
       .pipe(
-        tap((folder) => console.log('Active Folder', folder)),
         pluck('id'),
         switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId)))
       )
