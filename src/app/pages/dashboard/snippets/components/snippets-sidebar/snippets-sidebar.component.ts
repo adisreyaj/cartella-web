@@ -1,3 +1,4 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -75,7 +76,8 @@ export class SnippetsSidebarComponent
 
   constructor(
     private store: Store,
-    private nameGeneratorService: NameGeneratorService
+    private nameGeneratorService: NameGeneratorService,
+    private clipboard: Clipboard
   ) {
     super();
   }
@@ -94,6 +96,14 @@ export class SnippetsSidebarComponent
 
   trackBy(_, { id }: { id: string }) {
     return id;
+  }
+
+  handleSnippetShare(snippet: Snippet) {}
+
+  handleSnippetDelete(snippet: Snippet) {}
+  handleSnippetMove(snippet: Snippet) {}
+  handleCopyToClipboard(snippet: Snippet) {
+    this.clipboard.copy(snippet?.code);
   }
   selectSnippet(data: Snippet) {
     if (data) {
