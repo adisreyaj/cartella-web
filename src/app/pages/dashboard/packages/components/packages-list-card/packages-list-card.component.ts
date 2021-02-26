@@ -11,8 +11,8 @@ import {
   Package,
   PackageCardEvent,
   PackageCardEventType,
-} from '../../../shared/interfaces/packages.interface';
-import { PackagesService } from '../../../shared/services/packages.service';
+} from '../../shared/interfaces/packages.interface';
+import { PackagesService } from '../../shared/services/packages.service';
 
 @Component({
   selector: 'app-packages-list-card',
