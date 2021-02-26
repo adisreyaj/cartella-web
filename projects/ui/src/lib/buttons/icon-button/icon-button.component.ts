@@ -1,5 +1,10 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnInit,
+} from '@angular/core';
 const VARIANT_CLASSES = {
   primary: [
     'bg-primary',
@@ -20,12 +25,15 @@ const VARIANT_CLASSES = {
   ],
 };
 
-@Directive({
-  selector: '[iconButton]',
+@Component({
+  selector: 'button[iconButton], a[iconButton]',
+  templateUrl: './icon-button.component.html',
+  styleUrls: ['./icon-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconButtonDirective {
+export class IconButtonComponent implements OnInit {
   @Input() variant = 'primary';
-
+  @Input() loading = false;
   @HostBinding('class') get classes() {
     return `btn-primary
     flex items-center
@@ -34,4 +42,8 @@ export class IconButtonDirective {
     border
     `;
   }
+
+  constructor() {}
+
+  ngOnInit(): void {}
 }
