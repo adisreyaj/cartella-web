@@ -87,4 +87,5 @@ export enum PackageCardEventType {
   edit,
   delete,
   share,
+  move,
 }

@@ -93,6 +93,10 @@
         <p>Share</p>
       </div>
     </ng-container>
+    <div class="dropdown-item" (click)="handleMoveToFolder(package);hide()">
+      <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
+      <p>Move to</p>
+    </div>
     <div class="dropdown-item" (click)="handleEdit(package);hide()">
       <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
       <p>Edit</p>

@@ -52,6 +52,13 @@ export class PackagesListCardComponent implements OnInit {
     });
   }
 
+  handleMoveToFolder(packageData: Package) {
+    this.cardEvent.emit({
+      type: PackageCardEventType.move,
+      package: packageData,
+    });
+  }
+
   updateView(packageData: Package) {
     this.packageService.updateViews(packageData.id).pipe(take(1)).subscribe();
   }

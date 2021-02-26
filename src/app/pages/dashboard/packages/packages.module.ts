@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MoveToFolderModule } from '@app/components/move-to-folder/move-to-folder.module';
 import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { CountPipeModule } from '@app/pipes/count-pipe/count-pipe.module';
@@ -38,6 +39,7 @@ import { PackagesComponent } from './packages.component';
     NgxFilesizeModule,
     CountPipeModule,
     FeatureDirectiveModule,
+    MoveToFolderModule,
   ],
   providers: [MenuService],
 })

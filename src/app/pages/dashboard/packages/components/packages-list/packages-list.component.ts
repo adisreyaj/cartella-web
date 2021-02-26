@@ -5,13 +5,17 @@ import {
   OnInit,
 } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
+import { MoveToFolderComponent } from '@app/components/move-to-folder/move-to-folder.component';
+import { FeatureType } from '@app/interfaces/general.interface';
+import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { User } from '@app/interfaces/user.interface';
+import { PackageHelperService } from '@app/packages/shared/services/package-helper.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { combineLatest, Observable } from 'rxjs';
+import { map, switchMap, take, tap } from 'rxjs/operators';
 import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Package,
@@ -21,6 +25,7 @@ import {
 } from '../../shared/interfaces/packages.interface';
 import {
   DeletePackage,
+  GetPackages,
   UpdatePackage,
 } from '../../store/actions/package.action';
 import { PackageFolderState } from '../../store/states/package-folders.state';
@@ -47,13 +52,20 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
   @Select(PackageFolderState.getActivePackageFolder)
   activeFolder$: Observable<PackageFolder>;
 
+  @Select(PackageFolderState.getAllPackageFolders)
+  folders$: Observable<PackageFolder[]>;
+
+  @Select(PackageState.getAllPackages)
+  packages$: Observable<Package[]>;
+
   @Select(PackageState.isPackageFetched)
   fetched$: Observable<boolean>;
 
   constructor(
     private dialog: DialogService,
     private store: Store,
-    private menu: MenuService
+    private menu: MenuService,
+    private helper: PackageHelperService
   ) {
     super();
   }
@@ -80,22 +92,66 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
     });
   }
 
-  handleCardEvent(event: PackageCardEvent) {
-    const { id, favorite } = event.package;
-    switch (event.type) {
+  handleCardEvent({ type, package: packageData }: PackageCardEvent) {
+    const { id, favorite } = packageData;
+    switch (type) {
       case PackageCardEventType.favorite:
         this.store.dispatch(new UpdatePackage(id, { favorite: !favorite }));
         break;
       case PackageCardEventType.edit:
         break;
       case PackageCardEventType.delete:
-        this.handleDelete(event.package);
+        this.handleDelete(packageData);
+        break;
+      case PackageCardEventType.move:
+        this.handleMoveToFolder(packageData);
         break;
       case PackageCardEventType.share:
         break;
       default:
         break;
     }
+  }
+
+  private handleMoveToFolder(packageData: Package) {
+    const dialogRef = this.dialog.open<MoveToFolderModalPayload>(
+      MoveToFolderComponent,
+      {
+        size: 'sm',
+        minHeight: 'unset',
+        data: {
+          type: FeatureType.bookmark,
+          action: UpdatePackage,
+          item: packageData,
+          folders: this.folders$.pipe(
+            map((folders) =>
+              folders.filter(({ id }) => id !== packageData.folder.id)
+            )
+          ),
+        },
+        enableClose: false,
+      }
+    );
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          switchMap(() => combineLatest([this.packages$, this.folders$])),
+          take(1),
+          switchMap(([packages, folders]) =>
+            this.helper.updatePackagesInIDB(packages, folders)
+          ),
+          switchMap(() =>
+            this.store.dispatch(
+              new GetPackages(
+                this.store.selectSnapshot(
+                  PackageFolderState.getActivePackageFolder
+                )?.id
+              )
+            )
+          )
+        )
+        .subscribe(() => {})
+    );
   }
 
   private handleDelete({ id }: Package) {
