@@ -1,10 +1,19 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BUTTON_SIZE_PADDINGS } from './buttons.config';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { BUTTON_SIZE_PADDINGS } from '../buttons.config';
 
-@Directive({
-  selector: '[secondaryButton]',
+@Component({
+  selector: 'button[secondaryButton], a[secondaryButton]',
+  templateUrl: './secondary-button.component.html',
+  styleUrls: ['./secondary-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecondaryButtonDirective {
+export class SecondaryButtonComponent implements OnInit {
   @HostBinding('class') get classes() {
     return `btn-secondary rounded-md
      border border-transparent
@@ -26,4 +35,9 @@ export class SecondaryButtonDirective {
   }
 
   @Input() size: 'sm' | 'lg' = 'lg';
+  @Input() loading = false;
+
+  constructor() {}
+
+  ngOnInit(): void {}
 }

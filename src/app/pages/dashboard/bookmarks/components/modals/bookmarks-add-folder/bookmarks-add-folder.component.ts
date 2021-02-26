@@ -12,6 +12,7 @@ import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
+import { BehaviorSubject } from 'rxjs';
 import {
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
@@ -32,8 +33,11 @@ export class BookmarksAddFolderComponent
   extends WithDestroy
   implements OnInit, AfterViewInit {
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
+
   folderName = new FormControl('', [Validators.required]);
 
+  private savingSubject = new BehaviorSubject<boolean>(false);
+  saving$ = this.savingSubject.pipe();
   constructor(
     public ref: DialogRef<BookmarkFolderAddModalPayload>,
     private toaster: ToastService,
@@ -63,6 +67,7 @@ export class BookmarksAddFolderComponent
   }
 
   async updateFolder(folder: BookmarkFolder) {
+    this.savingSubject.next(true);
     this.store
       .dispatch(
         new UpdateBookmarkFolder(folder.id, {
@@ -71,16 +76,19 @@ export class BookmarksAddFolderComponent
       )
       .subscribe(
         () => {
+          this.savingSubject.next(false);
           this.toaster.showSuccessToast('Folder updated successfully!');
           this.ref.close();
         },
         () => {
+          this.savingSubject.next(false);
           this.toaster.showErrorToast('Failed to update the folder!');
         }
       );
   }
 
   async createFolder() {
+    this.savingSubject.next(true);
     this.store
       .dispatch(
         new AddBookmarkFolder({
@@ -92,9 +100,11 @@ export class BookmarksAddFolderComponent
       )
       .subscribe(
         () => {
+          this.savingSubject.next(false);
           this.ref.close();
         },
         (err) => {
+          this.savingSubject.next(false);
           if (has(err, 'error.message')) {
             this.toaster.showErrorToast(err.error.message);
           } else {

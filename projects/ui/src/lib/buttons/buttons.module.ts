@@ -1,20 +1,20 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PrimaryButtonDirective } from './primary-button.directive';
-import { SecondaryButtonDirective } from './secondary-button.directive';
-import { IconButtonDirective } from './icon-button.directive';
+import { NgModule } from '@angular/core';
+import { IconButtonComponent } from './icon-button/icon-button.component';
+import { PrimaryButtonComponent } from './primary-button/primary-button.component';
+import { SecondaryButtonComponent } from './secondary-button/secondary-button.component';
 
 @NgModule({
   declarations: [
-    PrimaryButtonDirective,
-    SecondaryButtonDirective,
-    IconButtonDirective,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
+    IconButtonComponent,
   ],
   imports: [CommonModule],
   exports: [
-    PrimaryButtonDirective,
-    SecondaryButtonDirective,
-    IconButtonDirective,
+    PrimaryButtonComponent,
+    SecondaryButtonComponent,
+    IconButtonComponent,
   ],
 })
 export class ButtonsModule {}

@@ -1,10 +1,19 @@
-import { Directive, HostBinding, Input } from '@angular/core';
-import { BUTTON_SIZE_PADDINGS } from './buttons.config';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { BUTTON_SIZE_PADDINGS } from '../buttons.config';
 
-@Directive({
-  selector: '[primaryButton]',
+@Component({
+  selector: 'button[primaryButton], a[primaryButton]',
+  templateUrl: './primary-button.component.html',
+  styleUrls: ['./primary-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PrimaryButtonDirective {
+export class PrimaryButtonComponent implements OnInit {
   @HostBinding('class') get classes() {
     return `btn-primary rounded-md
     flex items-center
@@ -27,4 +36,8 @@ export class PrimaryButtonDirective {
 
   @Input() size: 'sm' | 'lg' = 'lg';
   @Input() type: 'normal' | 'warn' = 'normal';
+  @Input() loading = false;
+  constructor() {}
+
+  ngOnInit(): void {}
 }

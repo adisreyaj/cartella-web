@@ -16,7 +16,7 @@
       </button>
       <div class="flex items-center">
         <button dialogClose secondaryButton class="mr-2" type="button">Cancel</button>
-        <button primaryButton [disabled]="folderName.invalid" type="submit">
+        <button primaryButton [loading]="saving$ | async" [disabled]="folderName.invalid" type="submit">
           {{ref?.data?.folder ? 'Update':'Create'}}
         </button>
       </div>
