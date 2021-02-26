@@ -11,6 +11,12 @@ import { Bookmark, BookmarkFolder } from '../interfaces/bookmarks.interface';
 export class BookmarkHelperService {
   constructor(private storage: StorageService) {}
 
+  /**
+   * Update the bookmarks in the Indexed DB
+   *
+   * @param bookmarks - all bookmarks
+   * @param bookmarkFolders - all bookmark folders
+   */
   updateBookmarksInIDB(
     bookmarks: Bookmark[],
     bookmarkFolders: BookmarkFolder[]
@@ -53,6 +59,13 @@ export class BookmarkHelperService {
       bookmarks.filter(({ favorite }) => favorite)
     );
 
+  /**
+   * Group bookmarks based on the folder
+   *
+   * ```json
+   * 'id': [{},{}]
+   * ```
+   */
   private groupBookmarksInFolders = (
     folders: BookmarkFolder[],
     bookmarks: Bookmark[]
