@@ -5,20 +5,19 @@ import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
   SnippetFolder,
   SnippetModes,
 } from './shared/interfaces/snippets.interface';
+import { SnippetHelperService } from './shared/services/helpers/snippet-helper.service';
 import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
@@ -84,7 +83,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     private dialog: DialogService,
     private menu: MenuService,
     private breakpointObserver: BreakpointObserver,
-    private storage: StorageService
+    private helper: SnippetHelperService
   ) {
     super();
   }
@@ -92,6 +91,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   ngOnInit(): void {
     this.getSnippetFolders();
     this.getSnippets();
+    this.updateSnippetsWhenActiveFolderChanges();
     this.observeLayoutChanges();
     this.updateSnippetFoldersInIDB();
     this.updateSnippetsInIDB();
@@ -119,15 +119,6 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
       this.snippetLoadingSubject.next(true);
       this.store.dispatch(new SetActiveSnippetFolder(folder));
       this.store.dispatch(new SetActiveSnippet(null));
-      const sub = this.store.dispatch(new GetSnippets(folder.id)).subscribe(
-        () => {
-          this.snippetLoadingSubject.next(false);
-        },
-        () => {
-          this.snippetLoadingSubject.next(false);
-        }
-      );
-      this.subs.add(sub);
     }
   }
   handleEditFolder(folder: SnippetFolder) {
@@ -181,6 +172,23 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER));
   }
 
+  private updateSnippetsWhenActiveFolderChanges() {
+    const sub = this.activeFolder$
+      .pipe(
+        pluck('id'),
+        switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId)))
+      )
+      .subscribe(
+        () => {
+          this.snippetLoadingSubject.next(false);
+        },
+        () => {
+          this.snippetLoadingSubject.next(false);
+        }
+      );
+    this.subs.add(sub);
+  }
+
   private observeLayoutChanges() {
     this.subs.add(
       this.breakpointObserver
@@ -192,18 +200,14 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private updateSnippetsInIDB() {
-    const sub = this.allSnippets$
+    const sub = combineLatest([
+      this.allSnippets$,
+      this.allSnippetFolders$.pipe(take(1)),
+    ])
       .pipe(
-        filter((res) => res.length > 0),
-        tap((snippets: Snippet[]) => {
-          this.saveStarredSnippets(snippets);
-        }),
-        switchMap((snippets: Snippet[]) =>
-          this.groupSnippetsInFolders(snippets)
-        ),
-        tap((foldersWithSnippets) => {
-          this.saveSnippetsInIDB(foldersWithSnippets);
-        })
+        switchMap(([bookmarks, folders]) =>
+          this.helper.updateSnippetsInIDB(bookmarks, folders)
+        )
       )
       .subscribe();
     this.subs.add(sub);
@@ -213,46 +217,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     const sub = this.allSnippetFolders$
       .pipe(
         filter((res) => res.length > 0),
-        tap((snippets) => {
-          this.storage.setItem(StorageFolders.folders, 'snippets', snippets);
-        })
+        switchMap((folders) => this.helper.updateSnippetFoldersInDb(folders))
       )
       .subscribe();
     this.subs.add(sub);
   }
-
-  private groupSnippetsInFolders = (snippets: Snippet[]) =>
-    this.allSnippetFolders$.pipe(
-      map((folders: SnippetFolder[]) =>
-        folders.reduce(
-          (acc, { id }) => ({
-            ...acc,
-            [id]: snippets.filter(
-              ({ folder: { id: folderId } }) => folderId === id
-            ),
-          }),
-          {}
-        )
-      )
-    );
-
-  private saveSnippetsInIDB = (foldersWithSnippets: {
-    [key: string]: Snippet[];
-  }) => {
-    Object.keys(foldersWithSnippets).forEach((key) => {
-      this.storage.setItem(
-        StorageFolders.snippets,
-        key,
-        foldersWithSnippets[key]
-      );
-    });
-  };
-
-  private saveStarredSnippets = (snippets: Snippet[]) => {
-    this.storage.setItem(
-      StorageFolders.snippets,
-      'starred',
-      snippets.filter(({ favorite }) => favorite)
-    );
-  };
 }
