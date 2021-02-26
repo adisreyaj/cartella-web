@@ -6,8 +6,8 @@ import { StorageService } from '@app/services/storage/storage.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import {
@@ -169,29 +169,27 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     this.subs.add(sub);
   }
 
+  /**
+   * Whenever bookmarks changes. get all bookmarks
+   * and bookmark folders and update the data in IDB
+   *
+   * `take(1)` is added to `allBookmarkFolders$` as we don't want
+   * `combineLatest` to emit when `allBookmarkFolders$` emits value
+   */
   private updateBookmarksInIDB() {
-    const sub = this.allBookmarks$
+    const sub = combineLatest([
+      this.allBookmarks$,
+      this.allBookmarkFolders$.pipe(take(1)),
+    ])
       .pipe(
-        filter((res) => res.length > 0),
-        switchMap((bookmarks) =>
-          this.allBookmarkFolders$.pipe(
-            take(1),
-            map((folders) => ({ bookmarks, folders }))
-          )
-        ),
-        switchMap(
-          ({
-            bookmarks,
-            folders,
-          }: {
-            bookmarks: Bookmark[];
-            folders: BookmarkFolder[];
-          }) => this.helper.updateBookmarksInIDB(bookmarks, folders)
+        switchMap(([bookmarks, folders]) =>
+          this.helper.updateBookmarksInIDB(bookmarks, folders)
         )
       )
       .subscribe();
     this.subs.add(sub);
   }
+
   private updateBookmarkFoldersInIDB() {
     const sub = this.allBookmarkFolders$
       .pipe(
