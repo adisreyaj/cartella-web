@@ -2,7 +2,8 @@
 @import '~tippy.js/themes/light.css';
 @import '~tippy.js/animations/scale.css';
 
-.tippy-box[role='dropdown'] {
+.tippy-box[role='dropdown'],
+.tippy-box[role='menu'] {
   .tippy-content {
     padding: 0;
   }

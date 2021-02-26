@@ -19,6 +19,7 @@ import {
   popperVariation,
   TippyModule,
   tooltipVariation,
+  withContextMenuVariation,
 } from '@ngneat/helipopper';
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -43,6 +44,7 @@ const tippyConfig: Partial<TippyConfig> = {
   variations: {
     tooltip: tooltipVariation,
     popper: popperVariation,
+    contextMenu: withContextMenuVariation({ ...popperVariation, role: 'menu' }),
     menu: {
       ...popperVariation,
       role: 'dropdown',
