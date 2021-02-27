@@ -11,8 +11,8 @@ import {
   Package,
   PackageCardEvent,
   PackageCardEventType,
-} from '../../../shared/interfaces/packages.interface';
-import { PackagesService } from '../../../shared/services/packages.service';
+} from '../../shared/interfaces/packages.interface';
+import { PackagesService } from '../../shared/services/packages.service';
 
 @Component({
   selector: 'app-packages-list-card',
@@ -48,6 +48,13 @@ export class PackagesListCardComponent implements OnInit {
   handleShare(packageData: Package) {
     this.cardEvent.emit({
       type: PackageCardEventType.share,
+      package: packageData,
+    });
+  }
+
+  handleMoveToFolder(packageData: Package) {
+    this.cardEvent.emit({
+      type: PackageCardEventType.move,
       package: packageData,
     });
   }

@@ -14,7 +14,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
     if (value) {
       const { type, data, views } = value;
       switch (type) {
-        case FeatureType.BOOKMARK: {
+        case FeatureType.bookmark: {
           const {
             id,
             name,
@@ -32,7 +32,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
           };
           break;
         }
-        case FeatureType.SNIPPET: {
+        case FeatureType.snippet: {
           const {
             id,
             name,
@@ -50,7 +50,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
           };
           break;
         }
-        case FeatureType.PACKAGE: {
+        case FeatureType.package: {
           const {
             id,
             name,

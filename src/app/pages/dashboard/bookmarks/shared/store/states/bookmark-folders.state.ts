@@ -92,7 +92,7 @@ export class BookmarkFolderState {
   }
 
   @Action(AddBookmarkFolder)
-  addBookmark(
+  addBookmarkFolder(
     { getState, patchState }: StateContext<BookmarkFolderStateModel>,
     { payload }: AddBookmarkFolder
   ) {
@@ -108,7 +108,7 @@ export class BookmarkFolderState {
   }
 
   @Action(UpdateBookmarkFolder)
-  updateBookmark(
+  updateBookmarkFolder(
     { getState, setState }: StateContext<BookmarkFolderStateModel>,
     { payload, id }: UpdateBookmarkFolder
   ) {
@@ -127,7 +127,7 @@ export class BookmarkFolderState {
   }
 
   @Action(DeleteBookmarkFolder)
-  deleteBookmark(
+  deleteBookmarkFolder(
     { getState, setState }: StateContext<BookmarkFolderStateModel>,
     { id }: DeleteBookmarkFolder
   ) {
@@ -146,7 +146,7 @@ export class BookmarkFolderState {
   }
 
   @Action(SetActiveBookmarkFolder, { cancelUncompleted: true })
-  setSelectedBookmark(
+  setSelectedBookmarkFolder(
     { getState, setState }: StateContext<BookmarkFolderStateModel>,
     { payload }: SetActiveBookmarkFolder
   ) {

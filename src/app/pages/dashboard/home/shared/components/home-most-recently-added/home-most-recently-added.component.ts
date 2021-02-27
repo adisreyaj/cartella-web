@@ -56,16 +56,16 @@ export class HomeMostRecentlyAddedComponent implements OnInit {
 
   handleClick(item: HomeCardInput) {
     switch (item.type) {
-      case FeatureType.BOOKMARK:
+      case FeatureType.bookmark:
         window.open((item.data as Partial<Bookmark>).url, '_blank');
         break;
-      case FeatureType.SNIPPET:
+      case FeatureType.snippet:
         this.router.navigate([
           '/snippets',
           (item.data as Partial<Snippet>)?.slug,
         ]);
         break;
-      case FeatureType.PACKAGE:
+      case FeatureType.package:
         window.open((item.data as Partial<Package>)?.repo, '_blank');
         break;
       default:

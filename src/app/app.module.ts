@@ -13,11 +13,13 @@ import { ConfigurationService } from '@app/services/configuration/configuration.
 import { TagState } from '@app/store/states/tag.state';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { UserState } from '@app/store/states/user.state';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import {
   popperVariation,
   TippyModule,
   tooltipVariation,
+  withContextMenuVariation,
 } from '@ngneat/helipopper';
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -42,6 +44,7 @@ const tippyConfig: Partial<TippyConfig> = {
   variations: {
     tooltip: tooltipVariation,
     popper: popperVariation,
+    contextMenu: withContextMenuVariation({ ...popperVariation, role: 'menu' }),
     menu: {
       ...popperVariation,
       role: 'dropdown',
@@ -68,6 +71,7 @@ const configurationFactory = (
     DialogModule.forRoot({
       windowClass: 'cartella-dialog',
     }),
+    NgSelectModule,
     TippyModule.forRoot(),
     ToastrModule.forRoot({
       timeOut: 2000,

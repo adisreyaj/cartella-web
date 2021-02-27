@@ -1,3 +1,4 @@
+import { Clipboard } from '@angular/cdk/clipboard';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -15,6 +16,7 @@ import {
 import { SNIPPET_TEMPLATE } from '@app/config/snippets.config';
 import { Technology } from '@app/interfaces/technology.interface';
 import { NameGeneratorService } from '@app/services/name-generator/name-generator.service';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
@@ -26,10 +28,11 @@ import {
   switchMap,
   take,
 } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import {
   Snippet as Snippet,
   SnippetFolder,
+  SnippetItemEvent,
+  SnippetItemEventType,
   SnippetModes,
   SnippetRequest,
 } from '../../shared/interfaces/snippets.interface';
@@ -55,6 +58,7 @@ export class SnippetsSidebarComponent
   @Input() mode = SnippetModes.explorer;
 
   @Output() modeChanged = new EventEmitter<SnippetModes>();
+  @Output() snippetEvent = new EventEmitter<SnippetItemEvent>();
 
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
@@ -75,7 +79,8 @@ export class SnippetsSidebarComponent
 
   constructor(
     private store: Store,
-    private nameGeneratorService: NameGeneratorService
+    private nameGeneratorService: NameGeneratorService,
+    private clipboard: Clipboard
   ) {
     super();
   }
@@ -95,6 +100,23 @@ export class SnippetsSidebarComponent
   trackBy(_, { id }: { id: string }) {
     return id;
   }
+
+  handleSnippetShare(snippet: Snippet) {
+    this.snippetEvent.emit({ type: SnippetItemEventType.share, snippet });
+  }
+
+  handleSnippetDelete(snippet: Snippet) {
+    this.snippetEvent.emit({ type: SnippetItemEventType.delete, snippet });
+  }
+
+  handleSnippetMove(snippet: Snippet) {
+    this.snippetEvent.emit({ type: SnippetItemEventType.move, snippet });
+  }
+
+  handleCopyToClipboard(snippet: Snippet) {
+    this.clipboard.copy(snippet?.code);
+  }
+
   selectSnippet(data: Snippet) {
     if (data) {
       if (!this.isLargeScreen) {

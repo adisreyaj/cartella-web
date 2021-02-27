@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BookmarkMenuService } from './bookmark-menu.service';
+import { SnippetHelperService } from './snippet-helper.service';
 
-describe('BookmarkMenuService', () => {
-  let service: BookmarkMenuService;
+describe('SnippetHelperService', () => {
+  let service: SnippetHelperService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(BookmarkMenuService);
+    service = TestBed.inject(SnippetHelperService);
   });
 
   it('should be created', () => {

@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DeleteTag } from '@app/store/actions/tag.action';
 import { TagState } from '@app/store/states/tag.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 import { TagsAddComponent } from '../modals/tags-add/tags-add.component';
 
 @Component({
@@ -35,7 +35,7 @@ export class ProfileTagsComponent extends WithDestroy implements OnInit {
     this.dialog.open<TagAddModalPayload>(TagsAddComponent, {
       size: 'sm',
       data: {
-        type: ModalOperationType.CREATE,
+        type: ModalOperationType.create,
       },
       enableClose: false,
     });
@@ -45,7 +45,7 @@ export class ProfileTagsComponent extends WithDestroy implements OnInit {
     this.dialog.open<TagAddModalPayload>(TagsAddComponent, {
       size: 'sm',
       data: {
-        type: ModalOperationType.UPDATE,
+        type: ModalOperationType.update,
         tag,
       },
       enableClose: false,

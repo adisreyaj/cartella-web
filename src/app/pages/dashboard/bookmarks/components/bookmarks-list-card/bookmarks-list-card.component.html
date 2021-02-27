@@ -51,6 +51,10 @@
         <p>Share</p>
       </div>
     </ng-container>
+    <div class="dropdown-item" (click)="handleMoveToFolder(bookmark);hide()">
+      <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
+      <p>Move to</p>
+    </div>
     <div class="dropdown-item" (click)="handleCopyToClipboard(bookmark);hide()">
       <rmx-icon name="clipboard-line" class="icon-sm"></rmx-icon>
       <p>Copy Link</p>

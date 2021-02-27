@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import { StorageFolders } from '@app/services/storage/storage.interface';
 import { StorageService } from '@app/services/storage/storage.service';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map, switchMap, tap } from 'rxjs/operators';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
+import { filter, pluck, switchMap, take } from 'rxjs/operators';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';
+import { PackageHelperService } from './shared/services/package-helper.service';
 import {
   GetPackageFolders,
   SetActivePackageFolder,
@@ -62,7 +62,8 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     private store: Store,
     private menu: MenuService,
     private dialog: DialogService,
-    private storage: StorageService
+    private storage: StorageService,
+    private helper: PackageHelperService
   ) {
     super();
   }
@@ -70,6 +71,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   ngOnInit(): void {
     this.getPackageFolders();
     this.getPackages();
+    this.updatePackagesWhenActiveFolderChanges();
     this.updatePackageFoldersInIDB();
     this.updatePackagesInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
@@ -82,15 +84,6 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     if (folder) {
       this.packageLoadingSubject.next(true);
       this.store.dispatch(new SetActivePackageFolder(folder));
-      const sub = this.store.dispatch(new GetPackages(folder.id)).subscribe(
-        () => {
-          this.packageLoadingSubject.next(false);
-        },
-        () => {
-          this.packageLoadingSubject.next(false);
-        }
-      );
-      this.subs.add(sub);
     }
   }
 
@@ -104,6 +97,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
       enableClose: false,
     });
   }
+
   handleCreateFolder() {
     this.dialog.open(PackagesAddFolderComponent, {
       size: 'sm',
@@ -128,6 +122,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
       );
     this.subs.add(sub);
   }
+
   private getPackageFolders() {
     this.packageFolderLoadingSubject.next(true);
     const sub = this.store.dispatch(new GetPackageFolders()).subscribe(
@@ -142,67 +137,44 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER));
   }
 
-  private updatePackagesInIDB() {
-    const sub = this.allPackages$
+  private updatePackagesWhenActiveFolderChanges() {
+    const sub = this.activeFolder$
       .pipe(
-        filter((res) => res.length > 0),
-        tap((bookmarks: Package[]) => {
-          this.saveStarredPackages(bookmarks);
-        }),
-        switchMap((bookmarks: Package[]) =>
-          this.groupPackagesInFolders(bookmarks)
-        ),
-        tap((foldersWithPackages) => {
-          this.savePackagesInIDB(foldersWithPackages);
-        })
+        pluck('id'),
+        switchMap((folderId) => this.store.dispatch(new GetPackages(folderId)))
+      )
+      .subscribe(
+        () => {
+          this.packageLoadingSubject.next(false);
+        },
+        () => {
+          this.packageLoadingSubject.next(false);
+        }
+      );
+    this.subs.add(sub);
+  }
+
+  private updatePackagesInIDB() {
+    const sub = combineLatest([
+      this.allPackages$,
+      this.allPackageFolders$.pipe(take(1)),
+    ])
+      .pipe(
+        switchMap(([packages, folders]) =>
+          this.helper.updatePackagesInIDB(packages, folders)
+        )
       )
       .subscribe();
     this.subs.add(sub);
   }
+
   private updatePackageFoldersInIDB() {
     const sub = this.allPackageFolders$
       .pipe(
         filter((res) => res.length > 0),
-        tap((packages) => {
-          this.storage.setItem(StorageFolders.folders, 'packages', packages);
-        })
+        switchMap((folders) => this.helper.updatePackageFoldersInDb(folders))
       )
       .subscribe();
     this.subs.add(sub);
   }
-
-  private groupPackagesInFolders = (packages: Package[]) =>
-    this.allPackageFolders$.pipe(
-      map((folders: PackageFolder[]) =>
-        folders.reduce(
-          (acc, { id }) => ({
-            ...acc,
-            [id]: packages.filter(
-              ({ folder: { id: folderId } }) => folderId === id
-            ),
-          }),
-          {}
-        )
-      )
-    );
-
-  private savePackagesInIDB = (foldersWithPackages: {
-    [key: string]: Package[];
-  }) => {
-    Object.keys(foldersWithPackages).forEach((key) => {
-      this.storage.setItem(
-        StorageFolders.packages,
-        key,
-        foldersWithPackages[key]
-      );
-    });
-  };
-
-  private saveStarredPackages = (packages: Package[]) => {
-    this.storage.setItem(
-      StorageFolders.packages,
-      'starred',
-      packages.filter(({ favorite }) => favorite)
-    );
-  };
 }

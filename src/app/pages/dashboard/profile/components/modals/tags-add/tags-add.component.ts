@@ -11,13 +11,13 @@ import { FormControl, Validators } from '@angular/forms';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
 import { ToastService } from '@app/services/toast/toast.service';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { AddTag, DeleteTag, UpdateTag } from '@app/store/actions/tag.action';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { ColorEvent } from 'ngx-color';
 import { TwitterComponent } from 'ngx-color/twitter';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
 
 @Component({
   selector: 'app-tags-add',
@@ -57,7 +57,7 @@ export class TagsAddComponent
   ngOnInit(): void {
     if (this.ref?.data) {
       const { tag, type } = this.ref.data;
-      if (type === ModalOperationType.UPDATE) {
+      if (type === ModalOperationType.update) {
         this.tagName.setValue(tag?.name);
         this.tagColor = tag.color;
         this.cdr.detectChanges();

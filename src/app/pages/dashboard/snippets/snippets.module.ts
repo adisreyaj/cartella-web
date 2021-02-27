@@ -3,6 +3,8 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ComponentsModule } from '@app/components/components.module';
+import { MoveToFolderModule } from '@app/components/move-to-folder/move-to-folder.module';
 import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
@@ -42,6 +44,8 @@ import { SnippetsComponent } from './snippets.component';
     ClipboardModule,
     LanguagePipeModule,
     DialogModule,
+    MoveToFolderModule,
+    ComponentsModule,
     HoveredDirectiveModule,
     ExplorerSidebarModule,
     TippyModule,

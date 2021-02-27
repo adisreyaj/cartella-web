@@ -25,8 +25,8 @@
     <ul *ngIf="(snippetsToShow$ | async)?.length > 0;else noSnippets">
       <ng-container *ngFor="let snippet of (snippetsToShow$ | async);trackBy:trackBy">
         <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
-            (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id" appHovered
-            #snippetListItem>
+            (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id"
+            [tippy]="contextMenu" [data]="snippet" variation="contextMenu" appHovered #snippetListItem>
           <header class="flex items-center justify-between mb-1">
             <p class="font-medium line-clamp-1 dark:text-white">{{snippet?.name}}</p>
             <button (click)="toggleFavorite(snippet);$event.stopPropagation()"
@@ -50,6 +50,7 @@
   </ng-container>
 </section>
 
+<!-- Dropdown asks for which technology will the snippet be -->
 <ng-template #createSnippetSelector let-hide>
   <div class="flex flex-col w-44">
     <ng-container *ngFor="let technology of technologies$ | async">
@@ -60,7 +61,6 @@
     </ng-container>
   </div>
 </ng-template>
-
 
 <ng-template #noSnippets>
   <div class="grid mt-10 place-items-center">
@@ -84,4 +84,28 @@
       </div>
     </li>
   </ul>
+</ng-template>
+
+
+<ng-template #contextMenu let-hide let-snippet="data">
+  <div class="flex flex-col w-36">
+    <ng-container *feature="'modules.snippets.sharing'">
+      <div class="dropdown-item" (click)="handleSnippetShare(snippet);hide()">
+        <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
+        <p>Share</p>
+      </div>
+    </ng-container>
+    <div class="dropdown-item" (click)="handleSnippetMove(snippet);hide()">
+      <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
+      <p>Move to</p>
+    </div>
+    <div class="dropdown-item" (click)="handleCopyToClipboard(snippet);hide()">
+      <rmx-icon name="clipboard-line" class="icon-sm"></rmx-icon>
+      <p>Copy</p>
+    </div>
+    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleSnippetDelete(snippet);hide()">
+      <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
+      <p>Delete</p>
+    </div>
+  </div>
 </ng-template>

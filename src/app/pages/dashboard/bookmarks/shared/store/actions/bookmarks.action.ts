@@ -11,7 +11,7 @@ export class AddBookmark {
 
 export class GetBookmarks {
   static readonly type = '[Bookmark] Get';
-  constructor(public id: string) {}
+  constructor(public id = 'all', public flushCache = false) {}
 }
 export class GetBookmarksInFolder {
   static readonly type = '[Bookmark] Get Bookmarks in Folder';

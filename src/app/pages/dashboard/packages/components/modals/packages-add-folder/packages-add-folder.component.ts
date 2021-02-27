@@ -8,10 +8,11 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from '@app/services/toast/toast.service';
+import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { WithDestroy } from 'src/app/shared/classes/with-destroy';
+import { BehaviorSubject } from 'rxjs';
 import {
   PackageFolder,
   PackageFolderAddModalPayload,
@@ -33,6 +34,9 @@ export class PackagesAddFolderComponent
   implements OnInit, AfterViewInit {
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
   folderName = new FormControl('', [Validators.required]);
+
+  private savingSubject = new BehaviorSubject<boolean>(false);
+  saving$ = this.savingSubject.pipe();
 
   constructor(
     public ref: DialogRef<PackageFolderAddModalPayload>,
@@ -64,6 +68,7 @@ export class PackagesAddFolderComponent
   }
 
   async updateFolder(folder: PackageFolder) {
+    this.savingSubject.next(true);
     const sub = this.store
       .dispatch(
         new UpdatePackageFolder(folder.id, {
@@ -72,10 +77,12 @@ export class PackagesAddFolderComponent
       )
       .subscribe(
         () => {
+          this.savingSubject.next(false);
           this.toaster.showSuccessToast('Folder updated successfully!');
           this.ref.close();
         },
         () => {
+          this.savingSubject.next(false);
           this.toaster.showErrorToast('Failed to update the folder!');
         }
       );
@@ -83,6 +90,7 @@ export class PackagesAddFolderComponent
   }
 
   async createFolder() {
+    this.savingSubject.next(true);
     const sub = this.store
       .dispatch(
         new AddPackageFolder({
@@ -94,9 +102,11 @@ export class PackagesAddFolderComponent
       )
       .subscribe(
         () => {
+          this.savingSubject.next(false);
           this.ref.close();
         },
         (err) => {
+          this.savingSubject.next(false);
           if (has(err, 'error.message')) {
             this.toaster.showErrorToast(err.error.message);
           } else {
