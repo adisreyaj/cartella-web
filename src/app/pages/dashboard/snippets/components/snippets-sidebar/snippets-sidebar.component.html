@@ -87,23 +87,23 @@
 </ng-template>
 
 
-<ng-template #contextMenu let-hide let-data="data">
+<ng-template #contextMenu let-hide let-snippet="data">
   <div class="flex flex-col w-36">
     <ng-container *feature="'modules.snippets.sharing'">
-      <div class="dropdown-item" (click)="{};hide()">
+      <div class="dropdown-item" (click)="handleSnippetShare(snippet);hide()">
         <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
         <p>Share</p>
       </div>
     </ng-container>
-    <div class="dropdown-item" (click)="{};hide()">
+    <div class="dropdown-item" (click)="handleSnippetMove(snippet);hide()">
       <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
       <p>Move to</p>
     </div>
-    <div class="dropdown-item" (click)="handleCopyToClipboard(data);hide()">
+    <div class="dropdown-item" (click)="handleCopyToClipboard(snippet);hide()">
       <rmx-icon name="clipboard-line" class="icon-sm"></rmx-icon>
       <p>Copy</p>
     </div>
-    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="{};hide()">
+    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleSnippetDelete(snippet);hide()">
       <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
       <p>Delete</p>
     </div>

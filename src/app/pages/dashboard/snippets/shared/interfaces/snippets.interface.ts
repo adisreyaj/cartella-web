@@ -60,3 +60,16 @@ export interface ScreenShotDialogPayload {
   language: Technology;
   theme: string;
 }
+
+export interface SnippetItemEvent {
+  type: SnippetItemEventType;
+  snippet: Snippet;
+}
+
+export enum SnippetItemEventType {
+  favorite,
+  edit,
+  delete,
+  share,
+  move,
+}

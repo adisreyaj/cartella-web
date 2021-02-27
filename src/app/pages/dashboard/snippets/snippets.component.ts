@@ -1,7 +1,11 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
+import { MoveToFolderComponent } from '@app/components/move-to-folder/move-to-folder.component';
 import { ALL_SNIPPETS_FOLDER } from '@app/config/snippets.config';
+import { FeatureType } from '@app/interfaces/general.interface';
+import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
@@ -10,11 +14,13 @@ import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { filter, map, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
   SnippetFolder,
+  SnippetItemEvent,
+  SnippetItemEventType,
   SnippetModes,
 } from './shared/interfaces/snippets.interface';
 import { SnippetHelperService } from './shared/services/helpers/snippet-helper.service';
@@ -22,7 +28,12 @@ import {
   GetSnippetFolders,
   SetActiveSnippetFolder,
 } from './store/actions/snippets-folders.action';
-import { GetSnippets, SetActiveSnippet } from './store/actions/snippets.action';
+import {
+  DeleteSnippet,
+  GetSnippets,
+  SetActiveSnippet,
+  UpdateSnippet,
+} from './store/actions/snippets.action';
 import { SnippetFolderState } from './store/states/snippet-folders.state';
 import { SnippetState } from './store/states/snippets.state';
 
@@ -41,6 +52,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
 
   @Select(SnippetState.getSnippetsShown)
   snippetsShown$: Observable<Snippet[]>;
+
+  @Select(SnippetState.getAllSnippets)
+  snippets$: Observable<Snippet[]>;
 
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
@@ -121,6 +135,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
       this.store.dispatch(new SetActiveSnippet(null));
     }
   }
+
   handleEditFolder(folder: SnippetFolder) {
     this.dialog.open(SnippetsAddFolderComponent, {
       size: 'sm',
@@ -140,6 +155,81 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
         type: 'CREATE',
       },
     });
+  }
+
+  handleItemEvent({ type, snippet }: SnippetItemEvent) {
+    switch (type) {
+      case SnippetItemEventType.delete:
+        this.handleDelete(snippet);
+        break;
+      case SnippetItemEventType.move:
+        this.handleMoveToFolder(snippet);
+        break;
+      case SnippetItemEventType.share:
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  private handleMoveToFolder(snippet: Snippet) {
+    const dialogRef = this.dialog.open<MoveToFolderModalPayload>(
+      MoveToFolderComponent,
+      {
+        size: 'sm',
+        minHeight: 'unset',
+        data: {
+          type: FeatureType.snippet,
+          action: UpdateSnippet,
+          item: snippet,
+          folders: this.folders$.pipe(
+            map((folders) =>
+              folders.filter(({ id }) => id !== snippet.folder.id)
+            )
+          ),
+        },
+        enableClose: false,
+      }
+    );
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          switchMap(() => combineLatest([this.snippets$, this.folders$])),
+          take(1),
+          switchMap(([snippets, folders]) =>
+            this.helper.updateSnippetsInIDB(snippets, folders)
+          ),
+          switchMap(() =>
+            this.store.dispatch(
+              new GetSnippets(
+                this.store.selectSnapshot(
+                  SnippetFolderState.getActiveSnippetFolder
+                )?.id
+              )
+            )
+          )
+        )
+        .subscribe()
+    );
+  }
+
+  private handleDelete(snippet: Snippet) {
+    const dialogRef = this.dialog.open(DeletePromptComponent, {
+      size: 'sm',
+      minHeight: 'unset',
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          tap((response) => {
+            if (response) {
+              this.store.dispatch(new DeleteSnippet(snippet.id));
+            }
+          })
+        )
+        .subscribe()
+    );
   }
 
   private getSnippets() {
@@ -205,8 +295,8 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
       this.allSnippetFolders$.pipe(take(1)),
     ])
       .pipe(
-        switchMap(([bookmarks, folders]) =>
-          this.helper.updateSnippetsInIDB(bookmarks, folders)
+        switchMap(([snippets, folders]) =>
+          this.helper.updateSnippetsInIDB(snippets, folders)
         )
       )
       .subscribe();

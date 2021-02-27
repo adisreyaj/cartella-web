@@ -31,6 +31,8 @@ import {
 import {
   Snippet as Snippet,
   SnippetFolder,
+  SnippetItemEvent,
+  SnippetItemEventType,
   SnippetModes,
   SnippetRequest,
 } from '../../shared/interfaces/snippets.interface';
@@ -56,6 +58,7 @@ export class SnippetsSidebarComponent
   @Input() mode = SnippetModes.explorer;
 
   @Output() modeChanged = new EventEmitter<SnippetModes>();
+  @Output() snippetEvent = new EventEmitter<SnippetItemEvent>();
 
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
@@ -98,13 +101,22 @@ export class SnippetsSidebarComponent
     return id;
   }
 
-  handleSnippetShare(snippet: Snippet) {}
+  handleSnippetShare(snippet: Snippet) {
+    this.snippetEvent.emit({ type: SnippetItemEventType.share, snippet });
+  }
 
-  handleSnippetDelete(snippet: Snippet) {}
-  handleSnippetMove(snippet: Snippet) {}
+  handleSnippetDelete(snippet: Snippet) {
+    this.snippetEvent.emit({ type: SnippetItemEventType.delete, snippet });
+  }
+
+  handleSnippetMove(snippet: Snippet) {
+    this.snippetEvent.emit({ type: SnippetItemEventType.move, snippet });
+  }
+
   handleCopyToClipboard(snippet: Snippet) {
     this.clipboard.copy(snippet?.code);
   }
+
   selectSnippet(data: Snippet) {
     if (data) {
       if (!this.isLargeScreen) {
