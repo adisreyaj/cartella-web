@@ -11,7 +11,7 @@
     <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.explorer">
       <app-snippets-sidebar [snippets]="snippetsShown$ | async" [isLoading]="snippetLoading$ | async"
                             [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
-                            (modeChanged)="changeMode($event)">
+                            (snippetEvent)="handleItemEvent($event)" (modeChanged)="changeMode($event)">
       </app-snippets-sidebar>
     </ng-container>
     <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.editor">

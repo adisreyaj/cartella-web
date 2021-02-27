@@ -10,7 +10,7 @@
       <input type="text" name="name" id="name" autocomplete="off" [formControl]="folderName" #folderNameRef>
     </div>
     <footer class="flex items-center mt-6" [class]="ref?.data.type === 'UPDATE'? 'justify-between':'justify-end'">
-      <button *ngIf="ref?.data.type === 'UPDATE'" type="button" class="text-red-500 default-ring p-1 rounded-full"
+      <button *ngIf="ref?.data.type === 'UPDATE'" type="button" class="p-1 text-red-500 rounded-full default-ring"
               (click)="deleteFolder(ref.data.folder)">
         <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
       </button>
