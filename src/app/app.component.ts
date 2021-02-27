@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { MetaService } from '@app/services/meta/meta.service';
+import { NgSelectConfig } from '@ng-select/ng-select';
 import { filter, map, mergeMap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
@@ -14,8 +15,11 @@ export class AppComponent implements OnInit {
     public readonly dark: DarkModeService,
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private metaService: MetaService
-  ) {}
+    private metaService: MetaService,
+    private config: NgSelectConfig
+  ) {
+    this.config.appendTo = 'body';
+  }
   ngOnInit(): void {
     this.router.events
       .pipe(
