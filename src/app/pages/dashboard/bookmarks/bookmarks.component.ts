@@ -9,7 +9,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap, take } from 'rxjs/operators';
+import { filter, pluck, switchMap } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -232,10 +232,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
    * `combineLatest` to emit when `allBookmarkFolders$` emits value
    */
   private updateBookmarksInIDB() {
-    const sub = combineLatest([
-      this.allBookmarks$,
-      this.allBookmarkFolders$.pipe(take(1)),
-    ])
+    const sub = combineLatest([this.allBookmarks$, this.allBookmarkFolders$])
       .pipe(
         switchMap(([bookmarks, folders]) =>
           this.helper.updateBookmarksInIDB(bookmarks, folders)
