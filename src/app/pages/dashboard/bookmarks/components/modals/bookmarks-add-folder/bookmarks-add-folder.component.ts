@@ -68,7 +68,7 @@ export class BookmarksAddFolderComponent
 
   async updateFolder(folder: BookmarkFolder) {
     this.savingSubject.next(true);
-    this.store
+    const sub = this.store
       .dispatch(
         new UpdateBookmarkFolder(folder.id, {
           name: this.folderName.value,
@@ -85,11 +85,12 @@ export class BookmarksAddFolderComponent
           this.toaster.showErrorToast('Failed to update the folder!');
         }
       );
+    this.subs.add(sub);
   }
 
   async createFolder() {
     this.savingSubject.next(true);
-    this.store
+    const sub = this.store
       .dispatch(
         new AddBookmarkFolder({
           name: this.folderName.value,
@@ -101,6 +102,7 @@ export class BookmarksAddFolderComponent
       .subscribe(
         () => {
           this.savingSubject.next(false);
+          this.toaster.showSuccessToast('Folder updated successfully!');
           this.ref.close();
         },
         (err) => {
@@ -112,22 +114,26 @@ export class BookmarksAddFolderComponent
           }
         }
       );
+    this.subs.add(sub);
   }
 
   async deleteFolder(folder: BookmarkFolder) {
-    this.store.dispatch(new DeleteBookmarkFolder(folder.id)).subscribe(
-      () => {
-        this.toaster.showSuccessToast('Folder deleted successfully!');
-        this.ref.close();
-      },
-      (err) => {
-        if (has(err, 'error.message')) {
-          this.toaster.showErrorToast(err.error.message);
-        } else {
-          this.toaster.showErrorToast('Folder was not deleted!');
+    const sub = this.store
+      .dispatch(new DeleteBookmarkFolder(folder.id))
+      .subscribe(
+        () => {
+          this.toaster.showSuccessToast('Folder deleted successfully!');
+          this.ref.close();
+        },
+        (err) => {
+          if (has(err, 'error.message')) {
+            this.toaster.showErrorToast(err.error.message);
+          } else {
+            this.toaster.showErrorToast('Folder was not deleted!');
+          }
         }
-      }
-    );
+      );
+    this.subs.add(sub);
   }
 
   close() {
