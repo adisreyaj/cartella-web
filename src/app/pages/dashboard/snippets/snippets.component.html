@@ -2,9 +2,8 @@
   <aside [ngClass]="(isMenuOpen$| async) ? 'open': 'close'" (swipedown)="closeMenu()"
          class="bg-gray-100 dark:bg-dark-500">
     <app-explorer-sidebar type="snippets" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
-                          (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
                           [isLoading]="snippetFolderLoading$ | async" [isFetched]="snippetFolderFetched$ | async"
-                          (folderSelected)="handleSelectFolder($event)" (menuClosed)="closeMenu()">
+                          (sidebarEvent)="handleSidebarEvent($event)">
     </app-explorer-sidebar>
   </aside>
   <main class="grid snippets__main dark:bg-dark-700">
