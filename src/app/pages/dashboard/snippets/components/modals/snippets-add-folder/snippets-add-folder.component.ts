@@ -12,6 +12,7 @@ import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
+import { BehaviorSubject } from 'rxjs';
 import {
   SnippetFolder,
   SnippetFolderRequest,
@@ -34,6 +35,8 @@ export class SnippetsAddFolderComponent
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
   folderName = new FormControl('', [Validators.required]);
 
+  private savingSubject = new BehaviorSubject<boolean>(false);
+  readonly saving$ = this.savingSubject.pipe();
   constructor(
     public ref: DialogRef,
     private toaster: ToastService,
@@ -64,22 +67,33 @@ export class SnippetsAddFolderComponent
   }
 
   async updateFolder(folder: Partial<SnippetFolder>) {
-    try {
-      this.store.dispatch(
+    this.savingSubject.next(true);
+    const sub = this.store
+      .dispatch(
         new UpdateSnippetFolder(folder.id, {
           name: this.folderName.value,
           metadata: {},
           private: true,
           share: {},
         })
+      )
+      .subscribe(
+        () => {
+          this.savingSubject.next(false);
+          this.toaster.showSuccessToast('Folder updated successfully!');
+          this.ref.close();
+        },
+        () => {
+          this.savingSubject.next(false);
+          this.toaster.showErrorToast('Failed to update the folder!');
+        }
       );
-    } catch (error) {
-      this.toaster.showErrorToast('Failed to update folder');
-    }
+    this.subs.add(sub);
   }
 
   async createFolder() {
-    this.store
+    this.savingSubject.next(true);
+    const sub = this.store
       .dispatch(
         new AddSnippetFolder({
           name: this.folderName.value,
@@ -90,9 +104,12 @@ export class SnippetsAddFolderComponent
       )
       .subscribe(
         () => {
+          this.savingSubject.next(false);
+          this.toaster.showSuccessToast('Folder created successfully!');
           this.ref.close();
         },
         (err) => {
+          this.savingSubject.next(false);
           if (has(err, 'error.message')) {
             this.toaster.showErrorToast(err.error.message);
           } else {
@@ -100,22 +117,26 @@ export class SnippetsAddFolderComponent
           }
         }
       );
+    this.subs.add(sub);
   }
 
   async deleteFolder(folder: SnippetFolder) {
-    this.store.dispatch(new DeleteSnippetFolder(folder.id)).subscribe(
-      () => {
-        this.toaster.showSuccessToast('Folder deleted successfully!');
-        this.ref.close();
-      },
-      (err) => {
-        if (has(err, 'error.message')) {
-          this.toaster.showErrorToast(err.error.message);
-        } else {
-          this.toaster.showErrorToast('Folder was not deleted!');
+    const sub = this.store
+      .dispatch(new DeleteSnippetFolder(folder.id))
+      .subscribe(
+        () => {
+          this.toaster.showSuccessToast('Folder deleted successfully!');
+          this.ref.close();
+        },
+        (err) => {
+          if (has(err, 'error.message')) {
+            this.toaster.showErrorToast(err.error.message);
+          } else {
+            this.toaster.showErrorToast('Folder was not deleted!');
+          }
         }
-      }
-    );
+      );
+    this.subs.add(sub);
   }
 
   close() {
