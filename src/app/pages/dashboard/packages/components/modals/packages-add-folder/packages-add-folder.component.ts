@@ -19,7 +19,6 @@ import {
 } from '../../../shared/interfaces/packages.interface';
 import {
   AddPackageFolder,
-  DeletePackageFolder,
   UpdatePackageFolder,
 } from '../../../store/actions/package-folders.action';
 
@@ -111,25 +110,6 @@ export class PackagesAddFolderComponent
             this.toaster.showErrorToast(err.error.message);
           } else {
             this.toaster.showErrorToast('Folder was not created!');
-          }
-        }
-      );
-    this.subs.add(sub);
-  }
-
-  async deleteFolder(folder: PackageFolder) {
-    const sub = this.store
-      .dispatch(new DeletePackageFolder(folder.id))
-      .subscribe(
-        () => {
-          this.toaster.showSuccessToast('Folder deleted successfully!');
-          this.ref.close();
-        },
-        (err) => {
-          if (has(err, 'error.message')) {
-            this.toaster.showErrorToast(err.error.message);
-          } else {
-            this.toaster.showErrorToast('Folder was not deleted!');
           }
         }
       );
