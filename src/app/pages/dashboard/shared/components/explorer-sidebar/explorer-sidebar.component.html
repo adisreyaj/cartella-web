@@ -33,15 +33,10 @@
       <ng-container *ngFor="let folder of folders;trackBy:trackBy">
         <li class="explorer-sidebar__item user-item" (click)="handleSelectFolder(folder)"
             [ngClass]="{'text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800':activeFolder?.id === folder?.id}"
-            appHovered>
+            [tippy]="contextMenu" [data]="folder" variation="contextMenu">
           <span class="line-clamp-2 ">
             {{folder?.name}}
           </span>
-          <button (click)="handleEditFolder(folder);$event.stopPropagation()"
-                  class="p-1 text-gray-500 transition-opacity duration-75 rounded-full opacity-100 md:opacity-0 edit-button default-ring hover:bg-gray-300 hover:text-primary"
-                  tippy="Edit folder" aria-label="Edit Folder">
-            <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
-          </button>
         </li>
       </ng-container>
     </ul>
@@ -58,4 +53,18 @@
       <span class="w-full h-5 shimmer dark"></span>
     </li>
   </ul>
+</ng-template>
+
+
+<ng-template #contextMenu let-hide let-folder="data">
+  <div class="flex flex-col w-36">
+    <div class="dropdown-item" (click)="handleEditFolder(folder);hide()">
+      <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
+      <p>Edit</p>
+    </div>
+    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleDeleteFolder(folder);hide()">
+      <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
+      <p>Delete</p>
+    </div>
+  </div>
 </ng-template>
