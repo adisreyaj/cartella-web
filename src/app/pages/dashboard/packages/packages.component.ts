@@ -1,20 +1,27 @@
 import { Component, OnInit } from '@angular/core';
+import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import { StorageService } from '@app/services/storage/storage.service';
+import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { UserState } from '@app/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
+import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, pluck, switchMap, take } from 'rxjs/operators';
+import {
+  ExplorerSidebarEvent,
+  ExplorerSidebarEventType
+} from '../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';
 import { PackageHelperService } from './shared/services/package-helper.service';
 import {
+  DeletePackageFolder,
   GetPackageFolders,
-  SetActivePackageFolder,
+  SetActivePackageFolder
 } from './store/actions/package-folders.action';
 import { GetPackages } from './store/actions/package.action';
 import { PackageFolderState } from './store/states/package-folders.state';
@@ -62,7 +69,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     private store: Store,
     private menu: MenuService,
     private dialog: DialogService,
-    private storage: StorageService,
+    private toaster: ToastService,
     private helper: PackageHelperService
   ) {
     super();
@@ -80,6 +87,27 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   closeMenu() {
     this.menu.closeMenu();
   }
+
+  handleSidebarEvent({ type, data }: ExplorerSidebarEvent) {
+    switch (type) {
+      case ExplorerSidebarEventType.select:
+        this.handleSelectFolder(data);
+        break;
+      case ExplorerSidebarEventType.edit:
+        this.handleEditFolder(data);
+        break;
+      case ExplorerSidebarEventType.createFolder:
+        this.handleCreateFolder();
+        break;
+      case ExplorerSidebarEventType.delete:
+        this.handleDeleteFolder(data);
+        break;
+      case ExplorerSidebarEventType.closeMenu:
+        this.closeMenu();
+        break;
+    }
+  }
+
   handleSelectFolder(folder: PackageFolder) {
     if (folder) {
       this.packageLoadingSubject.next(true);
@@ -96,6 +124,34 @@ export class PackagesComponent extends WithDestroy implements OnInit {
       },
       enableClose: false,
     });
+  }
+
+  handleDeleteFolder(folder: PackageFolder) {
+    const dialogRef = this.dialog.open(DeletePromptComponent, {
+      size: 'sm',
+      minHeight: 'unset',
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          filter((allowDelete) => allowDelete),
+          switchMap(() =>
+            this.store.dispatch(new DeletePackageFolder(folder.id))
+          )
+        )
+        .subscribe(
+          () => {
+            this.toaster.showSuccessToast('Folder deleted successfully!');
+          },
+          (err) => {
+            if (has(err, 'error.message')) {
+              this.toaster.showErrorToast(err.error.message);
+            } else {
+              this.toaster.showErrorToast('Folder was not deleted!');
+            }
+          }
+        )
+    );
   }
 
   handleCreateFolder() {
