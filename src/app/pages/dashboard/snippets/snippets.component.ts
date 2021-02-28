@@ -346,10 +346,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private updateSnippetsInIDB() {
-    const sub = combineLatest([
-      this.allSnippets$,
-      this.allSnippetFolders$.pipe(take(1)),
-    ])
+    const sub = combineLatest([this.allSnippets$, this.allSnippetFolders$])
       .pipe(
         switchMap(([snippets, folders]) =>
           this.helper.updateSnippetsInIDB(snippets, folders)

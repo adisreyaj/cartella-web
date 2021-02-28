@@ -9,10 +9,10 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap, take } from 'rxjs/operators';
+import { filter, pluck, switchMap } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
-  ExplorerSidebarEventType
+  ExplorerSidebarEventType,
 } from '../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
@@ -21,7 +21,7 @@ import { PackageHelperService } from './shared/services/package-helper.service';
 import {
   DeletePackageFolder,
   GetPackageFolders,
-  SetActivePackageFolder
+  SetActivePackageFolder,
 } from './store/actions/package-folders.action';
 import { GetPackages } from './store/actions/package.action';
 import { PackageFolderState } from './store/states/package-folders.state';
@@ -211,10 +211,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   }
 
   private updatePackagesInIDB() {
-    const sub = combineLatest([
-      this.allPackages$,
-      this.allPackageFolders$.pipe(take(1)),
-    ])
+    const sub = combineLatest([this.allPackages$, this.allPackageFolders$])
       .pipe(
         switchMap(([packages, folders]) =>
           this.helper.updatePackagesInIDB(packages, folders)
