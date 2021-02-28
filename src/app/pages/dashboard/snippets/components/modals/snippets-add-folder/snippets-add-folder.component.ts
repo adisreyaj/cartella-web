@@ -19,7 +19,6 @@ import {
 } from '../../../shared/interfaces/snippets.interface';
 import {
   AddSnippetFolder,
-  DeleteSnippetFolder,
   UpdateSnippetFolder,
 } from '../../../store/actions/snippets-folders.action';
 
@@ -114,25 +113,6 @@ export class SnippetsAddFolderComponent
             this.toaster.showErrorToast(err.error.message);
           } else {
             this.toaster.showErrorToast('Folder was not created!');
-          }
-        }
-      );
-    this.subs.add(sub);
-  }
-
-  async deleteFolder(folder: SnippetFolder) {
-    const sub = this.store
-      .dispatch(new DeleteSnippetFolder(folder.id))
-      .subscribe(
-        () => {
-          this.toaster.showSuccessToast('Folder deleted successfully!');
-          this.ref.close();
-        },
-        (err) => {
-          if (has(err, 'error.message')) {
-            this.toaster.showErrorToast(err.error.message);
-          } else {
-            this.toaster.showErrorToast('Folder was not deleted!');
           }
         }
       );

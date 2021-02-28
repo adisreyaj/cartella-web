@@ -9,11 +9,7 @@
       <label for="name">Folder Name</label>
       <input type="text" name="name" id="name" autocomplete="off" [formControl]="folderName" #folderNameRef>
     </div>
-    <footer class="flex items-center mt-6" [class]="ref?.data.type === 'UPDATE'? 'justify-between':'justify-end'">
-      <button *ngIf="ref?.data.type === 'UPDATE'" type="button" class="p-1 text-red-500 rounded-full default-ring"
-              (click)="deleteFolder(ref.data.folder)">
-        <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
-      </button>
+    <footer class="flex items-center justify-end mt-6">
       <div class="flex items-center">
         <button dialogClose secondaryButton class="mr-2" type="button">Cancel</button>
         <button primaryButton [loading]="saving$ | async" [disabled]="folderName.invalid"
