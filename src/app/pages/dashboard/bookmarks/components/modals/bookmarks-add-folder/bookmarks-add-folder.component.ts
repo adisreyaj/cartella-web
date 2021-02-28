@@ -19,7 +19,6 @@ import {
 } from '../../../shared/interfaces/bookmarks.interface';
 import {
   AddBookmarkFolder,
-  DeleteBookmarkFolder,
   UpdateBookmarkFolder,
 } from '../../../shared/store/actions/bookmark-folders.action';
 
@@ -111,25 +110,6 @@ export class BookmarksAddFolderComponent
             this.toaster.showErrorToast(err.error.message);
           } else {
             this.toaster.showErrorToast('Folder was not created!');
-          }
-        }
-      );
-    this.subs.add(sub);
-  }
-
-  async deleteFolder(folder: BookmarkFolder) {
-    const sub = this.store
-      .dispatch(new DeleteBookmarkFolder(folder.id))
-      .subscribe(
-        () => {
-          this.toaster.showSuccessToast('Folder deleted successfully!');
-          this.ref.close();
-        },
-        (err) => {
-          if (has(err, 'error.message')) {
-            this.toaster.showErrorToast(err.error.message);
-          } else {
-            this.toaster.showErrorToast('Folder was not deleted!');
           }
         }
       );
