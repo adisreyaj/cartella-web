@@ -9,12 +9,18 @@ import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interfa
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
+import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { TechnologyState } from '@app/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
+import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, map, pluck, switchMap, take, tap } from 'rxjs/operators';
+import {
+  ExplorerSidebarEvent,
+  ExplorerSidebarEventType,
+} from '../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
@@ -25,6 +31,7 @@ import {
 } from './shared/interfaces/snippets.interface';
 import { SnippetHelperService } from './shared/services/helpers/snippet-helper.service';
 import {
+  DeleteSnippetFolder,
   GetSnippetFolders,
   SetActiveSnippetFolder,
 } from './store/actions/snippets-folders.action';
@@ -96,6 +103,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
+    private toaster: ToastService,
     private breakpointObserver: BreakpointObserver,
     private helper: SnippetHelperService
   ) {
@@ -128,6 +136,26 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     this.modeSubject.next(mode);
   }
 
+  handleSidebarEvent({ type, data }: ExplorerSidebarEvent) {
+    switch (type) {
+      case ExplorerSidebarEventType.select:
+        this.handleSelectFolder(data);
+        break;
+      case ExplorerSidebarEventType.edit:
+        this.handleEditFolder(data);
+        break;
+      case ExplorerSidebarEventType.createFolder:
+        this.handleCreateFolder();
+        break;
+      case ExplorerSidebarEventType.delete:
+        this.handleDeleteFolder(data);
+        break;
+      case ExplorerSidebarEventType.closeMenu:
+        this.closeMenu();
+        break;
+    }
+  }
+
   handleSelectFolder(folder: SnippetFolder) {
     if (folder) {
       this.snippetLoadingSubject.next(true);
@@ -145,6 +173,34 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
       },
       enableClose: false,
     });
+  }
+
+  handleDeleteFolder(folder: SnippetFolder) {
+    const dialogRef = this.dialog.open(DeletePromptComponent, {
+      size: 'sm',
+      minHeight: 'unset',
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          filter((allowDelete) => allowDelete),
+          switchMap(() =>
+            this.store.dispatch(new DeleteSnippetFolder(folder.id))
+          )
+        )
+        .subscribe(
+          () => {
+            this.toaster.showSuccessToast('Folder deleted successfully!');
+          },
+          (err) => {
+            if (has(err, 'error.message')) {
+              this.toaster.showErrorToast(err.error.message);
+            } else {
+              this.toaster.showErrorToast('Folder was not deleted!');
+            }
+          }
+        )
+    );
   }
 
   handleCreateFolder() {
