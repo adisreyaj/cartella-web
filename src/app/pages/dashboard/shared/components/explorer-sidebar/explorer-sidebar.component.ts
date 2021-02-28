@@ -7,6 +7,18 @@ import {
   Output,
 } from '@angular/core';
 
+export enum ExplorerSidebarEventType {
+  edit,
+  delete,
+  select,
+  closeMenu,
+  createFolder,
+}
+export interface ExplorerSidebarEvent {
+  type: ExplorerSidebarEventType;
+  data: any;
+}
+
 @Component({
   selector: 'app-explorer-sidebar',
   templateUrl: './explorer-sidebar.component.html',
@@ -20,10 +32,7 @@ export class ExplorerSidebarComponent implements OnInit {
   @Input() isLoading = false;
   @Input() isFetched = false;
 
-  @Output() folderSelected = new EventEmitter();
-  @Output() createFolder = new EventEmitter<void>();
-  @Output() editFolder = new EventEmitter();
-  @Output() menuClosed = new EventEmitter<void>();
+  @Output() sidebarEvent = new EventEmitter<ExplorerSidebarEvent>();
 
   constructor() {}
 
@@ -33,17 +42,38 @@ export class ExplorerSidebarComponent implements OnInit {
     return id;
   }
   handleSelectFolder(folder) {
-    this.folderSelected.emit(folder);
+    this.sidebarEvent.emit({
+      type: ExplorerSidebarEventType.select,
+      data: folder,
+    });
     this.closeMenu();
   }
+
   handleEditFolder(folder) {
-    this.editFolder.emit(folder);
+    this.sidebarEvent.emit({
+      type: ExplorerSidebarEventType.edit,
+      data: folder,
+    });
   }
+
+  handleDeleteFolder(folder) {
+    this.sidebarEvent.emit({
+      type: ExplorerSidebarEventType.delete,
+      data: folder,
+    });
+  }
+
   handleCreateFolder() {
-    this.createFolder.emit();
+    this.sidebarEvent.emit({
+      type: ExplorerSidebarEventType.createFolder,
+      data: null,
+    });
   }
 
   closeMenu() {
-    this.menuClosed.emit();
+    this.sidebarEvent.emit({
+      type: ExplorerSidebarEventType.closeMenu,
+      data: null,
+    });
   }
 }
