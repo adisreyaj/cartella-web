@@ -3,8 +3,7 @@
          class="bg-gray-100 dark:bg-dark-500">
     <app-explorer-sidebar type="bookmarks" [folders]="folders$ | async" [activeFolder]="activeFolder$ | async"
                           [isFetched]="bookmarkFolderFetched$ | async" [isLoading]="bookmarkFolderLoading$ | async"
-                          (createFolder)="handleCreateFolder()" (editFolder)="handleEditFolder($event)"
-                          (folderSelected)="handleSelectFolder($event)" (menuClosed)="closeMenu()">
+                          (sidebarEvent)="handleSidebarEvent($event)">
     </app-explorer-sidebar>
   </aside>
   <main class="overflow-y-auto bookmarks__main bg-gray-50 dark:bg-dark-800">

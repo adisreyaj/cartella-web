@@ -1,13 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
 import { MenuService } from '@app/services/menu/menu.service';
-import { StorageService } from '@app/services/storage/storage.service';
+import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
+import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
 import { filter, pluck, switchMap, take } from 'rxjs/operators';
+import {
+  ExplorerSidebarEvent,
+  ExplorerSidebarEventType,
+} from '../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import {
@@ -17,6 +23,7 @@ import {
 } from './shared/interfaces/bookmarks.interface';
 import { BookmarkHelperService } from './shared/services/bookmark-helper.service';
 import {
+  DeleteBookmarkFolder,
   GetBookmarkFolders,
   SetActiveBookmarkFolder,
 } from './shared/store/actions/bookmark-folders.action';
@@ -66,7 +73,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
-    private storage: StorageService,
+    private toaster: ToastService,
     private helper: BookmarkHelperService
   ) {
     super();
@@ -85,12 +92,33 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     this.menu.closeMenu();
   }
 
+  handleSidebarEvent({ type, data }: ExplorerSidebarEvent) {
+    switch (type) {
+      case ExplorerSidebarEventType.select:
+        this.handleSelectFolder(data);
+        break;
+      case ExplorerSidebarEventType.edit:
+        this.handleEditFolder(data);
+        break;
+      case ExplorerSidebarEventType.createFolder:
+        this.handleCreateFolder();
+        break;
+      case ExplorerSidebarEventType.delete:
+        this.handleDeleteFolder(data);
+        break;
+      case ExplorerSidebarEventType.closeMenu:
+        this.closeMenu();
+        break;
+    }
+  }
+
   handleSelectFolder(folder: BookmarkFolder) {
     if (folder) {
       this.bookmarkLoadingSubject.next(true);
       this.store.dispatch(new SetActiveBookmarkFolder(folder));
     }
   }
+
   handleEditFolder(folder: BookmarkFolder) {
     this.dialog.open<BookmarkFolderAddModalPayload>(
       BookmarksAddFolderComponent,
@@ -102,6 +130,34 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
         },
         enableClose: false,
       }
+    );
+  }
+
+  handleDeleteFolder(folder: BookmarkFolder) {
+    const dialogRef = this.dialog.open(DeletePromptComponent, {
+      size: 'sm',
+      minHeight: 'unset',
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          filter((allowDelete) => allowDelete),
+          switchMap(() =>
+            this.store.dispatch(new DeleteBookmarkFolder(folder.id))
+          )
+        )
+        .subscribe(
+          () => {
+            this.toaster.showSuccessToast('Folder deleted successfully!');
+          },
+          (err) => {
+            if (has(err, 'error.message')) {
+              this.toaster.showErrorToast(err.error.message);
+            } else {
+              this.toaster.showErrorToast('Folder was not deleted!');
+            }
+          }
+        )
     );
   }
 
