@@ -79,7 +79,9 @@ header {
         @apply flex;
         @apply items-center;
         @apply py-3;
+        @apply px-2;
         @apply h-auto;
+        @apply rounded-md;
         &-icon {
           @apply p-2;
           @apply rounded-full;
