@@ -107,6 +107,7 @@ export class SnippetsPlaygroundComponent
     this.listenToLanguageChanges();
     this.listenToThemeChanges();
     this.listenToSnippetChanges();
+    this.listenToDarkModeChanges();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -301,6 +302,27 @@ export class SnippetsPlaygroundComponent
         .subscribe()
     );
   }
+
+  /**
+   * When the user switches the dark mode, the editor
+   * theme will be switched to the selected variant so that
+   * there is no contrast bump on the screen
+   */
+  private listenToDarkModeChanges() {
+    this.subs.add(
+      this.isDarkMode$
+        .pipe(
+          tap((isDarkMode) => {
+            if (this.editor) {
+              const defaultTheme = isDarkMode ? 'one-dark' : 'one-light';
+              this.themeFormControl.setValue(defaultTheme);
+            }
+          })
+        )
+        .subscribe()
+    );
+  }
+
   private initializeEditor() {
     this.codeEditorService.injectCustomScripts();
     if (this.editorRef) {
