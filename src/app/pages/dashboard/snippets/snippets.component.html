@@ -14,9 +14,8 @@
       </app-snippets-sidebar>
     </ng-container>
     <ng-container *ngIf="(isLargeScree$ | async) || (mode$ |async) === availableModes.editor">
-      <app-snippets-playground [activeSnippet]="activeSnippet$ | async" [technologies]="technologies$ | async"
-                               [isLargeScreen]="isLargeScree$ | async" [mode]="mode$ | async"
-                               (modeChanged)="changeMode($event)">
+      <app-snippets-playground [technologies]="technologies$ | async" [isLargeScreen]="isLargeScree$ | async"
+                               [mode]="mode$ | async" (modeChanged)="changeMode($event)">
       </app-snippets-playground>
     </ng-container>
   </main>
