@@ -110,14 +110,6 @@ export class SnippetsPlaygroundComponent
     this.listenToThemeChanges();
     this.listenToSnippetChanges();
     this.listenToDarkModeChanges();
-    this.subs.add(
-      this.activeSnippet$
-        .pipe(filter((data) => data != null))
-        .subscribe((snippet) => {
-          this.populateEditorData(snippet);
-          this.setSnippetName(snippet?.name);
-        })
-    );
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -222,7 +214,16 @@ export class SnippetsPlaygroundComponent
     fullScreen.on('change', this.handleFullscreenChange);
   }
 
-  private listenToSnippetChanges() {}
+  private listenToSnippetChanges() {
+    this.subs.add(
+      this.activeSnippet$
+        .pipe(filter((data) => data != null))
+        .subscribe((snippet) => {
+          this.populateEditorData(snippet);
+          this.setSnippetName(snippet?.name);
+        })
+    );
+  }
 
   private handleFullscreenChange = () => {
     if ((screenfull as screenfull.Screenfull).isFullscreen) {
