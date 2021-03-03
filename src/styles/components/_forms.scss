@@ -117,8 +117,11 @@ body.mode-dark {
   &.one-dark {
     .ng-option,
     .ng-value,
-    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-markedd {
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
       color: #999;
+    }
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option:hover {
+      color: #fff !important;
     }
     .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
       background-color: rgb(55, 65, 81);

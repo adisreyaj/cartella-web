@@ -5,7 +5,7 @@
             (init)="onAfterInit($event)" (breakpoint)="onBreakpoint($event)">
       <ng-container *ngFor="let item of topItems;index as i">
         <ng-template swiperSlide>
-          <app-home-item-card [item]="item | homeCardDataFormat" [index]="i">
+          <app-home-item-card [item]="item | homeCardDataFormat" [index]="i" (clicked)="handleClick($event)">
             {{item?.views}} Views
           </app-home-item-card>
         </ng-template>

@@ -1,6 +1,6 @@
 import {
   Snippet,
-  SnippetRequest,
+  SnippetRequest
 } from '../../shared/interfaces/snippets.interface';
 
 export class AddSnippet {
@@ -33,4 +33,8 @@ export class DeleteSnippet {
 export class SetActiveSnippet {
   static readonly type = '[Snippet] Set Active';
   constructor(public payload: Snippet) {}
+}
+export class SetActiveSnippetWithSlug {
+  static readonly type = '[Snippet] Set Active with slug';
+  constructor(public payload: string) {}
 }

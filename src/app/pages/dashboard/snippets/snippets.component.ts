@@ -39,6 +39,7 @@ import {
   DeleteSnippet,
   GetSnippets,
   SetActiveSnippet,
+  SetActiveSnippetWithSlug,
   UpdateSnippet,
 } from './store/actions/snippets.action';
 import { SnippetFolderState } from './store/states/snippet-folders.state';
@@ -118,6 +119,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     this.updateSnippetFoldersInIDB();
     this.updateSnippetsInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
+    this.allSnippets$
+      .pipe(filter((snippets) => snippets && snippets.length > 0))
+      .subscribe(() => this.setSlugBasedSnippet(this.snippetSlug));
   }
 
   get snippetSlug() {
@@ -291,19 +295,24 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   private getSnippets() {
     this.snippetLoadingSubject.next(true);
     const folderState = this.store.selectSnapshot(
-      (state) => state.snippetFolders
+      SnippetFolderState.getActiveSnippetFolder
     );
-    this.store
-      .dispatch(new GetSnippets(folderState?.activeSnippetFolder?.id))
-      .subscribe(
-        () => {
-          this.snippetLoadingSubject.next(false);
-        },
-        () => {
-          this.snippetLoadingSubject.next(false);
-        }
-      );
+    this.store.dispatch(new GetSnippets(folderState?.id)).subscribe(
+      () => {
+        this.snippetLoadingSubject.next(false);
+      },
+      () => {
+        this.snippetLoadingSubject.next(false);
+      }
+    );
   }
+
+  private setSlugBasedSnippet(slug: string) {
+    if (slug) {
+      this.store.dispatch(new SetActiveSnippetWithSlug(slug));
+    }
+  }
+
   private getSnippetFolders() {
     this.snippetFolderLoadingSubject.next(true);
     const sub = this.store.dispatch(new GetSnippetFolders()).subscribe(
@@ -324,14 +333,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
         pluck('id'),
         switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId)))
       )
-      .subscribe(
-        () => {
-          this.snippetLoadingSubject.next(false);
-        },
-        () => {
-          this.snippetLoadingSubject.next(false);
-        }
-      );
+      .subscribe();
     this.subs.add(sub);
   }
 

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { StorageFolders } from '@app/services/storage/storage.interface';
 import { StorageService } from '@app/services/storage/storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Snippet } from '../../shared/interfaces/snippets.interface';
 import { SnippetsService } from '../../shared/services/snippet/snippets.service';
@@ -11,6 +11,7 @@ import {
   DeleteSnippet,
   GetSnippets,
   SetActiveSnippet,
+  SetActiveSnippetWithSlug,
   UpdateSnippet,
 } from '../actions/snippets.action';
 
@@ -220,6 +221,24 @@ export class SnippetState {
         });
         return this.snippetService.updateViews(payload.id);
       }
+    }
+  }
+  @Action(SetActiveSnippetWithSlug, { cancelUncompleted: true })
+  setActiveSnippetWithSlug(
+    { getState, patchState }: StateContext<SnippetStateModel>,
+    { payload }: SetActiveSnippetWithSlug
+  ) {
+    if (payload) {
+      const state = getState();
+      const allSnippets = state.allSnippets;
+      const selectedSnippet = allSnippets.find(({ slug }) => slug === payload);
+      if (selectedSnippet) {
+        patchState({
+          activeSnippet: selectedSnippet,
+        });
+        return this.snippetService.updateViews(selectedSnippet.id);
+      }
+      return throwError(new Error('Failed to get snippet by slug'));
     }
   }
 }

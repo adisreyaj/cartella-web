@@ -23,8 +23,9 @@ import { Technology } from '@app/interfaces/technology.interface';
 import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@app/services/theme/editor-theme.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
+import { SnippetState } from '@app/snippets/store/states/snippets.state';
 import { DialogService } from '@ngneat/dialog';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import codemirror from 'codemirror';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
@@ -41,7 +42,7 @@ import 'codemirror/mode/vue/vue';
 import 'codemirror/mode/yaml/yaml';
 import { has } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { filter, take, tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
 import {
   Snippet,
@@ -64,7 +65,8 @@ import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snipp
 export class SnippetsPlaygroundComponent
   extends WithDestroy
   implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-  @Input() activeSnippet: Snippet;
+  @Select(SnippetState.getActiveSnippet)
+  activeSnippet$: Observable<Snippet>;
   @Input() technologies: Technology[] = [];
   @Input() isLargeScreen = true;
   @Input() mode = SnippetModes.explorer;
@@ -79,7 +81,7 @@ export class SnippetsPlaygroundComponent
   editor: codemirror.EditorFromTextArea;
   languageFormControl = new FormControl('javascript');
   themeFormControl = new FormControl(
-    localStorage.getItem('editor-theme') ?? 'one-light'
+    localStorage.getItem('editor-theme') ?? 'one-dark'
   );
   fullScreen$ = new BehaviorSubject(false);
   isDarkMode$: Observable<boolean>;
@@ -111,20 +113,8 @@ export class SnippetsPlaygroundComponent
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (has(changes, 'activeSnippet')) {
-      const data: Snippet = changes.activeSnippet.currentValue;
-      if (data) {
-        this.activeSnippet = data;
-        if (this.editor) {
-          this.populateEditorData(data);
-        }
-      }
-    }
     if (has(changes, 'mode') && !this.editor && !this.isLargeScreen) {
       this.initializeEditor();
-      if (this.activeSnippet) {
-        this.populateEditorData(this.activeSnippet);
-      }
     }
   }
 
@@ -149,10 +139,10 @@ export class SnippetsPlaygroundComponent
     this.modeChanged.emit(SnippetModes.explorer);
   }
 
-  save() {
-    if (this.editor && this.activeSnippet) {
+  save(activeSnippet: Snippet) {
+    if (this.editor && activeSnippet) {
       this.store.dispatch(
-        new UpdateSnippet(this.activeSnippet.id, {
+        new UpdateSnippet(activeSnippet.id, {
           code: this.editor.getValue(),
           technologyId: this.languageFormControl.value,
         })
@@ -160,8 +150,8 @@ export class SnippetsPlaygroundComponent
     }
   }
 
-  delete() {
-    if (this.editor && this.activeSnippet) {
+  delete(activeSnippet: Snippet) {
+    if (this.editor && activeSnippet) {
       const dialogRef = this.dialog.open(DeletePromptComponent, {
         size: 'sm',
         minHeight: 'unset',
@@ -171,7 +161,7 @@ export class SnippetsPlaygroundComponent
           .pipe(
             tap((response) => {
               if (response) {
-                this.store.dispatch(new DeleteSnippet(this.activeSnippet.id));
+                this.store.dispatch(new DeleteSnippet(activeSnippet.id));
                 this.store.dispatch(new SetActiveSnippet(null));
               }
             })
@@ -181,8 +171,8 @@ export class SnippetsPlaygroundComponent
     }
   }
 
-  exportAsImage() {
-    const dialogRef = this.dialog.open(SnippetsScreenshotComponent, {
+  exportAsImage(activeSnippet: Snippet) {
+    this.dialog.open(SnippetsScreenshotComponent, {
       size: 'lg',
       minHeight: 'auto',
       data: {
@@ -203,13 +193,15 @@ export class SnippetsPlaygroundComponent
         element.focus();
         element.value = 'Untitled Snippet';
       } else {
-        if (element.value.trim() !== this.activeSnippet.name) {
-          this.store.dispatch(
-            new UpdateSnippet(this.activeSnippet.id, {
-              name: element?.value?.trim() ?? 'Untitled Snippet',
-            })
-          );
-        }
+        this.activeSnippet$.pipe(take(1)).subscribe((activeSnippet) => {
+          if (element.value.trim() !== activeSnippet.name) {
+            this.store.dispatch(
+              new UpdateSnippet(activeSnippet.id, {
+                name: element?.value?.trim() ?? 'Untitled Snippet',
+              })
+            );
+          }
+        });
       }
     }
   }
@@ -222,7 +214,20 @@ export class SnippetsPlaygroundComponent
     fullScreen.on('change', this.handleFullscreenChange);
   }
 
-  private listenToSnippetChanges() {}
+  /**
+   * Update the editor data and title when the
+   * active snippet changes
+   */
+  private listenToSnippetChanges() {
+    this.subs.add(
+      this.activeSnippet$
+        .pipe(filter((data) => data != null))
+        .subscribe((snippet) => {
+          this.populateEditorData(snippet);
+          this.setSnippetName(snippet?.name);
+        })
+    );
+  }
 
   private handleFullscreenChange = () => {
     if ((screenfull as screenfull.Screenfull).isFullscreen) {
@@ -271,6 +276,12 @@ export class SnippetsPlaygroundComponent
       this.editor.setOption('mode', mode);
     }
   }
+
+  /**
+   * Update the editor mode when language changes
+   * Language is searched from the Technologies list using
+   * the id and then get the mode property for updating the editor
+   */
   private listenToLanguageChanges() {
     this.subs.add(
       this.languageFormControl.valueChanges
@@ -287,6 +298,7 @@ export class SnippetsPlaygroundComponent
         .subscribe()
     );
   }
+
   private listenToThemeChanges() {
     this.subs.add(
       this.themeFormControl.valueChanges
@@ -331,9 +343,6 @@ export class SnippetsPlaygroundComponent
         scrollbarStyle: 'null',
         theme: localStorage.getItem('editor-theme') ?? 'one-light',
       });
-    }
-    if (this.activeSnippet) {
-      this.populateEditorData(this.activeSnippet);
     }
   }
 

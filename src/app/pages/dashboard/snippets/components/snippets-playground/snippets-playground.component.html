@@ -5,20 +5,23 @@
       <button class="playground__header-button md:hidden" (click)="goBack()">
         <rmx-icon name="arrow-left-line" class="icon-lg"></rmx-icon>
       </button>
-      <div *ngIf="activeSnippet">
+      <div>
         <input type="text" name="snippet" class="px-2 py-1 mb-1 rounded-md" id="snippet-name" autocomplete="off"
                [formControl]="snippetNameFormControl" #snippetNameRef (blur)="updateSnippetName()"
                (keyup.enter)="updateSnippetName()">
-        <p class="ml-2 text-sm text-gray-500 playground__header-meta">Updated: {{activeSnippet?.updatedAt | timeAgo}}
+        <p class="ml-2 text-sm text-gray-500 playground__header-meta">Updated: {{(activeSnippet$ | async)?.updatedAt |
+          timeAgo}}
         </p>
       </div>
     </div>
     <div class="hidden xl:block">
-      <ng-container *ngTemplateOutlet="editorActions; context:{ $implicit: emptyFunction }"></ng-container>
+      <ng-container
+                    *ngTemplateOutlet="editorActions; context:{ $implicit: emptyFunction, data: activeSnippet$ | async }">
+      </ng-container>
     </div>
     <div class="xl:hidden">
       <button [tippy]="editorActionsDropDown" placement="bottom-start" variation="menu"
-              class="playground__header-button" aria-label="More options">
+              class="playground__header-button" [data]="activeSnippet$ | async" aria-label="More options">
         <rmx-icon name="more-line" class="icon-lg"></rmx-icon>
       </button>
     </div>
@@ -43,7 +46,7 @@
       </ng-select>
     </div>
   </footer>
-  <div *ngIf="!activeSnippet"
+  <div *ngIf="!activeSnippet$| async"
        class="absolute top-0 left-0 grid w-full h-full bg-white dark:bg-dark-800 place-items-center"
        [style.zIndex]="99">
     <div class="grid place-items-center">
@@ -53,20 +56,21 @@
   </div>
 </div>
 
-<ng-template #editorActionsDropDown let-hide>
+<ng-template #editorActionsDropDown let-hide let-snippet="data">
   <div class="p-4">
-    <ng-container *ngTemplateOutlet="editorActions;context:{$implicit: hide}"></ng-container>
+    <ng-container *ngTemplateOutlet="editorActions;context:{$implicit: hide, data: snippet}"></ng-container>
   </div>
 </ng-template>
 
 
-<ng-template #editorActions let-hide>
+<ng-template #editorActions let-hide let-snippet="data">
   <div class="flex space-x-2 flex-nowrap">
-    <button class="playground__header-button" (click)="save();hide()" tippy="Save Snippet" aria-label="Save Snippet">
+    <button class="playground__header-button" (click)="save(snippet);hide()" tippy="Save Snippet"
+            aria-label="Save Snippet">
       <rmx-icon name="save-2-line" class="icon-lg"></rmx-icon>
     </button>
     <ng-container *feature="'modules.snippets.screenshot'">
-      <button class="playground__header-button" (click)="exportAsImage();hide()" tippy="Export as Image"
+      <button class="playground__header-button" (click)="exportAsImage(snippet);hide()" tippy="Export as Image"
               aria-label="Export as Image">
         <rmx-icon name="camera-3-line" class="icon-lg"></rmx-icon>
       </button>
@@ -85,8 +89,8 @@
       <rmx-icon [name]="(fullScreen$ | async) ? 'fullscreen-exit-line' : 'fullscreen-line'" class="icon-lg">
       </rmx-icon>
     </button>
-    <button class="text-red-600 playground__header-button custom-color" (click)="delete();hide()" tippy="Delete Snippet"
-            aria-label="Delete Snippet">
+    <button class="text-red-600 playground__header-button custom-color" (click)="delete(snippet);hide()"
+            tippy="Delete Snippet" aria-label="Delete Snippet">
       <rmx-icon name="delete-bin-2-line" class="icon-lg"></rmx-icon>
     </button>
   </div>
