@@ -4,9 +4,15 @@ import {
   Component,
   OnInit,
 } from '@angular/core';
+import { Router } from '@angular/router';
+import { Bookmark } from '@app/bookmarks/shared/interfaces/bookmarks.interface';
+import { FeatureType } from '@app/interfaces/general.interface';
+import { Package } from '@app/packages/shared/interfaces/packages.interface';
+import { Snippet } from '@app/snippets/shared/interfaces/snippets.interface';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import Swiper, { SwiperOptions } from 'swiper';
+import { HomeCardInput } from '../../interfaces/home.interface';
 import { HomeState } from '../../store/states/home.state';
 
 @Component({
@@ -42,7 +48,7 @@ export class HomeTopItemsComponent implements OnInit {
   @Select(HomeState.getTopItems)
   top$: Observable<any[]>;
 
-  constructor(private cdr: ChangeDetectorRef) {}
+  constructor(private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {}
 
@@ -57,6 +63,25 @@ export class HomeTopItemsComponent implements OnInit {
 
   onBreakpoint(swiper: Swiper) {
     // this.updateNavigation(swiper);
+  }
+
+  handleClick(item: HomeCardInput) {
+    switch (item.type) {
+      case FeatureType.bookmark:
+        window.open((item.data as Partial<Bookmark>).url, '_blank');
+        break;
+      case FeatureType.snippet:
+        this.router.navigate([
+          '/snippets',
+          (item.data as Partial<Snippet>)?.slug,
+        ]);
+        break;
+      case FeatureType.package:
+        window.open((item.data as Partial<Package>)?.repo, '_blank');
+        break;
+      default:
+        break;
+    }
   }
 
   private updateNavigation(swiper: Swiper) {
