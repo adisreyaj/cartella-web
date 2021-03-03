@@ -81,7 +81,7 @@ export class SnippetsPlaygroundComponent
   editor: codemirror.EditorFromTextArea;
   languageFormControl = new FormControl('javascript');
   themeFormControl = new FormControl(
-    localStorage.getItem('editor-theme') ?? 'one-light'
+    localStorage.getItem('editor-theme') ?? 'one-dark'
   );
   fullScreen$ = new BehaviorSubject(false);
   isDarkMode$: Observable<boolean>;
@@ -172,7 +172,7 @@ export class SnippetsPlaygroundComponent
   }
 
   exportAsImage(activeSnippet: Snippet) {
-    const dialogRef = this.dialog.open(SnippetsScreenshotComponent, {
+    this.dialog.open(SnippetsScreenshotComponent, {
       size: 'lg',
       minHeight: 'auto',
       data: {
@@ -214,6 +214,10 @@ export class SnippetsPlaygroundComponent
     fullScreen.on('change', this.handleFullscreenChange);
   }
 
+  /**
+   * Update the editor data and title when the
+   * active snippet changes
+   */
   private listenToSnippetChanges() {
     this.subs.add(
       this.activeSnippet$
@@ -272,6 +276,12 @@ export class SnippetsPlaygroundComponent
       this.editor.setOption('mode', mode);
     }
   }
+
+  /**
+   * Update the editor mode when language changes
+   * Language is searched from the Technologies list using
+   * the id and then get the mode property for updating the editor
+   */
   private listenToLanguageChanges() {
     this.subs.add(
       this.languageFormControl.valueChanges
@@ -288,6 +298,7 @@ export class SnippetsPlaygroundComponent
         .subscribe()
     );
   }
+
   private listenToThemeChanges() {
     this.subs.add(
       this.themeFormControl.valueChanges
