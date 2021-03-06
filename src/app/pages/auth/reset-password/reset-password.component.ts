@@ -30,8 +30,16 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
   loading$ = this.loadingSubject.pipe();
   validators = {
     email: [Validators.required, Validators.email, Validators.minLength(5)],
-    otp: [Validators.minLength(4), Validators.maxLength(8)],
-    password: [Validators.minLength(6), Validators.maxLength(24)],
+    otp: [
+      Validators.required,
+      Validators.minLength(4),
+      Validators.maxLength(8),
+    ],
+    password: [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(24),
+    ],
   };
   constructor(private fb: FormBuilder) {
     super();
@@ -69,29 +77,45 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
   private updateFormValidators = (stage: ResetPasswordStages) => {
     switch (stage) {
       case ResetPasswordStages.email:
-        this.resetForm.get('email').setValidators(this.validators.email);
         this.resetForm.get('email').enable();
-        this.resetForm.get('otp').setValidators([]);
         this.resetForm.get('otp').disable();
-        this.resetForm.get('password').setValidators([]);
-        this.resetForm.get('password').disable();
-        break;
-      case ResetPasswordStages.otp:
-        this.resetForm.get('email').setValidators(this.validators.email);
-        this.resetForm.get('email').disable();
-        this.resetForm.get('otp').setValidators(this.validators.otp);
-        this.resetForm.get('otp').enable();
-        this.resetForm.get('password').setValidators([]);
         this.resetForm.get('password').disable();
 
+        this.resetForm.get('email').setValidators(this.validators.email);
+        this.resetForm.get('otp').setValidators([]);
+        this.resetForm.get('password').setValidators([]);
+
+        this.resetForm.get('email').updateValueAndValidity();
+        this.resetForm.get('otp').updateValueAndValidity();
+        this.resetForm.get('password').updateValueAndValidity();
         break;
-      case ResetPasswordStages.password:
-        this.resetForm.get('email').setValidators(this.validators.otp);
+
+      case ResetPasswordStages.otp:
         this.resetForm.get('email').disable();
+        this.resetForm.get('otp').enable();
+        this.resetForm.get('password').disable();
+
+        this.resetForm.get('email').setValidators(this.validators.email);
         this.resetForm.get('otp').setValidators(this.validators.otp);
+        this.resetForm.get('password').setValidators([]);
+
+        this.resetForm.get('email').updateValueAndValidity();
+        this.resetForm.get('otp').updateValueAndValidity();
+        this.resetForm.get('password').updateValueAndValidity();
+        break;
+
+      case ResetPasswordStages.password:
+        this.resetForm.get('email').disable();
         this.resetForm.get('otp').disable();
-        this.resetForm.get('password').setValidators(this.validators.password);
         this.resetForm.get('password').enable();
+
+        this.resetForm.get('email').setValidators(this.validators.otp);
+        this.resetForm.get('otp').setValidators(this.validators.otp);
+        this.resetForm.get('password').setValidators(this.validators.password);
+
+        this.resetForm.get('email').updateValueAndValidity();
+        this.resetForm.get('otp').updateValueAndValidity();
+        this.resetForm.get('password').updateValueAndValidity();
         break;
     }
   };
