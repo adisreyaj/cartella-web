@@ -17,6 +17,13 @@ const routes: Routes = [
       feature: 'signup',
     },
   },
+  {
+    path: 'reset-password',
+    loadChildren: () =>
+      import('./reset-password/reset-password.module').then(
+        (m) => m.ResetPasswordModule
+      ),
+  },
 ];
 
 @NgModule({
