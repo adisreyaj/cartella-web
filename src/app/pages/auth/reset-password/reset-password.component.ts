@@ -125,9 +125,7 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
         this.resetForm.get('otp').setValidators([]);
         this.resetForm.get('password').setValidators([]);
 
-        this.resetForm.get('email').updateValueAndValidity();
-        this.resetForm.get('otp').updateValueAndValidity();
-        this.resetForm.get('password').updateValueAndValidity();
+        this.updateFieldValidities();
         break;
 
       case ResetPasswordStages.password:
@@ -140,12 +138,16 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
         this.resetForm.get('otp').setValidators(this.validators.otp);
         this.resetForm.get('password').setValidators(this.validators.password);
 
-        this.resetForm.get('email').updateValueAndValidity();
-        this.resetForm.get('otp').updateValueAndValidity();
-        this.resetForm.get('password').updateValueAndValidity();
+        this.updateFieldValidities();
         break;
     }
   };
+
+  private updateFieldValidities() {
+    this.resetForm.get('email').updateValueAndValidity();
+    this.resetForm.get('otp').updateValueAndValidity();
+    this.resetForm.get('password').updateValueAndValidity();
+  }
 
   private resetFormValues(resetAll = false) {
     if (resetAll) {
