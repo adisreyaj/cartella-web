@@ -2,6 +2,7 @@ import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { ConfigurationService } from '../configuration/configuration.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,9 +13,13 @@ export class DarkModeService {
   isDarkMode$ = this.isDarkModeSubject.pipe(
     tap((isDark) => (this.isDarkMode = isDark))
   );
-  constructor(@Inject(DOCUMENT) private document: Document) {
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private config: ConfigurationService
+  ) {
     if (
-      localStorage.getItem('theme') === 'dark' ||
+      (this.config.isFeatureEnabled('darkMode') &&
+        localStorage.getItem('theme') === 'dark') ||
       (!('theme' in localStorage) &&
         window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
