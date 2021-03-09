@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
+import { environment } from '@app/env/environment.prod';
 import { FeatureConfiguration } from '@app/interfaces/configuration.interface';
 import { get, has } from 'lodash-es';
 import { tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

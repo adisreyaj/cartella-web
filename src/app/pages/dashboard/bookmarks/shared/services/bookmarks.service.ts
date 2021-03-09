@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
+import { environment } from '@app/env/environment.prod';
 import { FolderOperations } from '@app/interfaces/folder.interface';
 import { MoveToFolder } from '@app/interfaces/move-to-folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import {
   Bookmark,
   BookmarkFolder,

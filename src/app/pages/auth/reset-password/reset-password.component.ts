@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ResetPasswordService } from './reset-password.service';
+import { ResetPasswordService } from './services/reset-password.service';
 
 export enum ResetPasswordStages {
   email,

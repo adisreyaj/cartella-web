@@ -4,11 +4,11 @@ import {
   CARTELLA_ENDPOINTS,
   EXTERNAL_ENDPOINTS,
 } from '@app/config/endpoints.config';
+import { environment } from '@app/env/environment.prod';
 import { FolderOperations } from '@app/interfaces/folder.interface';
 import { MoveToFolder } from '@app/interfaces/move-to-folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';
 import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { PackageBundleMetaData } from '../interfaces/bundle.interface';
 import { PackageSuggestions } from '../interfaces/package-details.interface';
 import {

@@ -5,13 +5,13 @@ import {
   AUTH_ENDPOINTS,
   CARTELLA_ENDPOINTS,
 } from '@app/config/endpoints.config';
+import { environment } from '@app/env/environment.prod';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { SetLoggedInUser } from '@app/store/actions/user.action';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Store } from '@ngxs/store';
 import { ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
 import { WithDestroy } from '../with-destroy/with-destroy';
 const helper = new JwtHelperService();
 @Injectable({

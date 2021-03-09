@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
+import { environment } from '@app/env/environment.prod';
 import { FolderOperations } from '@app/interfaces/folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';
-import { environment } from 'src/environments/environment';
 import {
   Snippet,
   SnippetFolder,

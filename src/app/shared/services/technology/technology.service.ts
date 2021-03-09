@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
+import { environment } from '@app/env/environment.prod';
 import { PayloadResponse } from '@app/interfaces/response.interface';
 import { Technology } from '@app/interfaces/technology.interface';
-import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

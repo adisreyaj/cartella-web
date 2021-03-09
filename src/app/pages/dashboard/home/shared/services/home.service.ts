@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
-import { environment } from 'src/environments/environment';
+import { environment } from '@app/env/environment.prod';
 import { HomeItemCounts, HomeItems } from '../interfaces/home.interface';
 
 @Injectable({
