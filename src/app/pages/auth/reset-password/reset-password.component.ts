@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
-import { ResetPasswordService } from './reset-password.service';
+import { ResetPasswordService } from './services/reset-password.service';
 
 export enum ResetPasswordStages {
   email,
@@ -125,9 +125,7 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
         this.resetForm.get('otp').setValidators([]);
         this.resetForm.get('password').setValidators([]);
 
-        this.resetForm.get('email').updateValueAndValidity();
-        this.resetForm.get('otp').updateValueAndValidity();
-        this.resetForm.get('password').updateValueAndValidity();
+        this.updateFieldValidities();
         break;
 
       case ResetPasswordStages.password:
@@ -140,12 +138,16 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
         this.resetForm.get('otp').setValidators(this.validators.otp);
         this.resetForm.get('password').setValidators(this.validators.password);
 
-        this.resetForm.get('email').updateValueAndValidity();
-        this.resetForm.get('otp').updateValueAndValidity();
-        this.resetForm.get('password').updateValueAndValidity();
+        this.updateFieldValidities();
         break;
     }
   };
+
+  private updateFieldValidities() {
+    this.resetForm.get('email').updateValueAndValidity();
+    this.resetForm.get('otp').updateValueAndValidity();
+    this.resetForm.get('password').updateValueAndValidity();
+  }
 
   private resetFormValues(resetAll = false) {
     if (resetAll) {

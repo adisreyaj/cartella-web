@@ -15,6 +15,7 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "ui": ["dist/ui/ui", "dist/ui"],
+      "@app/env/*": ["src/environments/*"],
       "@app/services/*": ["src/app/shared/services/*"],
       "@app/guards/*": ["src/app/shared/guards/*"],
       "@app/interfaces/*": ["src/app/shared/interfaces/*"],
