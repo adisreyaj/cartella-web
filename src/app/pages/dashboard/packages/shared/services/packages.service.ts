@@ -4,7 +4,7 @@ import {
   CARTELLA_ENDPOINTS,
   EXTERNAL_ENDPOINTS,
 } from '@app/config/endpoints.config';
-import { environment } from '@app/env/environment.prod';
+import { environment } from '@app/env/environment';
 import { FolderOperations } from '@app/interfaces/folder.interface';
 import { MoveToFolder } from '@app/interfaces/move-to-folder.interface';
 import { PayloadResponse } from '@app/interfaces/response.interface';

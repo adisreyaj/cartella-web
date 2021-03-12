@@ -5,7 +5,7 @@ import {
   AUTH_ENDPOINTS,
   CARTELLA_ENDPOINTS,
 } from '@app/config/endpoints.config';
-import { environment } from '@app/env/environment.prod';
+import { environment } from '@app/env/environment';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
 import { SetLoggedInUser } from '@app/store/actions/user.action';
 import { JwtHelperService } from '@auth0/angular-jwt';

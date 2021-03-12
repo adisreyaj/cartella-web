@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import {
   HttpEvent,
   HttpHandler,
@@ -5,7 +6,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@app/env/environment.prod';
+import { environment } from '@app/env/environment';
 import { Observable } from 'rxjs';
 
 @Injectable()
