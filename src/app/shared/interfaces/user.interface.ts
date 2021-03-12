@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 export interface User {
   id?: string;
   firstname: string;
@@ -6,6 +7,9 @@ export interface User {
   password?: string;
   image?: string;
   loginMethods?: LoginMethods;
+  github?: string;
+  twitter?: string;
+  website?: string;
 }
 
 export interface LoggedUser {
