@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { environment } from '@app/env/environment.prod';
+import { environment } from '@app/env/environment';
 import { AuthGuard } from '@app/guards/auth.guard';
 import { FeatureGuard } from '@app/guards/feature.guard';
 import { DashboardComponent } from './dashboard.component';

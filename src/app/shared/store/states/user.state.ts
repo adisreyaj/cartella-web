@@ -4,10 +4,12 @@ import { AuthService } from '@app/services/auth/auth.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { UserService } from '../../services/user/user.service';
 import {
   GetLoggedInUser,
   LogoutUser,
   SetLoggedInUser,
+  UpdateUser,
   UpdateUserLoginMethod,
 } from '../actions/user.action';
 
@@ -20,7 +22,7 @@ export class UserStateModel {
 })
 @Injectable()
 export class UserState {
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private user: UserService) {}
 
   @Selector()
   static getLoggedInUser(state: UserStateModel) {
@@ -68,6 +70,20 @@ export class UserState {
       ...state,
       user: null,
     });
+  }
+
+  @Action(UpdateUser)
+  updateUser(
+    { patchState }: StateContext<UserStateModel>,
+    { id, payload }: UpdateUser
+  ) {
+    return this.user.updateUser(id, payload).pipe(
+      tap((result) => {
+        patchState({
+          user: result,
+        });
+      })
+    );
   }
 
   @Action(UpdateUserLoginMethod)
