@@ -37,6 +37,7 @@ import { PackageState } from './pages/dashboard/packages/store/states/package.st
 import { SnippetFolderState } from './pages/dashboard/snippets/store/states/snippet-folders.state';
 import { SnippetState } from './pages/dashboard/snippets/store/states/snippets.state';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
+import { HotToastModule } from '@ngneat/hot-toast';
 
 const tippyConfig: Partial<TippyConfig> = {
   defaultVariation: 'tooltip',
@@ -96,6 +97,7 @@ const configurationFactory = (
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    HotToastModule.forRoot(),
   ],
   providers: [
     environment.production

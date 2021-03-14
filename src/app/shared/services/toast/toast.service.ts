@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import { HotToastService } from '@ngneat/hot-toast';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ToastService {
-  constructor(private toastr: ToastrService) {}
+  constructor(private toastr: HotToastService) {}
 
   showSuccessToast(message: string) {
     this.toastr.success(message);
