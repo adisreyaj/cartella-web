@@ -1,12 +1,26 @@
 {
   "name": "cartella",
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "homepage": "https://github.com/adisreyaj/cartella-web#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/adisreyaj/cartella-web"
+  },
+  "bugs": {
+    "url": "https://github.com/adisreyaj/cartella-web/issues"
+  },
+  "author": {
+    "name": "Adithya Sreyaj",
+    "email": "adi.sreyaj@gmail.com",
+    "url": "https://github.com/adisreyaj"
+  },
+  "license": "Apache License 2.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build:prod": "cross-env NODE_ENV=production ng build --prod",
     "test": "ng test",
-    "lint": "ng lint",
+    "lint": "eslint src/**/*.ts",
     "e2e": "ng e2e",
     "build:analyze": "cross-env NODE_ENV=production ng build --prod --vendor-chunk=false --source-map=true",
     "analyze": "source-map-explorer dist/cartella/*.js"
@@ -27,6 +41,8 @@
     "@ng-select/ng-select": "^5.0.15",
     "@ngneat/dialog": "^1.0.4",
     "@ngneat/helipopper": "^2.1.1",
+    "@ngneat/hot-toast": "^1.0.3",
+    "@ngneat/overview": "^1.0.0-beta.7",
     "@ngxs/devtools-plugin": "^3.7.1",
     "@ngxs/logger-plugin": "^3.7.1",
     "@ngxs/store": "^3.7.1",
@@ -42,7 +58,6 @@
     "ngforage": "^6.0.0",
     "ngx-color": "^6.2.0",
     "ngx-filesize": "^2.0.16",
-    "ngx-toastr": "^13.2.0",
     "rxjs": "~6.6.0",
     "screenfull": "^5.1.0",
     "subsink": "^1.0.2",
@@ -88,7 +103,9 @@
     "karma-coverage": "~2.0.3",
     "karma-jasmine": "~4.0.0",
     "karma-jasmine-html-reporter": "^1.5.0",
+    "lint-staged": "^9.2.0",
     "ng-packagr": "^11.0.0",
+    "prettier": "^2.2.1",
     "protractor": "~7.0.0",
     "source-map-explorer": "^2.5.2",
     "tailwindcss": "2.0.2",
@@ -98,7 +115,21 @@
   },
   "husky": {
     "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{json,ts}": [
+      "prettier --write"
+    ],
+    "*.{ts}": [
+      "eslint --fix --cache"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
     }
   }
 }
