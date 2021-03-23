@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import {
   FormBuilder,
@@ -8,10 +9,13 @@ import {
 import { LoginMethods, User } from '@app/interfaces/user.interface';
 import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { UpdateUserLoginMethod } from '@app/store/actions/user.action';
+import {
+  UpdateUser,
+  UpdateUserLoginMethod,
+} from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 
 @Component({
@@ -23,6 +27,9 @@ import { map, switchMap, tap } from 'rxjs/operators';
 export class ProfileGeneralComponent extends WithDestroy implements OnInit {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
+
+  savingSubject = new BehaviorSubject(false);
+  saving$ = this.savingSubject.pipe();
 
   userForm: FormGroup;
   loginWithGithub = new FormControl();
@@ -47,14 +54,46 @@ export class ProfileGeneralComponent extends WithDestroy implements OnInit {
       firstname: ['', [Validators.required]],
       lastname: ['', [Validators.required]],
       email: ['', [Validators.required]],
-      github: [''],
-      twitter: [''],
+      github: [
+        '',
+        Validators.pattern(
+          /http(?:s)?:\/\/(?:www\.)?github\.com\/([a-zA-Z0-9_]+)/
+        ),
+      ],
+      twitter: [
+        '',
+        Validators.pattern(
+          /http(?:s)?:\/\/(?:www\.)?twitter\.com\/([a-zA-Z0-9_]+)/
+        ),
+      ],
       website: [''],
     });
     this.userForm.get('email').disable();
   }
 
-  saveUser() {}
+  saveUser() {
+    if (this.userForm.valid) {
+      this.savingSubject.next(true);
+      const sub = this.store
+        .dispatch(
+          new UpdateUser(
+            this.store.selectSnapshot(UserState.getLoggedInUser).id,
+            this.userForm.value
+          )
+        )
+        .subscribe(
+          () => {
+            this.savingSubject.next(false);
+            this.toast.showSuccessToast('Profile updated successfully');
+            this.userForm.markAsPristine();
+          },
+          () => {
+            this.savingSubject.next(false);
+          }
+        );
+      this.subs.add(sub);
+    }
+  }
 
   private listenToUserChange() {
     this.subs.add(
@@ -62,11 +101,22 @@ export class ProfileGeneralComponent extends WithDestroy implements OnInit {
         .pipe(
           tap((user) => {
             if (user) {
-              const { firstname, lastname, email, loginMethods } = user;
+              const {
+                firstname,
+                lastname,
+                email,
+                loginMethods,
+                github,
+                twitter,
+                website,
+              } = user;
               this.userForm.patchValue({
                 firstname,
                 lastname,
                 email,
+                github,
+                twitter,
+                website,
               });
               this.loginWithGoogle.setValue(
                 loginMethods.includes(LoginMethods.GOOGLE),

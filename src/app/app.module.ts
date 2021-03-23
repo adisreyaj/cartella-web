@@ -22,10 +22,10 @@ import {
   withContextMenuVariation,
 } from '@ngneat/helipopper';
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
+import { HotToastModule } from '@ngneat/hot-toast';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import * as Sentry from '@sentry/angular';
-import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,7 +37,6 @@ import { PackageState } from './pages/dashboard/packages/store/states/package.st
 import { SnippetFolderState } from './pages/dashboard/snippets/store/states/snippet-folders.state';
 import { SnippetState } from './pages/dashboard/snippets/store/states/snippets.state';
 import { AuthInterceptor } from './shared/interceptors/auth.interceptor';
-import { DelayApiInterceptor } from './shared/interceptors/delay-api.interceptor';
 
 const tippyConfig: Partial<TippyConfig> = {
   defaultVariation: 'tooltip',
@@ -73,10 +72,6 @@ const configurationFactory = (
     }),
     NgSelectModule,
     TippyModule.forRoot(),
-    ToastrModule.forRoot({
-      timeOut: 2000,
-      positionClass: 'toast-bottom-right',
-    }),
     TippyModule.forRoot(tippyConfig),
     NgxsModule.forRoot(
       [
@@ -97,6 +92,7 @@ const configurationFactory = (
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    HotToastModule.forRoot(),
   ],
   providers: [
     environment.production
@@ -115,11 +111,6 @@ const configurationFactory = (
       multi: true,
     },
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: DelayApiInterceptor,
-      multi: true,
-    },
     {
       provide: HAMMER_GESTURE_CONFIG,
       useClass: CartellaHammerConfig,
