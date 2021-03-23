@@ -22,10 +22,10 @@ import {
   withContextMenuVariation,
 } from '@ngneat/helipopper';
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
+import { HotToastModule } from '@ngneat/hot-toast';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
 import { NgxsModule } from '@ngxs/store';
 import * as Sentry from '@sentry/angular';
-import { ToastrModule } from 'ngx-toastr';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -72,10 +72,6 @@ const configurationFactory = (
     }),
     NgSelectModule,
     TippyModule.forRoot(),
-    ToastrModule.forRoot({
-      timeOut: 2000,
-      positionClass: 'toast-bottom-right',
-    }),
     TippyModule.forRoot(tippyConfig),
     NgxsModule.forRoot(
       [
@@ -96,6 +92,7 @@ const configurationFactory = (
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
     }),
+    HotToastModule.forRoot(),
   ],
   providers: [
     environment.production
