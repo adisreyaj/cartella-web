@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   hostname: 'http://localhost:4200',
-  api: 'http://192.168.18.10:3222/cartella/api',
+  api: 'http://localhost:3222/cartella/api',
 };
 
 /*
