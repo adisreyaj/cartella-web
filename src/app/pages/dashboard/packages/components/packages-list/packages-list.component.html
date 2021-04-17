@@ -4,7 +4,10 @@
       <p class="text-xl font-bold text-gray-700 dark:text-white">Packages</p>
       <p class="text-sm text-gray-500 dark:text-gray-50">Manage your saved packages</p>
     </div>
-    <div>
+    <div class="relative">
+      <span *ngIf="['all','starred'].includes((activeFolder$ | async)?.id)" class="absolute w-full h-full"
+            tippy="Choose a folder first">
+      </span>
       <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewPackage()"
               aria-label="Create new package">
         <rmx-icon name="add-line"></rmx-icon>
