@@ -1,32 +1,46 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastService } from '@app/services/toast/toast.service';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { SubSink } from 'subsink';
 import { AuthService } from '../../../shared/services/auth/auth.service';
+import { StorageService } from '../../../shared/services/storage/storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   loginForm: FormGroup;
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
   readonly loading$ = this.loadingSubject.pipe();
-
+  private subs = new SubSink();
   constructor(
     private auth: AuthService,
     private fb: FormBuilder,
     private router: Router,
+    private storageService: StorageService,
     private toast: ToastService
   ) {
     this.initForm();
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.subs.add(this.storageService.flushAll().subscribe());
+  }
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
 
   signInWithCredentials() {
     if (this.loginForm.valid) {

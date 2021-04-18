@@ -35,6 +35,7 @@ export class SignUpComponent implements OnInit {
       const value = this.signUpForm.value;
       this.auth.signUpUser(value).subscribe(
         () => {
+          this.toast.showSuccessToast('Signed up successfully!');
           this.router.navigate(['/auth/login']);
         },
         (error) => {
