@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { User } from '@app/interfaces/user.interface';
 import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
 import { MenuService } from '@app/services/menu/menu.service';
+import { StorageService } from '@app/services/storage/storage.service';
 import { LogoutUser } from '@app/store/actions/user.action';
 import { UserState } from '@app/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { switchMap, take } from 'rxjs/operators';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -24,7 +25,8 @@ export class HeaderComponent implements OnInit {
     private store: Store,
     private router: Router,
     private menu: MenuService,
-    private darkMode: DarkModeService
+    private darkMode: DarkModeService,
+    private storageService: StorageService
   ) {}
 
   ngOnInit(): void {
@@ -39,7 +41,10 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.store
       .dispatch(new LogoutUser())
-      .pipe(take(1))
+      .pipe(
+        take(1),
+        switchMap(() => this.storageService.flushAll())
+      )
       .subscribe(() => {
         this.router.navigate(['/auth/login']);
       });
