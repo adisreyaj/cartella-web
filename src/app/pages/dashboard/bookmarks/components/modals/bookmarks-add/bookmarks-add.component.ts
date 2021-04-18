@@ -133,7 +133,6 @@ export class BookmarksAddComponent
           })
         )
         .subscribe((data) => {
-          console.log(data);
           this.isLoadingSubject.next(false);
         });
     }
