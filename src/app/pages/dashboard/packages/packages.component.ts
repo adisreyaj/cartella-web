@@ -78,9 +78,10 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   ngOnInit(): void {
     const sub = this.getDataFromAPI()
       .pipe(switchMap(() => this.updatePackagesWhenActiveFolderChanges()))
-      .subscribe();
-    this.updatePackageFoldersInIDB();
-    this.updatePackagesInIDB();
+      .subscribe(() => {
+        this.updatePackageFoldersInIDB();
+        this.updatePackagesInIDB();
+      });
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.subs.add(sub);
   }
