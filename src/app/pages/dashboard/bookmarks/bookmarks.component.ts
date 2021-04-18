@@ -82,9 +82,10 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   ngOnInit(): void {
     const sub = this.getDataFromAPI()
       .pipe(switchMap(() => this.updateBookmarksWhenActiveFolderChanges()))
-      .subscribe();
-    this.updateBookmarksInIDB();
-    this.updateBookmarkFoldersInIDB();
+      .subscribe(() => {
+        this.updateBookmarksInIDB();
+        this.updateBookmarkFoldersInIDB();
+      });
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.subs.add(sub);
   }

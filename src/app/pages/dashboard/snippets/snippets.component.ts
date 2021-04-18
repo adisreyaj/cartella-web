@@ -100,7 +100,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   private snippetLoadingSubject = new BehaviorSubject(false);
   snippetLoading$ = this.snippetLoadingSubject.pipe();
   private isLargeScreenSubject = new BehaviorSubject(this.isLargeScreen);
-  isLargeScree$ = this.isLargeScreenSubject.pipe(
+  isLargeScreen$ = this.isLargeScreenSubject.pipe(
     tap((data) => (this.isLargeScreen = data))
   );
 
@@ -122,10 +122,12 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   ngOnInit(): void {
     const sub = this.getDataFromAPI()
       .pipe(switchMap(() => this.updateSnippetsWhenActiveFolderChanges()))
-      .subscribe();
+      .subscribe(() => {
+        this.store.dispatch(new SetActiveSnippet(null));
+        this.updateSnippetFoldersInIDB();
+        this.updateSnippetsInIDB();
+      });
     this.observeLayoutChanges();
-    this.updateSnippetFoldersInIDB();
-    this.updateSnippetsInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.allSnippets$
       .pipe(filter((snippets) => snippets && snippets.length > 0))
