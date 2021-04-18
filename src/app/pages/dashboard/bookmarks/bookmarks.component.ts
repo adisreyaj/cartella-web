@@ -9,7 +9,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, finalize, pluck, switchMap } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -178,6 +178,12 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   private getDataFromAPI() {
     this.bookmarkLoadingSubject.next(true);
     return combineLatest([this.getBookmarks(), this.getBookmarkFolders()]).pipe(
+      switchMap(([bookmarks, folders]) =>
+        combineLatest([
+          this.helper.updateBookmarksInIDB(bookmarks, folders),
+          this.helper.updateBookmarkFoldersInDb(folders),
+        ])
+      ),
       finalize(() => {
         this.bookmarkLoadingSubject.next(false);
       })
@@ -198,19 +204,22 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   }
 
   private getBookmarks() {
-    this.bookmarkLoadingSubject.next(true);
-    return this.store.dispatch(new GetBookmarks(ALL_BOOKMARKS_FOLDER.id));
+    return (
+      this.store
+        .dispatch(new GetBookmarks(ALL_BOOKMARKS_FOLDER.id))
+        // Get bookmarks from state
+        .pipe(pluck('bookmarks', 'allBookmarks'))
+    );
   }
 
   private getBookmarkFolders() {
-    this.bookmarkFolderLoadingSubject.next(true);
-    return this.store
-      .dispatch(new GetBookmarkFolders())
-      .pipe(
-        switchMap(() =>
-          this.store.dispatch(new SetActiveBookmarkFolder(ALL_BOOKMARKS_FOLDER))
-        )
-      );
+    return this.store.dispatch(new GetBookmarkFolders()).pipe(
+      switchMap(() =>
+        this.store.dispatch(new SetActiveBookmarkFolder(ALL_BOOKMARKS_FOLDER))
+      ),
+      // Get bookmark folders from state
+      pluck('bookmarkFolders', 'bookmarkFolders')
+    );
   }
 
   /**
@@ -221,7 +230,10 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
    * `combineLatest` to emit when `allBookmarkFolders$` emits value
    */
   private updateBookmarksInIDB() {
-    const sub = combineLatest([this.allBookmarks$, this.allBookmarkFolders$])
+    const sub = combineLatest([
+      this.allBookmarks$,
+      this.allBookmarkFolders$.pipe(take(1)),
+    ])
       .pipe(
         switchMap(([bookmarks, folders]) =>
           this.helper.updateBookmarksInIDB(bookmarks, folders)
