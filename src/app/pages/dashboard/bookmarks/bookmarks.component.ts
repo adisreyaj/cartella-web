@@ -9,7 +9,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -80,12 +80,13 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getBookmarkFolders();
-    this.getBookmarks();
-    this.updateBookmarksWhenActiveFolderChanges();
+    const sub = this.getDataFromAPI()
+      .pipe(switchMap(() => this.updateBookmarksWhenActiveFolderChanges()))
+      .subscribe();
     this.updateBookmarksInIDB();
     this.updateBookmarkFoldersInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
+    this.subs.add(sub);
   }
 
   closeMenu() {
@@ -174,54 +175,42 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     );
   }
 
+  private getDataFromAPI() {
+    this.bookmarkLoadingSubject.next(true);
+    return combineLatest([this.getBookmarks(), this.getBookmarkFolders()]).pipe(
+      finalize(() => {
+        this.bookmarkLoadingSubject.next(false);
+      })
+    );
+  }
+
   private updateBookmarksWhenActiveFolderChanges() {
-    const sub = this.activeFolder$
+    return this.activeFolder$
       .pipe(
         pluck('id'),
         switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId)))
       )
-      .subscribe(
-        () => {
+      .pipe(
+        finalize(() => {
           this.bookmarkLoadingSubject.next(false);
-        },
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        }
+        })
       );
-    this.subs.add(sub);
   }
 
   private getBookmarks() {
     this.bookmarkLoadingSubject.next(true);
-    const sub = this.store
-      .dispatch(new GetBookmarks(ALL_BOOKMARKS_FOLDER.id))
-      .subscribe(
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        },
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        }
-      );
-
-    this.subs.add(sub);
+    return this.store.dispatch(new GetBookmarks(ALL_BOOKMARKS_FOLDER.id));
   }
 
   private getBookmarkFolders() {
     this.bookmarkFolderLoadingSubject.next(true);
-    this.store.dispatch(new GetBookmarkFolders());
-    const sub = this.store
-      .dispatch(new SetActiveBookmarkFolder(ALL_BOOKMARKS_FOLDER))
-      .subscribe(
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        },
-        () => {
-          this.bookmarkLoadingSubject.next(false);
-        }
+    return this.store
+      .dispatch(new GetBookmarkFolders())
+      .pipe(
+        switchMap(() =>
+          this.store.dispatch(new SetActiveBookmarkFolder(ALL_BOOKMARKS_FOLDER))
+        )
       );
-
-    this.subs.add(sub);
   }
 
   /**

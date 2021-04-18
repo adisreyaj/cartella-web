@@ -9,7 +9,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -76,12 +76,13 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPackageFolders();
-    this.getPackages();
-    this.updatePackagesWhenActiveFolderChanges();
+    const sub = this.getDataFromAPI()
+      .pipe(switchMap(() => this.updatePackagesWhenActiveFolderChanges()))
+      .subscribe();
     this.updatePackageFoldersInIDB();
     this.updatePackagesInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
+    this.subs.add(sub);
   }
 
   closeMenu() {
@@ -164,50 +165,34 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     });
   }
 
-  private getPackages() {
+  private getDataFromAPI() {
     this.packageLoadingSubject.next(true);
-    const sub = this.store
-      .dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id))
-      .subscribe(
-        () => {
-          this.packageLoadingSubject.next(false);
-        },
-        () => {
-          this.packageLoadingSubject.next(false);
-        }
-      );
-    this.subs.add(sub);
+    return combineLatest([this.getPackages(), this.getPackageFolders()]).pipe(
+      finalize(() => {
+        this.packageLoadingSubject.next(false);
+      })
+    );
+  }
+
+  private getPackages() {
+    return this.store.dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id));
   }
 
   private getPackageFolders() {
-    this.packageFolderLoadingSubject.next(true);
-    const sub = this.store.dispatch(new GetPackageFolders()).subscribe(
-      () => {
-        this.packageFolderLoadingSubject.next(false);
-      },
-      () => {
-        this.packageFolderLoadingSubject.next(false);
-      }
-    );
-    this.subs.add(sub);
-    this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER));
+    return this.store
+      .dispatch(new GetPackageFolders())
+      .pipe(
+        switchMap(() =>
+          this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER))
+        )
+      );
   }
 
   private updatePackagesWhenActiveFolderChanges() {
-    const sub = this.activeFolder$
-      .pipe(
-        pluck('id'),
-        switchMap((folderId) => this.store.dispatch(new GetPackages(folderId)))
-      )
-      .subscribe(
-        () => {
-          this.packageLoadingSubject.next(false);
-        },
-        () => {
-          this.packageLoadingSubject.next(false);
-        }
-      );
-    this.subs.add(sub);
+    return this.activeFolder$.pipe(
+      pluck('id'),
+      switchMap((folderId) => this.store.dispatch(new GetPackages(folderId)))
+    );
   }
 
   private updatePackagesInIDB() {
