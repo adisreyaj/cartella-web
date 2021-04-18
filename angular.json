@@ -26,6 +26,11 @@
             "assets": [
               "src/assets/fonts",
               "src/fonts.css",
+              {
+                "input": "src/assets/themes/",
+                "output": "assets/styles/themes/",
+                "glob": "*"
+              },
               "src/assets/icons",
               "src/assets/images",
               "src/manifest.webmanifest"
@@ -37,32 +42,11 @@
               ]
             },
             "styles": [
-              "src/styles.scss",
-              {
-                "input": "src/styles/themes/one-light.css",
-                "bundleName": "assets/styles/themes/one-light",
-                "inject": false
-              },
-              {
-                "input": "src/styles/themes/one-dark.css",
-                "bundleName": "assets/styles/themes/one-dark",
-                "inject": false
-              },
-              {
-                "input": "src/styles/themes/material-darker.css",
-                "bundleName": "assets/styles/themes/material-darker",
-                "inject": false
-              },
-              {
-                "input": "src/styles/themes/material-palenight.css",
-                "bundleName": "assets/styles/themes/material-palenight",
-                "inject": false
-              },
-              {
-                "input": "src/styles/themes/dracula.css",
-                "bundleName": "assets/styles/themes/dracula",
-                "inject": false
-              }
+              "src/styles.scss"
+            ],
+            "allowedCommonJsDependencies": [
+              "codemirror",
+              "file-saver"
             ]
           },
           "configurations": {
