@@ -9,7 +9,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, finalize, pluck, switchMap } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -168,6 +168,12 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   private getDataFromAPI() {
     this.packageLoadingSubject.next(true);
     return combineLatest([this.getPackages(), this.getPackageFolders()]).pipe(
+      switchMap(([bookmarks, folders]) =>
+        combineLatest([
+          this.helper.updatePackagesInIDB(bookmarks, folders),
+          this.helper.updatePackageFoldersInDb(folders),
+        ])
+      ),
       finalize(() => {
         this.packageLoadingSubject.next(false);
       })
@@ -175,17 +181,22 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   }
 
   private getPackages() {
-    return this.store.dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id));
+    return (
+      this.store
+        .dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id))
+        // Get packages from state
+        .pipe(pluck('packages', 'allPackages'))
+    );
   }
 
   private getPackageFolders() {
-    return this.store
-      .dispatch(new GetPackageFolders())
-      .pipe(
-        switchMap(() =>
-          this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER))
-        )
-      );
+    return this.store.dispatch(new GetPackageFolders()).pipe(
+      switchMap(() =>
+        this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER))
+      ),
+      // Get package folders from state
+      pluck('packageFolders', 'packageFolders')
+    );
   }
 
   private updatePackagesWhenActiveFolderChanges() {
@@ -196,7 +207,10 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   }
 
   private updatePackagesInIDB() {
-    const sub = combineLatest([this.allPackages$, this.allPackageFolders$])
+    const sub = combineLatest([
+      this.allPackages$,
+      this.allPackageFolders$.pipe(take(1)),
+    ])
       .pipe(
         switchMap(([packages, folders]) =>
           this.helper.updatePackagesInIDB(packages, folders)

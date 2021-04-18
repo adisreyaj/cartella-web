@@ -304,6 +304,12 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   private getDataFromAPI() {
     this.snippetLoadingSubject.next(true);
     return combineLatest([this.getSnippets(), this.getSnippetFolders()]).pipe(
+      switchMap(([bookmarks, folders]) =>
+        combineLatest([
+          this.helper.updateSnippetsInIDB(bookmarks, folders),
+          this.helper.updateSnippetFoldersInDb(folders),
+        ])
+      ),
       finalize(() => {
         this.snippetLoadingSubject.next(false);
       })
@@ -311,10 +317,12 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private getSnippets() {
-    const folderState = this.store.selectSnapshot(
-      SnippetFolderState.getActiveSnippetFolder
+    return (
+      this.store
+        .dispatch(new GetSnippets(ALL_SNIPPETS_FOLDER?.id))
+        // Get snippets from state
+        .pipe(pluck('snippets', 'allSnippets'))
     );
-    return this.store.dispatch(new GetSnippets(folderState?.id));
   }
 
   private setSlugBasedSnippet(slug: string) {
@@ -324,13 +332,13 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private getSnippetFolders() {
-    return this.store
-      .dispatch(new GetSnippetFolders())
-      .pipe(
-        switchMap(() =>
-          this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER))
-        )
-      );
+    return this.store.dispatch(new GetSnippetFolders()).pipe(
+      switchMap(() =>
+        this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER))
+      ),
+      // Get snippet folders from state
+      pluck('snippetFolders', 'snippetFolders')
+    );
   }
 
   private updateSnippetsWhenActiveFolderChanges() {
@@ -351,7 +359,10 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private updateSnippetsInIDB() {
-    const sub = combineLatest([this.allSnippets$, this.allSnippetFolders$])
+    const sub = combineLatest([
+      this.allSnippets$,
+      this.allSnippetFolders$.pipe(take(1)),
+    ])
       .pipe(
         switchMap(([snippets, folders]) =>
           this.helper.updateSnippetsInIDB(snippets, folders)
