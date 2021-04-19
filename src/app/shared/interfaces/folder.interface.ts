@@ -1,3 +1,4 @@
+import { SharedWith } from '@app/interfaces/share.interface';
 import { Observable } from 'rxjs';
 import { PayloadResponse } from './response.interface';
 import { User } from './user.interface';
@@ -6,13 +7,13 @@ export interface FolderBaseRequest {
   name: string;
   metadata: any | null;
   private: boolean;
-  share: any | null;
 }
 
 export interface FolderBaseResponse extends FolderBaseRequest {
   id: string;
   createdAt: Date;
   updatedAt: Date;
+  share: SharedWith[];
 }
 
 export interface FolderOperations<FolderRequestType, FolderResponseType> {

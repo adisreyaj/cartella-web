@@ -95,7 +95,6 @@ export class BookmarksAddFolderComponent
           name: this.folderName.value,
           metadata: {},
           private: true,
-          share: [],
         })
       )
       .subscribe(

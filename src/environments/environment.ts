@@ -5,8 +5,8 @@
 export const environment = {
   production: false,
   hostname: 'http://localhost:4200',
-  api: 'https://srv.sreyaj.dev/cartella/api',
-  // api: 'http://192.168.18.10:3222/cartella/api',
+  // api: 'https://srv.sreyaj.dev/cartella/api',
+  api: 'http://localhost:3222/cartella/api',
 };
 
 /*

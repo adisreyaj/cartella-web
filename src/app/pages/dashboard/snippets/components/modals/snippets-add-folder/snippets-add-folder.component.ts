@@ -73,7 +73,6 @@ export class SnippetsAddFolderComponent
           name: this.folderName.value,
           metadata: {},
           private: true,
-          share: {},
         })
       )
       .subscribe(
@@ -98,7 +97,6 @@ export class SnippetsAddFolderComponent
           name: this.folderName.value,
           metadata: {},
           private: true,
-          share: {},
         })
       )
       .subscribe(

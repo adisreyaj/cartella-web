@@ -96,7 +96,6 @@ export class PackagesAddFolderComponent
           name: this.folderName.value,
           metadata: {},
           private: true,
-          share: [],
         })
       )
       .subscribe(
