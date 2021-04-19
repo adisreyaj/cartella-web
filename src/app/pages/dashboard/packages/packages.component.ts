@@ -9,7 +9,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, pluck, switchMap } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -76,12 +76,14 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getPackageFolders();
-    this.getPackages();
-    this.updatePackagesWhenActiveFolderChanges();
-    this.updatePackageFoldersInIDB();
-    this.updatePackagesInIDB();
+    const sub = this.getDataFromAPI()
+      .pipe(switchMap(() => this.updatePackagesWhenActiveFolderChanges()))
+      .subscribe(() => {
+        this.updatePackageFoldersInIDB();
+        this.updatePackagesInIDB();
+      });
     this.isMenuOpen$ = this.menu.isMenuOpen$;
+    this.subs.add(sub);
   }
 
   closeMenu() {
@@ -164,54 +166,52 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     });
   }
 
-  private getPackages() {
+  private getDataFromAPI() {
     this.packageLoadingSubject.next(true);
-    const sub = this.store
-      .dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id))
-      .subscribe(
-        () => {
-          this.packageLoadingSubject.next(false);
-        },
-        () => {
-          this.packageLoadingSubject.next(false);
-        }
-      );
-    this.subs.add(sub);
+    return combineLatest([this.getPackages(), this.getPackageFolders()]).pipe(
+      switchMap(([bookmarks, folders]) =>
+        combineLatest([
+          this.helper.updatePackagesInIDB(bookmarks, folders),
+          this.helper.updatePackageFoldersInDb(folders),
+        ])
+      ),
+      finalize(() => {
+        this.packageLoadingSubject.next(false);
+      })
+    );
+  }
+
+  private getPackages() {
+    return (
+      this.store
+        .dispatch(new GetPackages(ALL_PACKAGES_FOLDER.id))
+        // Get packages from state
+        .pipe(pluck('packages', 'allPackages'))
+    );
   }
 
   private getPackageFolders() {
-    this.packageFolderLoadingSubject.next(true);
-    const sub = this.store.dispatch(new GetPackageFolders()).subscribe(
-      () => {
-        this.packageFolderLoadingSubject.next(false);
-      },
-      () => {
-        this.packageFolderLoadingSubject.next(false);
-      }
+    return this.store.dispatch(new GetPackageFolders()).pipe(
+      switchMap(() =>
+        this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER))
+      ),
+      // Get package folders from state
+      pluck('packageFolders', 'packageFolders')
     );
-    this.subs.add(sub);
-    this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER));
   }
 
   private updatePackagesWhenActiveFolderChanges() {
-    const sub = this.activeFolder$
-      .pipe(
-        pluck('id'),
-        switchMap((folderId) => this.store.dispatch(new GetPackages(folderId)))
-      )
-      .subscribe(
-        () => {
-          this.packageLoadingSubject.next(false);
-        },
-        () => {
-          this.packageLoadingSubject.next(false);
-        }
-      );
-    this.subs.add(sub);
+    return this.activeFolder$.pipe(
+      pluck('id'),
+      switchMap((folderId) => this.store.dispatch(new GetPackages(folderId)))
+    );
   }
 
   private updatePackagesInIDB() {
-    const sub = combineLatest([this.allPackages$, this.allPackageFolders$])
+    const sub = combineLatest([
+      this.allPackages$,
+      this.allPackageFolders$.pipe(take(1)),
+    ])
       .pipe(
         switchMap(([packages, folders]) =>
           this.helper.updatePackagesInIDB(packages, folders)

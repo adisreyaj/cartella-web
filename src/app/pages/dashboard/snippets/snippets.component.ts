@@ -16,7 +16,15 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, map, pluck, switchMap, take, tap } from 'rxjs/operators';
+import {
+  filter,
+  finalize,
+  map,
+  pluck,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -92,7 +100,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   private snippetLoadingSubject = new BehaviorSubject(false);
   snippetLoading$ = this.snippetLoadingSubject.pipe();
   private isLargeScreenSubject = new BehaviorSubject(this.isLargeScreen);
-  isLargeScree$ = this.isLargeScreenSubject.pipe(
+  isLargeScreen$ = this.isLargeScreenSubject.pipe(
     tap((data) => (this.isLargeScreen = data))
   );
 
@@ -112,16 +120,19 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getSnippetFolders();
-    this.getSnippets();
-    this.updateSnippetsWhenActiveFolderChanges();
+    const sub = this.getDataFromAPI()
+      .pipe(switchMap(() => this.updateSnippetsWhenActiveFolderChanges()))
+      .subscribe(() => {
+        this.store.dispatch(new SetActiveSnippet(null));
+        this.updateSnippetFoldersInIDB();
+        this.updateSnippetsInIDB();
+      });
     this.observeLayoutChanges();
-    this.updateSnippetFoldersInIDB();
-    this.updateSnippetsInIDB();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.allSnippets$
       .pipe(filter((snippets) => snippets && snippets.length > 0))
       .subscribe(() => this.setSlugBasedSnippet(this.snippetSlug));
+    this.subs.add(sub);
   }
 
   get snippetSlug() {
@@ -292,18 +303,27 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     );
   }
 
-  private getSnippets() {
+  private getDataFromAPI() {
     this.snippetLoadingSubject.next(true);
-    const folderState = this.store.selectSnapshot(
-      SnippetFolderState.getActiveSnippetFolder
+    return combineLatest([this.getSnippets(), this.getSnippetFolders()]).pipe(
+      switchMap(([bookmarks, folders]) =>
+        combineLatest([
+          this.helper.updateSnippetsInIDB(bookmarks, folders),
+          this.helper.updateSnippetFoldersInDb(folders),
+        ])
+      ),
+      finalize(() => {
+        this.snippetLoadingSubject.next(false);
+      })
     );
-    this.store.dispatch(new GetSnippets(folderState?.id)).subscribe(
-      () => {
-        this.snippetLoadingSubject.next(false);
-      },
-      () => {
-        this.snippetLoadingSubject.next(false);
-      }
+  }
+
+  private getSnippets() {
+    return (
+      this.store
+        .dispatch(new GetSnippets(ALL_SNIPPETS_FOLDER?.id))
+        // Get snippets from state
+        .pipe(pluck('snippets', 'allSnippets'))
     );
   }
 
@@ -314,27 +334,20 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private getSnippetFolders() {
-    this.snippetFolderLoadingSubject.next(true);
-    const sub = this.store.dispatch(new GetSnippetFolders()).subscribe(
-      () => {
-        this.snippetFolderLoadingSubject.next(false);
-      },
-      () => {
-        this.snippetFolderLoadingSubject.next(false);
-      }
+    return this.store.dispatch(new GetSnippetFolders()).pipe(
+      switchMap(() =>
+        this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER))
+      ),
+      // Get snippet folders from state
+      pluck('snippetFolders', 'snippetFolders')
     );
-    this.subs.add(sub);
-    this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER));
   }
 
   private updateSnippetsWhenActiveFolderChanges() {
-    const sub = this.activeFolder$
-      .pipe(
-        pluck('id'),
-        switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId)))
-      )
-      .subscribe();
-    this.subs.add(sub);
+    return this.activeFolder$.pipe(
+      pluck('id'),
+      switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId)))
+    );
   }
 
   private observeLayoutChanges() {
@@ -348,7 +361,10 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private updateSnippetsInIDB() {
-    const sub = combineLatest([this.allSnippets$, this.allSnippetFolders$])
+    const sub = combineLatest([
+      this.allSnippets$,
+      this.allSnippetFolders$.pipe(take(1)),
+    ])
       .pipe(
         switchMap(([snippets, folders]) =>
           this.helper.updateSnippetsInIDB(snippets, folders)
