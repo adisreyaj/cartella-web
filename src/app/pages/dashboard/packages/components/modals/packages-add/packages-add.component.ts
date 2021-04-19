@@ -144,7 +144,6 @@ export class PackagesAddComponent
               url: links.repository,
               ...github,
             },
-            share: [],
             tags: [...this.tagsSelected].map(({ id }) => id),
           };
           this.savingSubject.next(false);

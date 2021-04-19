@@ -151,7 +151,6 @@ export class BookmarksAddComponent
       metadata: null,
       private: true,
       domain: data.domain,
-      share: [],
     };
     if (this.ref.data.type === ModalOperationType.create) {
       this.store.dispatch(new AddBookmark(bookmarkData));

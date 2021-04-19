@@ -3,6 +3,7 @@ import {
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
 import { ModalOperationType } from '@app/interfaces/general.interface';
+import { SharedWith } from '@app/interfaces/share.interface';
 
 export type BookmarkFolderRequest = FolderBaseRequest;
 export type BookmarkFolder = FolderBaseResponse;
@@ -23,7 +24,6 @@ export interface BookmarkBase {
 export interface BookmarkRequest extends BookmarkBase {
   tags?: string[];
   folderId: string;
-  share?: any | null;
 }
 
 export interface Bookmark extends BookmarkBase {
@@ -33,6 +33,7 @@ export interface Bookmark extends BookmarkBase {
   tags: any[];
   folder: BookmarkResponseFolder;
   owner: BookmarkResponseOwner;
+  share: SharedWith[];
 }
 
 export interface BookmarkResponseFolder {

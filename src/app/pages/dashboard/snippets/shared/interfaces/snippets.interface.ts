@@ -2,6 +2,7 @@ import {
   FolderBaseRequest,
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
+import { SharedWith } from '@app/interfaces/share.interface';
 import { Technology } from '@app/interfaces/technology.interface';
 
 export type SnippetFolderRequest = FolderBaseRequest;
@@ -24,7 +25,6 @@ export interface SnippetBase {
 export interface SnippetRequest extends SnippetBase {
   technologyId: string;
   folderId: string;
-  share?: any | null;
 }
 
 export interface Snippet extends SnippetRequest {
@@ -34,6 +34,7 @@ export interface Snippet extends SnippetRequest {
   folder: SnippetResponseFolder;
   owner: SnippetResponseOwner;
   technology: SnippetResponseTechnology;
+  share: SharedWith[];
 }
 
 export interface SnippetResponseFolder {

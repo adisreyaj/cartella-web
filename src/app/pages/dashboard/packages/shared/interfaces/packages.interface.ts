@@ -3,6 +3,7 @@ import {
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
 import { ModalOperationType } from '@app/interfaces/general.interface';
+import { SharedWith } from '@app/interfaces/share.interface';
 import { PackageLinks, packageScore } from './package-details.interface';
 
 export type PackageFolderRequest = FolderBaseRequest;
@@ -21,7 +22,6 @@ export interface PackageBase {
 export interface PackageRequest extends PackageBase {
   tags?: string[];
   folderId: string;
-  share?: any | null;
 }
 
 export interface Package extends PackageBase {
@@ -31,6 +31,7 @@ export interface Package extends PackageBase {
   tags: any[];
   folder: PackageResponseFolder;
   owner: PackageResponseOwner;
+  share: SharedWith[];
 }
 
 export interface PackageResponseFolder {

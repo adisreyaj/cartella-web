@@ -89,5 +89,4 @@ export const SNIPPET_TEMPLATE: Omit<
   favorite: false,
   metadata: {},
   private: true,
-  share: {},
 };
