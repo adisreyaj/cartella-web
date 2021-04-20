@@ -5,7 +5,7 @@
   @apply focus:ring-offset-1;
 }
 
-button.btn-normal:disabled {
+button:is(.btn-normal, .btn-primary):disabled {
   // background-color: lighten(#3d29bd, 20) !important;
   @apply bg-gray-300;
   @apply dark:bg-gray-600;

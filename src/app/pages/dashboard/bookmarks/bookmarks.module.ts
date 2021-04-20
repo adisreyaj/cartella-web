@@ -11,6 +11,7 @@ import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { HoveredDirectiveModule } from 'src/app/shared/directives/hovered/hovered-directive.module';
+import { SharePopupModule } from '../../../shared/components/share-popup/share-popup.module';
 import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
 import { BookmarksRoutingModule } from './bookmarks-routing.module';
 import { BookmarksComponent } from './bookmarks.component';
@@ -44,6 +45,7 @@ import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmar
     DefaultImageModule,
     FeatureDirectiveModule,
     MoveToFolderModule,
+    SharePopupModule,
   ],
   providers: [MenuService],
 })

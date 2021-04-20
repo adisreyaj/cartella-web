@@ -19,6 +19,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
+import { SharePopupComponent } from '../../../../../shared/components/share-popup/share-popup.component';
 import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Bookmark,
@@ -123,6 +124,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
         this.handleMoveToFolder(bookmark);
         break;
       case BookmarkCardEventType.share:
+        this.handleShare(bookmark);
         break;
 
       default:
@@ -190,6 +192,26 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
     const dialogRef = this.dialog.open(DeletePromptComponent, {
       size: 'sm',
       minHeight: 'unset',
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          tap((response) => {
+            if (response) {
+              this.store.dispatch(new DeleteBookmark(bookmark.id));
+            }
+          })
+        )
+        .subscribe(() => {})
+    );
+  }
+  private handleShare(bookmark: Bookmark) {
+    const dialogRef = this.dialog.open(SharePopupComponent, {
+      size: 'md',
+      minHeight: 'unset',
+      data: {
+        entity: 'Bookmark',
+      },
     });
     this.subs.add(
       dialogRef.afterClosed$

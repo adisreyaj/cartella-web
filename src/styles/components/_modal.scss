@@ -27,4 +27,8 @@ body.mode-dark {
       @apply dark:bg-dark-700;
     }
   }
+
+  .ngneat-close-dialog svg {
+    color: #fff;
+  }
 }

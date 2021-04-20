@@ -1,8 +1,10 @@
 import { User } from './user.interface';
 
-export interface SharedWith {
-  id: string;
+export interface ShareTo {
+  email: string;
   access: Access;
+}
+export interface SharedWith extends ShareTo {
   user: Pick<User, 'id' | 'email' | 'image' | 'firstname' | 'lastname'>;
 }
 

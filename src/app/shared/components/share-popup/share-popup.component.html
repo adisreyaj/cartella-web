@@ -1,0 +1,62 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold dark:text-white">
+      Share {{ref?.data?.entity}}
+    </p>
+  </header>
+  <form class="w-100" (ngSubmit)="share();" (keyup.enter)="$event.preventDefault()">
+    <section class="grid gap-2" style="grid-template-columns: 7fr 3fr;">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" autocomplete="email" [formControl]="emailInputControl"
+               #emailInputRef>
+      </div>
+      <div class="form-group">
+        <label for="access">Access</label>
+        <ng-select id="access" [formControl]="accessInputControl" [clearable]="false" [searchable]="false"
+                   class="w-full" aria-label="Choose theme">
+          <ng-option *ngFor="let access of accessLevels" [value]="access">
+            {{access | titlecase}}
+          </ng-option>
+        </ng-select>
+      </div>
+    </section>
+    <div>
+      <button primaryButton type="button" [disabled]="emailInputControl.invalid" (click)="addToList();">Add
+        User</button>
+    </div>
+    <section class="my-4" *ngIf="shareTo.length > 0">
+      <h4 class="text-base font-semibold text-gray-700 dark:text-white">Selected Users</h4>
+      <ul class="overflow-y-auto" style="max-height: 206px;">
+        <ng-container *ngFor="let user of shareTo; index as i">
+          <li class="flex space-x-4 space-y-1 border-t-0 border-l-0 border-r-0 border-gray-200 border-b-1 dark:border-gray-400"
+              [class.border]="i !== shareTo.length - 1">
+            <div class="flex items-center justify-between flex-1 my-2">
+              <div class="flex items-center space-x-2">
+                <p class="dark:text-white">{{user.email}}</p>
+              </div>
+              <div class="flex items-center space-x-2">
+                <ng-select [(ngModel)]="user.access" [ngModelOptions]="{standalone: true}" [clearable]="false"
+                           [searchable]="false" class="w-full" aria-label="Choose theme">
+                  <ng-option *ngFor="let access of accessLevels" [value]="access">
+                    {{access | titlecase}}
+                  </ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <button class="text-red-600" aria-label="Remove user">
+              <rmx-icon name="close-line"></rmx-icon>
+            </button>
+          </li>
+        </ng-container>
+      </ul>
+    </section>
+    <footer class="flex items-center justify-end mt-6">
+      <div class="flex items-center">
+        <button dialogClose secondaryButton class="mr-2" type="button">Cancel</button>
+        <button primaryButton [loading]="saving$ | async" [disabled]="shareTo?.length === 0"
+                type="submit">Share</button>
+      </div>
+    </footer>
+  </form>
+</div>
