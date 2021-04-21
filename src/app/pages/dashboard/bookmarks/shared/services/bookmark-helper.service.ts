@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { StorageFolders } from '@app/services/storage/storage.interface';
 import { StorageService } from '@app/services/storage/storage.service';
-import { Store } from '@ngxs/store';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { User } from '../../../../../shared/interfaces/user.interface';
-import { UserState } from '../../../../../shared/store/states/user.state';
+import { FolderAssortService } from '../../../../../shared/services/folder-assort/folder-assort.service';
 import { Bookmark, BookmarkFolder } from '../interfaces/bookmarks.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class BookmarkHelperService {
-  constructor(private storage: StorageService, private store: Store) {}
+  constructor(
+    private storage: StorageService,
+    private folderAssort: FolderAssortService
+  ) {}
 
   /**
    * Update the bookmarks in the Indexed DB
@@ -25,7 +26,7 @@ export class BookmarkHelperService {
     bookmarkFolders: BookmarkFolder[]
   ) {
     if (bookmarks != null && bookmarkFolders != null) {
-      const { own, shared, starred } = this.assortBookmarks(bookmarks);
+      const { own, shared, starred } = this.folderAssort.assort(bookmarks);
       const bookmarksGroupedByFolders = this.groupBookmarksInFolders(
         bookmarkFolders,
         own
@@ -114,26 +115,5 @@ export class BookmarkHelperService {
       );
     }
     return [];
-  };
-
-  private assortBookmarks = (bookmarks: Bookmark[]) => {
-    const user = this.store.selectSnapshot<User>(UserState.getLoggedInUser);
-    let shared = [];
-    let own = [];
-    let starred = [];
-    if (bookmarks?.length > 0) {
-      bookmarks.forEach((bookmark) => {
-        if (bookmark.owner.id === user.id) {
-          if (bookmark.favorite) {
-            starred = [...starred, bookmark];
-          } else {
-            own = [...own, bookmark];
-          }
-        } else {
-          shared = [...shared, bookmark];
-        }
-      });
-    }
-    return { own, shared, starred };
   };
 }
