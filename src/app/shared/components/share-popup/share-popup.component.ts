@@ -7,10 +7,11 @@ import {
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { DialogRef } from '@ngneat/dialog';
-import { Store } from '@ngxs/store';
 import { BehaviorSubject } from 'rxjs';
 import { Access, ShareTo } from '../../interfaces/share.interface';
 import { ToastService } from '../../services/toast/toast.service';
+import { SharePopupPayload } from './share-popup.interface';
+import { SharePopupService } from './share-popup.service';
 
 @Component({
   selector: 'app-share-popup',
@@ -31,9 +32,9 @@ export class SharePopupComponent implements OnInit {
   private savingSubject = new BehaviorSubject<boolean>(false);
   readonly saving$ = this.savingSubject.pipe();
   constructor(
-    public ref: DialogRef,
+    public ref: DialogRef<SharePopupPayload>,
     private toaster: ToastService,
-    private store: Store
+    private popupService: SharePopupService
   ) {}
 
   ngOnInit(): void {}
@@ -65,6 +66,18 @@ export class SharePopupComponent implements OnInit {
   }
 
   share() {
-    console.log(this.shareTo);
+    if (this.shareTo?.length > 0) {
+      this.popupService
+        .share(this.ref.data.item.id, this.shareTo, this.ref.data.entity)
+        .subscribe(
+          (data) => {
+            this.ref.close(data);
+            this.toaster.showSuccessToast('Shared successfully');
+          },
+          (err: Error) => {
+            this.toaster.showErrorToast(err.message);
+          }
+        );
+    }
   }
 }

@@ -10,7 +10,7 @@ export class ToastService {
   showSuccessToast(message: string) {
     this.toastr.success(message);
   }
-  showErrorToast(message: string) {
+  showErrorToast(message: string = 'Internal Server Error!') {
     this.toastr.error(message);
   }
 }
