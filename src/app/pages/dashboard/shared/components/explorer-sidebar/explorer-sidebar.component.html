@@ -13,11 +13,17 @@
         <rmx-icon name="folders-line" class="mr-2 icon-lg"></rmx-icon>
         <p>All {{type | titlecase}}</p>
       </li>
-      <li class="flex items-center explorer-sidebar__item"
+      <li class="flex items-center mb-3 explorer-sidebar__item"
           [ngClass]="{'text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800':activeFolder?.id === 'starred'}"
           (click)="handleSelectFolder({id:'starred'})">
         <rmx-icon name="star-line" class="mr-2 icon-lg"></rmx-icon>
         <p>Starred</p>
+      </li>
+      <li class="flex items-center explorer-sidebar__item"
+          [ngClass]="{'text-primary dark:text-dark-50 bg-primary-10 dark:bg-dark-800':activeFolder?.id === 'shared'}"
+          (click)="handleSelectFolder({id:'shared'})">
+        <rmx-icon name="share-box-line" class="mr-2 icon-lg"></rmx-icon>
+        <p>Shared With Me</p>
       </li>
     </ul>
   </section>

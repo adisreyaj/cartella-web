@@ -8,8 +8,16 @@ import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, finalize, pluck, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, forkJoin, Observable, of } from 'rxjs';
+import {
+  catchError,
+  filter,
+  finalize,
+  pluck,
+  switchMap,
+  take,
+  tap,
+} from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
@@ -178,15 +186,19 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
 
   private getDataFromAPI() {
     this.bookmarkLoadingSubject.next(true);
-    return combineLatest([this.getBookmarks(), this.getBookmarkFolders()]).pipe(
+    return forkJoin([this.getBookmarks(), this.getBookmarkFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
-        combineLatest([
+        forkJoin([
           this.helper.updateBookmarksInIDB(bookmarks, folders),
           this.helper.updateBookmarkFoldersInDb(folders),
         ])
       ),
       finalize(() => {
         this.bookmarkLoadingSubject.next(false);
+      }),
+      catchError((err) => {
+        console.log(err);
+        return of(null);
       })
     );
   }
@@ -194,6 +206,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   private updateBookmarksWhenActiveFolderChanges() {
     return this.activeFolder$
       .pipe(
+        tap(() => console.log('[Bookmark]: Active folder changed')),
         pluck('id'),
         switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId)))
       )

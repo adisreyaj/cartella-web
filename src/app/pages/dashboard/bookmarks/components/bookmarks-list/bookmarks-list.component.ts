@@ -211,6 +211,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
       minHeight: 'unset',
       data: {
         entity: 'Bookmark',
+        item: bookmark,
       },
     });
     this.subs.add(
@@ -218,7 +219,6 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
         .pipe(
           tap((response) => {
             if (response) {
-              this.store.dispatch(new DeleteBookmark(bookmark.id));
             }
           })
         )
