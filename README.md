@@ -46,3 +46,7 @@ Feel free to check [issues page](https://github.com/adisreyaj/cartella-web/issue
 ## 👍🏼 Show your support
 
 Please ⭐️ this repository if this project helped you!
+
+## Code Quality
+
+[![Quality gate](https://sonarcloud.io/api/project_badges/quality_gate?project=adisreyaj_cartella-web)](https://sonarcloud.io/dashboard?id=adisreyaj_cartella-web)

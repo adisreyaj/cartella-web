@@ -46,7 +46,7 @@
       </ng-select>
     </div>
   </footer>
-  <div *ngIf="!activeSnippet$| async"
+  <div *ngIf="(activeSnippet$| async) === null"
        class="absolute top-0 left-0 grid w-full h-full bg-white dark:bg-dark-800 place-items-center"
        [style.zIndex]="99">
     <div class="grid place-items-center">

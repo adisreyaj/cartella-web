@@ -80,11 +80,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.bookmarksShown$.subscribe((data) =>
-      console.log('BOOKMARK SHOWN', data)
-    );
-  }
+  ngOnInit(): void {}
 
   toggleMenu() {
     this.menu.toggleMenu();

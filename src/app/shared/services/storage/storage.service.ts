@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DedicatedInstanceFactory, NgForage } from 'ngforage';
-import { from, of } from 'rxjs';
+import { EMPTY, from, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { StorageFolders } from './storage.interface';
 
@@ -63,5 +63,15 @@ export class StorageService {
     return from(this.instances.get(type).removeItem(key)).pipe(
       catchError(() => of(null))
     );
+  }
+
+  flushAll() {
+    return from(
+      Promise.all(
+        Array.from(this.instances.entries()).map(([key, instance]) =>
+          instance.clear()
+        )
+      )
+    ).pipe(catchError(() => EMPTY));
   }
 }
