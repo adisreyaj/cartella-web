@@ -15,7 +15,6 @@ export interface FolderBaseResponse extends FolderBaseRequest {
   updatedAt: Date;
   share: SharedWith[];
 }
-
 export interface FolderOperations<FolderRequestType, FolderResponseType> {
   createNewFolder(data: FolderRequestType): Observable<FolderResponseType>;
   updateFolder(

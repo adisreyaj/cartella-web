@@ -9,7 +9,7 @@ import { MoveToFolderComponent } from '@app/components/move-to-folder/move-to-fo
 import { FeatureType } from '@app/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { User } from '@app/interfaces/user.interface';
-import { PackageHelperService } from '@app/packages/shared/services/package-helper.service';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
@@ -65,7 +65,7 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
     private dialog: DialogService,
     private store: Store,
     private menu: MenuService,
-    private helper: PackageHelperService
+    private syncService: IDBSyncService
   ) {
     super();
   }
@@ -138,7 +138,7 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
           switchMap(() => combineLatest([this.packages$, this.folders$])),
           take(1),
           switchMap(([packages, folders]) =>
-            this.helper.updatePackagesInIDB(packages, folders)
+            this.syncService.syncItems(packages, folders)
           ),
           switchMap(() =>
             this.store.dispatch(

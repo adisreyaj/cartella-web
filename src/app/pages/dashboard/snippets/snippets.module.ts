@@ -7,10 +7,12 @@ import { ComponentsModule } from '@app/components/components.module';
 import { MoveToFolderModule } from '@app/components/move-to-folder/move-to-folder.module';
 import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
+import { FeatureType } from '@app/interfaces/general.interface';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { LanguagePipeModule } from '@app/pipes/language-pipe/language-pipe.module';
 import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
 import { MenuService } from '@app/services/menu/menu.service';
+import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
@@ -53,6 +55,12 @@ import { SnippetsComponent } from './snippets.component';
     LayoutModule,
     FeatureDirectiveModule,
   ],
-  providers: [MenuService],
+  providers: [
+    MenuService,
+    {
+      provide: FEATURE_TOKEN,
+      useValue: FeatureType.bookmark,
+    },
+  ],
 })
 export class SnippetsModule {}

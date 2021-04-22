@@ -3,9 +3,11 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MoveToFolderModule } from '@app/components/move-to-folder/move-to-folder.module';
 import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
+import { FeatureType } from '@app/interfaces/general.interface';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { CountPipeModule } from '@app/pipes/count-pipe/count-pipe.module';
 import { MenuService } from '@app/services/menu/menu.service';
+import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxFilesizeModule } from 'ngx-filesize';
@@ -41,6 +43,12 @@ import { PackagesComponent } from './packages.component';
     FeatureDirectiveModule,
     MoveToFolderModule,
   ],
-  providers: [MenuService],
+  providers: [
+    MenuService,
+    {
+      provide: FEATURE_TOKEN,
+      useValue: FeatureType.bookmark,
+    },
+  ],
 })
 export class PackagesModule {}

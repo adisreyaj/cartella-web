@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { LoggedUser, User } from '@app/interfaces/user.interface';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
@@ -17,7 +18,6 @@ import {
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';
-import { PackageHelperService } from './shared/services/package-helper.service';
 import {
   DeletePackageFolder,
   GetPackageFolders,
@@ -70,7 +70,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     private menu: MenuService,
     private dialog: DialogService,
     private toaster: ToastService,
-    private helper: PackageHelperService
+    private syncService: IDBSyncService
   ) {
     super();
   }
@@ -171,8 +171,8 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     return combineLatest([this.getPackages(), this.getPackageFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
         combineLatest([
-          this.helper.updatePackagesInIDB(bookmarks, folders),
-          this.helper.updatePackageFoldersInDb(folders),
+          this.syncService.syncItems(bookmarks, folders),
+          this.syncService.syncFolders(folders),
         ])
       ),
       finalize(() => {
@@ -214,7 +214,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     ])
       .pipe(
         switchMap(([packages, folders]) =>
-          this.helper.updatePackagesInIDB(packages, folders)
+          this.syncService.syncItems(packages, folders)
         )
       )
       .subscribe();
@@ -225,7 +225,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     const sub = this.allPackageFolders$
       .pipe(
         filter((res) => res.length > 0),
-        switchMap((folders) => this.helper.updatePackageFoldersInDb(folders))
+        switchMap((folders) => this.syncService.syncFolders(folders))
       )
       .subscribe();
     this.subs.add(sub);

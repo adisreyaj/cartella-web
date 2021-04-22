@@ -3,15 +3,17 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MoveToFolderModule } from '@app/components/move-to-folder/move-to-folder.module';
+import { SharePopupModule } from '@app/components/share-popup/share-popup.module';
 import { DefaultImageModule } from '@app/directives/default-image/default-image.module';
 import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
+import { FeatureType } from '@app/interfaces/general.interface';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { MenuService } from '@app/services/menu/menu.service';
+import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { HoveredDirectiveModule } from 'src/app/shared/directives/hovered/hovered-directive.module';
-import { SharePopupModule } from '../../../shared/components/share-popup/share-popup.module';
 import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
 import { BookmarksRoutingModule } from './bookmarks-routing.module';
 import { BookmarksComponent } from './bookmarks.component';
@@ -47,6 +49,12 @@ import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmar
     MoveToFolderModule,
     SharePopupModule,
   ],
-  providers: [MenuService],
+  providers: [
+    MenuService,
+    {
+      provide: FEATURE_TOKEN,
+      useValue: FeatureType.bookmark,
+    },
+  ],
 })
 export class BookmarksModule {}

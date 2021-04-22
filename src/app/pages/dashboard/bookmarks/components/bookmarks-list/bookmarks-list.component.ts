@@ -4,22 +4,22 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { BookmarkHelperService } from '@app/bookmarks/shared/services/bookmark-helper.service';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { MoveToFolderComponent } from '@app/components/move-to-folder/move-to-folder.component';
+import { SharePopupComponent } from '@app/components/share-popup/share-popup.component';
 import {
   FeatureType,
   ModalOperationType,
 } from '@app/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { User } from '@app/interfaces/user.interface';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { combineLatest, Observable } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
-import { SharePopupComponent } from '../../../../../shared/components/share-popup/share-popup.component';
 import { HomeState } from '../../../home/shared/store/states/home.state';
 import {
   Bookmark,
@@ -70,7 +70,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
     private dialog: DialogService,
     private store: Store,
     private menu: MenuService,
-    private helper: BookmarkHelperService
+    private syncService: IDBSyncService
   ) {
     super();
   }
@@ -172,7 +172,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
           switchMap(() => combineLatest([this.bookmarks$, this.folders$])),
           take(1),
           switchMap(([bookmarks, folders]) =>
-            this.helper.updateBookmarksInIDB(bookmarks, folders)
+            this.syncService.syncItems(bookmarks, folders)
           ),
           switchMap(() =>
             this.store.dispatch(

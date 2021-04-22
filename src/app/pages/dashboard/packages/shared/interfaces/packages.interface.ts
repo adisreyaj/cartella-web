@@ -1,9 +1,14 @@
 import {
+  EntityFolder,
+  EntityGeneral,
+  EntityOwner,
+  EntityShare,
+} from '@app/interfaces/entity.interface';
+import {
   FolderBaseRequest,
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
 import { ModalOperationType } from '@app/interfaces/general.interface';
-import { SharedWith } from '@app/interfaces/share.interface';
 import { PackageLinks, packageScore } from './package-details.interface';
 
 export type PackageFolderRequest = FolderBaseRequest;
@@ -24,26 +29,13 @@ export interface PackageRequest extends PackageBase {
   folderId: string;
 }
 
-export interface Package extends PackageBase {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
+export interface Package
+  extends PackageBase,
+    EntityGeneral,
+    EntityShare,
+    EntityOwner,
+    EntityFolder {
   tags: any[];
-  folder: PackageResponseFolder;
-  owner: PackageResponseOwner;
-  share: SharedWith[];
-}
-
-export interface PackageResponseFolder {
-  id: string;
-  name: string;
-}
-
-export interface PackageResponseOwner {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
 }
 
 export interface PackageAddModalPayload {

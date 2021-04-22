@@ -8,6 +8,7 @@ import { FeatureType } from '@app/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
 import { Technology } from '@app/interfaces/technology.interface';
 import { User } from '@app/interfaces/user.interface';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
@@ -37,7 +38,6 @@ import {
   SnippetItemEventType,
   SnippetModes,
 } from './shared/interfaces/snippets.interface';
-import { SnippetHelperService } from './shared/services/helpers/snippet-helper.service';
 import {
   DeleteSnippetFolder,
   GetSnippetFolders,
@@ -114,7 +114,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     private menu: MenuService,
     private toaster: ToastService,
     private breakpointObserver: BreakpointObserver,
-    private helper: SnippetHelperService
+    private syncService: IDBSyncService
   ) {
     super();
   }
@@ -269,7 +269,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
           switchMap(() => combineLatest([this.snippets$, this.folders$])),
           take(1),
           switchMap(([snippets, folders]) =>
-            this.helper.updateSnippetsInIDB(snippets, folders)
+            this.syncService.syncItems(snippets, folders)
           ),
           switchMap(() =>
             this.store.dispatch(
@@ -308,8 +308,8 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     return combineLatest([this.getSnippets(), this.getSnippetFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
         combineLatest([
-          this.helper.updateSnippetsInIDB(bookmarks, folders),
-          this.helper.updateSnippetFoldersInDb(folders),
+          this.syncService.syncItems(bookmarks, folders),
+          this.syncService.syncFolders(folders),
         ])
       ),
       finalize(() => {
@@ -367,7 +367,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     ])
       .pipe(
         switchMap(([snippets, folders]) =>
-          this.helper.updateSnippetsInIDB(snippets, folders)
+          this.syncService.syncItems(snippets, folders)
         )
       )
       .subscribe();
@@ -378,7 +378,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     const sub = this.allSnippetFolders$
       .pipe(
         filter((res) => res.length > 0),
-        switchMap((folders) => this.helper.updateSnippetFoldersInDb(folders))
+        switchMap((folders) => this.syncService.syncFolders(folders))
       )
       .subscribe();
     this.subs.add(sub);

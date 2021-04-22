@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@app/interfaces/general.interface';
 import { User } from '@app/interfaces/user.interface';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
 import { ToastService } from '@app/services/toast/toast.service';
 import { WithDestroy } from '@app/services/with-destroy/with-destroy';
@@ -29,7 +30,6 @@ import {
   BookmarkFolder,
   BookmarkFolderAddModalPayload,
 } from './shared/interfaces/bookmarks.interface';
-import { BookmarkHelperService } from './shared/services/bookmark-helper.service';
 import {
   DeleteBookmarkFolder,
   GetBookmarkFolders,
@@ -82,7 +82,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     private dialog: DialogService,
     private menu: MenuService,
     private toaster: ToastService,
-    private helper: BookmarkHelperService
+    private syncService: IDBSyncService
   ) {
     super();
   }
@@ -189,8 +189,8 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     return forkJoin([this.getBookmarks(), this.getBookmarkFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
         forkJoin([
-          this.helper.updateBookmarksInIDB(bookmarks, folders),
-          this.helper.updateBookmarkFoldersInDb(folders),
+          this.syncService.syncItems(bookmarks, folders),
+          this.syncService.syncFolders(folders),
         ])
       ),
       finalize(() => {
@@ -250,7 +250,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     ])
       .pipe(
         switchMap(([bookmarks, folders]) =>
-          this.helper.updateBookmarksInIDB(bookmarks, folders)
+          this.syncService.syncItems(bookmarks, folders)
         )
       )
       .subscribe();
@@ -261,7 +261,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     const sub = this.allBookmarkFolders$
       .pipe(
         filter((res) => res.length > 0),
-        switchMap((folders) => this.helper.updateBookmarkFoldersInDb(folders))
+        switchMap((folders) => this.syncService.syncFolders(folders))
       )
       .subscribe();
     this.subs.add(sub);

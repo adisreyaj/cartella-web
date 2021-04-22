@@ -1,9 +1,14 @@
 import {
+  EntityFolder,
+  EntityGeneral,
+  EntityOwner,
+  EntityShare,
+} from '@app/interfaces/entity.interface';
+import {
   FolderBaseRequest,
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
 import { ModalOperationType } from '@app/interfaces/general.interface';
-import { SharedWith } from '@app/interfaces/share.interface';
 
 export type BookmarkFolderRequest = FolderBaseRequest;
 export type BookmarkFolder = FolderBaseResponse;
@@ -26,26 +31,18 @@ export interface BookmarkRequest extends BookmarkBase {
   folderId: string;
 }
 
-export interface Bookmark extends BookmarkBase {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
+export interface Bookmark
+  extends BookmarkBase,
+    EntityOwner,
+    EntityFolder,
+    EntityShare,
+    EntityGeneral {
   tags: any[];
-  folder: BookmarkResponseFolder;
-  owner: BookmarkResponseOwner;
-  share: SharedWith[];
 }
 
 export interface BookmarkResponseFolder {
   id: string;
   name: string;
-}
-
-export interface BookmarkResponseOwner {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
 }
 
 export interface BookmarkMetaData {

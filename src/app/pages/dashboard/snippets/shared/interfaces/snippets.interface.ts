@@ -1,10 +1,14 @@
 import {
+  EntityFolder,
+  EntityGeneral,
+  EntityOwner,
+  EntityShare,
+} from '@app/interfaces/entity.interface';
+import {
   FolderBaseRequest,
   FolderBaseResponse,
 } from '@app/interfaces/folder.interface';
-import { SharedWith } from '@app/interfaces/share.interface';
 import { Technology } from '@app/interfaces/technology.interface';
-
 export type SnippetFolderRequest = FolderBaseRequest;
 export type SnippetFolder = FolderBaseResponse;
 
@@ -27,25 +31,13 @@ export interface SnippetRequest extends SnippetBase {
   folderId: string;
 }
 
-export interface Snippet extends SnippetRequest {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
-  folder: SnippetResponseFolder;
-  owner: SnippetResponseOwner;
+export interface Snippet
+  extends SnippetRequest,
+    EntityGeneral,
+    EntityShare,
+    EntityOwner,
+    EntityFolder {
   technology: SnippetResponseTechnology;
-  share: SharedWith[];
-}
-
-export interface SnippetResponseFolder {
-  id: string;
-  name: string;
-}
-export interface SnippetResponseOwner {
-  id: string;
-  firstname: string;
-  lastname: string;
-  email: string;
 }
 export interface SnippetResponseTechnology {
   id: string;
