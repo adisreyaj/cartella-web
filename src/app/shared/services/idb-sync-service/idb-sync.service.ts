@@ -13,8 +13,8 @@ import {
   SnippetFolder,
 } from '@app/snippets/shared/interfaces/snippets.interface';
 import { FEATURE_TOKEN } from '@app/tokens/feature.token';
-import { forkJoin, of } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, mapTo } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';
 import { StorageFolders } from '../storage/storage.interface';
 import { StorageService } from '../storage/storage.service';
@@ -51,7 +51,7 @@ export class IDBSyncService {
     return IDB_FOLDER_NAMES[this.feature];
   }
 
-  syncItems(items: Items[], folders: Folders[]) {
+  syncItems(items: Items[], folders: Folders[]): Observable<boolean> {
     if (items != null && folders != null) {
       const { own, shared, starred } = this.folderAssort.assort(items);
       const itemsGroupedByFolders = this.groupItemsInFolders(folders, own);
@@ -60,22 +60,24 @@ export class IDBSyncService {
         this.syncSharedItems(shared),
         this.syncOwnItems(itemsGroupedByFolders),
       ]).pipe(
+        mapTo(true),
         catchError((err) => {
           console.error(err);
-          return of(null);
+          return of(false);
         })
       );
     }
-    return of(null);
+    return of(false);
   }
 
   syncFolders(folders: Folders[]) {
     return this.storage
       .setItem(StorageFolders.folders, this.folderName, folders)
       .pipe(
+        mapTo(true),
         catchError((err) => {
           console.error('Save Bookmark Folders', err);
-          return of(null);
+          return of(false);
         })
       );
   }
@@ -83,30 +85,39 @@ export class IDBSyncService {
   private syncOwnItems(itemsGroupedIntoFolders: { [key: string]: Items[] }) {
     const folders = Object.keys(itemsGroupedIntoFolders);
     if (folders?.length > 0) {
-      return folders.map((key) =>
+      const setOps$ = folders.map((key) =>
         this.storage.setItem(
           StorageFolders.bookmarks,
           key,
           itemsGroupedIntoFolders[key]
         )
       );
+      return forkJoin(setOps$).pipe(
+        mapTo(true),
+        catchError((err) => {
+          console.error('Save Bookmark Folders', err);
+          return of(false);
+        })
+      );
     }
-    return of(null);
+    return of(false);
   }
 
   private syncSharedItems(items: Items[]) {
-    this.storage.setItem(this.collectionName, 'shared', items).pipe(
+    return this.storage.setItem(this.collectionName, 'shared', items).pipe(
+      mapTo(true),
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
-        return of(null);
+        return of(false);
       })
     );
   }
   private syncStarredItems(items: Items[]) {
-    this.storage.setItem(this.collectionName, 'starred', items).pipe(
+    return this.storage.setItem(this.collectionName, 'starred', items).pipe(
+      mapTo(true),
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
-        return of(null);
+        return of(false);
       })
     );
   }
@@ -116,9 +127,9 @@ export class IDBSyncService {
    *
    * ```json
    * 'id': [{
-   *    '123sdfasdf': []
+   *    '1234656267': []
    *  },{
-   * '  54sdfarew': []
+   * '  83736372': []
    * }]
    * ```
    */
