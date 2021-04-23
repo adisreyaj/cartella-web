@@ -8,10 +8,13 @@ import { DefaultImageModule } from '@app/directives/default-image/default-image.
 import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { FeatureType } from '@app/interfaces/general.interface';
 import { IconModule } from '@app/modules/icon/icon.module';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
+import { NgxsModule } from '@ngxs/store';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { HoveredDirectiveModule } from 'src/app/shared/directives/hovered/hovered-directive.module';
 import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
@@ -22,6 +25,9 @@ import { BookmarksListComponent } from './components/bookmarks-list/bookmarks-li
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { BookmarkAddPreviewComponent } from './components/modals/bookmarks-add/bookmark-add-preview/bookmark-add-preview.component';
 import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmarks-add.component';
+import { BookmarkStorageService } from './shared/services/bookmark-storage.service';
+import { BookmarkFolderState } from './shared/store/states/bookmark-folders.state';
+import { BookmarkState } from './shared/store/states/bookmarks.state';
 
 @NgModule({
   declarations: [
@@ -48,13 +54,19 @@ import { BookmarksAddComponent } from './components/modals/bookmarks-add/bookmar
     FeatureDirectiveModule,
     MoveToFolderModule,
     SharePopupModule,
+    NgxsModule.forFeature([BookmarkState, BookmarkFolderState]),
   ],
   providers: [
     MenuService,
     {
+      provide: BaseStorageService,
+      useClass: BookmarkStorageService,
+    },
+    {
       provide: FEATURE_TOKEN,
       useValue: FeatureType.bookmark,
     },
+    IDBSyncService,
   ],
 })
 export class BookmarksModule {}

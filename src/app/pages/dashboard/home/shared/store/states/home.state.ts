@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { HomeItemCounts } from '../../interfaces/home.interface';
@@ -22,7 +21,7 @@ export class HomeStateModel {
 export class HomeState {
   constructor(
     private homeService: HomeService,
-    private storage: StorageService
+    private storage: BaseStorageService
   ) {}
   @Selector()
   static getLatestItemsLastUpdated(state: HomeStateModel) {
@@ -69,7 +68,7 @@ export class HomeState {
           counts: result,
           countsFetched: true,
         });
-        this.storage.setItem(StorageFolders.count, 'count', result);
+        this.storage.setItem('count', result);
       })
     );
   }

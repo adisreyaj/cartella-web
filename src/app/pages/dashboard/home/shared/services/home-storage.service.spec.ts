@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SnippetHelperService } from './snippet-helper.service';
+import { HomeStorageService } from './home-storage.service';
 
-describe('SnippetHelperService', () => {
-  let service: SnippetHelperService;
+describe('HomeStorageService', () => {
+  let service: HomeStorageService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(SnippetHelperService);
+    service = TestBed.inject(HomeStorageService);
   });
 
   it('should be created', () => {

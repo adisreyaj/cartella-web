@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -33,7 +32,7 @@ export class PackageStateModel {
 export class PackageState {
   constructor(
     private packageService: PackagesService,
-    private storage: StorageService
+    private storage: BaseStorageService<Package>
   ) {}
 
   @Selector()
@@ -64,27 +63,25 @@ export class PackageState {
       case 'all':
         const state = getState();
         if (state.fetched) {
-          return this.storage
-            .getAllItemsFromUserFolder<Package>(StorageFolders.packages)
-            .pipe(
-              switchMap((packages) => {
-                if (!packages) {
-                  return this.packageService.getPackages().pipe(
-                    map(({ payload }) => payload),
-                    tap((result) => {
-                      patchState({
-                        packagesShown: result,
-                      });
-                    })
-                  );
-                } else {
-                  patchState({
-                    packagesShown: packages,
-                  });
-                  return of(packages);
-                }
-              })
-            );
+          return this.storage.getAllItemsFromUserFolder().pipe(
+            switchMap((packages) => {
+              if (!packages) {
+                return this.packageService.getPackages().pipe(
+                  map(({ payload }) => payload),
+                  tap((result) => {
+                    patchState({
+                      packagesShown: result,
+                    });
+                  })
+                );
+              } else {
+                patchState({
+                  packagesShown: packages,
+                });
+                return of(packages);
+              }
+            })
+          );
         } else {
           return this.packageService.getPackages().pipe(
             map(({ payload }) => payload),
@@ -99,7 +96,7 @@ export class PackageState {
           );
         }
       case 'starred':
-        return this.storage.getItem(StorageFolders.packages, id).pipe(
+        return this.storage.getItem(id).pipe(
           switchMap((packages) => {
             if (!packages) {
               return this.packageService.getFavoritePackages().pipe(
@@ -117,7 +114,7 @@ export class PackageState {
           })
         );
       default: {
-        return this.storage.getItem(StorageFolders.packages, id).pipe(
+        return this.storage.getItem(id).pipe(
           switchMap((packages) => {
             if (!packages) {
               return this.packageService.getPackagesInFolder(id).pipe(

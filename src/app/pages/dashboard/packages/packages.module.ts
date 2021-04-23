@@ -6,10 +6,13 @@ import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
 import { FeatureType } from '@app/interfaces/general.interface';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { CountPipeModule } from '@app/pipes/count-pipe/count-pipe.module';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
+import { NgxsModule } from '@ngxs/store';
 import { NgxFilesizeModule } from 'ngx-filesize';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
@@ -19,6 +22,9 @@ import { PackagesListCardComponent } from './components/packages-list-card/packa
 import { PackagesListComponent } from './components/packages-list/packages-list.component';
 import { PackagesRoutingModule } from './packages-routing.module';
 import { PackagesComponent } from './packages.component';
+import { PackageStorageService } from './shared/services/package-storage.service';
+import { PackageFolderState } from './store/states/package-folders.state';
+import { PackageState } from './store/states/package.state';
 
 @NgModule({
   declarations: [
@@ -42,6 +48,7 @@ import { PackagesComponent } from './packages.component';
     CountPipeModule,
     FeatureDirectiveModule,
     MoveToFolderModule,
+    NgxsModule.forFeature([PackageState, PackageFolderState]),
   ],
   providers: [
     MenuService,
@@ -49,6 +56,11 @@ import { PackagesComponent } from './packages.component';
       provide: FEATURE_TOKEN,
       useValue: FeatureType.bookmark,
     },
+    {
+      provide: BaseStorageService,
+      useClass: PackageStorageService,
+    },
+    IDBSyncService,
   ],
 })
 export class PackagesModule {}

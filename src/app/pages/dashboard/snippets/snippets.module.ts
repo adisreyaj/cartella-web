@@ -11,11 +11,14 @@ import { FeatureType } from '@app/interfaces/general.interface';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { LanguagePipeModule } from '@app/pipes/language-pipe/language-pipe.module';
 import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
+import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@app/services/menu/menu.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
+import { NgxsModule } from '@ngxs/store';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
@@ -23,8 +26,11 @@ import { SnippetsScreenshotComponent } from './components/modals/snippets-screen
 import { SnippetsPlaygroundComponent } from './components/snippets-playground/snippets-playground.component';
 import { SnippetsSidebarComponent } from './components/snippets-sidebar/snippets-sidebar.component';
 import { ThemeVariantPipe } from './shared/pipes/theme-variant.pipe';
+import { SnippetStorageService } from './shared/services/snippet-storage.service';
 import { SnippetsRoutingModule } from './snippets-routing.module';
 import { SnippetsComponent } from './snippets.component';
+import { SnippetFolderState } from './store/states/snippet-folders.state';
+import { SnippetState } from './store/states/snippets.state';
 
 @NgModule({
   declarations: [
@@ -54,13 +60,19 @@ import { SnippetsComponent } from './snippets.component';
     TimeAgoPipeModule,
     LayoutModule,
     FeatureDirectiveModule,
+    NgxsModule.forFeature([SnippetState, SnippetFolderState]),
   ],
   providers: [
     MenuService,
     {
-      provide: FEATURE_TOKEN,
-      useValue: FeatureType.bookmark,
+      provide: BaseStorageService,
+      useClass: SnippetStorageService,
     },
+    {
+      provide: FEATURE_TOKEN,
+      useValue: FeatureType.snippet,
+    },
+    IDBSyncService,
   ],
 })
 export class SnippetsModule {}

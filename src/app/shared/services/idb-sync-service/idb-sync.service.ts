@@ -16,8 +16,8 @@ import { FEATURE_TOKEN } from '@app/tokens/feature.token';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';
+import { BaseStorageService } from '../storage/base-storage.service';
 import { StorageFolders } from '../storage/storage.interface';
-import { StorageService } from '../storage/storage.service';
 
 type Items = Bookmark | Snippet | Package;
 type Folders = BookmarkFolder | SnippetFolder | PackageFolder;
@@ -38,8 +38,8 @@ const IDB_COLLECTION_NAMES = {
 @Injectable()
 export class IDBSyncService {
   constructor(
-    private storage: StorageService,
     private folderAssort: FolderAssortService,
+    private storage: BaseStorageService,
     @Inject(FEATURE_TOKEN) private feature: FeatureType
   ) {}
 
@@ -71,26 +71,20 @@ export class IDBSyncService {
   }
 
   syncFolders(folders: Folders[]) {
-    return this.storage
-      .setItem(StorageFolders.folders, this.folderName, folders)
-      .pipe(
-        mapTo(true),
-        catchError((err) => {
-          console.error('Save Bookmark Folders', err);
-          return of(false);
-        })
-      );
+    return this.storage.setItem('folders', folders).pipe(
+      mapTo(true),
+      catchError((err) => {
+        console.error('Save Bookmark Folders', err);
+        return of(false);
+      })
+    );
   }
 
   private syncOwnItems(itemsGroupedIntoFolders: { [key: string]: Items[] }) {
     const folders = Object.keys(itemsGroupedIntoFolders);
     if (folders?.length > 0) {
       const setOps$ = folders.map((key) =>
-        this.storage.setItem(
-          StorageFolders.bookmarks,
-          key,
-          itemsGroupedIntoFolders[key]
-        )
+        this.storage.setItem(key, itemsGroupedIntoFolders[key])
       );
       return forkJoin(setOps$).pipe(
         mapTo(true),
@@ -104,7 +98,7 @@ export class IDBSyncService {
   }
 
   private syncSharedItems(items: Items[]) {
-    return this.storage.setItem(this.collectionName, 'shared', items).pipe(
+    return this.storage.setItem('shared', items).pipe(
       mapTo(true),
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
@@ -113,7 +107,7 @@ export class IDBSyncService {
     );
   }
   private syncStarredItems(items: Items[]) {
-    return this.storage.setItem(this.collectionName, 'starred', items).pipe(
+    return this.storage.setItem('starred', items).pipe(
       mapTo(true),
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);

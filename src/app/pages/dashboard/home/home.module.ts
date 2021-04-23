@@ -3,7 +3,9 @@ import { NgModule } from '@angular/core';
 import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
 import { IconModule } from '@app/modules/icon/icon.module';
 import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { TippyModule } from '@ngneat/helipopper';
+import { NgxsModule } from '@ngxs/store';
 import { ButtonsModule } from 'projects/ui/src/public-api';
 import { SwiperModule } from 'swiper/angular';
 import { HomeRoutingModule } from './home-routing.module';
@@ -13,6 +15,8 @@ import { HomeMostRecentlyAddedComponent } from './shared/components/home-most-re
 import { HomeTopItemsComponent } from './shared/components/home-top-items/home-top-items.component';
 import { StatsCardComponent } from './shared/components/stats-card/stats-card.component';
 import { HomeCardDataFormatPipe } from './shared/pipes/home-card-data-format.pipe';
+import { HomeStorageService } from './shared/services/home-storage.service';
+import { HomeState } from './shared/store/states/home.state';
 
 @NgModule({
   declarations: [
@@ -32,6 +36,13 @@ import { HomeCardDataFormatPipe } from './shared/pipes/home-card-data-format.pip
     HoveredDirectiveModule,
     TimeAgoPipeModule,
     TippyModule,
+    NgxsModule.forFeature([HomeState]),
+  ],
+  providers: [
+    {
+      provide: BaseStorageService,
+      useClass: HomeStorageService,
+    },
   ],
 })
 export class HomeModule {}

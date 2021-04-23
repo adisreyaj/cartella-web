@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -32,7 +31,7 @@ export class PackageFolderStateModel {
 export class PackageFolderState {
   constructor(
     private packageService: PackagesService,
-    private storage: StorageService
+    private storage: BaseStorageService<PackageFolder>
   ) {}
 
   @Selector()
@@ -53,7 +52,7 @@ export class PackageFolderState {
   }: StateContext<PackageFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
-      return this.storage.getItem(StorageFolders.folders, 'packages').pipe(
+      return this.storage.getItem('packages').pipe(
         switchMap((packageFolders) => {
           if (!packageFolders) {
             return this.packageService.getFolders().pipe(

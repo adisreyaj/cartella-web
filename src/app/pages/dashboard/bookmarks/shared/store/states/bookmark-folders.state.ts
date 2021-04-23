@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -32,7 +31,7 @@ export class BookmarkFolderStateModel {
 export class BookmarkFolderState {
   constructor(
     private bookmarkService: BookmarksService,
-    private storage: StorageService
+    private storage: BaseStorageService<BookmarkFolder>
   ) {}
 
   @Selector()
@@ -57,7 +56,7 @@ export class BookmarkFolderState {
   }: StateContext<BookmarkFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
-      return this.storage.getItem(StorageFolders.folders, 'bookmarks').pipe(
+      return this.storage.getItem('folders').pipe(
         switchMap((bookmarkFolders) => {
           if (!bookmarkFolders) {
             return this.bookmarkService.getFolders().pipe(

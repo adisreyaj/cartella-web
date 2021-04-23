@@ -6,12 +6,12 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { ToastService } from '@app/services/toast/toast.service';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
 import { AuthService } from '../../../shared/services/auth/auth.service';
-import { StorageService } from '../../../shared/services/storage/storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private storageService: StorageService,
+    private storageService: BaseStorageService,
     private toast: ToastService
   ) {
     this.initForm();

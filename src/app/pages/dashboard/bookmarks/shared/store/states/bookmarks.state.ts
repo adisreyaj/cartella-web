@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -33,7 +32,7 @@ export class BookmarkStateModel {
 export class BookmarkState {
   constructor(
     private bookmarkService: BookmarksService,
-    private storage: StorageService
+    private storage: BaseStorageService<Bookmark>
   ) {}
 
   @Selector()
@@ -65,27 +64,25 @@ export class BookmarkState {
       case 'all':
         const state = getState();
         if (state.fetched) {
-          return this.storage
-            .getAllItemsFromUserFolder<Bookmark>(StorageFolders.bookmarks)
-            .pipe(
-              switchMap((bookmarks) => {
-                if (!bookmarks) {
-                  return this.bookmarkService.getBookmarks().pipe(
-                    map(({ payload }) => payload),
-                    tap((result) => {
-                      patchState({
-                        bookmarksShown: result,
-                      });
-                    })
-                  );
-                } else {
-                  patchState({
-                    bookmarksShown: bookmarks,
-                  });
-                  return of(bookmarks);
-                }
-              })
-            );
+          return this.storage.getAllItemsFromUserFolder().pipe(
+            switchMap((bookmarks) => {
+              if (!bookmarks) {
+                return this.bookmarkService.getBookmarks().pipe(
+                  map(({ payload }) => payload),
+                  tap((result) => {
+                    patchState({
+                      bookmarksShown: result,
+                    });
+                  })
+                );
+              } else {
+                patchState({
+                  bookmarksShown: bookmarks,
+                });
+                return of(bookmarks);
+              }
+            })
+          );
         } else {
           return this.bookmarkService.getBookmarks().pipe(
             map(({ payload }) => payload),
@@ -100,7 +97,7 @@ export class BookmarkState {
           );
         }
       case 'starred':
-        return this.storage.getItem(StorageFolders.bookmarks, id).pipe(
+        return this.storage.getItem(id).pipe(
           switchMap((bookmarks) => {
             if (!bookmarks) {
               return this.bookmarkService.getFavoriteBookmarks().pipe(
@@ -120,7 +117,7 @@ export class BookmarkState {
           })
         );
       default: {
-        return this.storage.getItem(StorageFolders.bookmarks, id).pipe(
+        return this.storage.getItem(id).pipe(
           switchMap((bookmarks) => {
             if (!bookmarks) {
               return this.bookmarkService.getBookmarksInFolder(id).pipe(

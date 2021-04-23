@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@app/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of, throwError } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
@@ -34,7 +33,7 @@ export class SnippetStateModel {
 export class SnippetState {
   constructor(
     private snippetService: SnippetsService,
-    private storage: StorageService
+    private storage: BaseStorageService<Snippet>
   ) {}
 
   @Selector()
@@ -66,27 +65,25 @@ export class SnippetState {
       case 'all':
         const state = getState();
         if (state.fetched) {
-          return this.storage
-            .getAllItemsFromUserFolder<Snippet>(StorageFolders.snippets)
-            .pipe(
-              switchMap((snippets) => {
-                if (!snippets) {
-                  return this.snippetService.getSnippets().pipe(
-                    map(({ payload }) => payload),
-                    tap((result) => {
-                      patchState({
-                        snippetsShown: result,
-                      });
-                    })
-                  );
-                } else {
-                  patchState({
-                    snippetsShown: snippets,
-                  });
-                  return of(snippets);
-                }
-              })
-            );
+          return this.storage.getAllItemsFromUserFolder().pipe(
+            switchMap((snippets) => {
+              if (!snippets) {
+                return this.snippetService.getSnippets().pipe(
+                  map(({ payload }) => payload),
+                  tap((result) => {
+                    patchState({
+                      snippetsShown: result,
+                    });
+                  })
+                );
+              } else {
+                patchState({
+                  snippetsShown: snippets,
+                });
+                return of(snippets);
+              }
+            })
+          );
         } else {
           return this.snippetService.getSnippets().pipe(
             map(({ payload }) => payload),
@@ -101,7 +98,7 @@ export class SnippetState {
           );
         }
       case 'starred':
-        return this.storage.getItem(StorageFolders.snippets, id).pipe(
+        return this.storage.getItem(id).pipe(
           switchMap((snippets) => {
             if (!snippets) {
               return this.snippetService.getFavoriteSnippets().pipe(
@@ -119,7 +116,7 @@ export class SnippetState {
           })
         );
       default: {
-        return this.storage.getItem(StorageFolders.snippets, id).pipe(
+        return this.storage.getItem(id).pipe(
           switchMap((snippets) => {
             if (!snippets) {
               return this.snippetService.getSnippetsInFolder(id).pipe(
