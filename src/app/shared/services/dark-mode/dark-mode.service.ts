@@ -41,12 +41,12 @@ export class DarkModeService {
   }
 
   enable() {
-    this.bodyElement.classList.add('mode-dark');
+    this.bodyElement.classList.add(...['dark']);
     this.isDarkModeSubject.next(true);
     localStorage.setItem('theme', 'dark');
   }
   disable() {
-    this.bodyElement.classList.remove('mode-dark');
+    this.bodyElement.classList.remove(...['dark']);
     this.isDarkModeSubject.next(false);
     localStorage.setItem('theme', 'light');
   }

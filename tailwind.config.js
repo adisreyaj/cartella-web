@@ -73,6 +73,5 @@ module.exports = {
     require('@tailwindcss/custom-forms'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
-    require('tailwindcss-dark-mode')(),
   ],
 };
