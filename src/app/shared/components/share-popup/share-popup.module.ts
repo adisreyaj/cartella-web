@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from '@cartella/ui';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { DialogModule } from '@ngneat/dialog';
 import { IconModule } from '../../modules/icon/icon.module';
 import { SharePopupComponent } from './share-popup.component';
 
@@ -13,6 +14,7 @@ import { SharePopupComponent } from './share-popup.component';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
+    DialogModule,
     ButtonsModule,
     NgSelectModule,
     IconModule,
