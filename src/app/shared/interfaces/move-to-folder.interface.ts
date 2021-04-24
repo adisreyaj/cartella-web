@@ -1,5 +1,5 @@
-import { Bookmark } from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
-import { Package } from '@cartella/packages/shared/interfaces/packages.interface';
+import { Bookmark } from '@cartella/bookmarks';
+import { Package } from '@cartella/packages';
 import { Snippet } from '@cartella/snippets';
 import { Observable } from 'rxjs';
 import { FolderBaseResponse } from './folder.interface';

@@ -1,12 +1,6 @@
 import { Injectable } from '@angular/core';
-import {
-  Bookmark,
-  BookmarkFolder,
-} from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
-import {
-  Package,
-  PackageFolder,
-} from '@cartella/packages/shared/interfaces/packages.interface';
+import { Bookmark, BookmarkFolder } from '@cartella/bookmarks';
+import { Package, PackageFolder } from '@cartella/packages';
 import { Snippet, SnippetFolder } from '@cartella/snippets';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
@@ -18,10 +12,7 @@ type Folders = BookmarkFolder | SnippetFolder | PackageFolder;
 
 @Injectable()
 export class IDBSyncService {
-  constructor(
-    private folderAssort: FolderAssortService,
-    private storage: BaseStorageService
-  ) {}
+  constructor(private folderAssort: FolderAssortService, private storage: BaseStorageService) {}
 
   syncItems(items: Items[], folders: Folders[]): Observable<boolean> {
     if (items != null && folders != null) {
@@ -55,9 +46,7 @@ export class IDBSyncService {
   private syncOwnItems(itemsGroupedIntoFolders: { [key: string]: Items[] }) {
     const folders = Object.keys(itemsGroupedIntoFolders);
     if (folders?.length > 0) {
-      const setOps$ = folders.map((key) =>
-        this.storage.setItem(key, itemsGroupedIntoFolders[key])
-      );
+      const setOps$ = folders.map((key) => this.storage.setItem(key, itemsGroupedIntoFolders[key]));
       return forkJoin(setOps$).pipe(
         mapTo(true),
         catchError((err) => {
@@ -104,10 +93,7 @@ export class IDBSyncService {
       return folders.reduce(
         (acc, { id }) => ({
           ...acc,
-          [id]:
-            items?.length > 0
-              ? items.filter(({ folder: { id: folderId } }) => folderId === id)
-              : [],
+          [id]: items?.length > 0 ? items.filter(({ folder: { id: folderId } }) => folderId === id) : [],
         }),
         {}
       );

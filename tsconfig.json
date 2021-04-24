@@ -27,9 +27,15 @@
       "@cartella/directives/*": ["src/app/shared/directives/*"],
       "@cartella/store/*": ["src/app/shared/store/*"],
       "@cartella/home/*": ["src/app/pages/dashboard/home/*"],
-      "@cartella/bookmarks/*": ["src/app/pages/dashboard/bookmarks/*"],
-      "@cartella/packages/*": ["src/app/pages/dashboard/packages/*"],
-      "@cartella/snippets": ["projects/snippets/src/public-api.ts"]
+      "@cartella/snippets": ["projects/snippets/src/public-api.ts"],
+      "@cartella/bookmarks": ["projects/bookmarks/src/public-api.ts"],
+      "@cartella/packages": [
+        "projects/packages/src/public-api.ts"
+      ],
+      "packages": [
+        "dist/packages/packages",
+        "dist/packages"
+      ]
     }
   }
 }

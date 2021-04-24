@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from '@cartella/services/toast/toast.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
@@ -13,14 +6,8 @@ import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
-import {
-  SnippetFolder,
-  SnippetFolderRequest,
-} from '../../../shared/interfaces/snippets.interface';
-import {
-  AddSnippetFolder,
-  UpdateSnippetFolder,
-} from '../../../store/actions/snippets-folders.action';
+import { SnippetFolder, SnippetFolderRequest } from '../../../shared/interfaces/snippets.interface';
+import { AddSnippetFolder, UpdateSnippetFolder } from '../../../shared/store/actions/snippets-folders.action';
 
 @Component({
   selector: 'app-snippets-add-folder',
@@ -28,19 +15,13 @@ import {
   styleUrls: ['./snippets-add-folder.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SnippetsAddFolderComponent
-  extends WithDestroy
-  implements OnInit, AfterViewInit {
+export class SnippetsAddFolderComponent extends WithDestroy implements OnInit, AfterViewInit {
   @ViewChild('folderNameRef') folderNameRef: ElementRef;
   folderName = new FormControl('', [Validators.required]);
 
   private savingSubject = new BehaviorSubject<boolean>(false);
   readonly saving$ = this.savingSubject.pipe();
-  constructor(
-    public ref: DialogRef,
-    private toaster: ToastService,
-    private store: Store
-  ) {
+  constructor(public ref: DialogRef, private toaster: ToastService, private store: Store) {
     super();
   }
 

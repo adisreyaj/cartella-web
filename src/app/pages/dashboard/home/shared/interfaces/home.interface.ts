@@ -1,6 +1,6 @@
-import { Bookmark } from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
+import { Bookmark } from '@cartella/bookmarks';
 import { FeatureType } from '@cartella/interfaces/general.interface';
-import { Package } from '@cartella/packages/shared/interfaces/packages.interface';
+import { Package } from '@cartella/packages';
 import { Snippet } from '@cartella/snippets';
 
 export interface HomeItems {

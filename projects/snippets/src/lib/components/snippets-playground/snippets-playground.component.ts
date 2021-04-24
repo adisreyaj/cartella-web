@@ -15,10 +15,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
-import {
-  DEFAULT_EDITOR_OPTIONS,
-  THEMES_SUPPORTED,
-} from '@cartella/config/snippets.config';
+import { DEFAULT_EDITOR_OPTIONS, THEMES_SUPPORTED } from '@cartella/config/snippets.config';
 import { Technology } from '@cartella/interfaces/technology.interface';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
@@ -43,17 +40,10 @@ import { has } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take, tap } from 'rxjs/operators';
 import screenfull from 'screenfull';
-import {
-  Snippet,
-  SnippetModes,
-} from '../../shared/interfaces/snippets.interface';
+import { Snippet, SnippetModes } from '../../shared/interfaces/snippets.interface';
 import { CodeEditorService } from '../../shared/services/code-editor/code-editor.service';
-import { SnippetState } from '../../store';
-import {
-  DeleteSnippet,
-  SetActiveSnippet,
-  UpdateSnippet,
-} from '../../store/actions/snippets.action';
+import { SnippetState } from '../../shared/store';
+import { DeleteSnippet, SetActiveSnippet, UpdateSnippet } from '../../shared/store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
 
 @Component({
@@ -62,9 +52,7 @@ import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snipp
   styleUrls: ['./snippets-playground.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SnippetsPlaygroundComponent
-  extends WithDestroy
-  implements OnInit, AfterViewInit, OnChanges, OnDestroy {
+export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Select(SnippetState.getActiveSnippet)
   activeSnippet$: Observable<Snippet>;
   @Input() technologies: Technology[] = [];
@@ -80,9 +68,7 @@ export class SnippetsPlaygroundComponent
   availableThemes = THEMES_SUPPORTED;
   editor: codemirror.EditorFromTextArea;
   languageFormControl = new FormControl('javascript');
-  themeFormControl = new FormControl(
-    localStorage.getItem('editor-theme') ?? 'one-dark'
-  );
+  themeFormControl = new FormControl(localStorage.getItem('editor-theme') ?? 'one-dark');
   fullScreen$ = new BehaviorSubject(false);
   isDarkMode$: Observable<boolean>;
 
@@ -120,10 +106,7 @@ export class SnippetsPlaygroundComponent
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    (screenfull as screenfull.Screenfull).off(
-      'change',
-      this.handleFullscreenChange
-    );
+    (screenfull as screenfull.Screenfull).off('change', this.handleFullscreenChange);
   }
 
   emptyFunction() {}
@@ -178,9 +161,7 @@ export class SnippetsPlaygroundComponent
       data: {
         name: this.snippetNameFormControl.value,
         code: this.editor.getValue(),
-        language: this.technologies.find(
-          ({ id }) => id === this.languageFormControl.value
-        ),
+        language: this.technologies.find(({ id }) => id === this.languageFormControl.value),
         theme: this.themeFormControl.value,
       },
     });
@@ -220,12 +201,10 @@ export class SnippetsPlaygroundComponent
    */
   private listenToSnippetChanges() {
     this.subs.add(
-      this.activeSnippet$
-        .pipe(filter((data) => data != null))
-        .subscribe((snippet) => {
-          this.populateEditorData(snippet);
-          this.setSnippetName(snippet?.name);
-        })
+      this.activeSnippet$.pipe(filter((data) => data != null)).subscribe((snippet) => {
+        this.populateEditorData(snippet);
+        this.setSnippetName(snippet?.name);
+      })
     );
   }
 
@@ -241,19 +220,13 @@ export class SnippetsPlaygroundComponent
 
   private enableEditorFullScreen() {
     if (this.playgroundRef) {
-      this.renderer.addClass(
-        this.playgroundRef.nativeElement,
-        'playground--fullscreen'
-      );
+      this.renderer.addClass(this.playgroundRef.nativeElement, 'playground--fullscreen');
     }
   }
 
   private disableEditorFullScreen() {
     if (this.playgroundRef) {
-      this.renderer.removeClass(
-        this.playgroundRef.nativeElement,
-        'playground--fullscreen'
-      );
+      this.renderer.removeClass(this.playgroundRef.nativeElement, 'playground--fullscreen');
     }
   }
 

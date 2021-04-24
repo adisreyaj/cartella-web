@@ -21,13 +21,7 @@ import { TechnologyState } from '@cartella/store/states/technology.state';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
 import {
   Snippet as Snippet,
   SnippetFolder,
@@ -36,22 +30,16 @@ import {
   SnippetModes,
   SnippetRequest,
 } from '../../shared/interfaces/snippets.interface';
-import {
-  AddSnippet,
-  SetActiveSnippet,
-  UpdateSnippet,
-} from '../../store/actions/snippets.action';
-import { SnippetFolderState } from '../../store/states/snippet-folders.state';
-import { SnippetState } from '../../store/states/snippets.state';
+import { AddSnippet, SetActiveSnippet, UpdateSnippet } from '../../shared/store/actions/snippets.action';
+import { SnippetFolderState } from '../../shared/store/states/snippet-folders.state';
+import { SnippetState } from '../../shared/store/states/snippets.state';
 @Component({
   selector: 'app-snippets-sidebar',
   templateUrl: './snippets-sidebar.component.html',
   styleUrls: ['./snippets-sidebar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SnippetsSidebarComponent
-  extends WithDestroy
-  implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnChanges, AfterViewInit, OnDestroy {
   @Input() snippets: Snippet[] = [];
   @Input() isLoading = false;
   @Input() isLargeScreen = true;
@@ -77,11 +65,7 @@ export class SnippetsSidebarComponent
 
   @ViewChild('searchRef') searchRef: ElementRef;
 
-  constructor(
-    private store: Store,
-    private nameGeneratorService: NameGeneratorService,
-    private clipboard: Clipboard
-  ) {
+  constructor(private store: Store, private nameGeneratorService: NameGeneratorService, private clipboard: Clipboard) {
     super();
   }
 
@@ -152,9 +136,7 @@ export class SnippetsSidebarComponent
 
   private getFilteredSnippetsBasedOnSearchTerm(searchTerm = '') {
     if (searchTerm !== '' && this.snippets?.length > 0) {
-      return this.snippets.filter(({ name }) =>
-        name.toLowerCase().includes(searchTerm)
-      );
+      return this.snippets.filter(({ name }) => name.toLowerCase().includes(searchTerm));
     }
     return this.snippets;
   }
@@ -167,9 +149,7 @@ export class SnippetsSidebarComponent
           map(() => this.searchRef.nativeElement.value)
         )
         .subscribe((searchTerm) => {
-          const filteredSnippets = this.getFilteredSnippetsBasedOnSearchTerm(
-            searchTerm
-          );
+          const filteredSnippets = this.getFilteredSnippetsBasedOnSearchTerm(searchTerm);
           this.snippetsToShowSubject.next(filteredSnippets);
         });
       this.subs.add(sub);

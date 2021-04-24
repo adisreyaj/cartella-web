@@ -222,6 +222,86 @@
           }
         }
       }
+    },
+    "bookmarks": {
+      "projectType": "library",
+      "root": "projects/bookmarks",
+      "sourceRoot": "projects/bookmarks/src",
+      "prefix": "cartella",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/bookmarks/tsconfig.lib.json",
+            "project": "projects/bookmarks/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bookmarks/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bookmarks/src/test.ts",
+            "tsConfig": "projects/bookmarks/tsconfig.spec.json",
+            "karmaConfig": "projects/bookmarks/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bookmarks/tsconfig.lib.json",
+              "projects/bookmarks/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "packages": {
+      "projectType": "library",
+      "root": "projects/packages",
+      "sourceRoot": "projects/packages/src",
+      "prefix": "cartella",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/packages/tsconfig.lib.json",
+            "project": "projects/packages/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/packages/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/packages/src/test.ts",
+            "tsConfig": "projects/packages/tsconfig.spec.json",
+            "karmaConfig": "projects/packages/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/packages/tsconfig.lib.json",
+              "projects/packages/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "cartella"

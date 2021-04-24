@@ -27,10 +27,10 @@ import { SnippetsPlaygroundComponent } from './components/snippets-playground/sn
 import { SnippetsSidebarComponent } from './components/snippets-sidebar/snippets-sidebar.component';
 import { ThemeVariantPipe } from './shared/pipes/theme-variant.pipe';
 import { SnippetStorageService } from './shared/services/snippet-storage.service';
+import { SnippetFolderState } from './shared/store/states/snippet-folders.state';
+import { SnippetState } from './shared/store/states/snippets.state';
 import { SnippetsRoutingModule } from './snippets-routing.module';
 import { SnippetsComponent } from './snippets.component';
-import { SnippetFolderState } from './store/states/snippet-folders.state';
-import { SnippetState } from './store/states/snippets.state';
 
 @NgModule({
   declarations: [
