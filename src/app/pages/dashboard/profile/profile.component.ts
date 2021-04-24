@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuService } from '@app/services/menu/menu.service';
+import { MenuService } from '@cartella/services/menu/menu.service';
 import { Observable } from 'rxjs';
 
 @Component({

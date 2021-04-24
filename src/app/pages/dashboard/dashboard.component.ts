@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuService } from '@app/services/menu/menu.service';
-import { GetCustomTags } from '@app/store/actions/tag.action';
-import { GetTechnologies } from '@app/store/actions/technology.action';
-import { GetLoggedInUser } from '@app/store/actions/user.action';
+import { MenuService } from '@cartella/services/menu/menu.service';
+import { GetCustomTags } from '@cartella/store/actions/tag.action';
+import { GetTechnologies } from '@cartella/store/actions/technology.action';
+import { GetLoggedInUser } from '@cartella/store/actions/user.action';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 

@@ -3,12 +3,12 @@ import {
   EntityGeneral,
   EntityOwner,
   EntityShare,
-} from '@app/interfaces/entity.interface';
+} from '@cartella/interfaces/entity.interface';
 import {
   FolderBaseRequest,
   FolderBaseResponse,
-} from '@app/interfaces/folder.interface';
-import { Technology } from '@app/interfaces/technology.interface';
+} from '@cartella/interfaces/folder.interface';
+import { Technology } from '@cartella/interfaces/technology.interface';
 export type SnippetFolderRequest = FolderBaseRequest;
 export type SnippetFolder = FolderBaseResponse;
 

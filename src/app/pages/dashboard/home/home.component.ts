@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { User } from '@app/interfaces/user.interface';
-import { UserState } from '@app/store/states/user.state';
+import { User } from '@cartella/interfaces/user.interface';
+import { UserState } from '@cartella/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import dayjs from 'dayjs';
 import { BehaviorSubject, Observable } from 'rxjs';

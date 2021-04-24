@@ -1,4 +1,4 @@
-import { SharedWith } from '@app/interfaces/share.interface';
+import { SharedWith } from '@cartella/interfaces/share.interface';
 import { Observable } from 'rxjs';
 import { PayloadResponse } from './response.interface';
 import { User } from './user.interface';

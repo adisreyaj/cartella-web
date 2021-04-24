@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseStorageService } from '@app/services/storage/base-storage.service';
+import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { of, throwError } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';

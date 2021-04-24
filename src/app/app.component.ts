@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
-import { MetaService } from '@app/services/meta/meta.service';
+import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
+import { MetaService } from '@cartella/services/meta/meta.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
 import { filter, map, mergeMap } from 'rxjs/operators';
 @Component({

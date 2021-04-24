@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { environment } from '@app/env/environment';
-import { AuthGuard } from '@app/guards/auth.guard';
-import { FeatureGuard } from '@app/guards/feature.guard';
+import { environment } from '@cartella/env/environment';
+import { AuthGuard } from '@cartella/guards/auth.guard';
+import { FeatureGuard } from '@cartella/guards/feature.guard';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [

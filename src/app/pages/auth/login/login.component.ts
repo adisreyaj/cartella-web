@@ -6,12 +6,12 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { BaseStorageService } from '@app/services/storage/base-storage.service';
-import { ToastService } from '@app/services/toast/toast.service';
+import { AuthService } from '@cartella/services/auth/auth.service';
+import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
+import { ToastService } from '@cartella/services/toast/toast.service';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
-import { AuthService } from '../../../shared/services/auth/auth.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',

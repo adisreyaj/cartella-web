@@ -6,8 +6,8 @@ import {
   RouterStateSnapshot,
   UrlTree,
 } from '@angular/router';
-import { AuthService } from '@app/services/auth/auth.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthService } from '@cartella/services/auth/auth.service';
 import { Observable } from 'rxjs';
 const helper = new JwtHelperService();
 

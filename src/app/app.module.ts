@@ -7,14 +7,14 @@ import {
 } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { CartellaHammerConfig } from '@app/config/hammer.config';
-import { IconModule } from '@app/modules/icon/icon.module';
-import { ConfigurationService } from '@app/services/configuration/configuration.service';
-import { BaseStorageService } from '@app/services/storage/base-storage.service';
-import { StorageService } from '@app/services/storage/storage.service';
-import { TagState } from '@app/store/states/tag.state';
-import { TechnologyState } from '@app/store/states/technology.state';
-import { UserState } from '@app/store/states/user.state';
+import { CartellaHammerConfig } from '@cartella/config/hammer.config';
+import { IconModule } from '@cartella/modules/icon/icon.module';
+import { ConfigurationService } from '@cartella/services/configuration/configuration.service';
+import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
+import { StorageService } from '@cartella/services/storage/storage.service';
+import { TagState } from '@cartella/store/states/tag.state';
+import { TechnologyState } from '@cartella/store/states/technology.state';
+import { UserState } from '@cartella/store/states/user.state';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import {

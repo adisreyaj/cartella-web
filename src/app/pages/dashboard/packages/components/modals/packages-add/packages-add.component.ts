@@ -7,10 +7,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Tag } from '@app/interfaces/tag.interface';
-import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { TagState } from '@app/store/states/tag.state';
+import { Tag } from '@cartella/interfaces/tag.interface';
+import { ToastService } from '@cartella/services/toast/toast.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { TagState } from '@cartella/store/states/tag.state';
 import { DialogRef } from '@ngneat/dialog';
 import { TippyInstance } from '@ngneat/helipopper';
 import { Select, Store } from '@ngxs/store';

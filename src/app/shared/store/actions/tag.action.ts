@@ -1,4 +1,4 @@
-import { TagRequest } from '@app/interfaces/tag.interface';
+import { TagRequest } from '@cartella/interfaces/tag.interface';
 
 export class GetTags {
   static readonly type = '[Tag] Get Default';

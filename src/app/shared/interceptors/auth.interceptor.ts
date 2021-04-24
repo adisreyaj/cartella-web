@@ -6,7 +6,7 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@app/env/environment';
+import { environment } from '@cartella/env/environment';
 import { Observable } from 'rxjs';
 
 @Injectable()

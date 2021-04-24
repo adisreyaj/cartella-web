@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
-import { IconModule } from '@app/modules/icon/icon.module';
-import { TimeAgoPipeModule } from '@app/pipes/time-ago-pipe/time-ago-pipe.module';
-import { BaseStorageService } from '@app/services/storage/base-storage.service';
+import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
+import { IconModule } from '@cartella/modules/icon/icon.module';
+import { TimeAgoPipeModule } from '@cartella/pipes/time-ago-pipe/time-ago-pipe.module';
+import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
 import { ButtonsModule } from 'projects/ui/src/public-api';

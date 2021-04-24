@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
-import { LoggedUser, User } from '@app/interfaces/user.interface';
-import { IDBSyncService } from '@app/services/idb-sync-service/idb-sync.service';
-import { MenuService } from '@app/services/menu/menu.service';
-import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { UserState } from '@app/store/states/user.state';
+import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
+import { LoggedUser, User } from '@cartella/interfaces/user.interface';
+import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
+import { MenuService } from '@cartella/services/menu/menu.service';
+import { ToastService } from '@cartella/services/toast/toast.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { UserState } from '@cartella/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';

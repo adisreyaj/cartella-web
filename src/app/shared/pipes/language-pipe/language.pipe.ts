@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { LANGUAGES_SUPPORTED } from '@app/config/snippets.config';
+import { LANGUAGES_SUPPORTED } from '@cartella/config/snippets.config';
 
 @Pipe({
   name: 'language',

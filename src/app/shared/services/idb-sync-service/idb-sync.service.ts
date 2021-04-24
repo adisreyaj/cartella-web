@@ -2,17 +2,17 @@ import { Inject, Injectable } from '@angular/core';
 import {
   Bookmark,
   BookmarkFolder,
-} from '@app/bookmarks/shared/interfaces/bookmarks.interface';
-import { FeatureType } from '@app/interfaces/general.interface';
+} from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
+import { FeatureType } from '@cartella/interfaces/general.interface';
 import {
   Package,
   PackageFolder,
-} from '@app/packages/shared/interfaces/packages.interface';
+} from '@cartella/packages/shared/interfaces/packages.interface';
 import {
   Snippet,
   SnippetFolder,
-} from '@app/snippets/shared/interfaces/snippets.interface';
-import { FEATURE_TOKEN } from '@app/tokens/feature.token';
+} from '@cartella/snippets/shared/interfaces/snippets.interface';
+import { FEATURE_TOKEN } from '@cartella/tokens/feature.token';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';

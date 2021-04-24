@@ -8,11 +8,15 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ModalOperationType } from '@app/interfaces/general.interface';
-import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
-import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { AddTag, DeleteTag, UpdateTag } from '@app/store/actions/tag.action';
+import { ModalOperationType } from '@cartella/interfaces/general.interface';
+import { Tag, TagAddModalPayload } from '@cartella/interfaces/tag.interface';
+import { ToastService } from '@cartella/services/toast/toast.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import {
+  AddTag,
+  DeleteTag,
+  UpdateTag,
+} from '@cartella/store/actions/tag.action';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';

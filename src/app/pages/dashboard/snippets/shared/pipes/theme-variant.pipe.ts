@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ThemesSupported } from '@app/config/snippets.config';
+import { ThemesSupported } from '@cartella/config/snippets.config';
 
 @Pipe({
   name: 'themeVariant',

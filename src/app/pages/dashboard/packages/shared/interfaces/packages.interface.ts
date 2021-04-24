@@ -3,12 +3,12 @@ import {
   EntityGeneral,
   EntityOwner,
   EntityShare,
-} from '@app/interfaces/entity.interface';
+} from '@cartella/interfaces/entity.interface';
 import {
   FolderBaseRequest,
   FolderBaseResponse,
-} from '@app/interfaces/folder.interface';
-import { ModalOperationType } from '@app/interfaces/general.interface';
+} from '@cartella/interfaces/folder.interface';
+import { ModalOperationType } from '@cartella/interfaces/general.interface';
 import { PackageLinks, packageScore } from './package-details.interface';
 
 export type PackageFolderRequest = FolderBaseRequest;

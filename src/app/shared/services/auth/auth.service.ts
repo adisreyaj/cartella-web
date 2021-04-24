@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import {
   AUTH_ENDPOINTS,
   CARTELLA_ENDPOINTS,
-} from '@app/config/endpoints.config';
-import { environment } from '@app/env/environment';
-import { LoggedUser, User } from '@app/interfaces/user.interface';
-import { SetLoggedInUser } from '@app/store/actions/user.action';
-import { JwtHelperService } from '@auth0/angular-jwt';
+} from '@cartella/config/endpoints.config';
+import { environment } from '@cartella/env/environment';
+import { LoggedUser, User } from '@cartella/interfaces/user.interface';
+import { SetLoggedInUser } from '@cartella/store/actions/user.action';
 import { Store } from '@ngxs/store';
 import { ReplaySubject } from 'rxjs';
 import { tap } from 'rxjs/operators';

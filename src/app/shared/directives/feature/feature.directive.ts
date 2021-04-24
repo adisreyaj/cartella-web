@@ -5,7 +5,7 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { ConfigurationService } from '@app/services/configuration/configuration.service';
+import { ConfigurationService } from '@cartella/services/configuration/configuration.service';
 
 @Directive({
   // eslint-disable-next-line @angular-eslint/directive-selector

@@ -1,4 +1,4 @@
-import { LoggedUser, User } from '@app/interfaces/user.interface';
+import { LoggedUser, User } from '@cartella/interfaces/user.interface';
 
 export class GetLoggedInUser {
   static readonly type = '[User] Get';

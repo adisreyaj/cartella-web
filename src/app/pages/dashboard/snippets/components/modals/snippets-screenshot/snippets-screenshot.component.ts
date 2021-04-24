@@ -6,7 +6,7 @@ import {
   Renderer2,
   ViewChild,
 } from '@angular/core';
-import { DEFAULT_EDITOR_OPTIONS } from '@app/config/snippets.config';
+import { DEFAULT_EDITOR_OPTIONS } from '@cartella/config/snippets.config';
 import { DialogRef } from '@ngneat/dialog';
 import codemirror from 'codemirror';
 import 'codemirror/mode/css/css';

@@ -14,16 +14,16 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
+import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
 import {
   DEFAULT_EDITOR_OPTIONS,
   THEMES_SUPPORTED,
-} from '@app/config/snippets.config';
-import { Technology } from '@app/interfaces/technology.interface';
-import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
-import { EditorThemeService } from '@app/services/theme/editor-theme.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { SnippetState } from '@app/snippets/store/states/snippets.state';
+} from '@cartella/config/snippets.config';
+import { Technology } from '@cartella/interfaces/technology.interface';
+import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
+import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { SnippetState } from '@cartella/snippets/store/states/snippets.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import codemirror from 'codemirror';

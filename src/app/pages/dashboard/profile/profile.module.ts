@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentsModule } from '@app/components/components.module';
-import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
-import { HoveredDirectiveModule } from '@app/directives/hovered/hovered-directive.module';
-import { IconModule } from '@app/modules/icon/icon.module';
-import { MenuService } from '@app/services/menu/menu.service';
+import { ComponentsModule } from '@cartella/components/components.module';
+import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
+import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
+import { IconModule } from '@cartella/modules/icon/icon.module';
+import { MenuService } from '@cartella/services/menu/menu.service';
 import { DialogModule } from '@ngneat/dialog';
 import { ColorTwitterModule } from 'ngx-color/twitter';
 import { ButtonsModule } from 'projects/ui/src/public-api';

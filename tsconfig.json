@@ -15,21 +15,21 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "ui": ["dist/ui/ui", "dist/ui"],
-      "@app/env/*": ["src/environments/*"],
-      "@app/services/*": ["src/app/shared/services/*"],
-      "@app/guards/*": ["src/app/shared/guards/*"],
-      "@app/interfaces/*": ["src/app/shared/interfaces/*"],
-      "@app/tokens/*": ["src/app/shared/tokens/*"],
-      "@app/config/*": ["src/app/shared/config/*"],
-      "@app/modules/*": ["src/app/shared/modules/*"],
-      "@app/components/*": ["src/app/shared/components/*"],
-      "@app/pipes/*": ["src/app/shared/pipes/*"],
-      "@app/directives/*": ["src/app/shared/directives/*"],
-      "@app/store/*": ["src/app/shared/store/*"],
-      "@app/home/*": ["src/app/pages/dashboard/home/*"],
-      "@app/bookmarks/*": ["src/app/pages/dashboard/bookmarks/*"],
-      "@app/packages/*": ["src/app/pages/dashboard/packages/*"],
-      "@app/snippets/*": ["src/app/pages/dashboard/snippets/*"]
+      "@cartella/env/*": ["src/environments/*"],
+      "@cartella/services/*": ["src/app/shared/services/*"],
+      "@cartella/guards/*": ["src/app/shared/guards/*"],
+      "@cartella/interfaces/*": ["src/app/shared/interfaces/*"],
+      "@cartella/tokens/*": ["src/app/shared/tokens/*"],
+      "@cartella/config/*": ["src/app/shared/config/*"],
+      "@cartella/modules/*": ["src/app/shared/modules/*"],
+      "@cartella/components/*": ["src/app/shared/components/*"],
+      "@cartella/pipes/*": ["src/app/shared/pipes/*"],
+      "@cartella/directives/*": ["src/app/shared/directives/*"],
+      "@cartella/store/*": ["src/app/shared/store/*"],
+      "@cartella/home/*": ["src/app/pages/dashboard/home/*"],
+      "@cartella/bookmarks/*": ["src/app/pages/dashboard/bookmarks/*"],
+      "@cartella/packages/*": ["src/app/pages/dashboard/packages/*"],
+      "@cartella/snippets/*": ["src/app/pages/dashboard/snippets/*"]
     }
   }
 }

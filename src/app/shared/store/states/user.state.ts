@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { User } from '@app/interfaces/user.interface';
-import { AuthService } from '@app/services/auth/auth.service';
+import { User } from '@cartella/interfaces/user.interface';
+import { AuthService } from '@cartella/services/auth/auth.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { throwError } from 'rxjs';
 import { tap } from 'rxjs/operators';
