@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/explorer-sidebar.module';
 import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
+import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
 import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { IconModule } from '@cartella/modules/icon/icon.module';
@@ -48,6 +49,7 @@ import { PackageState } from './shared/store/states/package.state';
     CountPipeModule,
     FeatureDirectiveModule,
     MoveToFolderModule,
+    SharePopupModule,
     NgxsModule.forFeature([PackageState, PackageFolderState]),
   ],
   providers: [

@@ -6,6 +6,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentsModule } from '@cartella/components/components.module';
 import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/explorer-sidebar.module';
 import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
+import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
 import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
 import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
@@ -60,6 +61,7 @@ import { SnippetsComponent } from './snippets.component';
     TimeAgoPipeModule,
     LayoutModule,
     FeatureDirectiveModule,
+    SharePopupModule,
     NgxsModule.forFeature([SnippetState, SnippetFolderState]),
   ],
   providers: [
