@@ -1,9 +1,8 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import {
   Bookmark,
   BookmarkFolder,
 } from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
-import { FeatureType } from '@cartella/interfaces/general.interface';
 import {
   Package,
   PackageFolder,
@@ -12,44 +11,20 @@ import {
   Snippet,
   SnippetFolder,
 } from '@cartella/snippets/shared/interfaces/snippets.interface';
-import { FEATURE_TOKEN } from '@cartella/tokens/feature.token';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';
 import { BaseStorageService } from '../storage/base-storage.service';
-import { StorageFolders } from '../storage/storage.interface';
 
 type Items = Bookmark | Snippet | Package;
 type Folders = BookmarkFolder | SnippetFolder | PackageFolder;
-type Entities = 'bookmarks' | 'snippets' | 'packages';
-
-const IDB_FOLDER_NAMES = {
-  [FeatureType.bookmark]: 'bookmarks',
-  [FeatureType.snippet]: 'snippets',
-  [FeatureType.package]: 'packages',
-};
-
-const IDB_COLLECTION_NAMES = {
-  [FeatureType.bookmark]: StorageFolders.bookmarks,
-  [FeatureType.snippet]: StorageFolders.snippets,
-  [FeatureType.package]: StorageFolders.packages,
-};
 
 @Injectable()
 export class IDBSyncService {
   constructor(
     private folderAssort: FolderAssortService,
-    private storage: BaseStorageService,
-    @Inject(FEATURE_TOKEN) private feature: FeatureType
+    private storage: BaseStorageService
   ) {}
-
-  private get collectionName() {
-    return IDB_COLLECTION_NAMES[this.feature];
-  }
-
-  private get folderName() {
-    return IDB_FOLDER_NAMES[this.feature];
-  }
 
   syncItems(items: Items[], folders: Folders[]): Observable<boolean> {
     if (items != null && folders != null) {
