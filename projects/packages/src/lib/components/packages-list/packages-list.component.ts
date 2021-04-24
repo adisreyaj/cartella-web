@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
 import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
+import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@cartella/interfaces/move-to-folder.interface';
 import { User } from '@cartella/interfaces/user.interface';
@@ -96,6 +97,7 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
         this.handleMoveToFolder(packageData);
         break;
       case PackageCardEventType.share:
+        this.handleShare(packageData);
         break;
       default:
         break;
@@ -141,6 +143,27 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
           tap((response) => {
             if (response) {
               this.store.dispatch(new DeletePackage(id));
+            }
+          })
+        )
+        .subscribe(() => {})
+    );
+  }
+
+  private handleShare(packageItem: Package) {
+    const dialogRef = this.dialog.open(SharePopupComponent, {
+      size: 'md',
+      minHeight: 'unset',
+      data: {
+        entity: 'Package',
+        item: packageItem,
+      },
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          tap((response) => {
+            if (response) {
             }
           })
         )

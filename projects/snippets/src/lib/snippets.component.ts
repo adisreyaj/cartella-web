@@ -7,6 +7,7 @@ import {
   ExplorerSidebarEventType,
 } from '@cartella/components/explorer-sidebar/explorer-sidebar.component';
 import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
+import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
 import { ALL_SNIPPETS_FOLDER } from '@cartella/config/snippets.config';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@cartella/interfaces/move-to-folder.interface';
@@ -225,6 +226,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
         this.handleMoveToFolder(snippet);
         break;
       case SnippetItemEventType.share:
+        this.handleShare(snippet);
         break;
 
       default:
@@ -275,6 +277,27 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
           })
         )
         .subscribe()
+    );
+  }
+
+  private handleShare(snippet: Snippet) {
+    const dialogRef = this.dialog.open(SharePopupComponent, {
+      size: 'md',
+      minHeight: 'unset',
+      data: {
+        entity: 'Snippet',
+        item: snippet,
+      },
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          tap((response) => {
+            if (response) {
+            }
+          })
+        )
+        .subscribe(() => {})
     );
   }
 
