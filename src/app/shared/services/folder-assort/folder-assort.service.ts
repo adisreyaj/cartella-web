@@ -1,17 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngxs/store';
 import {
   Bookmark,
   BookmarkFolder,
-} from '../../../pages/dashboard/bookmarks/shared/interfaces/bookmarks.interface';
+} from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
 import {
   Package,
   PackageFolder,
-} from '../../../pages/dashboard/packages/shared/interfaces/packages.interface';
-import {
-  Snippet,
-  SnippetFolder,
-} from '../../../pages/dashboard/snippets/shared/interfaces/snippets.interface';
+} from '@cartella/packages/shared/interfaces/packages.interface';
+import { Snippet, SnippetFolder } from '@cartella/snippets';
+import { Store } from '@ngxs/store';
 import { User } from '../../interfaces/user.interface';
 import { UserState } from '../../store/states/user.state';
 type Items = Bookmark | Snippet | Package;

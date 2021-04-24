@@ -10,12 +10,12 @@ import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.ser
 import { MenuService } from '@cartella/services/menu/menu.service';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@cartella/tokens/feature.token';
+import { ButtonsModule } from '@cartella/ui';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
 import { NgxFilesizeModule } from 'ngx-filesize';
-import { ButtonsModule } from 'projects/ui/src/public-api';
-import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
+import { ExplorerSidebarModule } from '../../../shared/components/explorer-sidebar/explorer-sidebar.module';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { PackagesAddComponent } from './components/modals/packages-add/packages-add.component';
 import { PackagesListCardComponent } from './components/packages-list-card/packages-list-card.component';

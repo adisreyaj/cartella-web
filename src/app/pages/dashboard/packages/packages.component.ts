@@ -14,7 +14,7 @@ import { filter, finalize, pluck, switchMap, take } from 'rxjs/operators';
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
-} from '../shared/components/explorer-sidebar/explorer-sidebar.component';
+} from '../../../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';

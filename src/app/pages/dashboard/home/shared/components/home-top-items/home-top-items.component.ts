@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { Bookmark } from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Package } from '@cartella/packages/shared/interfaces/packages.interface';
-import { Snippet } from '@cartella/snippets/shared/interfaces/snippets.interface';
+import { Snippet } from '@cartella/snippets';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import Swiper, { SwiperOptions } from 'swiper';

@@ -7,10 +7,7 @@ import {
   Package,
   PackageFolder,
 } from '@cartella/packages/shared/interfaces/packages.interface';
-import {
-  Snippet,
-  SnippetFolder,
-} from '@cartella/snippets/shared/interfaces/snippets.interface';
+import { Snippet, SnippetFolder } from '@cartella/snippets';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';

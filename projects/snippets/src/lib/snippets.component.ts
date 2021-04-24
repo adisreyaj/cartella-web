@@ -2,6 +2,10 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
+import {
+  ExplorerSidebarEvent,
+  ExplorerSidebarEventType,
+} from '@cartella/components/explorer-sidebar/explorer-sidebar.component';
 import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
 import { ALL_SNIPPETS_FOLDER } from '@cartella/config/snippets.config';
 import { FeatureType } from '@cartella/interfaces/general.interface';
@@ -26,10 +30,6 @@ import {
   take,
   tap,
 } from 'rxjs/operators';
-import {
-  ExplorerSidebarEvent,
-  ExplorerSidebarEventType,
-} from '../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,

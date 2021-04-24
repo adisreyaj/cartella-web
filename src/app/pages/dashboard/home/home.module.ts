@@ -4,9 +4,9 @@ import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-dir
 import { IconModule } from '@cartella/modules/icon/icon.module';
 import { TimeAgoPipeModule } from '@cartella/pipes/time-ago-pipe/time-ago-pipe.module';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
+import { ButtonsModule } from '@cartella/ui';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
-import { ButtonsModule } from 'projects/ui/src/public-api';
 import { SwiperModule } from 'swiper/angular';
 import { HomeRoutingModule } from './home-routing.module';
 import { HomeComponent } from './home.component';

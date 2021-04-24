@@ -12,12 +12,12 @@ import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.ser
 import { MenuService } from '@cartella/services/menu/menu.service';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@cartella/tokens/feature.token';
+import { ButtonsModule } from '@cartella/ui';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
-import { ButtonsModule } from 'projects/ui/src/public-api';
 import { HoveredDirectiveModule } from 'src/app/shared/directives/hovered/hovered-directive.module';
-import { ExplorerSidebarModule } from '../shared/components/explorer-sidebar/explorer-sidebar.module';
+import { ExplorerSidebarModule } from '../../../shared/components/explorer-sidebar/explorer-sidebar.module';
 import { BookmarksRoutingModule } from './bookmarks-routing.module';
 import { BookmarksComponent } from './bookmarks.component';
 import { BookmarksListCardComponent } from './components/bookmarks-list-card/bookmarks-list-card.component';

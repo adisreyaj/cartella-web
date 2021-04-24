@@ -29,7 +29,7 @@ const routes: Routes = [
       {
         path: 'snippets',
         loadChildren: () =>
-          import('./snippets/snippets.module').then((m) => m.SnippetsModule),
+          import('@cartella/snippets').then((m) => m.SnippetsModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'snippets',

@@ -1,5 +1,5 @@
+import { SnippetRequest } from '@cartella/snippets';
 import { EditorConfiguration } from 'codemirror';
-import { SnippetRequest } from 'src/app/pages/dashboard/snippets/shared/interfaces/snippets.interface';
 
 export const LANGUAGES_SUPPORTED = [
   { label: 'Javascript', value: 'javascript' },

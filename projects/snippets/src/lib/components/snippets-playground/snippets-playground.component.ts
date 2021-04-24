@@ -23,7 +23,6 @@ import { Technology } from '@cartella/interfaces/technology.interface';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
-import { SnippetState } from '@cartella/snippets/store/states/snippets.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import codemirror from 'codemirror';
@@ -49,6 +48,7 @@ import {
   SnippetModes,
 } from '../../shared/interfaces/snippets.interface';
 import { CodeEditorService } from '../../shared/services/code-editor/code-editor.service';
+import { SnippetState } from '../../store';
 import {
   DeleteSnippet,
   SetActiveSnippet,

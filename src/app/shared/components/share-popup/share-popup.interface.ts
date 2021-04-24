@@ -1,6 +1,6 @@
-import { Bookmark } from '../../../pages/dashboard/bookmarks/shared/interfaces/bookmarks.interface';
-import { Package } from '../../../pages/dashboard/packages/shared/interfaces/packages.interface';
-import { Snippet } from '../../../pages/dashboard/snippets/shared/interfaces/snippets.interface';
+import { Bookmark } from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
+import { Package } from '@cartella/packages/shared/interfaces/packages.interface';
+import { Snippet } from '@cartella/snippets';
 import { FeatureType } from '../../interfaces/general.interface';
 
 export interface SharePopupPayload {

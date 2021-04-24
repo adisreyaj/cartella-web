@@ -22,7 +22,7 @@ import {
 import {
   ExplorerSidebarEvent,
   ExplorerSidebarEventType,
-} from '../shared/components/explorer-sidebar/explorer-sidebar.component';
+} from '../../../shared/components/explorer-sidebar/explorer-sidebar.component';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import {

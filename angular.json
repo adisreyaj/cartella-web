@@ -182,6 +182,46 @@
           }
         }
       }
+    },
+    "snippets": {
+      "projectType": "library",
+      "root": "projects/snippets",
+      "sourceRoot": "projects/snippets/src",
+      "prefix": "cartella",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/snippets/tsconfig.lib.json",
+            "project": "projects/snippets/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/snippets/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/snippets/src/test.ts",
+            "tsConfig": "projects/snippets/tsconfig.spec.json",
+            "karmaConfig": "projects/snippets/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/snippets/tsconfig.lib.json",
+              "projects/snippets/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
     }
   },
   "defaultProject": "cartella"

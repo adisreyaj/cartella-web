@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Bookmark } from '@cartella/bookmarks/shared/interfaces/bookmarks.interface';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Package } from '@cartella/packages/shared/interfaces/packages.interface';
-import { Snippet } from '@cartella/snippets/shared/interfaces/snippets.interface';
+import { Snippet } from '@cartella/snippets';
 import { HomeCardInput, HomeItems } from '../interfaces/home.interface';
 
 @Pipe({

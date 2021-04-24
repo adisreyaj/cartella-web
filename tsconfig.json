@@ -14,7 +14,7 @@
     "module": "es2020",
     "lib": ["es2018", "dom"],
     "paths": {
-      "ui": ["dist/ui/ui", "dist/ui"],
+      "@cartella/ui": ["projects/ui/src/public-api.ts"],
       "@cartella/env/*": ["src/environments/*"],
       "@cartella/services/*": ["src/app/shared/services/*"],
       "@cartella/guards/*": ["src/app/shared/guards/*"],
@@ -29,7 +29,7 @@
       "@cartella/home/*": ["src/app/pages/dashboard/home/*"],
       "@cartella/bookmarks/*": ["src/app/pages/dashboard/bookmarks/*"],
       "@cartella/packages/*": ["src/app/pages/dashboard/packages/*"],
-      "@cartella/snippets/*": ["src/app/pages/dashboard/snippets/*"]
+      "@cartella/snippets": ["projects/snippets/src/public-api.ts"]
     }
   }
 }
