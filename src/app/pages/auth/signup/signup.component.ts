@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastService } from '@app/services/toast/toast.service';
-import { AuthService } from '../../../shared/services/auth/auth.service';
+import { AuthService } from '@cartella/services/auth/auth.service';
+import { ToastService } from '@cartella/services/toast/toast.service';
 
 @Component({
   selector: 'app-signup',

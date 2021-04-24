@@ -1,14 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { User } from '@app/interfaces/user.interface';
-import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
-import { MenuService } from '@app/services/menu/menu.service';
-import { StorageService } from '@app/services/storage/storage.service';
-import { LogoutUser } from '@app/store/actions/user.action';
-import { UserState } from '@app/store/states/user.state';
+import { User } from '@cartella/interfaces/user.interface';
+import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
+import { MenuService } from '@cartella/services/menu/menu.service';
+import { LogoutUser } from '@cartella/store/actions/user.action';
+import { UserState } from '@cartella/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { switchMap, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -25,8 +24,7 @@ export class HeaderComponent implements OnInit {
     private store: Store,
     private router: Router,
     private menu: MenuService,
-    private darkMode: DarkModeService,
-    private storageService: StorageService
+    private darkMode: DarkModeService
   ) {}
 
   ngOnInit(): void {
@@ -41,10 +39,7 @@ export class HeaderComponent implements OnInit {
   logout() {
     this.store
       .dispatch(new LogoutUser())
-      .pipe(
-        take(1),
-        switchMap(() => this.storageService.flushAll())
-      )
+      .pipe(take(1))
       .subscribe(() => {
         this.router.navigate(['/auth/login']);
       });

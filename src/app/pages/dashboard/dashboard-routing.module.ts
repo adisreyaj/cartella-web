@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { environment } from '@app/env/environment';
-import { AuthGuard } from '@app/guards/auth.guard';
-import { FeatureGuard } from '@app/guards/feature.guard';
+import { environment } from '@cartella/env/environment';
+import { AuthGuard } from '@cartella/guards/auth.guard';
+import { FeatureGuard } from '@cartella/guards/feature.guard';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
@@ -15,8 +15,7 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        loadChildren: () =>
-          import('./home/home.module').then((m) => m.HomeModule),
+        loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'home',
@@ -28,8 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'snippets',
-        loadChildren: () =>
-          import('./snippets/snippets.module').then((m) => m.SnippetsModule),
+        loadChildren: () => import('@cartella/snippets').then((m) => m.SnippetsModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'snippets',
@@ -40,8 +38,7 @@ const routes: Routes = [
       },
       {
         path: 'bookmarks',
-        loadChildren: () =>
-          import('./bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
+        loadChildren: () => import('@cartella/bookmarks').then((m) => m.BookmarksModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'bookmarks',
@@ -52,8 +49,7 @@ const routes: Routes = [
       },
       {
         path: 'packages',
-        loadChildren: () =>
-          import('./packages/packages.module').then((m) => m.PackagesModule),
+        loadChildren: () => import('@cartella/packages').then((m) => m.PackagesModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'packages',
@@ -64,8 +60,7 @@ const routes: Routes = [
       },
       {
         path: 'profile',
-        loadChildren: () =>
-          import('./profile/profile.module').then((m) => m.ProfileModule),
+        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'profile',

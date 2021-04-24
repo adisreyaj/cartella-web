@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ButtonsModule } from '@cartella/ui';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { ButtonsModule } from 'projects/ui/src/public-api';
 import { IconModule } from '../../modules/icon/icon.module';
 import { SharePopupComponent } from './share-popup.component';
 

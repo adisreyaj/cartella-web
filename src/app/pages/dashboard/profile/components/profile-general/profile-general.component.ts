@@ -6,14 +6,14 @@ import {
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { LoginMethods, User } from '@app/interfaces/user.interface';
-import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
+import { LoginMethods, User } from '@cartella/interfaces/user.interface';
+import { ToastService } from '@cartella/services/toast/toast.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import {
   UpdateUser,
   UpdateUserLoginMethod,
-} from '@app/store/actions/user.action';
-import { UserState } from '@app/store/states/user.state';
+} from '@cartella/store/actions/user.action';
+import { UserState } from '@cartella/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';

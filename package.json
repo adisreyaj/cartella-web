@@ -120,10 +120,10 @@
     }
   },
   "lint-staged": {
-    "*.{json,ts}": [
-      "prettier --write"
+    "src/**/*.{json,ts}": [
+      "prettier --config ./.prettierrc --write"
     ],
-    "*.{ts}": [
+    "src/**/*.{ts}": [
       "eslint --fix --cache"
     ]
   },

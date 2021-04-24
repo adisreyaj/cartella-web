@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MoveToFolderModalPayload } from '@app/interfaces/move-to-folder.interface';
-import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
+import { MoveToFolderModalPayload } from '@cartella/interfaces/move-to-folder.interface';
+import { ToastService } from '@cartella/services/toast/toast.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 

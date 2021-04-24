@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FeatureDirectiveModule } from '@app/directives/feature/feature.module';
-import { IconModule } from '@app/modules/icon/icon.module';
+import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
+import { IconModule } from '@cartella/modules/icon/icon.module';
+import { ButtonsModule } from '@cartella/ui';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
-import { ButtonsModule } from 'projects/ui/src/public-api';
 import { DeletePromptComponent } from './delete-prompt/delete-prompt.component';
 import { HeaderComponent } from './header/header.component';
 

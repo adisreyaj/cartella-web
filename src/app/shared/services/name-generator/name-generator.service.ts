@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { DEFAULT_NAME_GENERATOR_CONFIG } from '@app/config/name-generator.config';
+import { DEFAULT_NAME_GENERATOR_CONFIG } from '@cartella/config/name-generator.config';
 import { NumberDictionary, uniqueNamesGenerator } from 'unique-names-generator';
 
 @Injectable({

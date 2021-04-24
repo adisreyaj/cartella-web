@@ -1,55 +1,18 @@
-import { Inject, Injectable } from '@angular/core';
-import {
-  Bookmark,
-  BookmarkFolder,
-} from '@app/bookmarks/shared/interfaces/bookmarks.interface';
-import { FeatureType } from '@app/interfaces/general.interface';
-import {
-  Package,
-  PackageFolder,
-} from '@app/packages/shared/interfaces/packages.interface';
-import {
-  Snippet,
-  SnippetFolder,
-} from '@app/snippets/shared/interfaces/snippets.interface';
-import { FEATURE_TOKEN } from '@app/tokens/feature.token';
+import { Injectable } from '@angular/core';
+import { Bookmark, BookmarkFolder } from '@cartella/bookmarks';
+import { Package, PackageFolder } from '@cartella/packages';
+import { Snippet, SnippetFolder } from '@cartella/snippets';
 import { forkJoin, Observable, of } from 'rxjs';
 import { catchError, mapTo } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';
-import { StorageFolders } from '../storage/storage.interface';
-import { StorageService } from '../storage/storage.service';
+import { BaseStorageService } from '../storage/base-storage.service';
 
 type Items = Bookmark | Snippet | Package;
 type Folders = BookmarkFolder | SnippetFolder | PackageFolder;
-type Entities = 'bookmarks' | 'snippets' | 'packages';
-
-const IDB_FOLDER_NAMES = {
-  [FeatureType.bookmark]: 'bookmarks',
-  [FeatureType.snippet]: 'snippets',
-  [FeatureType.package]: 'packages',
-};
-
-const IDB_COLLECTION_NAMES = {
-  [FeatureType.bookmark]: StorageFolders.bookmarks,
-  [FeatureType.snippet]: StorageFolders.snippets,
-  [FeatureType.package]: StorageFolders.packages,
-};
 
 @Injectable()
 export class IDBSyncService {
-  constructor(
-    private storage: StorageService,
-    private folderAssort: FolderAssortService,
-    @Inject(FEATURE_TOKEN) private feature: FeatureType
-  ) {}
-
-  private get collectionName() {
-    return IDB_COLLECTION_NAMES[this.feature];
-  }
-
-  private get folderName() {
-    return IDB_FOLDER_NAMES[this.feature];
-  }
+  constructor(private folderAssort: FolderAssortService, private storage: BaseStorageService) {}
 
   syncItems(items: Items[], folders: Folders[]): Observable<boolean> {
     if (items != null && folders != null) {
@@ -71,27 +34,19 @@ export class IDBSyncService {
   }
 
   syncFolders(folders: Folders[]) {
-    return this.storage
-      .setItem(StorageFolders.folders, this.folderName, folders)
-      .pipe(
-        mapTo(true),
-        catchError((err) => {
-          console.error('Save Bookmark Folders', err);
-          return of(false);
-        })
-      );
+    return this.storage.setItem('folders', folders).pipe(
+      mapTo(true),
+      catchError((err) => {
+        console.error('Save Bookmark Folders', err);
+        return of(false);
+      })
+    );
   }
 
   private syncOwnItems(itemsGroupedIntoFolders: { [key: string]: Items[] }) {
     const folders = Object.keys(itemsGroupedIntoFolders);
     if (folders?.length > 0) {
-      const setOps$ = folders.map((key) =>
-        this.storage.setItem(
-          StorageFolders.bookmarks,
-          key,
-          itemsGroupedIntoFolders[key]
-        )
-      );
+      const setOps$ = folders.map((key) => this.storage.setItem(key, itemsGroupedIntoFolders[key]));
       return forkJoin(setOps$).pipe(
         mapTo(true),
         catchError((err) => {
@@ -104,7 +59,7 @@ export class IDBSyncService {
   }
 
   private syncSharedItems(items: Items[]) {
-    return this.storage.setItem(this.collectionName, 'shared', items).pipe(
+    return this.storage.setItem('shared', items).pipe(
       mapTo(true),
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
@@ -113,7 +68,7 @@ export class IDBSyncService {
     );
   }
   private syncStarredItems(items: Items[]) {
-    return this.storage.setItem(this.collectionName, 'starred', items).pipe(
+    return this.storage.setItem('starred', items).pipe(
       mapTo(true),
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
@@ -138,10 +93,7 @@ export class IDBSyncService {
       return folders.reduce(
         (acc, { id }) => ({
           ...acc,
-          [id]:
-            items?.length > 0
-              ? items.filter(({ folder: { id: folderId } }) => folderId === id)
-              : [],
+          [id]: items?.length > 0 ? items.filter(({ folder: { id: folderId } }) => folderId === id) : [],
         }),
         {}
       );
