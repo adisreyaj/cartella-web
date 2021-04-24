@@ -4,7 +4,7 @@ module.exports = {
   mode: 'jit',
   purge: {
     enabled: true,
-    content: ['./src/app/**/*.{html,ts}', './projects/ui/**/*.{html,ts}'],
+    content: ['./src/app/**/*.{html,ts}', './projects/**/*.{html,ts}'],
   },
   darkMode: 'class',
   theme: {
