@@ -32,6 +32,7 @@ import {
   RiSettingsLine,
   RiShareBoxLine,
   RiShareCircleLine,
+  RiShareLine,
   RiShutDownLine,
   RiStarFill,
   RiStarLine,
@@ -74,6 +75,7 @@ const icons = {
   RiMenu4Line,
   RiHomeLine,
   RiSettingsLine,
+  RiShareLine,
   RiFireFill,
 };
 @NgModule({

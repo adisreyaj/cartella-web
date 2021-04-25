@@ -10,7 +10,8 @@
                [formControl]="snippetNameFormControl" #snippetNameRef (blur)="updateSnippetName()"
                (keyup.enter)="updateSnippetName()">
         <p class="ml-2 text-sm text-gray-500 playground__header-meta">Updated: {{(activeSnippet$ | async)?.updatedAt |
-          timeAgo}}
+          timeAgo}} <span *ngIf="(activeSnippet$ | async)?.owner | isSharedItem">| Shared by {{(activeSnippet$ |
+            async)?.owner?.firstname}}</span>
         </p>
       </div>
     </div>
@@ -76,7 +77,8 @@
       </button>
     </ng-container>
     <ng-container *feature="'modules.snippets.sharing'">
-      <button class="playground__header-button" tippy="Share" aria-label="Share">
+      <button *ngIf="!((activeSnippet$ | async)?.owner | isSharedItem)" class="playground__header-button" tippy="Share"
+              aria-label="Share" (click)="share(snippet);hide()">
         <rmx-icon name="share-circle-line" class="icon-lg"></rmx-icon>
       </button>
     </ng-container>
