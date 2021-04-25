@@ -12,9 +12,7 @@
 .playground {
   height: 100%;
   display: grid;
-  grid-template-rows: var(--editor-header-height) 1fr var(
-      --editor-footer-height
-    );
+  grid-template-rows: var(--editor-header-height) 1fr var(--editor-footer-height);
   &--fullscreen {
     position: fixed;
     width: 100%;
@@ -27,7 +25,8 @@
       @include defaultRing();
       @apply rounded-full;
       @apply p-2;
-      @apply bg-gray-100;
+      @apply bg-white;
+      @apply shadow-sm;
       &.active {
         @apply bg-primary;
         @apply text-white;
@@ -79,6 +78,16 @@
         }
       }
     }
+    &.one-light {
+      background-color: #f3f3f3;
+      #snippet-name {
+        background-color: #f3f3f3;
+
+        &:hover {
+          background-color: lighten(#f3f3f3, 10);
+        }
+      }
+    }
     &.one-dark {
       background-color: #282c34;
       #snippet-name {
@@ -92,10 +101,7 @@
   }
   &__editor {
     display: flex;
-    height: calc(
-      100vh - var(--header-height) - var(--editor-header-height) -
-        var(--editor-footer-height)
-    );
+    height: calc(100vh - var(--header-height) - var(--editor-header-height) - var(--editor-footer-height));
   }
 
   &__footer {
@@ -116,6 +122,9 @@
     }
     &.one-dark {
       background-color: #282c34;
+    }
+    &.one-light {
+      background-color: #f3f3f3;
     }
   }
 }
