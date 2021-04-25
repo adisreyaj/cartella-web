@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { ComponentsModule } from '@cartella/components/components.module';
+import { HeaderModule } from '@cartella/components/header/header.module';
 import { DashboardRoutingModule } from './dashboard-routing.module';
 import { DashboardComponent } from './dashboard.component';
 
 @NgModule({
   declarations: [DashboardComponent],
-  imports: [CommonModule, DashboardRoutingModule, ComponentsModule],
+  imports: [CommonModule, DashboardRoutingModule, HeaderModule],
 })
 export class DashboardModule {}

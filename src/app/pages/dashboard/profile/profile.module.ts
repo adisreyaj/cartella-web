@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentsModule } from '@cartella/components/components.module';
+import { DeletePromptModule } from '@cartella/components/delete-prompt/delete-prompt.module';
 import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
 import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
 import { IconModule } from '@cartella/modules/icon/icon.module';
@@ -33,9 +33,9 @@ import { ProfileComponent } from './profile.component';
     ButtonsModule,
     IconModule,
     HoveredDirectiveModule,
-    ComponentsModule,
     ColorTwitterModule,
     FeatureDirectiveModule,
+    DeletePromptModule,
   ],
   providers: [MenuService],
 })
