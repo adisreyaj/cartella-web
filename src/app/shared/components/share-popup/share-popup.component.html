@@ -32,32 +32,11 @@
       <ng-container *ngIf="shareTo?.length > 0">
         <h4 class="text-base font-semibold text-gray-700 dark:text-white">To be shared with</h4>
         <ul class="overflow-y-auto" style="max-height: 206px;">
-          <ng-container *ngFor="let user of shareTo; index as i">
-            <li class="flex items-center mr-2 space-x-4 space-y-1 border-t-0 border-l-0 border-r-0 border-gray-200 border-b-1 dark:border-gray-400"
-                [class.border]="i !== shareTo.length - 1">
-              <div class="flex items-center justify-between flex-1 my-2">
-                <div class="flex items-center space-x-2">
-                  <p class="dark:text-white">{{user.email}}</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <ng-select [(ngModel)]="user.access" [ngModelOptions]="{standalone: true}" [clearable]="false"
-                             [searchable]="false" class="w-full" aria-label="Choose theme">
-                    <ng-option *ngFor="let access of accessLevels" [value]="access">
-                      {{access | titlecase}}
-                    </ng-option>
-                  </ng-select>
-                </div>
-              </div>
-              <button class="text-red-600 rounded-full default-ring" aria-label="Remove user" type="button"
-                      (click)="removeFromToBeSharedList(user)">
-                <rmx-icon name="close-line"></rmx-icon>
-              </button>
-            </li>
+          <ng-container *ngTemplateOutlet="shareList; context:{$implicit: shareTo, remove: removeFromToBeSharedList}">
           </ng-container>
-
         </ul>
       </ng-container>
-      <div>
+      <div class="mt-2">
         <button primaryButton type="button" [disabled]="emailInputControl.invalid" (click)="addToList();">Add
           User</button>
       </div>
@@ -65,29 +44,8 @@
     <section class="my-4" *ngIf="(isShareListView$ | async)">
       <ng-container *ngIf="sharedWith?.length > 0;else notShared">
         <ul class="overflow-y-auto" style="max-height: 206px;">
-          <ng-container *ngFor="let user of sharedWith; index as i">
-            <li class="flex items-center mr-2 space-x-4 space-y-1 border-t-0 border-l-0 border-r-0 border-gray-200 border-b-1 dark:border-gray-400"
-                [class.border]="i !== sharedWith.length - 1">
-              <div class="flex items-center justify-between flex-1 my-2">
-                <div class="flex items-center space-x-2">
-                  <p class="dark:text-white">{{user.email}}</p>
-                </div>
-                <div class="flex items-center space-x-2">
-                  <ng-select [(ngModel)]="user.access" [ngModelOptions]="{standalone: true}" [clearable]="false"
-                             [searchable]="false" class="w-full" aria-label="Choose theme">
-                    <ng-option *ngFor="let access of accessLevels" [value]="access">
-                      {{access | titlecase}}
-                    </ng-option>
-                  </ng-select>
-                </div>
-              </div>
-              <button class="text-red-600 rounded-full default-ring" aria-label="Remove user" type="button"
-                      (click)="removeFromList(user)">
-                <rmx-icon name="close-line"></rmx-icon>
-              </button>
-            </li>
+          <ng-container *ngTemplateOutlet="shareList; context:{$implicit: sharedWith, remove: removeFromList}">
           </ng-container>
-
         </ul>
       </ng-container>
       <ng-template #notShared>
@@ -121,3 +79,29 @@
     </footer>
   </form>
 </div>
+
+
+<ng-template #shareList let-list>
+  <ng-container *ngFor="let user of list; index as i">
+    <li class="flex items-center mr-2 border-t-0 border-l-0 border-r-0 border-gray-200 border-b-1 dark:border-gray-400"
+        [class.border]="i !== list.length - 1">
+      <div class="flex items-center justify-between flex-1 my-2">
+        <div class="flex items-center">
+          <p class="dark:text-white">{{user.email}}</p>
+        </div>
+        <div class="flex items-center mr-2">
+          <ng-select [(ngModel)]="user.access" [ngModelOptions]="{standalone: true}" [clearable]="false"
+                     [searchable]="false" class="w-full" aria-label="Choose theme">
+            <ng-option *ngFor="let access of accessLevels" [value]="access">
+              {{access | titlecase}}
+            </ng-option>
+          </ng-select>
+        </div>
+      </div>
+      <button class="text-red-600 rounded-full default-ring" aria-label="Remove user" type="button"
+              (click)="removeFromList(user)">
+        <rmx-icon name="close-line"></rmx-icon>
+      </button>
+    </li>
+  </ng-container>
+</ng-template>
