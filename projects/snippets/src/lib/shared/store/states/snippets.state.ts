@@ -11,6 +11,8 @@ import {
   GetSnippets,
   SetActiveSnippet,
   SetActiveSnippetWithSlug,
+  ShareSnippet,
+  UnShareSnippet,
   UpdateSnippet,
 } from '../actions/snippets.action';
 
@@ -210,5 +212,43 @@ export class SnippetState {
       }
       return throwError(new Error('Failed to get snippet by slug'));
     }
+  }
+
+  @Action(ShareSnippet, { cancelUncompleted: true })
+  shareSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id, shareTo }: ShareSnippet) {
+    return this.snippetService.share(id, shareTo).pipe(
+      tap((result) => {
+        const state = getState();
+        const allSnippetList = [...state.allSnippets];
+        const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
+        allSnippetList[snippetIndex] = result;
+        const shownSnippetList = [...state.snippetsShown];
+        const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
+        shownSnippetList[shownSnippetIndex] = result;
+        patchState({
+          allSnippets: allSnippetList,
+          snippetsShown: shownSnippetList,
+        });
+      })
+    );
+  }
+
+  @Action(UnShareSnippet, { cancelUncompleted: true })
+  unShareSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id, revoke }: UnShareSnippet) {
+    return this.snippetService.unShare(id, revoke).pipe(
+      tap((result) => {
+        const state = getState();
+        const allSnippetList = [...state.allSnippets];
+        const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
+        allSnippetList[snippetIndex] = result;
+        const shownSnippetList = [...state.snippetsShown];
+        const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
+        shownSnippetList[shownSnippetIndex] = result;
+        patchState({
+          allSnippets: allSnippetList,
+          snippetsShown: shownSnippetList,
+        });
+      })
+    );
   }
 }

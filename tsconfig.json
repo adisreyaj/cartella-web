@@ -29,13 +29,10 @@
       "@cartella/home/*": ["src/app/pages/dashboard/home/*"],
       "@cartella/snippets": ["projects/snippets/src/public-api.ts"],
       "@cartella/bookmarks": ["projects/bookmarks/src/public-api.ts"],
-      "@cartella/packages": [
-        "projects/packages/src/public-api.ts"
-      ],
-      "packages": [
-        "dist/packages/packages",
-        "dist/packages"
-      ]
+      "@cartella/packages": ["projects/packages/src/public-api.ts"],
+      "@cartella/snippets/module": ["projects/snippets/src/module.ts"],
+      "@cartella/bookmarks/module": ["projects/bookmarks/src/module.ts"],
+      "@cartella/packages/module": ["projects/packages/src/module.ts"]
     }
   }
 }

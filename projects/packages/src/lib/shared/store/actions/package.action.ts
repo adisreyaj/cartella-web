@@ -17,7 +17,7 @@ export class GetPackagesInFolder {
 export class UpdatePackage {
   static readonly type = '[Package] Update';
 
-  constructor(public id: string, public payload: Partial<PackageRequest>) {}
+  constructor(public id: string, public payload: Partial<Package>) {}
 }
 
 export class DeletePackage {
