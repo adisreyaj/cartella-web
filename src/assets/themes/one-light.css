@@ -1,7 +1,7 @@
 /* purgecss ignore */
 .cm-s-one-light.CodeMirror {
   color: #50a14f;
-  background-color: #fff;
+  background-color: #f3f3f3;
 }
 .cm-s-one-light .CodeMirror-selected {
   background-color: #3e4451;
@@ -9,7 +9,7 @@
 .cm-s-one-light .CodeMirror-gutter,
 .cm-s-one-light .CodeMirror-gutters {
   border: none;
-  background-color: #fff;
+  background-color: #f3f3f3;
 }
 .cm-s-one-light .CodeMirror-linenumber,
 .cm-s-one-light .CodeMirror-linenumbers {
