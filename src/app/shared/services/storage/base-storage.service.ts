@@ -6,20 +6,16 @@ import { catchError, filter, map, mapTo, switchMap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export abstract class BaseStorageService<DataType = any> {
+export class BaseStorageService<DataType = any> {
   instance: NgForage;
   constructor(instance: NgForage) {
     this.instance = instance;
   }
   setItem(key: string, value: DataType) {
-    return from(this.instance.setItem(key, value)).pipe(
-      catchError(() => of(null))
-    );
+    return from(this.instance.setItem(key, value)).pipe(catchError(() => of(null)));
   }
   getItem(key: string) {
-    return from(this.instance.getItem<DataType>(key)).pipe(
-      catchError(() => of(null))
-    );
+    return from(this.instance.getItem<DataType>(key)).pipe(catchError(() => of(null)));
   }
 
   deleteItem(key: string) {
@@ -42,24 +38,16 @@ export abstract class BaseStorageService<DataType = any> {
    * entry as same item can be in user folder as well as starred folder.
    */
   getAllItemsFromUserFolder() {
-    const items: Observable<string[]> = from(this.instance.keys()).pipe(
-      catchError(() => of([]))
-    );
+    const items: Observable<string[]> = from(this.instance.keys()).pipe(catchError(() => of([])));
     return items.pipe(
       // Starred items should be removed as its duplicated already
-      map((keys) =>
-        keys.filter((key) => !['starred', 'folders'].includes(key))
-      ),
+      map((keys) => keys.filter((key) => !['starred', 'shared', 'folders'].includes(key))),
       filter((keys) => keys.length > 0),
-      map((keys: string[]) =>
-        keys.map((key) => this.instance.getItem<DataType[]>(key))
-      ),
+      map((keys: string[]) => keys.map((key) => this.instance.getItem<DataType[]>(key))),
       filter((promises) => promises.length > 0),
       map((promises: Promise<DataType[]>[]) => Promise.all(promises)),
       filter((promise) => promise != null),
-      switchMap((promise: Promise<DataType[][]>) =>
-        from(promise).pipe(catchError(() => of([])))
-      ),
+      switchMap((promise: Promise<DataType[][]>) => from(promise).pipe(catchError(() => of([])))),
       map((values) =>
         values.reduce((acc, curr: DataType[]) => {
           if (curr && Array.isArray(curr) && curr.length > 0) {

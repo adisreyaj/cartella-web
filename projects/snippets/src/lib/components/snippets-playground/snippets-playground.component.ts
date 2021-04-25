@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
+import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
 import { DEFAULT_EDITOR_OPTIONS, THEMES_SUPPORTED } from '@cartella/config/snippets.config';
 import { Technology } from '@cartella/interfaces/technology.interface';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
@@ -165,6 +166,27 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
         theme: this.themeFormControl.value,
       },
     });
+  }
+
+  share(snippet: Snippet) {
+    const dialogRef = this.dialog.open(SharePopupComponent, {
+      size: 'md',
+      minHeight: 'unset',
+      data: {
+        entity: 'Snippet',
+        item: snippet,
+      },
+    });
+    this.subs.add(
+      dialogRef.afterClosed$
+        .pipe(
+          tap((response) => {
+            if (response) {
+            }
+          })
+        )
+        .subscribe(() => {})
+    );
   }
 
   updateSnippetName() {
