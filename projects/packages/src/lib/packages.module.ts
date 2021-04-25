@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { DeletePromptModule } from '@cartella/components/delete-prompt/delete-prompt.module';
 import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/explorer-sidebar.module';
 import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
 import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
@@ -50,6 +51,7 @@ import { PackageState } from './shared/store/states/package.state';
     FeatureDirectiveModule,
     MoveToFolderModule,
     SharePopupModule,
+    DeletePromptModule,
     NgxsModule.forFeature([PackageState, PackageFolderState]),
   ],
   providers: [

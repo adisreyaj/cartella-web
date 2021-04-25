@@ -3,7 +3,7 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentsModule } from '@cartella/components/components.module';
+import { DeletePromptModule } from '@cartella/components/delete-prompt/delete-prompt.module';
 import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/explorer-sidebar.module';
 import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
 import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
@@ -54,7 +54,6 @@ import { SnippetsComponent } from './snippets.component';
     LanguagePipeModule,
     DialogModule,
     MoveToFolderModule,
-    ComponentsModule,
     HoveredDirectiveModule,
     ExplorerSidebarModule,
     TippyModule,
@@ -62,6 +61,7 @@ import { SnippetsComponent } from './snippets.component';
     LayoutModule,
     FeatureDirectiveModule,
     SharePopupModule,
+    DeletePromptModule,
     NgxsModule.forFeature([SnippetState, SnippetFolderState]),
   ],
   providers: [
