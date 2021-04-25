@@ -1,3 +1,4 @@
+import { ShareTo } from '@cartella/interfaces/share.interface';
 import { Snippet, SnippetRequest } from '../../interfaces/snippets.interface';
 
 export class AddSnippet {
@@ -18,13 +19,23 @@ export class GetSnippetsInFolder {
 export class UpdateSnippet {
   static readonly type = '[Snippet] Update';
 
-  constructor(public id: string, public payload: Partial<SnippetRequest>) {}
+  constructor(public id: string, public payload: Partial<Snippet>) {}
 }
 
 export class DeleteSnippet {
   static readonly type = '[Snippet] Delete';
 
   constructor(public id: string) {}
+}
+export class ShareSnippet {
+  static readonly type = '[Snippet] Share';
+
+  constructor(public id: string, public shareTo: ShareTo[]) {}
+}
+export class UnShareSnippet {
+  static readonly type = '[Snippet] Unshare';
+
+  constructor(public id: string, public revoke: string[]) {}
 }
 
 export class SetActiveSnippet {

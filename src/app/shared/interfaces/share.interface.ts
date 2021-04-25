@@ -5,7 +5,13 @@ export interface ShareTo {
   access: Access;
 }
 export interface SharedWith extends ShareTo {
+  id: string;
   user: Pick<User, 'id' | 'email' | 'image' | 'firstname' | 'lastname'>;
+}
+
+export interface ShareRevokeRequest {
+  email: string;
+  id: string;
 }
 
 export enum Access {

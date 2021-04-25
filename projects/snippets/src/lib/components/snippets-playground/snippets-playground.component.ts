@@ -16,7 +16,9 @@ import {
 import { FormControl } from '@angular/forms';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
 import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
+import { SharePopupPayload } from '@cartella/components/share-popup/share-popup.interface';
 import { DEFAULT_EDITOR_OPTIONS, THEMES_SUPPORTED } from '@cartella/config/snippets.config';
+import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Technology } from '@cartella/interfaces/technology.interface';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
@@ -169,11 +171,11 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
   }
 
   share(snippet: Snippet) {
-    const dialogRef = this.dialog.open(SharePopupComponent, {
+    const dialogRef = this.dialog.open<SharePopupPayload>(SharePopupComponent, {
       size: 'md',
       minHeight: 'unset',
       data: {
-        entity: 'Snippet',
+        entity: FeatureType.snippet,
         item: snippet,
       },
     });

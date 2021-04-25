@@ -1,7 +1,4 @@
-import {
-  Bookmark,
-  BookmarkRequest,
-} from '../../interfaces/bookmarks.interface';
+import { Bookmark, BookmarkRequest } from '../../interfaces/bookmarks.interface';
 
 export class AddBookmark {
   static readonly type = '[Bookmark] Add';
@@ -21,7 +18,7 @@ export class GetBookmarksInFolder {
 export class UpdateBookmark {
   static readonly type = '[Bookmark] Update';
 
-  constructor(public id: string, public payload: Partial<BookmarkRequest>) {}
+  constructor(public id: string, public payload: Partial<Bookmark>) {}
 }
 
 export class DeleteBookmark {

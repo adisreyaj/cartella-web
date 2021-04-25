@@ -4,18 +4,13 @@ import { CARTELLA_ENDPOINTS } from '@cartella/config/endpoints.config';
 import { environment } from '@cartella/env/environment';
 import { FolderOperations } from '@cartella/interfaces/folder.interface';
 import { PayloadResponse } from '@cartella/interfaces/response.interface';
-import {
-  Snippet,
-  SnippetFolder,
-  SnippetFolderRequest,
-  SnippetRequest,
-} from '../../interfaces/snippets.interface';
+import { ShareTo } from '@cartella/interfaces/share.interface';
+import { Snippet, SnippetFolder, SnippetFolderRequest, SnippetRequest } from '../../interfaces/snippets.interface';
 
 @Injectable({
   providedIn: 'root',
 })
-export class SnippetsService
-  implements FolderOperations<SnippetFolderRequest, SnippetFolder> {
+export class SnippetsService implements FolderOperations<SnippetFolderRequest, SnippetFolder> {
   snippetUrl = `${environment.api}/${CARTELLA_ENDPOINTS.snippets}`;
   snippetFolderUrl = `${environment.api}/${CARTELLA_ENDPOINTS.snippetFolders}`;
 
@@ -29,15 +24,11 @@ export class SnippetsService
   }
 
   getFavoriteSnippets() {
-    return this.http.get<PayloadResponse<Snippet>>(
-      `${this.snippetUrl}/favorites`
-    );
+    return this.http.get<PayloadResponse<Snippet>>(`${this.snippetUrl}/favorites`);
   }
 
   getSnippetsInFolder(folderId: string) {
-    return this.http.get<PayloadResponse<Snippet>>(
-      `${this.snippetUrl}/folder/${folderId}`
-    );
+    return this.http.get<PayloadResponse<Snippet>>(`${this.snippetUrl}/folder/${folderId}`);
   }
   updateSnippet(id: string, data: Partial<SnippetRequest>) {
     return this.http.put<Snippet>(`${this.snippetUrl}/${id}`, data);
@@ -69,6 +60,15 @@ export class SnippetsService
 
   getSnippetsInAFolder(folderId: string) {
     return this.http.get<Snippet[]>(`${this.snippetUrl}/folder/${folderId}`);
+  }
+
+  share(id: string, list: ShareTo[]) {
+    const url = `${this.snippetUrl}/${id}/share`;
+    return this.http.put<Snippet>(url, { shareTo: list });
+  }
+  unShare(id: string, list: string[]) {
+    const url = `${this.snippetUrl}/${id}/unshare`;
+    return this.http.put<Snippet>(url, { revoke: list });
   }
 
   updateSnippetAndFolderBasedOnSlug(slug: string) {}

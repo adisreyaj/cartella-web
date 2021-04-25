@@ -27,7 +27,7 @@ const routes: Routes = [
       },
       {
         path: 'snippets',
-        loadChildren: () => import('@cartella/snippets').then((m) => m.SnippetsModule),
+        loadChildren: () => import('@cartella/snippets/module').then((m) => m.SnippetsModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'snippets',
@@ -38,7 +38,7 @@ const routes: Routes = [
       },
       {
         path: 'bookmarks',
-        loadChildren: () => import('@cartella/bookmarks').then((m) => m.BookmarksModule),
+        loadChildren: () => import('@cartella/bookmarks/module').then((m) => m.BookmarksModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'bookmarks',
@@ -49,7 +49,7 @@ const routes: Routes = [
       },
       {
         path: 'packages',
-        loadChildren: () => import('@cartella/packages').then((m) => m.PackagesModule),
+        loadChildren: () => import('@cartella/packages/module').then((m) => m.PackagesModule),
         canLoad: [FeatureGuard],
         data: {
           feature: 'packages',
