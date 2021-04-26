@@ -4,6 +4,11 @@ export interface ShareTo {
   email: string;
   access: Access;
 }
+
+export interface UpdateSharePrefRequest {
+  id: string;
+  access: Access;
+}
 export interface SharedWith extends ShareTo {
   id: string;
   user: Pick<User, 'id' | 'email' | 'image' | 'firstname' | 'lastname'>;

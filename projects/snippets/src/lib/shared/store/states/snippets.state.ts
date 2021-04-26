@@ -13,6 +13,7 @@ import {
   SetActiveSnippetWithSlug,
   ShareSnippet,
   UnShareSnippet,
+  UpdateSharePreferencesSnippet,
   UpdateSnippet,
 } from '../actions/snippets.action';
 
@@ -153,17 +154,8 @@ export class SnippetState {
   updateSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { payload, id }: UpdateSnippet) {
     return this.snippetService.updateSnippet(id, payload).pipe(
       tap((result) => {
-        const state = getState();
-        const allSnippetList = [...state.allSnippets];
-        const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
-        allSnippetList[snippetIndex] = result;
-        const shownSnippetList = [...state.snippetsShown];
-        const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
-        shownSnippetList[shownSnippetIndex] = result;
-        patchState({
-          allSnippets: allSnippetList,
-          snippetsShown: shownSnippetList,
-        });
+        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
+        patchState(stateToPatch);
       })
     );
   }
@@ -218,17 +210,8 @@ export class SnippetState {
   shareSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id, shareTo }: ShareSnippet) {
     return this.snippetService.share(id, shareTo).pipe(
       tap((result) => {
-        const state = getState();
-        const allSnippetList = [...state.allSnippets];
-        const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
-        allSnippetList[snippetIndex] = result;
-        const shownSnippetList = [...state.snippetsShown];
-        const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
-        shownSnippetList[shownSnippetIndex] = result;
-        patchState({
-          allSnippets: allSnippetList,
-          snippetsShown: shownSnippetList,
-        });
+        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
+        patchState(stateToPatch);
       })
     );
   }
@@ -237,18 +220,34 @@ export class SnippetState {
   unShareSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id, revoke }: UnShareSnippet) {
     return this.snippetService.unShare(id, revoke).pipe(
       tap((result) => {
-        const state = getState();
-        const allSnippetList = [...state.allSnippets];
-        const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
-        allSnippetList[snippetIndex] = result;
-        const shownSnippetList = [...state.snippetsShown];
-        const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
-        shownSnippetList[shownSnippetIndex] = result;
-        patchState({
-          allSnippets: allSnippetList,
-          snippetsShown: shownSnippetList,
-        });
+        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
+        patchState(stateToPatch);
       })
     );
+  }
+  @Action(UpdateSharePreferencesSnippet, { cancelUncompleted: true })
+  updateSharePref(
+    { getState, patchState }: StateContext<SnippetStateModel>,
+    { id, shareTo }: UpdateSharePreferencesSnippet
+  ) {
+    return this.snippetService.updateSharePref(id, shareTo).pipe(
+      tap((result) => {
+        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
+        patchState(stateToPatch);
+      })
+    );
+  }
+
+  private getUpdatedSnippetsState(id: string, result: Snippet, state: SnippetStateModel) {
+    const allSnippetList = [...state.allSnippets];
+    const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
+    allSnippetList[snippetIndex] = result;
+    const shownSnippetList = [...state.snippetsShown];
+    const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
+    shownSnippetList[shownSnippetIndex] = result;
+    return {
+      allSnippets: allSnippetList,
+      snippetsShown: shownSnippetList,
+    };
   }
 }

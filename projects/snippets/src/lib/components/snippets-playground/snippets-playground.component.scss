@@ -32,7 +32,7 @@
         @apply text-white;
       }
     }
-    #snippet-name {
+    #snippet-name:not(.disabled) {
       &:hover {
         @apply bg-gray-100;
       }
@@ -55,6 +55,8 @@
       background-color: #212121;
       #snippet-name {
         background-color: #212121;
+      }
+      #snippet-name:not(.disabled) {
         &:hover {
           background-color: lighten(#212121, 10);
         }
@@ -64,6 +66,8 @@
       background-color: #292d3e;
       #snippet-name {
         background-color: #292d3e;
+      }
+      #snippet-name:not(.disabled) {
         &:hover {
           background-color: lighten(#292d3e, 10);
         }
@@ -73,6 +77,8 @@
       background-color: #282a36;
       #snippet-name {
         background-color: #282a36;
+      }
+      #snippet-name:not(.disabled) {
         &:hover {
           background-color: lighten(#282a36, 10);
         }
@@ -82,7 +88,8 @@
       background-color: #f3f3f3;
       #snippet-name {
         background-color: #f3f3f3;
-
+      }
+      #snippet-name:not(.disabled) {
         &:hover {
           background-color: lighten(#f3f3f3, 10);
         }
@@ -92,7 +99,8 @@
       background-color: #282c34;
       #snippet-name {
         background-color: #282c34;
-
+      }
+      #snippet-name:not(.disabled) {
         &:hover {
           background-color: lighten(#282c34, 10);
         }

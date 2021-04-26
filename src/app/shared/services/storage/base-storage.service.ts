@@ -41,7 +41,7 @@ export class BaseStorageService<DataType = any> {
     const items: Observable<string[]> = from(this.instance.keys()).pipe(catchError(() => of([])));
     return items.pipe(
       // Starred items should be removed as its duplicated already
-      map((keys) => keys.filter((key) => !['starred', 'shared', 'folders'].includes(key))),
+      map((keys) => keys.filter((key) => !['starred', 'folders'].includes(key))),
       filter((keys) => keys.length > 0),
       map((keys: string[]) => keys.map((key) => this.instance.getItem<DataType[]>(key))),
       filter((promises) => promises.length > 0),
