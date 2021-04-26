@@ -4,7 +4,7 @@ import { CARTELLA_ENDPOINTS } from '@cartella/config/endpoints.config';
 import { environment } from '@cartella/env/environment';
 import { FolderOperations } from '@cartella/interfaces/folder.interface';
 import { PayloadResponse } from '@cartella/interfaces/response.interface';
-import { ShareTo } from '@cartella/interfaces/share.interface';
+import { ShareTo, UpdateSharePrefRequest } from '@cartella/interfaces/share.interface';
 import { Snippet, SnippetFolder, SnippetFolderRequest, SnippetRequest } from '../../interfaces/snippets.interface';
 
 @Injectable({
@@ -69,6 +69,11 @@ export class SnippetsService implements FolderOperations<SnippetFolderRequest, S
   unShare(id: string, list: string[]) {
     const url = `${this.snippetUrl}/${id}/unshare`;
     return this.http.put<Snippet>(url, { revoke: list });
+  }
+
+  updateSharePref(id: string, list: UpdateSharePrefRequest[]) {
+    const url = `${this.snippetUrl}/${id}/share/access`;
+    return this.http.put<Snippet>(url, { shareTo: list });
   }
 
   updateSnippetAndFolderBasedOnSlug(slug: string) {}

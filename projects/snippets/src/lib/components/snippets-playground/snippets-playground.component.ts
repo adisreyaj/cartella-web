@@ -20,6 +20,7 @@ import { SharePopupPayload } from '@cartella/components/share-popup/share-popup.
 import { DEFAULT_EDITOR_OPTIONS, THEMES_SUPPORTED } from '@cartella/config/snippets.config';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Technology } from '@cartella/interfaces/technology.interface';
+import { IsSharedItemPipe } from '@cartella/pipes/is-shared-item/is-shared-item.pipe';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
@@ -174,6 +175,7 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
     const dialogRef = this.dialog.open<SharePopupPayload>(SharePopupComponent, {
       size: 'md',
       minHeight: 'unset',
+      enableClose: false,
       data: {
         entity: FeatureType.snippet,
         item: snippet,
@@ -226,6 +228,11 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
   private listenToSnippetChanges() {
     this.subs.add(
       this.activeSnippet$.pipe(filter((data) => data != null)).subscribe((snippet) => {
+        const isSharedPipe = new IsSharedItemPipe(this.store);
+        const sharedAccess = isSharedPipe.transform(snippet);
+        if (sharedAccess !== 'WRITE') {
+          this.snippetNameFormControl.disable();
+        }
         this.populateEditorData(snippet);
         this.setSnippetName(snippet?.name);
       })

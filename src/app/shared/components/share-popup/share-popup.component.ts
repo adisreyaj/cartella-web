@@ -3,11 +3,11 @@ import { FormControl, Validators } from '@angular/forms';
 import { Bookmark, UpdateBookmark } from '@cartella/bookmarks';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Package, UpdatePackage } from '@cartella/packages';
-import { ShareSnippet, UnShareSnippet } from '@cartella/snippets';
+import { ShareSnippet, UnShareSnippet, UpdateSharePreferencesSnippet } from '@cartella/snippets';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject } from 'rxjs';
-import { Access, ShareTo } from '../../interfaces/share.interface';
+import { Access, ShareTo, UpdateSharePrefRequest } from '../../interfaces/share.interface';
 import { ToastService } from '../../services/toast/toast.service';
 import { SharePopupPayload } from './share-popup.interface';
 
@@ -38,6 +38,12 @@ export class SharePopupComponent implements OnInit {
   unShareAction = {
     [FeatureType.bookmark]: (bookmark: Bookmark) => new UpdateBookmark(bookmark.id, { share: bookmark.share }),
     [FeatureType.snippet]: (id: string, revoke: string[]) => new UnShareSnippet(id, revoke),
+    [FeatureType.package]: (packageData: Package) => new UpdatePackage(packageData.id, { share: packageData.share }),
+  };
+  updateShareAction = {
+    [FeatureType.bookmark]: (bookmark: Bookmark) => new UpdateBookmark(bookmark.id, { share: bookmark.share }),
+    [FeatureType.snippet]: (id: string, shareTo: UpdateSharePrefRequest[]) =>
+      new UpdateSharePreferencesSnippet(id, shareTo),
     [FeatureType.package]: (packageData: Package) => new UpdatePackage(packageData.id, { share: packageData.share }),
   };
   constructor(
@@ -106,6 +112,15 @@ export class SharePopupComponent implements OnInit {
     );
   }
 
+  shareOrUpdate() {
+    const isListView = this.isShareListView$.getValue();
+    if (isListView) {
+      this.updateSharePermissions();
+    } else {
+      this.share();
+    }
+  }
+
   share() {
     if (this.shareTo?.length > 0) {
       const action = this.shareAction[this.ref.data.entity];
@@ -114,6 +129,23 @@ export class SharePopupComponent implements OnInit {
           this.shareTo = [];
           this.cdr.detectChanges();
           this.toaster.showSuccessToast('Shared successfully');
+          this.ref.close();
+        },
+        (err: Error) => {
+          this.toaster.showErrorToast(err.message);
+        }
+      );
+    }
+  }
+
+  updateSharePermissions() {
+    if (this.sharedWith?.length > 0) {
+      const action = this.updateShareAction[this.ref.data.entity];
+      const data: UpdateSharePrefRequest[] = this.sharedWith.map(({ id, access }) => ({ id, access }));
+      this.store.dispatch(action(this.ref.data.item.id, data)).subscribe(
+        () => {
+          this.cdr.detectChanges();
+          this.toaster.showSuccessToast('Permissions updated successfully');
           this.ref.close();
         },
         (err: Error) => {

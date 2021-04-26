@@ -11,7 +11,7 @@
       </p>
     </ng-template>
   </header>
-  <form class="w-100" (ngSubmit)="share();" (keyup.enter)="$event.preventDefault()">
+  <form class="w-100" (ngSubmit)="shareOrUpdate()" (keyup.enter)="$event.preventDefault()">
     <section [hidden]="(isShareListView$ | async)">
       <div class="grid gap-2" style="grid-template-columns: 7fr 3fr;">
         <div class="form-group">
