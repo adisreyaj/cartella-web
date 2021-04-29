@@ -49,12 +49,13 @@
         </ul>
       </ng-container>
       <ng-template #notShared>
-        <p>Not shared with anyone.</p>
+        <p class="dark:text-white">Not shared with anyone.</p>
       </ng-template>
     </section>
     <footer class="flex items-center justify-between mt-6">
-      <button *ngIf="(isShareListView$ | async);else viewShared" class="flex items-center space-x-1 text-sm"
-              type="button" (click)="isShareListView$.next(false)">
+      <button *ngIf="(isShareListView$ | async);else viewShared"
+              class="flex items-center space-x-1 text-sm dark:text-white" type="button"
+              (click)="isShareListView$.next(false)">
         <rmx-icon class="icon-md" name="arrow-left-line"></rmx-icon>
         <p>
           Back to Share
@@ -62,8 +63,8 @@
       </button>
       <ng-template #viewShared>
         <button class="flex items-center space-x-1 text-sm" type="button" (click)="isShareListView$.next(true)">
-          <rmx-icon class="icon-md" name="eye-line"></rmx-icon>
-          <p>
+          <rmx-icon class="icon-md dark:text-white" name="eye-line"></rmx-icon>
+          <p class="dark:text-white">
             Shared with
             {{sharedWith?.length}} {{sharedWith?.length| i18nPlural:
             usersPluralMap}}
