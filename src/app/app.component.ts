@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { CleanupService } from '@cartella/services/cleanup/cleanup.service';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
 import { MetaService } from '@cartella/services/meta/meta.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
@@ -16,12 +17,14 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private metaService: MetaService,
-    private config: NgSelectConfig
+    private config: NgSelectConfig,
+    private cleanupService: CleanupService
   ) {
     this.config.appendTo = 'body';
   }
   ngOnInit(): void {
-    // window.indexedDB.deleteDatabase('cartella');
+    // Cleanup local data
+    this.cleanupService.cleanUpLocalSyncedData();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
