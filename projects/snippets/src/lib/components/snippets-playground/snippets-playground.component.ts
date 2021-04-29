@@ -228,15 +228,24 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
   private listenToSnippetChanges() {
     this.subs.add(
       this.activeSnippet$.pipe(filter((data) => data != null)).subscribe((snippet) => {
-        const isSharedPipe = new IsSharedItemPipe(this.store);
-        const sharedAccess = isSharedPipe.transform(snippet);
-        if (sharedAccess !== 'WRITE') {
-          this.snippetNameFormControl.disable();
-        }
         this.populateEditorData(snippet);
+        this.checkAndDisableNameChangeInput(snippet);
         this.setSnippetName(snippet?.name);
       })
     );
+  }
+
+  /**
+   * User who is the owner or has the `write` permission
+   * for shared user can edit the name of the snippet
+   * @param snippet - current active snippet
+   */
+  private checkAndDisableNameChangeInput(snippet: Snippet) {
+    const isSharedPipe = new IsSharedItemPipe(this.store);
+    const sharedAccess = isSharedPipe.transform(snippet);
+    if (sharedAccess && sharedAccess !== 'WRITE') {
+      this.snippetNameFormControl.disable();
+    }
   }
 
   private handleFullscreenChange = () => {
