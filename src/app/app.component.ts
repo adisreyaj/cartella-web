@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
     this.config.appendTo = 'body';
   }
   ngOnInit(): void {
+    // window.indexedDB.deleteDatabase('cartella');
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
