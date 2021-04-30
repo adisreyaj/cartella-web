@@ -229,7 +229,7 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
     this.subs.add(
       this.activeSnippet$.pipe(filter((data) => data != null)).subscribe((snippet) => {
         this.populateEditorData(snippet);
-        this.checkAndDisableNameChangeInput(snippet);
+        this.checkAndDisableWriteActions(snippet);
         this.setSnippetName(snippet?.name);
       })
     );
@@ -237,14 +237,18 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
 
   /**
    * User who is the owner or has the `write` permission
-   * for shared user can edit the name of the snippet
+   * for shared user can edit the name of the snippet, and snippet itself
    * @param snippet - current active snippet
    */
-  private checkAndDisableNameChangeInput(snippet: Snippet) {
+  private checkAndDisableWriteActions(snippet: Snippet) {
     const isSharedPipe = new IsSharedItemPipe(this.store);
     const sharedAccess = isSharedPipe.transform(snippet);
     if (sharedAccess && sharedAccess !== 'WRITE') {
       this.snippetNameFormControl.disable();
+      this.editor.setOption('readOnly', true);
+    } else {
+      this.snippetNameFormControl.enable();
+      this.editor.setOption('readOnly', false);
     }
   }
 
