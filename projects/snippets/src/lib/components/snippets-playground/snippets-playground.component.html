@@ -1,4 +1,4 @@
-<div class="relative playground" #playground>
+<div class="relative playground" #fullscreen="fullscreen" fullscreen>
   <header class="flex items-center justify-between px-4 bg-white dark:bg-dark-800 playground__header"
           [class.rounded-tl-lg]="isLargeScreen" [class]="themeFormControl.value">
     <div class="flex items-center space-x-2">
@@ -87,9 +87,9 @@
             aria-label="Copy Code" (click)="hide()">
       <rmx-icon name="clipboard-line" class="icon-lg"></rmx-icon>
     </button>
-    <button class="playground__header-button" (click)="toggleFullScreen();hide()" [class.active]="fullScreen$ | async"
+    <button class="playground__header-button" (click)="fullscreen.toggle();hide()" [class.active]="fullScreen$ | async"
             tippy="Toggle Fullscreen" aria-label="Toggle Fullscreen">
-      <rmx-icon [name]="(fullScreen$ | async) ? 'fullscreen-exit-line' : 'fullscreen-line'" class="icon-lg">
+      <rmx-icon [name]="(fullscreen.isMaximized$ | async) ? 'fullscreen-exit-line' : 'fullscreen-line'" class="icon-lg">
       </rmx-icon>
     </button>
     <button *ngIf="!((activeSnippet$ | async) | isSharedItem)"

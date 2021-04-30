@@ -8,6 +8,7 @@ import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/exp
 import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
 import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
 import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
+import { FullscreenModule } from '@cartella/directives/fullscreen/fullscreen.module';
 import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { IconModule } from '@cartella/modules/icon/icon.module';
@@ -66,6 +67,7 @@ import { SnippetsComponent } from './snippets.component';
     DeletePromptModule,
     IsSharedItemModule,
     HasWriteAccessModule,
+    FullscreenModule,
     NgxsModule.forFeature([SnippetState, SnippetFolderState]),
   ],
   providers: [
