@@ -11,7 +11,7 @@
                (keyup.enter)="updateSnippetName()"
                [class.disabled]="((activeSnippet$ | async) | isSharedItem) && ((activeSnippet$ | async) | isSharedItem) !== 'WRITE'">
         <p class="ml-2 text-sm text-gray-500 playground__header-meta">Updated: {{(activeSnippet$ | async)?.updatedAt |
-          timeAgo}} <span *ngIf="(activeSnippet$ | async)?.owner | isSharedItem">| Shared by {{(activeSnippet$ |
+          timeAgo}} <span *ngIf="(activeSnippet$ | async) | isSharedItem">| Shared by {{(activeSnippet$ |
             async)?.owner?.firstname}}</span>
         </p>
       </div>
