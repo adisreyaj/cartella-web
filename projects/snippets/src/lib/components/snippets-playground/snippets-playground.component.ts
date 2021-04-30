@@ -43,7 +43,6 @@ import 'codemirror/mode/yaml/yaml';
 import { has } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take, tap } from 'rxjs/operators';
-import screenfull from 'screenfull';
 import { Snippet, SnippetModes } from '../../shared/interfaces/snippets.interface';
 import { CodeEditorService } from '../../shared/services/code-editor/code-editor.service';
 import { SnippetState } from '../../shared/store';
@@ -110,7 +109,6 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
 
   ngOnDestroy() {
     super.ngOnDestroy();
-    (screenfull as screenfull.Screenfull).off('change', this.handleFullscreenChange);
   }
 
   emptyFunction() {}
@@ -213,14 +211,6 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
     }
   }
 
-  toggleFullScreen() {
-    const fullScreen = screenfull as screenfull.Screenfull;
-    if (screenfull.isEnabled) {
-      screenfull.toggle();
-    }
-    fullScreen.on('change', this.handleFullscreenChange);
-  }
-
   /**
    * Update the editor data and title when the
    * active snippet changes
@@ -251,28 +241,6 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
       this.snippetNameFormControl.enable();
       this.languageFormControl.enable();
       this.editor.setOption('readOnly', false);
-    }
-  }
-
-  private handleFullscreenChange = () => {
-    if ((screenfull as screenfull.Screenfull).isFullscreen) {
-      this.fullScreen$.next(true);
-      this.enableEditorFullScreen();
-    } else {
-      this.fullScreen$.next(false);
-      this.disableEditorFullScreen();
-    }
-  };
-
-  private enableEditorFullScreen() {
-    if (this.playgroundRef) {
-      this.renderer.addClass(this.playgroundRef.nativeElement, 'playground--fullscreen');
-    }
-  }
-
-  private disableEditorFullScreen() {
-    if (this.playgroundRef) {
-      this.renderer.removeClass(this.playgroundRef.nativeElement, 'playground--fullscreen');
     }
   }
 
