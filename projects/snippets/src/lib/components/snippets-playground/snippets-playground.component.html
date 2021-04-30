@@ -8,8 +8,7 @@
       <div>
         <input class="snippet-name" type="text" name="snippet" class="px-2 py-1 mb-1 rounded-md" id="snippet-name"
                autocomplete="off" [formControl]="snippetNameFormControl" #snippetNameRef (blur)="updateSnippetName()"
-               (keyup.enter)="updateSnippetName()"
-               [class.disabled]="((activeSnippet$ | async) | isSharedItem) && ((activeSnippet$ | async) | isSharedItem) !== 'WRITE'">
+               (keyup.enter)="updateSnippetName()" [class.disabled]="!((activeSnippet$ | async) | hasWriteAccess)">
         <p class="ml-2 text-sm text-gray-500 playground__header-meta">Updated: {{(activeSnippet$ | async)?.updatedAt |
           timeAgo}} <span *ngIf="(activeSnippet$ | async) | isSharedItem">| Shared by {{(activeSnippet$ |
             async)?.owner?.firstname}}</span>
