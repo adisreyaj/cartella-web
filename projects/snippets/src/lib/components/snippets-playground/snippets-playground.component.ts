@@ -20,7 +20,7 @@ import { SharePopupPayload } from '@cartella/components/share-popup/share-popup.
 import { DEFAULT_EDITOR_OPTIONS, THEMES_SUPPORTED } from '@cartella/config/snippets.config';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Technology } from '@cartella/interfaces/technology.interface';
-import { IsSharedItemPipe } from '@cartella/pipes/is-shared-item/is-shared-item.pipe';
+import { HasWriteAccessPipe } from '@cartella/pipes/has-write-access/has-write-access.pipe';
 import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
 import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
@@ -241,13 +241,15 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
    * @param snippet - current active snippet
    */
   private checkAndDisableWriteActions(snippet: Snippet) {
-    const isSharedPipe = new IsSharedItemPipe(this.store);
-    const sharedAccess = isSharedPipe.transform(snippet);
-    if (sharedAccess && sharedAccess !== 'WRITE') {
+    const hasWriteAccessPipe = new HasWriteAccessPipe(this.store);
+    const hasWriteAccess = hasWriteAccessPipe.transform(snippet);
+    if (!hasWriteAccess) {
       this.snippetNameFormControl.disable();
+      this.languageFormControl.disable();
       this.editor.setOption('readOnly', true);
     } else {
       this.snippetNameFormControl.enable();
+      this.languageFormControl.enable();
       this.editor.setOption('readOnly', false);
     }
   }

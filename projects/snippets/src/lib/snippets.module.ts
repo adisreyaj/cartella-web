@@ -11,6 +11,7 @@ import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.mod
 import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { IconModule } from '@cartella/modules/icon/icon.module';
+import { HasWriteAccessModule } from '@cartella/pipes/has-write-access/has-write-access.module';
 import { IsSharedItemModule } from '@cartella/pipes/is-shared-item/is-shared-item.module';
 import { LanguagePipeModule } from '@cartella/pipes/language-pipe/language-pipe.module';
 import { TimeAgoPipeModule } from '@cartella/pipes/time-ago-pipe/time-ago-pipe.module';
@@ -64,6 +65,7 @@ import { SnippetsComponent } from './snippets.component';
     SharePopupModule,
     DeletePromptModule,
     IsSharedItemModule,
+    HasWriteAccessModule,
     NgxsModule.forFeature([SnippetState, SnippetFolderState]),
   ],
   providers: [
