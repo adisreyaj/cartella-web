@@ -93,12 +93,12 @@
 <ng-template #contextMenu let-hide let-snippet="data">
   <div class="flex flex-col w-36">
     <ng-container *feature="'modules.snippets.sharing'">
-      <div class="dropdown-item" (click)="handleSnippetShare(snippet);hide()">
+      <div class="dropdown-item" *ngIf="(snippet |isOwner)" (click)="handleSnippetShare(snippet);hide()">
         <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
         <p>Share</p>
       </div>
     </ng-container>
-    <div class="dropdown-item" (click)="handleSnippetMove(snippet);hide()">
+    <div class="dropdown-item" *ngIf="(snippet |isOwner)" (click)="handleSnippetMove(snippet);hide()">
       <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
       <p>Move to</p>
     </div>
