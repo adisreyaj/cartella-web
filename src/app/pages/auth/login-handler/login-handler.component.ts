@@ -14,7 +14,7 @@ export class LoginHandlerComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
-    private toast: ToastService
+    private toast: ToastService,
   ) {}
   ngOnInit(): void {
     const query = this.route.snapshot.queryParams;
@@ -29,7 +29,7 @@ export class LoginHandlerComponent implements OnInit {
           },
           () => {
             this.router.navigate([ROUTES.auth.root, ROUTES.auth.login]);
-          }
+          },
         );
     } else {
       this.toast.showErrorToast(query.message);

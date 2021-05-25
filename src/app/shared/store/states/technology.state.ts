@@ -30,7 +30,7 @@ export class TechnologyState {
           ...state,
           technologies: result,
         });
-      })
+      }),
     );
   }
 }
