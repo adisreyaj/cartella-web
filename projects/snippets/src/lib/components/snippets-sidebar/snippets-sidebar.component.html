@@ -4,12 +4,12 @@
       <p class="text-xl font-bold text-gray-700 dark:text-white">Snippets</p>
       <p class="text-sm text-gray-500 dark:text-gray-50">Manage your snippets</p>
     </div>
-    <div class="relative">
-      <span *ngIf="['all','starred'].includes((activeFolder$ | async)?.id)" class="absolute w-full h-full"
+    <div class="relative" *ngIf="(activeFolder$ | async) as activeFolder">
+      <span *ngIf="['all','starred'].includes(activeFolder.id)" class="absolute w-full h-full"
             tippy="Choose a folder first">
       </span>
       <button primaryButton [tippy]="createSnippetSelector" placement="top-start" variation="menu"
-              [disabled]="['all','starred'].includes((activeFolder$ | async)?.id)" aria-label="Create new snippet">
+              [disabled]="['all','starred'].includes(activeFolder.id)" aria-label="Create new snippet">
         <rmx-icon name="add-line"></rmx-icon>
       </button>
     </div>
@@ -25,29 +25,31 @@
 </header>
 <section class="relative overflow-y-auto snippets-sidebar__list">
   <ng-container *ngIf="!isLoading || (snippetFetched$ | async); else shimmerLoading">
-    <ul *ngIf="(snippetsToShow$ | async)?.length > 0;else noSnippets">
-      <ng-container *ngFor="let snippet of (snippetsToShow$ | async);trackBy:trackBy">
-        <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
-            (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id"
-            [tippy]="contextMenu" [data]="snippet" variation="contextMenu" appHovered #snippetListItem>
-          <header class="flex items-center justify-between mb-1">
-            <p class="font-medium line-clamp-1 dark:text-white">{{snippet?.name}}</p>
-            <button (click)="toggleFavorite(snippet);$event.stopPropagation()"
-                    class="transition-opacity duration-75 rounded-full opacity-0 favorite-button default-ring">
-              <rmx-icon [name]="snippet?.favorite ? 'star-fill':'star-line'" class="text-gray-400 icon-md"
-                        [class.text-primary]="snippet?.favorite">
-              </rmx-icon>
-            </button>
-          </header>
-          <footer class="flex items-center justify-between">
-            <div class="flex items-center">
-              <img class="w-4 h-4 mr-1 rounded-md" [src]="snippet?.technology?.icon" [alt]="snippet?.technology?.name"
-                   height="16px" width="16px">
-              <p class="text-xs text-gray-500 dark:text-gray-50">{{snippet?.technology?.name}}</p>
-            </div>
-            <p class="text-xs text-gray-400">{{snippet?.updatedAt | timeAgo}}</p>
-          </footer>
-        </li>
+    <ul *ngIf="snippetsToShow$ | async  as snippetsToShow">
+      <ng-container *ngIf="snippetsToShow.length > 0;else noSnippets">
+        <ng-container *ngFor="let snippet of snippetsToShow;trackBy:trackBy">
+          <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
+              (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id"
+              [tippy]="contextMenu" [data]="snippet" variation="contextMenu" appHovered #snippetListItem>
+            <header class="flex items-center justify-between mb-1">
+              <p class="font-medium line-clamp-1 dark:text-white">{{snippet?.name}}</p>
+              <button (click)="toggleFavorite(snippet);$event.stopPropagation()"
+                      class="transition-opacity duration-75 rounded-full opacity-0 favorite-button default-ring">
+                <rmx-icon [name]="snippet?.favorite ? 'star-fill':'star-line'" class="text-gray-400 icon-md"
+                          [class.text-primary]="snippet?.favorite">
+                </rmx-icon>
+              </button>
+            </header>
+            <footer class="flex items-center justify-between">
+              <div class="flex items-center">
+                <img class="w-4 h-4 mr-1 rounded-md" [src]="snippet?.technology?.icon" [alt]="snippet?.technology?.name"
+                     height="16px" width="16px">
+                <p class="text-xs text-gray-500 dark:text-gray-50">{{snippet?.technology?.name}}</p>
+              </div>
+              <p class="text-xs text-gray-400">{{snippet.updatedAt | timeAgo}}</p>
+            </footer>
+          </li>
+        </ng-container>
       </ng-container>
     </ul>
   </ng-container>
@@ -57,7 +59,7 @@
 <ng-template #createSnippetSelector let-hide>
   <div class="flex flex-col w-44">
     <ng-container *ngFor="let technology of technologies$ | async">
-      <div class="flex space-x-2 dropdown-item" (click)="createNewSnippet(technology?.id);hide()">
+      <div class="flex space-x-2 dropdown-item" (click)="createNewSnippet(technology.id);hide()">
         <img [src]="technology?.icon" [alt]="technology?.name" height="20px" width="20px" class="rounded-lg">
         <p class="text-sm">{{technology?.name}}</p>
       </div>

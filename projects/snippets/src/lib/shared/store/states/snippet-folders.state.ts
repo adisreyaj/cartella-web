@@ -15,9 +15,9 @@ import {
 } from '../actions/snippets-folders.action';
 
 export class SnippetFolderStateModel {
-  snippetFolders: SnippetFolder[];
-  activeSnippetFolder: SnippetFolder;
-  fetched: boolean;
+  snippetFolders: SnippetFolder[] = [];
+  activeSnippetFolder: SnippetFolder | null = null;
+  fetched: boolean = false;
 }
 @State({
   name: 'snippetFolders',
@@ -59,7 +59,7 @@ export class SnippetFolderState {
                 patchState({
                   snippetFolders: result,
                 });
-              })
+              }),
             );
           } else {
             patchState({
@@ -67,7 +67,7 @@ export class SnippetFolderState {
             });
             return of(snippetFolders);
           }
-        })
+        }),
       );
     } else {
       return this.snippetService.getFolders().pipe(
@@ -79,7 +79,7 @@ export class SnippetFolderState {
             fetched: true,
             activeSnippetFolder: ALL_SNIPPETS_FOLDER,
           });
-        })
+        }),
       );
     }
   }
@@ -93,7 +93,7 @@ export class SnippetFolderState {
           snippetFolders: [...state.snippetFolders, result],
           activeSnippetFolder: result,
         });
-      })
+      }),
     );
   }
 
@@ -109,7 +109,7 @@ export class SnippetFolderState {
           ...state,
           snippetFolders: foldersList,
         });
-      })
+      }),
     );
   }
 
@@ -123,14 +123,14 @@ export class SnippetFolderState {
           ...state,
           snippetFolders: filteredArray,
         });
-      })
+      }),
     );
   }
 
   @Action(SetActiveSnippetFolder, { cancelUncompleted: true })
   setSelectedSnippetId(
     { getState, setState }: StateContext<SnippetFolderStateModel>,
-    { payload }: SetActiveSnippetFolder
+    { payload }: SetActiveSnippetFolder,
   ) {
     const state = getState();
     setState({

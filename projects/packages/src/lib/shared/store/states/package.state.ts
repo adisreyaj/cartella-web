@@ -8,10 +8,10 @@ import { PackagesService } from '../../services/packages.service';
 import { AddPackage, DeletePackage, GetPackages, SetActivePackage, UpdatePackage } from '../actions/package.action';
 
 export class PackageStateModel {
-  allPackages: Package[];
-  fetched: boolean;
-  packagesShown: Package[];
-  activePackage: Package;
+  allPackages: Package[] = [];
+  fetched: boolean = false;
+  packagesShown: Package[] = [];
+  activePackage: Package | null = null;
 }
 @State({
   name: 'packages',
@@ -60,7 +60,7 @@ export class PackageState {
                     patchState({
                       packagesShown: result,
                     });
-                  })
+                  }),
                 );
               } else {
                 patchState({
@@ -68,7 +68,7 @@ export class PackageState {
                 });
                 return of(packages);
               }
-            })
+            }),
           );
         } else {
           return this.packageService.getPackages().pipe(
@@ -80,7 +80,7 @@ export class PackageState {
                 allPackages: result,
                 packagesShown: result,
               });
-            })
+            }),
           );
         }
       case 'starred':
@@ -91,7 +91,7 @@ export class PackageState {
                 map(({ payload }) => payload),
                 tap((result) => {
                   patchState({ packagesShown: result });
-                })
+                }),
               );
             } else {
               patchState({
@@ -99,7 +99,7 @@ export class PackageState {
               });
               return of(packages);
             }
-          })
+          }),
         );
       default: {
         return this.storage.getItem(id).pipe(
@@ -111,7 +111,7 @@ export class PackageState {
                   patchState({
                     packagesShown: result,
                   });
-                })
+                }),
               );
             } else {
               patchState({
@@ -119,7 +119,7 @@ export class PackageState {
               });
               return of(packages);
             }
-          })
+          }),
         );
       }
     }
@@ -135,7 +135,7 @@ export class PackageState {
           packagesShown: [...state.packagesShown, result],
           activePackage: result,
         });
-      })
+      }),
     );
   }
 
@@ -154,7 +154,7 @@ export class PackageState {
           allPackages: allPackageList,
           packagesShown: shownPackageList,
         });
-      })
+      }),
     );
   }
 
@@ -169,7 +169,7 @@ export class PackageState {
           allPackages: filteredAllPackages,
           packagesShown: filteredVisiblePackages,
         });
-      })
+      }),
     );
   }
 

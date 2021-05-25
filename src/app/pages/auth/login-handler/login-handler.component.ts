@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ROUTES } from '@cartella/config/routes.config';
 import { ToastService } from '@cartella/services/toast/toast.service';
 import { GetLoggedInUser } from '@cartella/store/actions/user.action';
 import { Store } from '@ngxs/store';
@@ -27,12 +28,12 @@ export class LoginHandlerComponent implements OnInit {
             this.router.navigate(['/']);
           },
           () => {
-            this.router.navigate(['/auth/login']);
+            this.router.navigate([ROUTES.auth.root, ROUTES.auth.login]);
           }
         );
     } else {
       this.toast.showErrorToast(query.message);
-      this.router.navigate(['/auth/login']);
+      this.router.navigate([ROUTES.auth.root, ROUTES.auth.login]);
     }
   }
 }

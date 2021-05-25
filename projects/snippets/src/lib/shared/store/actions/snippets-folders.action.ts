@@ -12,7 +12,6 @@ export class GetSnippetFolders {
 
 export class UpdateSnippetFolder {
   static readonly type = '[SnippetFolder] Update';
-
   constructor(public id: string, public payload: Partial<SnippetFolderRequest>) {}
 }
 

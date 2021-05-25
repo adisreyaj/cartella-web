@@ -1,3 +1,5 @@
+/* eslint-disable @angular-eslint/directive-selector */
+/* eslint-disable @angular-eslint/no-host-metadata-property */
 import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
 
 @Directive({
@@ -7,7 +9,7 @@ import { Directive, ElementRef, Input, OnInit, Renderer2 } from '@angular/core';
   },
 })
 export class DefaultImageDirective implements OnInit {
-  @Input() default: string;
+  @Input() default = '';
   constructor(private renderer: Renderer2, private el: ElementRef) {}
 
   ngOnInit() {}

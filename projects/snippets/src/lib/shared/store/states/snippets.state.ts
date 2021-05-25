@@ -18,10 +18,10 @@ import {
 } from '../actions/snippets.action';
 
 export class SnippetStateModel {
-  allSnippets: Snippet[];
-  snippetsShown: Snippet[];
-  activeSnippet: Snippet;
-  fetched: boolean;
+  allSnippets: Snippet[] = [];
+  snippetsShown: Snippet[] = [];
+  activeSnippet: Snippet | null = null;
+  fetched = false;
 }
 @State({
   name: 'snippets',
@@ -71,7 +71,7 @@ export class SnippetState {
                     patchState({
                       snippetsShown: result,
                     });
-                  })
+                  }),
                 );
               } else {
                 patchState({
@@ -79,7 +79,7 @@ export class SnippetState {
                 });
                 return of(snippets);
               }
-            })
+            }),
           );
         } else {
           return this.snippetService.getSnippets().pipe(
@@ -91,7 +91,7 @@ export class SnippetState {
                 allSnippets: result,
                 snippetsShown: result,
               });
-            })
+            }),
           );
         }
       case 'starred':
@@ -102,7 +102,7 @@ export class SnippetState {
                 map(({ payload }) => payload),
                 tap((result) => {
                   patchState({ snippetsShown: result });
-                })
+                }),
               );
             } else {
               patchState({
@@ -110,7 +110,7 @@ export class SnippetState {
               });
               return of(snippets);
             }
-          })
+          }),
         );
       default: {
         return this.storage.getItem(id).pipe(
@@ -122,7 +122,7 @@ export class SnippetState {
                   patchState({
                     snippetsShown: result,
                   });
-                })
+                }),
               );
             } else {
               patchState({
@@ -130,7 +130,7 @@ export class SnippetState {
               });
               return of(snippets);
             }
-          })
+          }),
         );
       }
     }
@@ -146,7 +146,7 @@ export class SnippetState {
           snippetsShown: [...state.snippetsShown, result],
           activeSnippet: result,
         });
-      })
+      }),
     );
   }
 
@@ -156,7 +156,7 @@ export class SnippetState {
       tap((result) => {
         const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
         patchState(stateToPatch);
-      })
+      }),
     );
   }
 
@@ -171,7 +171,7 @@ export class SnippetState {
           allSnippets: filteredAllSnippets,
           snippetsShown: filteredVisibleSnippets,
         });
-      })
+      }),
     );
   }
 
@@ -190,7 +190,7 @@ export class SnippetState {
   @Action(SetActiveSnippetWithSlug, { cancelUncompleted: true })
   setActiveSnippetWithSlug(
     { getState, patchState }: StateContext<SnippetStateModel>,
-    { payload }: SetActiveSnippetWithSlug
+    { payload }: SetActiveSnippetWithSlug,
   ) {
     if (payload) {
       const state = getState();
@@ -212,7 +212,7 @@ export class SnippetState {
       tap((result) => {
         const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
         patchState(stateToPatch);
-      })
+      }),
     );
   }
 
@@ -222,19 +222,19 @@ export class SnippetState {
       tap((result) => {
         const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
         patchState(stateToPatch);
-      })
+      }),
     );
   }
   @Action(UpdateSharePreferencesSnippet, { cancelUncompleted: true })
   updateSharePref(
     { getState, patchState }: StateContext<SnippetStateModel>,
-    { id, shareTo }: UpdateSharePreferencesSnippet
+    { id, shareTo }: UpdateSharePreferencesSnippet,
   ) {
     return this.snippetService.updateSharePref(id, shareTo).pipe(
       tap((result) => {
         const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
         patchState(stateToPatch);
-      })
+      }),
     );
   }
 

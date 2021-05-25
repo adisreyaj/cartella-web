@@ -26,5 +26,5 @@ export interface EntityFolderResponse {
 export interface EntityGeneral {
   id: string;
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt: Date | string;
 }

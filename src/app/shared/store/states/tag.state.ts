@@ -3,16 +3,11 @@ import { Tag } from '@cartella/interfaces/tag.interface';
 import { TagService } from '@cartella/services/tag/tag.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { map, tap } from 'rxjs/operators';
-import {
-  AddTag,
-  DeleteTag,
-  GetCustomTags,
-  UpdateTag,
-} from '../actions/tag.action';
+import { AddTag, DeleteTag, GetCustomTags, UpdateTag } from '../actions/tag.action';
 
 export class TagStateModel {
-  customTags: Tag[];
-  defaultTags: Tag[];
+  customTags: Tag[] = [];
+  defaultTags: Tag[] = [];
 }
 
 @State({
@@ -45,30 +40,24 @@ export class TagState {
           ...state,
           customTags: result,
         });
-      })
+      }),
     );
   }
 
   @Action(AddTag)
-  addTag(
-    { getState, patchState }: StateContext<TagStateModel>,
-    { payload }: AddTag
-  ) {
+  addTag({ getState, patchState }: StateContext<TagStateModel>, { payload }: AddTag) {
     return this.tagService.createNewTag(payload).pipe(
       tap((result) => {
         const state = getState();
         patchState({
           customTags: [...state.customTags, result],
         });
-      })
+      }),
     );
   }
 
   @Action(UpdateTag)
-  updateTag(
-    { getState, setState }: StateContext<TagStateModel>,
-    { payload, id }: UpdateTag
-  ) {
+  updateTag({ getState, setState }: StateContext<TagStateModel>, { payload, id }: UpdateTag) {
     return this.tagService.updateTag(id, payload).pipe(
       tap((result) => {
         const state = getState();
@@ -79,15 +68,12 @@ export class TagState {
           ...state,
           customTags: tagsList,
         });
-      })
+      }),
     );
   }
 
   @Action(DeleteTag)
-  deleteTag(
-    { getState, setState }: StateContext<TagStateModel>,
-    { id }: DeleteTag
-  ) {
+  deleteTag({ getState, setState }: StateContext<TagStateModel>, { id }: DeleteTag) {
     return this.tagService.deleteTag(id).pipe(
       tap(() => {
         const state = getState();
@@ -96,7 +82,7 @@ export class TagState {
           ...state,
           customTags: filteredArray,
         });
-      })
+      }),
     );
   }
 }

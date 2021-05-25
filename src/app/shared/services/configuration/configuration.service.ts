@@ -10,7 +10,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ConfigurationService {
-  config: FeatureConfiguration = null;
+  config: FeatureConfiguration | null = null;
   configUrl = `${environment.api}/${CARTELLA_ENDPOINTS.config}`;
 
   constructor(private http: HttpClient) {}

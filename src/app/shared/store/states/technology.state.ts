@@ -6,9 +6,8 @@ import { map, tap } from 'rxjs/operators';
 import { GetTechnologies } from '../actions/technology.action';
 
 export class TechnologyStateModel {
-  technologies: Technology[];
+  technologies: Technology[] = [];
 }
-
 @State({
   name: 'technologies',
 })

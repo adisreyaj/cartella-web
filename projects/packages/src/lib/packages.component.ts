@@ -13,8 +13,8 @@ import { UserState } from '@cartella/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, finalize, pluck, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { filter, finalize, pluck, switchMap, withLatestFrom } from 'rxjs/operators';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';
@@ -63,14 +63,14 @@ export class PackagesComponent extends WithDestroy implements OnInit {
   private packageLoadingSubject = new BehaviorSubject(false);
   packageLoading$ = this.packageLoadingSubject.pipe();
 
-  isMenuOpen$: Observable<boolean>;
+  isMenuOpen$: Observable<boolean> | null = null;
 
   constructor(
     private store: Store,
     private menu: MenuService,
     private dialog: DialogService,
     private toaster: ToastService,
-    private syncService: IDBSyncService
+    private syncService: IDBSyncService,
   ) {
     super();
   }
@@ -122,7 +122,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
       size: 'sm',
       data: {
         folder,
-        owner: this.store.selectSnapshot<User>(UserState.getLoggedInUser)?.id,
+        owner: this.store.selectSnapshot<User>((state) => state.user)?.id,
       },
       enableClose: false,
     });
@@ -137,7 +137,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
       dialogRef.afterClosed$
         .pipe(
           filter((allowDelete) => allowDelete),
-          switchMap(() => this.store.dispatch(new DeletePackageFolder(folder.id)))
+          switchMap(() => this.store.dispatch(new DeletePackageFolder(folder.id))),
         )
         .subscribe(
           () => {
@@ -149,8 +149,8 @@ export class PackagesComponent extends WithDestroy implements OnInit {
             } else {
               this.toaster.showErrorToast('Folder was not deleted!');
             }
-          }
-        )
+          },
+        ),
     );
   }
 
@@ -158,7 +158,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     this.dialog.open(PackagesAddFolderComponent, {
       size: 'sm',
       data: {
-        owner: this.store.selectSnapshot<User>(UserState.getLoggedInUser)?.id,
+        owner: this.store.selectSnapshot<User>((state) => state.user)?.id,
       },
       enableClose: false,
     });
@@ -168,11 +168,11 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     this.packageLoadingSubject.next(true);
     return combineLatest([this.getPackages(), this.getPackageFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
-        combineLatest([this.syncService.syncItems(bookmarks, folders), this.syncService.syncFolders(folders)])
+        combineLatest([this.syncService.syncItems(bookmarks, folders), this.syncService.syncFolders(folders)]),
       ),
       finalize(() => {
         this.packageLoadingSubject.next(false);
-      })
+      }),
     );
   }
 
@@ -189,31 +189,39 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     return this.store.dispatch(new GetPackageFolders()).pipe(
       switchMap(() => this.store.dispatch(new SetActivePackageFolder(ALL_PACKAGES_FOLDER))),
       // Get package folders from state
-      pluck('packageFolders', 'packageFolders')
+      pluck('packageFolders', 'packageFolders'),
     );
   }
 
   private updatePackagesWhenActiveFolderChanges() {
+    if (!this.activeFolder$) return of(null);
     return this.activeFolder$.pipe(
       pluck('id'),
-      switchMap((folderId) => this.store.dispatch(new GetPackages(folderId)))
+      switchMap((folderId) => this.store.dispatch(new GetPackages(folderId))),
     );
   }
 
   private updatePackagesInIDB() {
-    const sub = combineLatest([this.allPackages$, this.allPackageFolders$.pipe(take(1))])
-      .pipe(switchMap(([packages, folders]) => this.syncService.syncItems(packages, folders)))
-      .subscribe();
-    this.subs.add(sub);
+    if (this.allPackages$ && this.allPackageFolders$) {
+      const sub = this.allPackages$
+        .pipe(
+          withLatestFrom(this.allPackageFolders$),
+          switchMap(([packages, folders]) => this.syncService.syncItems(packages, folders)),
+        )
+        .subscribe();
+      this.subs.add(sub);
+    }
   }
 
   private updatePackageFoldersInIDB() {
-    const sub = this.allPackageFolders$
-      .pipe(
-        filter((res) => res.length > 0),
-        switchMap((folders) => this.syncService.syncFolders(folders))
-      )
-      .subscribe();
-    this.subs.add(sub);
+    if (this.allPackageFolders$) {
+      const sub = this.allPackageFolders$
+        .pipe(
+          filter((res) => res.length > 0),
+          switchMap((folders) => this.syncService.syncFolders(folders)),
+        )
+        .subscribe();
+      this.subs.add(sub);
+    }
   }
 }

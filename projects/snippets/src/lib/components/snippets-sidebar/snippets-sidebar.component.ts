@@ -63,7 +63,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
   private snippetsToShowSubject = new BehaviorSubject<Snippet[]>([]);
   snippetsToShow$ = this.snippetsToShowSubject.pipe();
 
-  @ViewChild('searchRef') searchRef: ElementRef;
+  @ViewChild('searchRef') searchRef: ElementRef | null = null;
 
   constructor(private store: Store, private nameGeneratorService: NameGeneratorService, private clipboard: Clipboard) {
     super();
@@ -81,7 +81,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
     this.listenToSearchInput();
   }
 
-  trackBy(_, { id }: { id: string }) {
+  trackBy(_: number, { id }: { id: string }) {
     return id;
   }
 
@@ -98,7 +98,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
   }
 
   handleCopyToClipboard(snippet: Snippet) {
-    this.clipboard.copy(snippet?.code);
+    this.clipboard.copy(snippet?.code || '');
   }
 
   selectSnippet(data: Snippet) {
@@ -118,6 +118,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
   }
 
   createNewSnippet(technologyId: string) {
+    if (!this.activeFolder$) return;
     this.activeFolder$
       .pipe(
         take(1),
@@ -129,7 +130,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
             folderId: activeFolder.id,
           };
           return this.store.dispatch(new AddSnippet(data));
-        })
+        }),
       )
       .subscribe(() => {});
   }
@@ -146,7 +147,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
         .pipe(
           debounceTime(300),
           distinctUntilChanged(),
-          map(() => this.searchRef.nativeElement.value)
+          map(() => this.searchRef?.nativeElement.value ?? ''),
         )
         .subscribe((searchTerm) => {
           const filteredSnippets = this.getFilteredSnippetsBasedOnSearchTerm(searchTerm);

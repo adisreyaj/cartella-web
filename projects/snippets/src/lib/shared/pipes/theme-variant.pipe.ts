@@ -14,7 +14,7 @@ export class ThemeVariantPipe implements PipeTransform {
    * @param value - themes supported
    * @param isDarkMode - is dark mode enabled
    */
-  transform(value: ThemesSupported[], isDarkMode = false): unknown {
+  transform(value: ThemesSupported[], isDarkMode: boolean | null = false): ThemesSupported[] {
     if (value?.length > 0) {
       return value.filter(({ type }) => {
         if (isDarkMode) {

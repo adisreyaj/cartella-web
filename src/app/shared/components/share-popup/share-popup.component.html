@@ -29,7 +29,7 @@
           </ng-select>
         </div>
       </div>
-      <ng-container *ngIf="shareTo?.length > 0">
+      <ng-container *ngIf="shareTo && shareTo.length > 0">
         <h4 class="text-base font-semibold text-gray-700 dark:text-white">To be shared with</h4>
         <ul class="overflow-y-auto" style="max-height: 206px;">
           <ng-container *ngTemplateOutlet="shareList; context:{$implicit: shareTo, remove: removeFromToBeSharedList}">
@@ -42,7 +42,7 @@
       </div>
     </section>
     <section class="my-4" *ngIf="(isShareListView$ | async)">
-      <ng-container *ngIf="sharedWith?.length > 0;else notShared">
+      <ng-container *ngIf="sharedWith && sharedWith.length > 0;else notShared">
         <ul class="overflow-y-auto" style="max-height: 206px;">
           <ng-container *ngTemplateOutlet="shareList; context:{$implicit: sharedWith, remove: removeFromList}">
           </ng-container>

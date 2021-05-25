@@ -2,6 +2,7 @@ import { environment } from '@cartella/env/environment';
 
 export const ROUTES = {
   auth: {
+    root: 'auth',
     login: 'login',
     loginSuccess: 'login/success',
     loginFailure: 'login/failure',

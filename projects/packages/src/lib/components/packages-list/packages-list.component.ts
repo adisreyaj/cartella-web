@@ -10,7 +10,7 @@ import { MenuService } from '@cartella/services/menu/menu.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { HomeState } from '../../../../../../src/app/pages/dashboard/home/shared/store/states/home.state';
 import {
@@ -31,11 +31,11 @@ import { PackagesAddComponent } from '../modals/packages-add/packages-add.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackagesListComponent extends WithDestroy implements OnInit {
-  @Input() user: User;
-  @Input() activeFolder: PackageFolder;
-  @Input() folders: PackageFolder[];
-  @Input() packages: Package[] = [];
-  @Input() isLoading = false;
+  @Input() user: User | null = null;
+  @Input() activeFolder: PackageFolder | null = null;
+  @Input() folders: PackageFolder[] | null = [];
+  @Input() packages: Package[] | null = [];
+  @Input() isLoading: boolean | null = false;
 
   packagesCount = new Array(this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages || 1).fill('');
 
@@ -55,7 +55,7 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
     private dialog: DialogService,
     private store: Store,
     private menu: MenuService,
-    private syncService: IDBSyncService
+    private syncService: IDBSyncService,
   ) {
     super();
   }
@@ -66,7 +66,7 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
     this.menu.toggleMenu();
   }
 
-  trackBy(_, { id }: { id: string }) {
+  trackBy(_: number, { id }: { id: string }) {
     return id;
   }
   addNewPackage() {
@@ -112,23 +112,27 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
         type: FeatureType.bookmark,
         action: UpdatePackage,
         item: packageData,
-        folders: this.folders$.pipe(map((folders) => folders.filter(({ id }) => id !== packageData.folder.id))),
+        folders: this.folders$
+          ? this.folders$.pipe(map((folders) => folders.filter(({ id }) => id !== packageData.folder.id)))
+          : of([]),
       },
       enableClose: false,
     });
     this.subs.add(
       dialogRef.afterClosed$
         .pipe(
-          switchMap(() => combineLatest([this.packages$, this.folders$])),
+          switchMap(() => combineLatest([this.packages$ ?? of([]), this.folders$ ?? of([])])),
           take(1),
           switchMap(([packages, folders]) => this.syncService.syncItems(packages, folders)),
-          switchMap(() =>
-            this.store.dispatch(
-              new GetPackages(this.store.selectSnapshot(PackageFolderState.getActivePackageFolder)?.id)
-            )
-          )
+          switchMap(() => {
+            const activePackageFolder = this.store.selectSnapshot(PackageFolderState.getActivePackageFolder);
+            if (activePackageFolder) {
+              return this.store.dispatch(new GetPackages(activePackageFolder.id));
+            }
+            return of(null);
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 
@@ -144,9 +148,9 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
             if (response) {
               this.store.dispatch(new DeletePackage(id));
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 
@@ -165,9 +169,9 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
           tap((response) => {
             if (response) {
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 }

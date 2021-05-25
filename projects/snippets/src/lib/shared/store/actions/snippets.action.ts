@@ -41,7 +41,7 @@ export class UpdateSharePreferencesSnippet {
 
 export class SetActiveSnippet {
   static readonly type = '[Snippet] Set Active';
-  constructor(public payload: Snippet) {}
+  constructor(public payload: Snippet | null) {}
 }
 export class SetActiveSnippetWithSlug {
   static readonly type = '[Snippet] Set Active with slug';

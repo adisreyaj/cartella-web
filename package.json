@@ -45,7 +45,7 @@
     "@ngneat/overview": "^1.0.0-beta.7",
     "@ngxs/devtools-plugin": "^3.7.1",
     "@ngxs/logger-plugin": "^3.7.1",
-    "@ngxs/store": "^3.7.1",
+    "@ngxs/store": "^3.7.2",
     "@sentry/angular": "^6.2.0",
     "@sentry/tracing": "^6.2.0",
     "angular-remix-icon": "^1.1.0",

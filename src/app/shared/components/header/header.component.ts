@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@cartella/interfaces/user.interface';
 import { CleanupService } from '@cartella/services/cleanup/cleanup.service';
@@ -16,11 +16,12 @@ import { SubSink } from 'subsink';
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnDestroy {
   @Select(UserState.getLoggedInUser)
   user$: Observable<User>;
-  isDarkMode$: Observable<boolean>;
-  isMenuOpen$: Observable<boolean>;
+
+  isDarkMode$ = this.darkMode.isDarkMode$;
+  isMenuOpen$ = this.menu.isMenuOpen$;
 
   private subs = new SubSink();
   constructor(
@@ -28,13 +29,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private router: Router,
     private menu: MenuService,
     private darkMode: DarkModeService,
-    private cleanupService: CleanupService
+    private cleanupService: CleanupService,
   ) {}
-
-  ngOnInit(): void {
-    this.isMenuOpen$ = this.menu.isMenuOpen$;
-    this.isDarkMode$ = this.darkMode.isDarkMode$;
-  }
 
   ngOnDestroy() {
     this.subs.unsubscribe();
@@ -52,7 +48,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         .subscribe(() => {
           this.cleanupService.cleanUpLocalSyncedData();
           this.router.navigate(['/auth/login']);
-        })
+        }),
     );
   }
 

@@ -18,7 +18,7 @@ import { SharePopupPayload } from './share-popup.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharePopupComponent implements OnInit {
-  @ViewChild('emailInputRef') emailInputRef: ElementRef;
+  @ViewChild('emailInputRef') emailInputRef: ElementRef | null = null;
   emailInputControl = new FormControl('', [Validators.required, Validators.email]);
   accessInputControl = new FormControl(Access.read, [Validators.required]);
   accessLevels = Object.values(Access);
@@ -34,23 +34,26 @@ export class SharePopupComponent implements OnInit {
     [FeatureType.bookmark]: (bookmark: Bookmark) => new UpdateBookmark(bookmark.id, { share: bookmark.share }),
     [FeatureType.snippet]: (id: string, shareTo: ShareTo[]) => new ShareSnippet(id, shareTo),
     [FeatureType.package]: (packageData: Package) => new UpdatePackage(packageData.id, { share: packageData.share }),
+    [FeatureType.repo]: {},
   };
   unShareAction = {
     [FeatureType.bookmark]: (bookmark: Bookmark) => new UpdateBookmark(bookmark.id, { share: bookmark.share }),
     [FeatureType.snippet]: (id: string, revoke: string[]) => new UnShareSnippet(id, revoke),
     [FeatureType.package]: (packageData: Package) => new UpdatePackage(packageData.id, { share: packageData.share }),
+    [FeatureType.repo]: {},
   };
   updateShareAction = {
     [FeatureType.bookmark]: (bookmark: Bookmark) => new UpdateBookmark(bookmark.id, { share: bookmark.share }),
     [FeatureType.snippet]: (id: string, shareTo: UpdateSharePrefRequest[]) =>
       new UpdateSharePreferencesSnippet(id, shareTo),
     [FeatureType.package]: (packageData: Package) => new UpdatePackage(packageData.id, { share: packageData.share }),
+    [FeatureType.repo]: {},
   };
   constructor(
     public ref: DialogRef<SharePopupPayload>,
     private toaster: ToastService,
     private cdr: ChangeDetectorRef,
-    private store: Store
+    private store: Store,
   ) {}
 
   ngOnInit(): void {
@@ -99,7 +102,7 @@ export class SharePopupComponent implements OnInit {
 
   unshare(shareData: ShareTo & { id: string }) {
     const revokeData = [shareData.id];
-    const action = this.unShareAction[this.ref.data.entity];
+    const action: any = this.unShareAction[this.ref.data.entity];
     this.store.dispatch(action(this.ref.data.item.id, revokeData)).subscribe(
       () => {
         this.sharedWith = this.sharedWith.filter(({ email }) => email !== shareData.email);
@@ -108,7 +111,7 @@ export class SharePopupComponent implements OnInit {
       },
       (err: Error) => {
         this.toaster.showErrorToast(err.message);
-      }
+      },
     );
   }
 
@@ -123,7 +126,7 @@ export class SharePopupComponent implements OnInit {
 
   share() {
     if (this.shareTo?.length > 0) {
-      const action = this.shareAction[this.ref.data.entity];
+      const action: any = this.shareAction[this.ref.data.entity];
       this.store.dispatch(action(this.ref.data.item.id, this.shareTo)).subscribe(
         () => {
           this.shareTo = [];
@@ -133,15 +136,17 @@ export class SharePopupComponent implements OnInit {
         },
         (err: Error) => {
           this.toaster.showErrorToast(err.message);
-        }
+        },
       );
     }
   }
 
   updateSharePermissions() {
     if (this.sharedWith?.length > 0) {
-      const action = this.updateShareAction[this.ref.data.entity];
-      const data: UpdateSharePrefRequest[] = this.sharedWith.map(({ id, access }) => ({ id, access }));
+      const action: any = this.updateShareAction[this.ref.data.entity];
+      const data: UpdateSharePrefRequest[] = this.sharedWith.map(
+        ({ id, access }) => ({ id, access } as UpdateSharePrefRequest),
+      );
       this.store.dispatch(action(this.ref.data.item.id, data)).subscribe(
         () => {
           this.cdr.detectChanges();
@@ -150,7 +155,7 @@ export class SharePopupComponent implements OnInit {
         },
         (err: Error) => {
           this.toaster.showErrorToast(err.message);
-        }
+        },
       );
     }
   }

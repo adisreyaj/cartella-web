@@ -17,10 +17,7 @@ export interface FolderBaseResponse extends FolderBaseRequest {
 }
 export interface FolderOperations<FolderRequestType, FolderResponseType> {
   createNewFolder(data: FolderRequestType): Observable<FolderResponseType>;
-  updateFolder(
-    id: string,
-    data: Partial<FolderRequestType>
-  ): Observable<FolderResponseType>;
+  updateFolder(id: string, data: Partial<FolderRequestType>): Observable<FolderResponseType>;
   deleteFolder(id: string): Observable<any>;
   getFolders(user: User): Observable<PayloadResponse<FolderResponseType>>;
 }

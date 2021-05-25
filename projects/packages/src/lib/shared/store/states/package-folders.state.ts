@@ -15,9 +15,9 @@ import {
 } from '../actions/package-folders.action';
 
 export class PackageFolderStateModel {
-  packageFolders: PackageFolder[];
-  fetched: boolean;
-  activePackageFolder: PackageFolder;
+  packageFolders: PackageFolder[] = [];
+  fetched: boolean = false;
+  activePackageFolder: PackageFolder | null = null;
 }
 @State({
   name: 'packageFolders',
@@ -54,7 +54,7 @@ export class PackageFolderState {
                 patchState({
                   packageFolders: result,
                 });
-              })
+              }),
             );
           } else {
             patchState({
@@ -62,7 +62,7 @@ export class PackageFolderState {
             });
             return of(packageFolders);
           }
-        })
+        }),
       );
     } else {
       return this.packageService.getFolders().pipe(
@@ -74,7 +74,7 @@ export class PackageFolderState {
             fetched: true,
             activePackageFolder: ALL_PACKAGES_FOLDER,
           });
-        })
+        }),
       );
     }
   }
@@ -88,7 +88,7 @@ export class PackageFolderState {
           packageFolders: [...state.packageFolders, result],
           activePackageFolder: result,
         });
-      })
+      }),
     );
   }
 
@@ -104,7 +104,7 @@ export class PackageFolderState {
           ...state,
           packageFolders: foldersList,
         });
-      })
+      }),
     );
   }
 
@@ -118,14 +118,14 @@ export class PackageFolderState {
           ...state,
           packageFolders: filteredArray,
         });
-      })
+      }),
     );
   }
 
   @Action(SetActivePackageFolder, { cancelUncompleted: true })
   setSelectedPackage(
     { getState, setState }: StateContext<PackageFolderStateModel>,
-    { payload }: SetActivePackageFolder
+    { payload }: SetActivePackageFolder,
   ) {
     const state = getState();
     setState({
