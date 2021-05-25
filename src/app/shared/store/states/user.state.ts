@@ -14,7 +14,7 @@ import {
 } from '../actions/user.action';
 
 export class UserStateModel {
-  user: User;
+  user: User | null = null;
 }
 
 @State({
@@ -44,17 +44,14 @@ export class UserState {
             ...state,
             user,
           });
-        })
+        }),
       );
     }
     return throwError(new Error('Failed to login'));
   }
 
   @Action(SetLoggedInUser)
-  setLoggedInUser(
-    { getState, setState }: StateContext<UserStateModel>,
-    { payload }: SetLoggedInUser
-  ) {
+  setLoggedInUser({ getState, setState }: StateContext<UserStateModel>, { payload }: SetLoggedInUser) {
     const state = getState();
     setState({
       ...state,
@@ -73,35 +70,31 @@ export class UserState {
   }
 
   @Action(UpdateUser)
-  updateUser(
-    { patchState }: StateContext<UserStateModel>,
-    { id, payload }: UpdateUser
-  ) {
+  updateUser({ patchState }: StateContext<UserStateModel>, { id, payload }: UpdateUser) {
     return this.user.updateUser(id, payload).pipe(
       tap((result) => {
         patchState({
           user: result,
         });
-      })
+      }),
     );
   }
 
   @Action(UpdateUserLoginMethod)
-  updateUserLoginMethod(
-    { getState, setState }: StateContext<UserStateModel>,
-    { id, payload }: UpdateUserLoginMethod
-  ) {
+  updateUserLoginMethod({ getState, setState }: StateContext<UserStateModel>, { id, payload }: UpdateUserLoginMethod) {
     return this.auth.updateUserLoginMethod(id, payload).pipe(
       tap((result) => {
         const state = getState();
-        setState({
-          ...state,
-          user: {
-            ...state.user,
-            loginMethods: result.loginMethods,
-          },
-        });
-      })
+        if (state.user) {
+          setState({
+            ...state,
+            user: {
+              ...state.user,
+              loginMethods: result.loginMethods,
+            },
+          });
+        }
+      }),
     );
   }
 }

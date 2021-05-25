@@ -3,7 +3,6 @@ import { Bookmark, BookmarkFolder } from '@cartella/bookmarks';
 import { User } from '@cartella/interfaces/user.interface';
 import { Package, PackageFolder } from '@cartella/packages';
 import { Snippet, SnippetFolder } from '@cartella/snippets';
-import { UserState } from '@cartella/store/states/user.state';
 import { Store } from '@ngxs/store';
 type Items = Bookmark | Snippet | Package;
 type Folders = BookmarkFolder | SnippetFolder | PackageFolder;
@@ -15,10 +14,10 @@ export class FolderAssortService {
   constructor(private store: Store) {}
 
   assort(items: Items[]) {
-    const user = this.store.selectSnapshot<User>(UserState.getLoggedInUser);
-    let shared = [];
-    let own = [];
-    let starred = [];
+    const user = this.store.selectSnapshot<User>((state) => state.user);
+    let shared: Items[] = [];
+    let own: Items[] = [];
+    let starred: Items[] = [];
     if (items?.length > 0) {
       items.forEach((bookmark) => {
         if (bookmark.owner.id === user.id) {

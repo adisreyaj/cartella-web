@@ -45,7 +45,7 @@
             <a class="text-sm leading-relaxed text-gray-700 hover:text-primary focus:text-primary dark:text-dark-50"
                routerLink="/auth/reset-password">Forgot Password?</a>
           </div>
-          <button primaryButton [loading]="loading$ | async" class="grid items-center w-full"
+          <button primaryButton [loading]="(loading$ | async)" class="grid items-center w-full"
                   [disabled]="loginForm?.touched && loginForm?.invalid">Login</button>
         </form>
         <ng-container *feature="'modules.signup.enabled'">

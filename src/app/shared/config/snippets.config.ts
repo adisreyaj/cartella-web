@@ -1,3 +1,4 @@
+import { FolderBaseResponse } from '@cartella/interfaces/folder.interface';
 import { SnippetRequest } from '@cartella/snippets';
 import { EditorConfiguration } from 'codemirror';
 
@@ -66,23 +67,17 @@ export const DEFAULT_EDITOR_OPTIONS: EditorConfiguration & {
   // },
 };
 
-export const ALL_SNIPPETS_FOLDER = {
+export const ALL_SNIPPETS_FOLDER: FolderBaseResponse = {
   name: 'All Snippets',
-  normalizedName: 'all snippets',
   id: 'all',
-  owner: null,
-  updatedAt: null,
-  createdAt: null,
-  share: null,
+  updatedAt: new Date(),
+  createdAt: new Date(),
+  share: [],
   metadata: null,
   private: true,
-  ownerId: null,
 };
 
-export const SNIPPET_TEMPLATE: Omit<
-  SnippetRequest,
-  'ownerId' | 'technologyId' | 'folderId' | 'slug'
-> = {
+export const SNIPPET_TEMPLATE: Omit<SnippetRequest, 'ownerId' | 'technologyId' | 'folderId' | 'slug'> = {
   name: 'Untitled Snippet',
   code: '',
   description: '',

@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FolderBaseResponse } from '@cartella/interfaces/folder.interface';
 
 export enum ExplorerSidebarEventType {
   edit,
@@ -26,11 +20,11 @@ export interface ExplorerSidebarEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExplorerSidebarComponent implements OnInit {
-  @Input() type: 'snippets' | 'bookmarks' | 'packages';
-  @Input() folders: any[];
-  @Input() activeFolder: any;
-  @Input() isLoading = false;
-  @Input() isFetched = false;
+  @Input() type: 'snippets' | 'bookmarks' | 'packages' = 'snippets';
+  @Input() folders: FolderBaseResponse[] | null = [];
+  @Input() activeFolder: FolderBaseResponse | null = null;
+  @Input() isLoading: boolean | null = false;
+  @Input() isFetched: boolean | null = false;
 
   @Output() sidebarEvent = new EventEmitter<ExplorerSidebarEvent>();
 
@@ -38,10 +32,10 @@ export class ExplorerSidebarComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  trackBy(_, { id }: { id: string }) {
+  trackBy(_: number, { id }: { id: string }) {
     return id;
   }
-  handleSelectFolder(folder) {
+  handleSelectFolder(folder: FolderBaseResponse) {
     this.sidebarEvent.emit({
       type: ExplorerSidebarEventType.select,
       data: folder,
@@ -49,14 +43,14 @@ export class ExplorerSidebarComponent implements OnInit {
     this.closeMenu();
   }
 
-  handleEditFolder(folder) {
+  handleEditFolder(folder: FolderBaseResponse) {
     this.sidebarEvent.emit({
       type: ExplorerSidebarEventType.edit,
       data: folder,
     });
   }
 
-  handleDeleteFolder(folder) {
+  handleDeleteFolder(folder: FolderBaseResponse) {
     this.sidebarEvent.emit({
       type: ExplorerSidebarEventType.delete,
       data: folder,

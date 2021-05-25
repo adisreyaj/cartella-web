@@ -27,8 +27,8 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
 
   tagsSelected = new Set<Tag>();
 
-  @ViewChild('packageNameRef') packageNameInputRef: TippyInstance;
-  @ViewChild('tagNameRef') tagNameInputRef: TippyInstance;
+  @ViewChild('packageNameRef') packageNameInputRef: TippyInstance | null = null;
+  @ViewChild('tagNameRef') tagNameInputRef: TippyInstance | null = null;
 
   private tagSuggestionLoadingSubject = new BehaviorSubject<boolean>(false);
   tagSuggestionsLoading$ = this.tagSuggestionLoadingSubject.pipe();
@@ -53,7 +53,7 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
     private packageService: PackagesService,
     private toast: ToastService,
     private cdr: ChangeDetectorRef,
-    private store: Store
+    private store: Store,
   ) {
     super();
   }
@@ -112,7 +112,7 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
           };
           this.savingSubject.next(false);
           return this.store.dispatch(new AddPackage(packageData));
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -125,7 +125,7 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
           }
           this.toast.showErrorToast(message);
           this.savingSubject.next(false);
-        }
+        },
       );
   }
 
@@ -151,9 +151,9 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
             }
           }),
           tap((suggestions) => {
-            this.packageNameInputRef.show();
+            this.packageNameInputRef?.show();
             this.searchSuggestionSubject.next(suggestions);
-          })
+          }),
         )
         .subscribe(() => {
           this.searchSuggestionLoadingSubject.next(false);
@@ -179,9 +179,9 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
             }
           }),
           tap((tags) => {
-            this.tagNameInputRef.show();
+            this.tagNameInputRef?.show();
             this.tagSuggestionSubject.next(tags);
-          })
+          }),
         )
         .subscribe(() => {
           this.searchSuggestionLoadingSubject.next(false);
@@ -191,6 +191,8 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
   }
 
   private filterOutTagNames(query: string) {
-    return this.tags$.pipe(map((tags) => tags.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))));
+    return this.tags$
+      ? this.tags$.pipe(map((tags) => tags.filter(({ name }) => name.toLowerCase().includes(query.toLowerCase()))))
+      : of([]);
   }
 }

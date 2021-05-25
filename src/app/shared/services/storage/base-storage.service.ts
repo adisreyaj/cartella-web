@@ -15,20 +15,20 @@ export class BaseStorageService<DataType = any> {
     return from(this.instance.setItem(key, value)).pipe(catchError(() => of(null)));
   }
   getItem(key: string) {
-    return from(this.instance.getItem<DataType>(key)).pipe(catchError(() => of(null)));
+    return from(this.instance.getItem<DataType[]>(key)).pipe(catchError(() => of(null)));
   }
 
   deleteItem(key: string) {
     return from(this.instance.removeItem(key)).pipe(
       mapTo(true),
-      catchError(() => of(false))
+      catchError(() => of(false)),
     );
   }
 
   flush() {
     return from(this.instance.clear()).pipe(
       mapTo(true),
-      catchError(() => of(false))
+      catchError(() => of(false)),
     );
   }
 
@@ -43,19 +43,19 @@ export class BaseStorageService<DataType = any> {
       // Starred items should be removed as its duplicated already
       map((keys) => keys.filter((key) => !['starred', 'folders'].includes(key))),
       filter((keys) => keys.length > 0),
-      map((keys: string[]) => keys.map((key) => this.instance.getItem<DataType[]>(key))),
-      filter((promises) => promises.length > 0),
-      map((promises: Promise<DataType[]>[]) => Promise.all(promises)),
+      map((keys) => keys.map((key) => this.instance.getItem<DataType[]>(key))),
+      filter((promises) => promises?.length > 0),
+      map((promises) => Promise.all(promises)),
       filter((promise) => promise != null),
       switchMap((promise: Promise<DataType[][]>) => from(promise).pipe(catchError(() => of([])))),
-      map((values) =>
+      map((values: DataType[][]) =>
         values.reduce((acc, curr: DataType[]) => {
           if (curr && Array.isArray(curr) && curr.length > 0) {
             return [...acc, ...curr];
           }
           return acc;
-        }, [])
-      )
+        }, []),
+      ),
     );
   }
 

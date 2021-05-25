@@ -10,18 +10,11 @@ import { ConfigurationService } from '../configuration/configuration.service';
 export class DarkModeService {
   private isDarkMode = false;
   isDarkModeSubject = new BehaviorSubject<boolean>(this.isDarkMode);
-  isDarkMode$ = this.isDarkModeSubject.pipe(
-    tap((isDark) => (this.isDarkMode = isDark))
-  );
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    private config: ConfigurationService
-  ) {
+  isDarkMode$ = this.isDarkModeSubject.pipe(tap((isDark) => (this.isDarkMode = isDark)));
+  constructor(@Inject(DOCUMENT) private document: Document, private config: ConfigurationService) {
     if (
-      (this.config.isFeatureEnabled('darkMode') &&
-        localStorage.getItem('theme') === 'dark') ||
-      (!('theme' in localStorage) &&
-        window.matchMedia('(prefers-color-scheme: dark)').matches)
+      (this.config.isFeatureEnabled('darkMode') && localStorage.getItem('theme') === 'dark') ||
+      (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
     ) {
       this.enable();
     } else {
@@ -41,12 +34,12 @@ export class DarkModeService {
   }
 
   enable() {
-    this.bodyElement.classList.add(...['dark']);
+    this.bodyElement?.classList.add(...['dark']);
     this.isDarkModeSubject.next(true);
     localStorage.setItem('theme', 'dark');
   }
   disable() {
-    this.bodyElement.classList.remove(...['dark']);
+    this.bodyElement?.classList.remove(...['dark']);
     this.isDarkModeSubject.next(false);
     localStorage.setItem('theme', 'light');
   }

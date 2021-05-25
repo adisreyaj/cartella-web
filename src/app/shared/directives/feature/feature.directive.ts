@@ -1,10 +1,4 @@
-import {
-  Directive,
-  Input,
-  OnInit,
-  TemplateRef,
-  ViewContainerRef,
-} from '@angular/core';
+import { Directive, Input, OnInit, TemplateRef, ViewContainerRef } from '@angular/core';
 import { ConfigurationService } from '@cartella/services/configuration/configuration.service';
 
 @Directive({
@@ -12,16 +6,15 @@ import { ConfigurationService } from '@cartella/services/configuration/configura
   selector: '[feature]',
 })
 export class FeatureDirective implements OnInit {
-  @Input() feature: string;
+  @Input() feature = '';
   constructor(
     private tpl: TemplateRef<any>,
     private vcr: ViewContainerRef,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
   ) {}
 
   ngOnInit() {
-    const isEnabled =
-      this.configService.isFeatureEnabled(this.feature) || false;
+    const isEnabled = this.configService.isFeatureEnabled(this.feature) || false;
     if (isEnabled) {
       this.vcr.createEmbeddedView(this.tpl);
     }

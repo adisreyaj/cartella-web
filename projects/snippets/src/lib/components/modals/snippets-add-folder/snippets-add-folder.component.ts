@@ -16,7 +16,7 @@ import { AddSnippetFolder, UpdateSnippetFolder } from '../../../shared/store/act
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SnippetsAddFolderComponent extends WithDestroy implements OnInit, AfterViewInit {
-  @ViewChild('folderNameRef') folderNameRef: ElementRef;
+  @ViewChild('folderNameRef') folderNameRef: ElementRef | null = null;
   folderName = new FormControl('', [Validators.required]);
 
   private savingSubject = new BehaviorSubject<boolean>(false);
@@ -48,26 +48,28 @@ export class SnippetsAddFolderComponent extends WithDestroy implements OnInit, A
 
   async updateFolder(folder: Partial<SnippetFolder>) {
     this.savingSubject.next(true);
-    const sub = this.store
-      .dispatch(
-        new UpdateSnippetFolder(folder.id, {
-          name: this.folderName.value,
-          metadata: {},
-          private: true,
-        })
-      )
-      .subscribe(
-        () => {
-          this.savingSubject.next(false);
-          this.toaster.showSuccessToast('Folder updated successfully!');
-          this.ref.close();
-        },
-        () => {
-          this.savingSubject.next(false);
-          this.toaster.showErrorToast('Failed to update the folder!');
-        }
-      );
-    this.subs.add(sub);
+    if (folder.id) {
+      const sub = this.store
+        .dispatch(
+          new UpdateSnippetFolder(folder.id, {
+            name: this.folderName.value,
+            metadata: {},
+            private: true,
+          }),
+        )
+        .subscribe(
+          () => {
+            this.savingSubject.next(false);
+            this.toaster.showSuccessToast('Folder updated successfully!');
+            this.ref.close();
+          },
+          () => {
+            this.savingSubject.next(false);
+            this.toaster.showErrorToast('Failed to update the folder!');
+          },
+        );
+      this.subs.add(sub);
+    }
   }
 
   async createFolder() {
@@ -78,7 +80,7 @@ export class SnippetsAddFolderComponent extends WithDestroy implements OnInit, A
           name: this.folderName.value,
           metadata: {},
           private: true,
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -93,7 +95,7 @@ export class SnippetsAddFolderComponent extends WithDestroy implements OnInit, A
           } else {
             this.toaster.showErrorToast('Folder was not created!');
           }
-        }
+        },
       );
     this.subs.add(sub);
   }

@@ -7,27 +7,19 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class FeatureGuard implements CanLoad {
-  constructor(
-    private configService: ConfigurationService,
-    private router: Router
-  ) {}
+  constructor(private configService: ConfigurationService, private router: Router) {}
   canLoad(
     route: Route,
-    segments: UrlSegment[]
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
-    const {
-      data: { feature },
-    } = route;
-    if (feature) {
-      const isEnabled = this.configService.isFeatureEnabled(
-        `modules.${feature}.enabled`
-      );
-      if (isEnabled) {
-        return true;
+    _: UrlSegment[],
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    const { data } = route;
+    if (data && data.feature) {
+      const { feature } = data;
+      if (feature) {
+        const isEnabled = this.configService.isFeatureEnabled(`modules.${feature}.enabled`);
+        if (isEnabled) {
+          return true;
+        }
       }
     }
     this.router.navigate(['/']);

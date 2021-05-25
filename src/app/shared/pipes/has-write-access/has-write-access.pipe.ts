@@ -16,13 +16,13 @@ export class HasWriteAccessPipe implements PipeTransform {
    *
    * @param owner - owner of the item
    */
-  transform(entity: Bookmark | Snippet | Package): boolean {
+  transform(entity: Bookmark | Snippet | Package | null): boolean {
     const currentUser = this.store.selectSnapshot(UserState.getLoggedInUser);
-    if (entity && entity.owner != null && currentUser != null) {
+    if (entity != null && entity.owner != null && currentUser != null) {
       if (entity.owner.id === currentUser.id) {
         return true;
       }
-      return entity.share.find(({ email }) => email === currentUser.email).access === Access.write;
+      return entity.share.find(({ email }) => email === currentUser.email)?.access === Access.write;
     }
     return false;
   }

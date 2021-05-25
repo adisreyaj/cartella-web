@@ -18,11 +18,11 @@ export class IsSharedItemPipe implements PipeTransform {
    * @param owner - owner of the item
    * @returns whether the logged in user is the owner or not
    */
-  transform(entity: Bookmark | Snippet | Package): boolean | Access {
+  transform(entity: Bookmark | Snippet | Package | null): boolean | Access {
     const currentUser = this.store.selectSnapshot(UserState.getLoggedInUser);
     if (entity && entity.owner != null && currentUser != null) {
       if (entity.owner.id !== currentUser.id) {
-        return entity.share.find(({ email }) => email === currentUser.email).access;
+        return entity.share.find(({ email }) => email === currentUser.email)?.access || false;
       }
       return false;
     }

@@ -9,7 +9,6 @@ import {
   OnDestroy,
   OnInit,
   Output,
-  Renderer2,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -64,25 +63,24 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
 
   @Output() modeChanged = new EventEmitter<SnippetModes>();
 
-  @ViewChild('editor', { static: true }) editorRef: ElementRef;
-  @ViewChild('playground') playgroundRef: ElementRef;
-  @ViewChild('snippetNameRef') snippetNameRef: ElementRef;
+  @ViewChild('editor', { static: true }) editorRef: ElementRef | null = null;
+  @ViewChild('playground') playgroundRef: ElementRef | null = null;
+  @ViewChild('snippetNameRef') snippetNameRef: ElementRef | null = null;
 
   availableThemes = THEMES_SUPPORTED;
-  editor: codemirror.EditorFromTextArea;
+  editor: codemirror.EditorFromTextArea | null = null;
   languageFormControl = new FormControl('javascript');
   themeFormControl = new FormControl(localStorage.getItem('editor-theme') ?? 'one-dark');
   fullScreen$ = new BehaviorSubject(false);
-  isDarkMode$: Observable<boolean>;
+  isDarkMode$: Observable<boolean> | null = null;
 
   snippetNameFormControl = new FormControl('');
   constructor(
     private editorThemeService: EditorThemeService,
     private darkMode: DarkModeService,
-    private renderer: Renderer2,
     private dialog: DialogService,
     private store: Store,
-    private codeEditorService: CodeEditorService
+    private codeEditorService: CodeEditorService,
   ) {
     super();
   }
@@ -130,7 +128,7 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
         new UpdateSnippet(activeSnippet.id, {
           code: this.editor.getValue(),
           technologyId: this.languageFormControl.value,
-        })
+        }),
       );
     }
   }
@@ -149,9 +147,9 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
                 this.store.dispatch(new DeleteSnippet(activeSnippet.id));
                 this.store.dispatch(new SetActiveSnippet(null));
               }
-            })
+            }),
           )
-          .subscribe(() => {})
+          .subscribe(() => {}),
       );
     }
   }
@@ -162,7 +160,7 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
       minHeight: 'auto',
       data: {
         name: this.snippetNameFormControl.value,
-        code: this.editor.getValue(),
+        code: this.editor?.getValue() || '',
         language: this.technologies.find(({ id }) => id === this.languageFormControl.value),
         theme: this.themeFormControl.value,
       },
@@ -185,9 +183,9 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
           tap((response) => {
             if (response) {
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 
@@ -198,15 +196,16 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
         element.focus();
         element.value = 'Untitled Snippet';
       } else {
-        this.activeSnippet$.pipe(take(1)).subscribe((activeSnippet) => {
-          if (element.value.trim() !== activeSnippet.name) {
-            this.store.dispatch(
-              new UpdateSnippet(activeSnippet.id, {
-                name: element?.value?.trim() ?? 'Untitled Snippet',
-              })
-            );
-          }
-        });
+        if (this.activeSnippet$)
+          this.activeSnippet$.pipe(take(1)).subscribe((activeSnippet) => {
+            if (element.value.trim() !== activeSnippet.name) {
+              this.store.dispatch(
+                new UpdateSnippet(activeSnippet.id, {
+                  name: element?.value?.trim() ?? 'Untitled Snippet',
+                }),
+              );
+            }
+          });
       }
     }
   }
@@ -216,13 +215,14 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
    * active snippet changes
    */
   private listenToSnippetChanges() {
-    this.subs.add(
-      this.activeSnippet$.pipe(filter((data) => data != null)).subscribe((snippet) => {
-        this.populateEditorData(snippet);
-        this.checkAndDisableWriteActions(snippet);
-        this.setSnippetName(snippet?.name);
-      })
-    );
+    if (this.activeSnippet$)
+      this.subs.add(
+        this.activeSnippet$.pipe(filter((data) => data != null)).subscribe((snippet) => {
+          this.populateEditorData(snippet);
+          this.checkAndDisableWriteActions(snippet);
+          this.setSnippetName(snippet?.name);
+        }),
+      );
   }
 
   /**
@@ -236,18 +236,18 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
     if (!hasWriteAccess) {
       this.snippetNameFormControl.disable();
       this.languageFormControl.disable();
-      this.editor.setOption('readOnly', true);
+      this.editor?.setOption('readOnly', true);
     } else {
       this.snippetNameFormControl.enable();
       this.languageFormControl.enable();
-      this.editor.setOption('readOnly', false);
+      this.editor?.setOption('readOnly', false);
     }
   }
 
   private setSnippetName(name: string) {
     this.snippetNameFormControl.setValue(name);
   }
-  private setEditorValue(value: string) {
+  private setEditorValue(value = '') {
     if (this.editor) {
       this.editor.setValue(value);
     }
@@ -280,9 +280,9 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
                 this.setEditorMode(technology.mode);
               }
             }
-          })
+          }),
         )
-        .subscribe()
+        .subscribe(),
     );
   }
 
@@ -296,9 +296,9 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
               this.editorThemeService.loadTheme(theme);
               this.setEditorTheme(theme);
             }
-          })
+          }),
         )
-        .subscribe()
+        .subscribe(),
     );
   }
 
@@ -308,18 +308,19 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
    * there is no contrast bump on the screen
    */
   private listenToDarkModeChanges() {
-    this.subs.add(
-      this.isDarkMode$
-        .pipe(
-          tap((isDarkMode) => {
-            if (this.editor) {
-              const defaultTheme = isDarkMode ? 'one-dark' : 'one-light';
-              this.themeFormControl.setValue(defaultTheme);
-            }
-          })
-        )
-        .subscribe()
-    );
+    if (this.isDarkMode$)
+      this.subs.add(
+        this.isDarkMode$
+          .pipe(
+            tap((isDarkMode) => {
+              if (this.editor) {
+                const defaultTheme = isDarkMode ? 'one-dark' : 'one-light';
+                this.themeFormControl.setValue(defaultTheme);
+              }
+            }),
+          )
+          .subscribe(),
+      );
   }
 
   private initializeEditor() {
@@ -339,7 +340,7 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
       technology: { id },
       name,
     } = data;
-    this.setEditorValue(code);
+    this.setEditorValue(code ?? '');
     this.setSnippetName(name);
     this.languageFormControl.setValue(id);
   }

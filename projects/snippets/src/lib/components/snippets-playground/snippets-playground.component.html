@@ -33,15 +33,15 @@
   <footer class="flex items-center justify-between px-4 bg-white playground__footer" [class]="themeFormControl.value">
     <div class="flex items-center">
       <rmx-icon class="mr-2 icon-lg" name="code-line"></rmx-icon>
-      <ng-select [formControl]="languageFormControl" [clearable]="false" [appendTo]="null" [searchable]="false"
-                 class="w-40" aria-label="Choose technology">
+      <ng-select [formControl]="languageFormControl" [clearable]="false" [searchable]="false" class="w-40"
+                 aria-label="Choose technology">
         <ng-option *ngFor="let language of technologies" [value]="language.id">{{language.name}}</ng-option>
       </ng-select>
     </div>
     <div class="flex items-center">
       <rmx-icon class="mr-2 icon-lg" name="palette-line"></rmx-icon>
-      <ng-select [formControl]="themeFormControl" [clearable]="false" [appendTo]="null" [searchable]="false"
-                 class="w-40" aria-label="Choose theme">
+      <ng-select [formControl]="themeFormControl" [clearable]="false" [searchable]="false" class="w-40"
+                 aria-label="Choose theme">
         <ng-option *ngFor="let theme of availableThemes | themeVariant: (isDarkMode$ | async)" [value]="theme.value">
           {{theme.label}}</ng-option>
       </ng-select>
