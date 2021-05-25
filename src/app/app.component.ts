@@ -7,8 +7,7 @@ import { NgSelectConfig } from '@ng-select/ng-select';
 import { filter, map, mergeMap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
   // To enable dark mode in auth pages

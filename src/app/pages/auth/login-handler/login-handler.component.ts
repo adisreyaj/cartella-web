@@ -6,8 +6,7 @@ import { Store } from '@ngxs/store';
 import { take } from 'rxjs/operators';
 
 @Component({
-  templateUrl: './login-handler.component.html',
-  styleUrls: ['./login-handler.component.scss'],
+  template: '',
 })
 export class LoginHandlerComponent implements OnInit {
   constructor(

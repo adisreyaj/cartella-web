@@ -4,6 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
+    "strict": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
@@ -34,5 +35,10 @@
       "@cartella/bookmarks/module": ["projects/bookmarks/src/module.ts"],
       "@cartella/packages/module": ["projects/packages/src/module.ts"]
     }
+  },
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true,
+    "preserveWhitespaces": true,
+    "strictTemplates": true
   }
 }
