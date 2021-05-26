@@ -1,17 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { take } from 'rxjs/operators';
-import {
-  Package,
-  PackageCardEvent,
-  PackageCardEventType,
-} from '../../shared/interfaces/packages.interface';
+import { Package, PackageCardEvent, PackageCardEventType } from '../../shared/interfaces/packages.interface';
 import { PackagesService } from '../../shared/services/packages.service';
 
 @Component({
@@ -21,7 +10,7 @@ import { PackagesService } from '../../shared/services/packages.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackagesListCardComponent implements OnInit {
-  @Input() package: Package;
+  @Input() package!: Package;
 
   @Output() cardEvent = new EventEmitter<PackageCardEvent>();
   constructor(private packageService: PackagesService) {}

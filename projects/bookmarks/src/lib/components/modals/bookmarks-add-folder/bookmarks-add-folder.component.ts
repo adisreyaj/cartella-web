@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  ElementRef,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ToastService } from '@cartella/services/toast/toast.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
@@ -13,14 +6,8 @@ import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject } from 'rxjs';
-import {
-  BookmarkFolder,
-  BookmarkFolderAddModalPayload,
-} from '../../../shared/interfaces/bookmarks.interface';
-import {
-  AddBookmarkFolder,
-  UpdateBookmarkFolder,
-} from '../../../shared/store/actions/bookmark-folders.action';
+import { BookmarkFolder, BookmarkFolderAddModalPayload } from '../../../shared/interfaces/bookmarks.interface';
+import { AddBookmarkFolder, UpdateBookmarkFolder } from '../../../shared/store/actions/bookmark-folders.action';
 
 @Component({
   selector: 'app-bookmarks-add-folder',
@@ -28,10 +15,8 @@ import {
   styleUrls: ['./bookmarks-add-folder.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BookmarksAddFolderComponent
-  extends WithDestroy
-  implements OnInit, AfterViewInit {
-  @ViewChild('folderNameRef') folderNameRef: ElementRef;
+export class BookmarksAddFolderComponent extends WithDestroy implements OnInit, AfterViewInit {
+  @ViewChild('folderNameRef') folderNameRef: ElementRef | null = null;
 
   folderName = new FormControl('', [Validators.required]);
 
@@ -40,7 +25,7 @@ export class BookmarksAddFolderComponent
   constructor(
     public ref: DialogRef<BookmarkFolderAddModalPayload>,
     private toaster: ToastService,
-    private store: Store
+    private store: Store,
   ) {
     super();
   }
@@ -71,7 +56,7 @@ export class BookmarksAddFolderComponent
       .dispatch(
         new UpdateBookmarkFolder(folder.id, {
           name: this.folderName.value,
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -82,7 +67,7 @@ export class BookmarksAddFolderComponent
         () => {
           this.savingSubject.next(false);
           this.toaster.showErrorToast('Failed to update the folder!');
-        }
+        },
       );
     this.subs.add(sub);
   }
@@ -95,7 +80,7 @@ export class BookmarksAddFolderComponent
           name: this.folderName.value,
           metadata: {},
           private: true,
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -110,7 +95,7 @@ export class BookmarksAddFolderComponent
           } else {
             this.toaster.showErrorToast('Folder was not created!');
           }
-        }
+        },
       );
     this.subs.add(sub);
   }

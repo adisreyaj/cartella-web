@@ -43,7 +43,6 @@ import { has } from 'lodash-es';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, take, tap } from 'rxjs/operators';
 import { Snippet, SnippetModes } from '../../shared/interfaces/snippets.interface';
-import { CodeEditorService } from '../../shared/services/code-editor/code-editor.service';
 import { SnippetState } from '../../shared/store';
 import { DeleteSnippet, SetActiveSnippet, UpdateSnippet } from '../../shared/store/actions/snippets.action';
 import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snippets-screenshot.component';
@@ -56,8 +55,8 @@ import { SnippetsScreenshotComponent } from '../modals/snippets-screenshot/snipp
 })
 export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, AfterViewInit, OnChanges, OnDestroy {
   @Select(SnippetState.getActiveSnippet)
-  activeSnippet$: Observable<Snippet>;
-  @Input() technologies: Technology[] = [];
+  activeSnippet$!: Observable<Snippet>;
+  @Input() technologies!: Technology[];
   @Input() isLargeScreen = true;
   @Input() mode = SnippetModes.explorer;
 
@@ -80,7 +79,6 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
     private darkMode: DarkModeService,
     private dialog: DialogService,
     private store: Store,
-    private codeEditorService: CodeEditorService,
   ) {
     super();
   }
@@ -324,7 +322,6 @@ export class SnippetsPlaygroundComponent extends WithDestroy implements OnInit, 
   }
 
   private initializeEditor() {
-    this.codeEditorService.injectCustomScripts();
     if (this.editorRef) {
       this.editor = codemirror.fromTextArea(this.editorRef.nativeElement, {
         ...DEFAULT_EDITOR_OPTIONS,

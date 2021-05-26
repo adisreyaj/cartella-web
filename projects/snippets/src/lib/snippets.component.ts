@@ -21,8 +21,8 @@ import { TechnologyState } from '@cartella/store/states/technology.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs';
-import { filter, finalize, map, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { filter, finalize, pluck, switchMap, take, tap } from 'rxjs/operators';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
@@ -54,38 +54,38 @@ import { SnippetState } from './shared/store/states/snippets.state';
 })
 export class SnippetsComponent extends WithDestroy implements OnInit {
   @Select(SnippetState.getAllSnippets)
-  allSnippets$: Observable<Snippet[]>;
+  allSnippets$!: Observable<Snippet[]>;
 
   @Select(SnippetFolderState.getAllSnippetFolders)
-  allSnippetFolders$: Observable<SnippetFolder[]>;
+  allSnippetFolders$!: Observable<SnippetFolder[]>;
 
   @Select(SnippetState.getSnippetsShown)
-  snippetsShown$: Observable<Snippet[]>;
+  snippetsShown$!: Observable<Snippet[]>;
 
   @Select(SnippetState.getAllSnippets)
-  snippets$: Observable<Snippet[]>;
+  snippets$!: Observable<Snippet[]>;
 
   @Select(SnippetState.getActiveSnippet)
-  activeSnippet$: Observable<Snippet>;
+  activeSnippet$!: Observable<Snippet>;
 
   @Select(SnippetFolderState.getAllSnippetFolders)
-  folders$: Observable<SnippetFolder[]>;
+  folders$!: Observable<SnippetFolder[]>;
 
   @Select(SnippetFolderState.getActiveSnippetFolder)
-  activeFolder$: Observable<SnippetFolder>;
+  activeFolder$!: Observable<SnippetFolder>;
 
   @Select(TechnologyState.getTechnologiesList)
-  technologies$: Observable<Technology[]>;
+  technologies$!: Observable<Technology[]>;
 
   @Select(SnippetState.getSnippetFetched)
-  snippetsFetched$: Observable<boolean>;
+  snippetsFetched$!: Observable<boolean>;
 
   @Select(SnippetFolderState.getSnippetFolderFetched)
-  snippetFolderFetched$: Observable<boolean>;
+  snippetFolderFetched$!: Observable<boolean>;
 
-  user: User;
+  user: User | null = null;
   isLargeScreen = true;
-  isMenuOpen$: Observable<boolean>;
+  isMenuOpen$!: Observable<boolean>;
 
   private snippetFolderLoadingSubject = new BehaviorSubject(false);
   snippetFolderLoading$ = this.snippetFolderLoadingSubject.pipe();
@@ -105,7 +105,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     private menu: MenuService,
     private toaster: ToastService,
     private breakpointObserver: BreakpointObserver,
-    private syncService: IDBSyncService
+    private syncService: IDBSyncService,
   ) {
     super();
   }
@@ -190,7 +190,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
       dialogRef.afterClosed$
         .pipe(
           filter((allowDelete) => allowDelete),
-          switchMap(() => this.store.dispatch(new DeleteSnippetFolder(folder.id)))
+          switchMap(() => this.store.dispatch(new DeleteSnippetFolder(folder.id))),
         )
         .subscribe(
           () => {
@@ -202,8 +202,8 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
             } else {
               this.toaster.showErrorToast('Folder was not deleted!');
             }
-          }
-        )
+          },
+        ),
     );
   }
 
@@ -242,7 +242,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
         type: FeatureType.snippet,
         action: UpdateSnippet,
         item: snippet,
-        folders: this.folders$.pipe(map((folders) => folders.filter(({ id }) => id !== snippet.folder.id))),
+        folders: this.store
+          .selectSnapshot(SnippetFolderState.getAllSnippetFolders)
+          .filter(({ id }) => id !== snippet.folder.id),
       },
       enableClose: false,
     });
@@ -252,13 +254,15 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
           switchMap(() => combineLatest([this.snippets$, this.folders$])),
           take(1),
           switchMap(([snippets, folders]) => this.syncService.syncItems(snippets, folders)),
-          switchMap(() =>
-            this.store.dispatch(
-              new GetSnippets(this.store.selectSnapshot(SnippetFolderState.getActiveSnippetFolder)?.id)
-            )
-          )
+          switchMap(() => {
+            const activeFolder = this.store.selectSnapshot(SnippetFolderState.getActiveSnippetFolder);
+            if (activeFolder) {
+              return this.store.dispatch(new GetSnippets(activeFolder.id));
+            }
+            return of(null);
+          }),
         )
-        .subscribe()
+        .subscribe(),
     );
   }
 
@@ -274,9 +278,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
             if (response) {
               this.store.dispatch(new DeleteSnippet(snippet.id));
             }
-          })
+          }),
         )
-        .subscribe()
+        .subscribe(),
     );
   }
 
@@ -295,9 +299,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
           tap((response) => {
             if (response) {
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 
@@ -305,11 +309,11 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     this.snippetLoadingSubject.next(true);
     return combineLatest([this.getSnippets(), this.getSnippetFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
-        combineLatest([this.syncService.syncItems(bookmarks, folders), this.syncService.syncFolders(folders)])
+        combineLatest([this.syncService.syncItems(bookmarks, folders), this.syncService.syncFolders(folders)]),
       ),
       finalize(() => {
         this.snippetLoadingSubject.next(false);
-      })
+      }),
     );
   }
 
@@ -322,7 +326,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     );
   }
 
-  private setSlugBasedSnippet(slug: string) {
+  private setSlugBasedSnippet(slug: string | null) {
     if (slug) {
       this.store.dispatch(new SetActiveSnippetWithSlug(slug));
     }
@@ -332,14 +336,14 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     return this.store.dispatch(new GetSnippetFolders()).pipe(
       switchMap(() => this.store.dispatch(new SetActiveSnippetFolder(ALL_SNIPPETS_FOLDER))),
       // Get snippet folders from state
-      pluck('snippetFolders', 'snippetFolders')
+      pluck('snippetFolders', 'snippetFolders'),
     );
   }
 
   private updateSnippetsWhenActiveFolderChanges() {
     return this.activeFolder$.pipe(
       pluck('id'),
-      switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId)))
+      switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId))),
     );
   }
 
@@ -347,7 +351,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     this.subs.add(
       this.breakpointObserver.observe(['(min-width: 768px)']).subscribe((result) => {
         this.isLargeScreenSubject.next(result.matches);
-      })
+      }),
     );
   }
 
@@ -362,7 +366,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     const sub = this.allSnippetFolders$
       .pipe(
         filter((res) => res.length > 0),
-        switchMap((folders) => this.syncService.syncFolders(folders))
+        switchMap((folders) => this.syncService.syncFolders(folders)),
       )
       .subscribe();
     this.subs.add(sub);

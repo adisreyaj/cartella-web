@@ -1,18 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { take } from 'rxjs/operators';
-import {
-  Bookmark,
-  BookmarkCardEvent,
-  BookmarkCardEventType,
-} from '../../shared/interfaces/bookmarks.interface';
+import { Bookmark, BookmarkCardEvent, BookmarkCardEventType } from '../../shared/interfaces/bookmarks.interface';
 import { BookmarksService } from '../../shared/services/bookmarks.service';
 
 @Component({
@@ -22,13 +11,10 @@ import { BookmarksService } from '../../shared/services/bookmarks.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarksListCardComponent implements OnInit {
-  @Input() bookmark: Bookmark;
+  @Input() bookmark!: Bookmark;
 
   @Output() cardEvent = new EventEmitter<BookmarkCardEvent>();
-  constructor(
-    private clipboard: Clipboard,
-    private bookmarkService: BookmarksService
-  ) {}
+  constructor(private clipboard: Clipboard, private bookmarkService: BookmarksService) {}
 
   ngOnInit(): void {}
 

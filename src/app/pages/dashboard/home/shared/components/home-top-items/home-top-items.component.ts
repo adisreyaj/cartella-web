@@ -37,11 +37,11 @@ export class HomeTopItemsComponent implements OnInit {
   };
 
   swiperPagination: SwiperOptions['pagination'] = false;
-  swiper: Swiper = null;
+  swiper: Swiper | null = null;
   showNavigation = true;
 
   @Select(HomeState.getTopItems)
-  top$: Observable<any[]>;
+  top$!: Observable<any[]>;
 
   constructor(private cdr: ChangeDetectorRef, private router: Router) {}
 

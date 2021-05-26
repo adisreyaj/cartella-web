@@ -1,12 +1,11 @@
-export const ALL_BOOKMARKS_FOLDER = {
+import { FolderBaseResponse } from '@cartella/interfaces/folder.interface';
+
+export const ALL_BOOKMARKS_FOLDER: FolderBaseResponse = {
   name: 'All Bookmarks',
-  normalizedName: 'all bookmarks',
   id: 'all',
-  owner: null,
-  updatedAt: null,
-  createdAt: null,
-  share: null,
+  updatedAt: new Date(),
+  createdAt: new Date(),
+  share: [],
   metadata: null,
   private: true,
-  ownerId: null,
 };

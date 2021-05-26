@@ -4,7 +4,7 @@
       <p class="text-xl font-bold text-gray-700 dark:text-white">Snippets</p>
       <p class="text-sm text-gray-500 dark:text-gray-50">Manage your snippets</p>
     </div>
-    <div class="relative" *ngIf="(activeFolder$ | async) as activeFolder">
+    <div class="relative" *ngIf="activeFolder">
       <span *ngIf="['all','starred'].includes(activeFolder.id)" class="absolute w-full h-full"
             tippy="Choose a folder first">
       </span>
@@ -24,13 +24,13 @@
   <div></div>
 </header>
 <section class="relative overflow-y-auto snippets-sidebar__list">
-  <ng-container *ngIf="!isLoading || (snippetFetched$ | async); else shimmerLoading">
-    <ul *ngIf="snippetsToShow$ | async  as snippetsToShow">
+  <ng-container *ngIf="!isLoading || snippetFetched; else shimmerLoading">
+    <ul *ngIf="snippetsToShow">
       <ng-container *ngIf="snippetsToShow.length > 0;else noSnippets">
         <ng-container *ngFor="let snippet of snippetsToShow;trackBy:trackBy">
           <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
-              (click)="selectSnippet(snippet)" [class.active]="(activeSnippet$ | async)?.id === snippet?.id"
-              [tippy]="contextMenu" [data]="snippet" variation="contextMenu" appHovered #snippetListItem>
+              (click)="selectSnippet(snippet)" [class.active]="activeSnippet?.id === snippet?.id" [tippy]="contextMenu"
+              [data]="snippet" variation="contextMenu" appHovered #snippetListItem>
             <header class="flex items-center justify-between mb-1">
               <p class="font-medium line-clamp-1 dark:text-white">{{snippet?.name}}</p>
               <button (click)="toggleFavorite(snippet);$event.stopPropagation()"

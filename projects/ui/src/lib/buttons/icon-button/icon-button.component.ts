@@ -1,11 +1,5 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  Input,
-  OnInit,
-} from '@angular/core';
-const VARIANT_CLASSES = {
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+const VARIANT_CLASSES: { [key: string]: string[] } = {
   primary: [
     'bg-primary',
     'text-white',
@@ -27,11 +21,13 @@ const VARIANT_CLASSES = {
 
 @Component({
   selector: 'button[iconButton], a[iconButton]',
-  templateUrl: './icon-button.component.html',
-  styleUrls: ['./icon-button.component.scss'],
+  template: ` <ng-container *ngIf="!loading">
+      <ng-content></ng-content>
+    </ng-container>
+    <ng-container *ngIf="loading"> <cartella-button-loader></cartella-button-loader> </ng-container>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class IconButtonComponent implements OnInit {
+export class IconButtonComponent {
   @Input() variant = 'primary';
   @Input() loading = false;
   @HostBinding('class') get classes() {
@@ -42,8 +38,4 @@ export class IconButtonComponent implements OnInit {
     border
     `;
   }
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

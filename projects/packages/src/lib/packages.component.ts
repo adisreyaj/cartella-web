@@ -34,28 +34,28 @@ import { PackageState } from './shared/store/states/package.state';
 })
 export class PackagesComponent extends WithDestroy implements OnInit {
   @Select(UserState.getLoggedInUser)
-  user$: Observable<LoggedUser>;
+  user$!: Observable<LoggedUser>;
 
   @Select(PackageState.getAllPackages)
-  allPackages$: Observable<Package[]>;
+  allPackages$!: Observable<Package[]>;
 
   @Select(PackageFolderState.getAllPackageFolders)
-  allPackageFolders$: Observable<PackageFolder[]>;
+  allPackageFolders$!: Observable<PackageFolder[]>;
 
   @Select(PackageState.isPackageFetched)
-  packageFetched$: Observable<Package[]>;
+  packageFetched$!: Observable<Package[]>;
 
   @Select(PackageState.getPackagesShown)
-  packagesShown$: Observable<Package[]>;
+  packagesShown$!: Observable<Package[]>;
 
   @Select(PackageState.getActivePackage)
-  activePackage$: Observable<Package>;
+  activePackage$!: Observable<Package>;
 
   @Select(PackageFolderState.getAllPackageFolders)
-  folders$: Observable<PackageFolder[]>;
+  folders$!: Observable<PackageFolder[]>;
 
   @Select(PackageFolderState.getActivePackageFolder)
-  activeFolder$: Observable<PackageFolder>;
+  activeFolder$!: Observable<PackageFolder>;
 
   private packageFolderLoadingSubject = new BehaviorSubject(false);
   packageFolderLoading$ = this.packageFolderLoadingSubject.pipe();

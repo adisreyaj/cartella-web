@@ -14,10 +14,10 @@ import {
 } from '../actions/bookmarks.action';
 
 export class BookmarkStateModel {
-  allBookmarks: Bookmark[];
-  fetched: boolean;
-  bookmarksShown: Bookmark[];
-  activeBookmark: Bookmark;
+  allBookmarks: Bookmark[] = [];
+  fetched: boolean = false;
+  bookmarksShown: Bookmark[] = [];
+  activeBookmark: Bookmark | null = null;
 }
 @State({
   name: 'bookmarks',
@@ -30,10 +30,7 @@ export class BookmarkStateModel {
 })
 @Injectable()
 export class BookmarkState {
-  constructor(
-    private bookmarkService: BookmarksService,
-    private storage: BaseStorageService<Bookmark>
-  ) {}
+  constructor(private bookmarkService: BookmarksService, private storage: BaseStorageService<Bookmark>) {}
 
   @Selector()
   static getAllBookmarks(state: BookmarkStateModel) {
@@ -56,10 +53,7 @@ export class BookmarkState {
   }
 
   @Action(GetBookmarks, { cancelUncompleted: true })
-  getBookmarks(
-    { getState, setState, patchState }: StateContext<BookmarkStateModel>,
-    { id }: GetBookmarks
-  ) {
+  getBookmarks({ getState, setState, patchState }: StateContext<BookmarkStateModel>, { id }: GetBookmarks) {
     switch (id) {
       case 'all':
         const state = getState();
@@ -73,7 +67,7 @@ export class BookmarkState {
                     patchState({
                       bookmarksShown: result,
                     });
-                  })
+                  }),
                 );
               } else {
                 patchState({
@@ -81,7 +75,7 @@ export class BookmarkState {
                 });
                 return of(bookmarks);
               }
-            })
+            }),
           );
         } else {
           return this.bookmarkService.getBookmarks().pipe(
@@ -93,7 +87,7 @@ export class BookmarkState {
                 allBookmarks: result,
                 bookmarksShown: result,
               });
-            })
+            }),
           );
         }
       case 'starred':
@@ -106,7 +100,7 @@ export class BookmarkState {
                   patchState({
                     bookmarksShown: result,
                   });
-                })
+                }),
               );
             } else {
               patchState({
@@ -114,7 +108,7 @@ export class BookmarkState {
               });
               return of(bookmarks);
             }
-          })
+          }),
         );
       default: {
         return this.storage.getItem(id).pipe(
@@ -126,7 +120,7 @@ export class BookmarkState {
                   patchState({
                     bookmarksShown: result,
                   });
-                })
+                }),
               );
             } else {
               patchState({
@@ -134,17 +128,14 @@ export class BookmarkState {
               });
               return of(bookmarks);
             }
-          })
+          }),
         );
       }
     }
   }
 
   @Action(AddBookmark)
-  addBookmark(
-    { getState, patchState }: StateContext<BookmarkStateModel>,
-    { payload }: AddBookmark
-  ) {
+  addBookmark({ getState, patchState }: StateContext<BookmarkStateModel>, { payload }: AddBookmark) {
     return this.bookmarkService.createNewBookmark(payload).pipe(
       tap((result) => {
         const state = getState();
@@ -153,63 +144,46 @@ export class BookmarkState {
           bookmarksShown: [...state.bookmarksShown, result],
           activeBookmark: result,
         });
-      })
+      }),
     );
   }
 
   @Action(UpdateBookmark)
-  updateBookmark(
-    { getState, patchState }: StateContext<BookmarkStateModel>,
-    { payload, id }: UpdateBookmark
-  ) {
+  updateBookmark({ getState, patchState }: StateContext<BookmarkStateModel>, { payload, id }: UpdateBookmark) {
     return this.bookmarkService.updateBookmark(id, payload).pipe(
       tap((result) => {
         const state = getState();
         const allBookmarkList = [...state.allBookmarks];
-        const bookmarkIndex = allBookmarkList.findIndex(
-          (item) => item.id === id
-        );
+        const bookmarkIndex = allBookmarkList.findIndex((item) => item.id === id);
         allBookmarkList[bookmarkIndex] = result;
         const shownBookmarkList = [...state.bookmarksShown];
-        const shownBookmarkIndex = shownBookmarkList.findIndex(
-          (item) => item.id === id
-        );
+        const shownBookmarkIndex = shownBookmarkList.findIndex((item) => item.id === id);
         shownBookmarkList[shownBookmarkIndex] = result;
         patchState({
           allBookmarks: allBookmarkList,
           bookmarksShown: shownBookmarkList,
         });
-      })
+      }),
     );
   }
 
   @Action(DeleteBookmark)
-  deleteBookmark(
-    { getState, patchState }: StateContext<BookmarkStateModel>,
-    { id }: DeleteBookmark
-  ) {
+  deleteBookmark({ getState, patchState }: StateContext<BookmarkStateModel>, { id }: DeleteBookmark) {
     return this.bookmarkService.deleteBookmark(id).pipe(
       tap(() => {
         const state = getState();
-        const filteredAllBookmarks = state.allBookmarks.filter(
-          (item) => item.id !== id
-        );
-        const filteredVisibleBookmarks = state.bookmarksShown.filter(
-          (item) => item.id !== id
-        );
+        const filteredAllBookmarks = state.allBookmarks.filter((item) => item.id !== id);
+        const filteredVisibleBookmarks = state.bookmarksShown.filter((item) => item.id !== id);
         patchState({
           allBookmarks: filteredAllBookmarks,
           bookmarksShown: filteredVisibleBookmarks,
         });
-      })
+      }),
     );
   }
 
   @Action(SetActiveBookmark, { cancelUncompleted: true })
-  setSelectedBookmarkId(
-    { patchState }: StateContext<BookmarkStateModel>,
-    { payload }: SetActiveBookmark
-  ) {
+  setSelectedBookmarkId({ patchState }: StateContext<BookmarkStateModel>, { payload }: SetActiveBookmark) {
     patchState({
       activeBookmark: payload,
     });

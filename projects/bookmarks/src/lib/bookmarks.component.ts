@@ -5,11 +5,12 @@ import {
   ExplorerSidebarEventType,
 } from '@cartella/components/explorer-sidebar/explorer-sidebar.component';
 import { ModalOperationType } from '@cartella/interfaces/general.interface';
-import { User } from '@cartella/interfaces/user.interface';
+import { LoggedUser } from '@cartella/interfaces/user.interface';
 import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@cartella/services/menu/menu.service';
 import { ToastService } from '@cartella/services/toast/toast.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { UserState } from '@cartella/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
@@ -33,30 +34,31 @@ import { BookmarkState } from './shared/store/states/bookmarks.state';
   styleUrls: ['./bookmarks.component.scss'],
 })
 export class BookmarksComponent extends WithDestroy implements OnInit {
-  user: User;
+  @Select(UserState.getLoggedInUser)
+  user$!: Observable<LoggedUser>;
   @Select(BookmarkState.getAllBookmarks)
-  allBookmarks$: Observable<Bookmark[]>;
+  allBookmarks$!: Observable<Bookmark[]>;
 
   @Select(BookmarkFolderState.getAllBookmarkFolders)
-  allBookmarkFolders$: Observable<BookmarkFolder[]>;
+  allBookmarkFolders$!: Observable<BookmarkFolder[]>;
 
   @Select(BookmarkState.getBookmarkFetched)
-  bookmarkFetched$: Observable<boolean>;
+  bookmarkFetched$!: Observable<boolean>;
 
   @Select(BookmarkFolderState.getBookmarkFolderFetched)
-  bookmarkFolderFetched$: Observable<Bookmark[]>;
+  bookmarkFolderFetched$!: Observable<Bookmark[]>;
 
   @Select(BookmarkState.getBookmarksShown)
-  bookmarksShown$: Observable<Bookmark[]>;
+  bookmarksShown$!: Observable<Bookmark[]>;
 
   @Select(BookmarkState.getActiveBookmark)
-  activeBookmark$: Observable<Bookmark>;
+  activeBookmark$!: Observable<Bookmark>;
 
   @Select(BookmarkFolderState.getAllBookmarkFolders)
-  folders$: Observable<BookmarkFolder[]>;
+  folders$!: Observable<BookmarkFolder[]>;
 
   @Select(BookmarkFolderState.getActiveBookmarkFolder)
-  activeFolder$: Observable<BookmarkFolder>;
+  activeFolder$!: Observable<BookmarkFolder>;
 
   private bookmarkFolderLoadingSubject = new BehaviorSubject(false);
   bookmarkFolderLoading$ = this.bookmarkFolderLoadingSubject.pipe();
@@ -64,13 +66,13 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   private bookmarkLoadingSubject = new BehaviorSubject(false);
   bookmarkLoading$ = this.bookmarkLoadingSubject.pipe();
 
-  isMenuOpen$: Observable<boolean>;
+  isMenuOpen$!: Observable<boolean>;
   constructor(
     private store: Store,
     private dialog: DialogService,
     private menu: MenuService,
     private toaster: ToastService,
-    private syncService: IDBSyncService
+    private syncService: IDBSyncService,
   ) {
     super();
   }
@@ -137,7 +139,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
       dialogRef.afterClosed$
         .pipe(
           filter((allowDelete) => allowDelete),
-          switchMap(() => this.store.dispatch(new DeleteBookmarkFolder(folder.id)))
+          switchMap(() => this.store.dispatch(new DeleteBookmarkFolder(folder.id))),
         )
         .subscribe(
           () => {
@@ -149,8 +151,8 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
             } else {
               this.toaster.showErrorToast('Folder was not deleted!');
             }
-          }
-        )
+          },
+        ),
     );
   }
 
@@ -168,7 +170,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     this.bookmarkLoadingSubject.next(true);
     return forkJoin([this.getBookmarks(), this.getBookmarkFolders()]).pipe(
       switchMap(([bookmarks, folders]) =>
-        forkJoin([this.syncService.syncItems(bookmarks, folders), this.syncService.syncFolders(folders)])
+        forkJoin([this.syncService.syncItems(bookmarks, folders), this.syncService.syncFolders(folders)]),
       ),
       finalize(() => {
         this.bookmarkLoadingSubject.next(false);
@@ -176,7 +178,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
       catchError((err) => {
         console.log(err);
         return of(null);
-      })
+      }),
     );
   }
 
@@ -185,12 +187,12 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
       .pipe(
         tap(() => console.log('[Bookmark]: Active folder changed')),
         pluck('id'),
-        switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId)))
+        switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId))),
       )
       .pipe(
         finalize(() => {
           this.bookmarkLoadingSubject.next(false);
-        })
+        }),
       );
   }
 
@@ -207,7 +209,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     return this.store.dispatch(new GetBookmarkFolders()).pipe(
       switchMap(() => this.store.dispatch(new SetActiveBookmarkFolder(ALL_BOOKMARKS_FOLDER))),
       // Get bookmark folders from state
-      pluck('bookmarkFolders', 'bookmarkFolders')
+      pluck('bookmarkFolders', 'bookmarkFolders'),
     );
   }
 
@@ -229,7 +231,7 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
     const sub = this.allBookmarkFolders$
       .pipe(
         filter((res) => res.length > 0),
-        switchMap((folders) => this.syncService.syncFolders(folders))
+        switchMap((folders) => this.syncService.syncFolders(folders)),
       )
       .subscribe();
     this.subs.add(sub);

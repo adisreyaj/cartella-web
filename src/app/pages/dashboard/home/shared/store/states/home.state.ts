@@ -7,11 +7,11 @@ import { HomeService } from '../../services/home.service';
 import { GetCounts, GetLatestItems, GetTopItems } from '../actions/home.action';
 
 export class HomeStateModel {
-  latest: any[];
-  top: any[];
-  latestUpdatedAt: Date;
-  topUpdatedAt: Date;
-  counts: HomeItemCounts;
+  latest: any[] = [];
+  top: any[] = [];
+  latestUpdatedAt!: Date;
+  topUpdatedAt!: Date;
+  counts!: HomeItemCounts;
   countsFetched = false;
 }
 @State({
@@ -19,10 +19,7 @@ export class HomeStateModel {
 })
 @Injectable()
 export class HomeState {
-  constructor(
-    private homeService: HomeService,
-    private storage: BaseStorageService
-  ) {}
+  constructor(private homeService: HomeService, private storage: BaseStorageService) {}
   @Selector()
   static getLatestItemsLastUpdated(state: HomeStateModel) {
     return state.latestUpdatedAt;
@@ -55,7 +52,7 @@ export class HomeState {
           top: result,
           topUpdatedAt: new Date(),
         });
-      })
+      }),
     );
   }
   @Action(GetCounts)
@@ -69,7 +66,7 @@ export class HomeState {
           countsFetched: true,
         });
         this.storage.setItem('count', result);
-      })
+      }),
     );
   }
 
@@ -83,7 +80,7 @@ export class HomeState {
           latest: result,
           latestUpdatedAt: new Date(),
         });
-      })
+      }),
     );
   }
 }

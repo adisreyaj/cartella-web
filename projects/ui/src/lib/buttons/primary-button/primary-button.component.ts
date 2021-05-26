@@ -3,8 +3,21 @@ import { BUTTON_SIZE_PADDINGS } from '../buttons.config';
 
 @Component({
   selector: 'button[primaryButton], a[primaryButton]',
-  templateUrl: './primary-button.component.html',
-  styleUrls: ['./primary-button.component.scss'],
+  template: ` <ng-container *ngIf="!loading">
+      <ng-content></ng-content>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <cartella-button-loader></cartella-button-loader>
+    </ng-container>`,
+  styles: [
+    `
+      :host {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PrimaryButtonComponent implements OnInit {

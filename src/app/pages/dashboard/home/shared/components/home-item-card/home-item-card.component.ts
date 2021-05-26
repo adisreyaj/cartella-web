@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { HomeCardInput } from '../../interfaces/home.interface';
 
 @Component({
@@ -14,8 +8,8 @@ import { HomeCardInput } from '../../interfaces/home.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeItemCardComponent {
-  @Input() item: HomeCardInput;
-  @Input() index: number;
+  @Input() item!: HomeCardInput;
+  @Input() index!: number;
 
   @Output() clicked = new EventEmitter<HomeCardInput>();
 
