@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
 import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
 import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
@@ -29,14 +29,14 @@ import { PackagesAddComponent } from '../modals/packages-add/packages-add.compon
   styleUrls: ['./packages-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PackagesListComponent extends WithDestroy implements OnInit {
+export class PackagesListComponent extends WithDestroy implements OnChanges {
   @Input() user!: User;
   @Input() activeFolder!: PackageFolder;
   @Input() folders!: PackageFolder[];
   @Input() packages!: Package[];
   @Input() isLoading!: boolean;
 
-  packagesCount = new Array(this.packages.length || 1).fill('');
+  packagesCount = [''];
 
   @Select(PackageState.isPackageFetched)
   fetched$!: Observable<boolean>;
@@ -49,8 +49,11 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
   ) {
     super();
   }
-
-  ngOnInit(): void {}
+  ngOnChanges(changes: SimpleChanges): void {
+    if ('packages' in changes && changes.packages.currentValue) {
+      this.packagesCount = new Array(changes.packages.currentValue?.length || 1).fill('');
+    }
+  }
 
   toggleMenu() {
     this.menu.toggleMenu();

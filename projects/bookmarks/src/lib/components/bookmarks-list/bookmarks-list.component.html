@@ -15,10 +15,10 @@
     </div>
   </header>
   <ng-container *ngIf="!isLoading || bookmarkFetched;else shimmerLoader">
-    <ng-container *ngIf="(bookmarksShown$ | async)?.length > 0;else noBookmarks">
+    <ng-container *ngIf="bookmarksShown?.length > 0;else noBookmarks">
       <section class="grid gap-4 pb-8 bookmarks-grid">
-        <app-bookmarks-list-card *ngFor="let bookmark of (bookmarksShown$ | async);trackBy: trackBy"
-                                 [bookmark]="bookmark" (cardEvent)="handleCardEvent($event)">
+        <app-bookmarks-list-card *ngFor="let bookmark of bookmarksShown;trackBy: trackBy" [bookmark]="bookmark"
+                                 (cardEvent)="handleCardEvent($event)">
         </app-bookmarks-list-card>
       </section>
     </ng-container>

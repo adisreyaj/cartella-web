@@ -25,8 +25,8 @@
 </header>
 <section class="relative overflow-y-auto snippets-sidebar__list">
   <ng-container *ngIf="!isLoading || snippetFetched; else shimmerLoading">
-    <ul *ngIf="snippetsToShow">
-      <ng-container *ngIf="snippetsToShow.length > 0;else noSnippets">
+    <ng-container *ngIf="snippetsToShow$ | async as snippetsToShow">
+      <ul *ngIf="snippetsToShow.length > 0;else noSnippets">
         <ng-container *ngFor="let snippet of snippetsToShow;trackBy:trackBy">
           <li class="snippets-sidebar__list-item focus:bg-primary-10 focus-within:bg-primary-10"
               (click)="selectSnippet(snippet)" [class.active]="activeSnippet?.id === snippet?.id" [tippy]="contextMenu"
@@ -50,15 +50,15 @@
             </footer>
           </li>
         </ng-container>
-      </ng-container>
-    </ul>
+      </ul>
+    </ng-container>
   </ng-container>
 </section>
 
 <!-- Dropdown asks for which technology will the snippet be -->
 <ng-template #createSnippetSelector let-hide>
   <div class="flex flex-col w-44">
-    <ng-container *ngFor="let technology of technologies$ | async">
+    <ng-container *ngFor="let technology of technologies">
       <div class="flex space-x-2 dropdown-item" (click)="createNewSnippet(technology.id);hide()">
         <img [src]="technology?.icon" [alt]="technology?.name" height="20px" width="20px" class="rounded-lg">
         <p class="text-sm">{{technology?.name}}</p>

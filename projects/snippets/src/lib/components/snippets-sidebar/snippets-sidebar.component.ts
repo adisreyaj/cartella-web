@@ -50,7 +50,7 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
   @Output() snippetEvent = new EventEmitter<SnippetItemEvent>();
 
   private snippetsToShowSubject = new BehaviorSubject<Snippet[]>([]);
-  snippetsToShow$ = this.snippetsToShowSubject.pipe();
+  snippetsToShow$ = this.snippetsToShowSubject.pipe(distinctUntilChanged());
 
   @ViewChild('searchRef') searchRef: ElementRef | null = null;
 
