@@ -10,7 +10,7 @@ import { HomeCardInput, HomeItems } from '../interfaces/home.interface';
 })
 export class HomeCardDataFormatPipe implements PipeTransform {
   transform(value: HomeItems): null | HomeCardInput {
-    let formatted: HomeCardInput = null;
+    let formatted: HomeCardInput | null = null;
     if (value) {
       const { type, data, views } = value;
       switch (type) {
@@ -21,7 +21,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
             label: name,
             type,
             updatedAt,
-            description,
+            description: description ?? '',
             views,
           };
           break;
@@ -33,7 +33,7 @@ export class HomeCardDataFormatPipe implements PipeTransform {
             label: name,
             type,
             updatedAt,
-            description,
+            description: description ?? '',
             views,
           };
           break;

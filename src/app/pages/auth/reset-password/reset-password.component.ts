@@ -17,12 +17,12 @@ export enum ResetPasswordStages {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent extends WithDestroy implements OnInit {
-  resetForm: FormGroup;
+  resetForm!: FormGroup;
   resetPasswordStages = ResetPasswordStages;
   stageValue = ResetPasswordStages.email;
   stageSubject = new BehaviorSubject<ResetPasswordStages>(this.stageValue);
   stage$ = this.stageSubject.pipe(tap((value) => (this.stageValue = value)));
-  buttonText = {
+  buttonText: { [key: number]: string } = {
     [ResetPasswordStages.email]: 'Send OTP',
     [ResetPasswordStages.password]: 'Update Password',
   };
@@ -30,22 +30,10 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
   loading$ = this.loadingSubject.pipe();
   validators = {
     email: [Validators.required, Validators.email, Validators.minLength(5)],
-    otp: [
-      Validators.required,
-      Validators.minLength(4),
-      Validators.maxLength(8),
-    ],
-    password: [
-      Validators.required,
-      Validators.minLength(6),
-      Validators.maxLength(24),
-    ],
+    otp: [Validators.required, Validators.minLength(4), Validators.maxLength(8)],
+    password: [Validators.required, Validators.minLength(6), Validators.maxLength(24)],
   };
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private resetPasswordService: ResetPasswordService
-  ) {
+  constructor(private fb: FormBuilder, private router: Router, private resetPasswordService: ResetPasswordService) {
     super();
     this.initForm();
   }
@@ -78,7 +66,7 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
           .pipe(
             tap(() => {
               this.stageSubject.next(ResetPasswordStages.password);
-            })
+            }),
           )
           .subscribe(
             () => {
@@ -87,8 +75,8 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
             () => {
               this.loadingSubject.next(false);
               this.stageSubject.next(ResetPasswordStages.email);
-            }
-          )
+            },
+          ),
       );
     }
   }
@@ -108,8 +96,8 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
             this.loadingSubject.next(false);
             this.resetFormValues(true);
             this.stageSubject.next(ResetPasswordStages.email);
-          }
-        )
+          },
+        ),
       );
     }
   }
@@ -117,26 +105,26 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
   private updateFormValidators = (stage: ResetPasswordStages) => {
     switch (stage) {
       case ResetPasswordStages.email:
-        this.resetForm.get('email').enable();
-        this.resetForm.get('otp').disable();
-        this.resetForm.get('password').disable();
+        this.resetForm.get('email')?.enable();
+        this.resetForm.get('otp')?.disable();
+        this.resetForm.get('password')?.disable();
 
-        this.resetForm.get('email').setValidators(this.validators.email);
-        this.resetForm.get('otp').setValidators([]);
-        this.resetForm.get('password').setValidators([]);
+        this.resetForm.get('email')?.setValidators(this.validators.email);
+        this.resetForm.get('otp')?.setValidators([]);
+        this.resetForm.get('password')?.setValidators([]);
 
         this.updateFieldValidities();
         break;
 
       case ResetPasswordStages.password:
         this.resetFormValues();
-        this.resetForm.get('email').disable();
-        this.resetForm.get('otp').enable();
-        this.resetForm.get('password').enable();
+        this.resetForm.get('email')?.disable();
+        this.resetForm.get('otp')?.enable();
+        this.resetForm.get('password')?.enable();
 
-        this.resetForm.get('email').setValidators(this.validators.email);
-        this.resetForm.get('otp').setValidators(this.validators.otp);
-        this.resetForm.get('password').setValidators(this.validators.password);
+        this.resetForm.get('email')?.setValidators(this.validators.email);
+        this.resetForm.get('otp')?.setValidators(this.validators.otp);
+        this.resetForm.get('password')?.setValidators(this.validators.password);
 
         this.updateFieldValidities();
         break;
@@ -144,17 +132,17 @@ export class ResetPasswordComponent extends WithDestroy implements OnInit {
   };
 
   private updateFieldValidities() {
-    this.resetForm.get('email').updateValueAndValidity();
-    this.resetForm.get('otp').updateValueAndValidity();
-    this.resetForm.get('password').updateValueAndValidity();
+    this.resetForm.get('email')?.updateValueAndValidity();
+    this.resetForm.get('otp')?.updateValueAndValidity();
+    this.resetForm.get('password')?.updateValueAndValidity();
   }
 
   private resetFormValues(resetAll = false) {
     if (resetAll) {
-      this.resetForm.get('email').reset();
+      this.resetForm.get('email')?.reset();
     }
-    this.resetForm.get('otp').reset();
-    this.resetForm.get('password').reset();
+    this.resetForm.get('otp')?.reset();
+    this.resetForm.get('password')?.reset();
   }
 
   private initForm() {

@@ -19,7 +19,7 @@ import { TagsAddComponent } from '../modals/tags-add/tags-add.component';
 })
 export class ProfileTagsComponent extends WithDestroy implements OnInit {
   @Select(TagState.getCustomTagsList)
-  tags$: Observable<Tag[]>;
+  tags$!: Observable<Tag[]>;
 
   constructor(private store: Store, private dialog: DialogService) {
     super();
@@ -27,7 +27,7 @@ export class ProfileTagsComponent extends WithDestroy implements OnInit {
 
   ngOnInit(): void {}
 
-  trackBy(_, tag: Tag) {
+  trackBy(_: number, tag: Tag) {
     return tag?.id;
   }
 
@@ -64,9 +64,9 @@ export class ProfileTagsComponent extends WithDestroy implements OnInit {
             if (response) {
               this.store.dispatch(new DeleteTag(id));
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 }

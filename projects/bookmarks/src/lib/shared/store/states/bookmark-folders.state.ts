@@ -15,9 +15,9 @@ import {
 } from '../actions/bookmark-folders.action';
 
 export class BookmarkFolderStateModel {
-  bookmarkFolders: BookmarkFolder[];
-  fetched: boolean;
-  activeBookmarkFolder: BookmarkFolder;
+  bookmarkFolders: BookmarkFolder[] = [];
+  fetched = false;
+  activeBookmarkFolder: BookmarkFolder | null = null;
 }
 @State({
   name: 'bookmarkFolders',
@@ -29,10 +29,7 @@ export class BookmarkFolderStateModel {
 })
 @Injectable()
 export class BookmarkFolderState {
-  constructor(
-    private bookmarkService: BookmarksService,
-    private storage: BaseStorageService<BookmarkFolder>
-  ) {}
+  constructor(private bookmarkService: BookmarksService, private storage: BaseStorageService<BookmarkFolder>) {}
 
   @Selector()
   static getAllBookmarkFolders(state: BookmarkFolderStateModel) {
@@ -49,11 +46,7 @@ export class BookmarkFolderState {
   }
 
   @Action(GetBookmarkFolders)
-  getBookmarkFolders({
-    getState,
-    setState,
-    patchState,
-  }: StateContext<BookmarkFolderStateModel>) {
+  getBookmarkFolders({ getState, setState, patchState }: StateContext<BookmarkFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
       return this.storage.getItem('folders').pipe(
@@ -65,7 +58,7 @@ export class BookmarkFolderState {
                 patchState({
                   bookmarkFolders: result,
                 });
-              })
+              }),
             );
           } else {
             patchState({
@@ -73,7 +66,7 @@ export class BookmarkFolderState {
             });
             return of(bookmarkFolders);
           }
-        })
+        }),
       );
     } else {
       return this.bookmarkService.getFolders().pipe(
@@ -85,16 +78,13 @@ export class BookmarkFolderState {
             fetched: true,
             activeBookmarkFolder: ALL_BOOKMARKS_FOLDER,
           });
-        })
+        }),
       );
     }
   }
 
   @Action(AddBookmarkFolder)
-  addBookmarkFolder(
-    { getState, patchState }: StateContext<BookmarkFolderStateModel>,
-    { payload }: AddBookmarkFolder
-  ) {
+  addBookmarkFolder({ getState, patchState }: StateContext<BookmarkFolderStateModel>, { payload }: AddBookmarkFolder) {
     return this.bookmarkService.createNewFolder(payload).pipe(
       tap((result) => {
         const state = getState();
@@ -102,14 +92,14 @@ export class BookmarkFolderState {
           bookmarkFolders: [...state.bookmarkFolders, result],
           activeBookmarkFolder: result,
         });
-      })
+      }),
     );
   }
 
   @Action(UpdateBookmarkFolder)
   updateBookmarkFolder(
     { getState, setState }: StateContext<BookmarkFolderStateModel>,
-    { payload, id }: UpdateBookmarkFolder
+    { payload, id }: UpdateBookmarkFolder,
   ) {
     return this.bookmarkService.updateFolder(id, payload).pipe(
       tap((result) => {
@@ -121,33 +111,28 @@ export class BookmarkFolderState {
           ...state,
           bookmarkFolders: foldersList,
         });
-      })
+      }),
     );
   }
 
   @Action(DeleteBookmarkFolder)
-  deleteBookmarkFolder(
-    { getState, setState }: StateContext<BookmarkFolderStateModel>,
-    { id }: DeleteBookmarkFolder
-  ) {
+  deleteBookmarkFolder({ getState, setState }: StateContext<BookmarkFolderStateModel>, { id }: DeleteBookmarkFolder) {
     return this.bookmarkService.deleteFolder(id).pipe(
       tap(() => {
         const state = getState();
-        const filteredArray = state.bookmarkFolders.filter(
-          (item) => item.id !== id
-        );
+        const filteredArray = state.bookmarkFolders.filter((item) => item.id !== id);
         setState({
           ...state,
           bookmarkFolders: filteredArray,
         });
-      })
+      }),
     );
   }
 
   @Action(SetActiveBookmarkFolder, { cancelUncompleted: true })
   setSelectedBookmarkFolder(
     { getState, setState }: StateContext<BookmarkFolderStateModel>,
-    { payload }: SetActiveBookmarkFolder
+    { payload }: SetActiveBookmarkFolder,
   ) {
     const state = getState();
     setState({

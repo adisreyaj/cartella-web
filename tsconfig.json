@@ -4,7 +4,7 @@
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
     "sourceMap": true,
-    "strict": false,
+    "strict": true,
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
@@ -38,7 +38,6 @@
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": false,
-    "preserveWhitespaces": true,
     "strictTemplates": false
   }
 }

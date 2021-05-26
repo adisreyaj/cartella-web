@@ -13,5 +13,5 @@ export interface MoveToFolderModalPayload {
   type: FeatureType;
   action: any;
   item: Bookmark | Snippet | Package;
-  folders: Observable<FolderBaseResponse[]>;
+  folders: FolderBaseResponse[];
 }

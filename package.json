@@ -82,6 +82,8 @@
     "@tailwindcss/line-clamp": "0.1.0",
     "@tailwindcss/typography": "0.3.1",
     "@types/codemirror": "0.0.106",
+    "@types/dom-to-image": "^2.6.2",
+    "@types/file-saver": "^2.0.2",
     "@types/hammerjs": "^2.0.38",
     "@types/jasmine": "~3.6.0",
     "@types/lodash-es": "^4.17.4",

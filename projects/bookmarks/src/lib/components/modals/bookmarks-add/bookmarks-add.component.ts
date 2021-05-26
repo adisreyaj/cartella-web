@@ -21,7 +21,7 @@ import { AddBookmark, UpdateBookmark } from '../../../shared/store/actions/bookm
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarksAddComponent extends WithDestroy implements OnInit, AfterViewInit {
-  @ViewChild('bookmarkURL') bookmarkURLRef: ElementRef;
+  @ViewChild('bookmarkURL') bookmarkURLRef: ElementRef | null = null;
 
   bookmarkFormControls = {
     url: new FormControl('', [
@@ -32,9 +32,9 @@ export class BookmarksAddComponent extends WithDestroy implements OnInit, AfterV
     description: new FormControl('', [Validators.required]),
     site: new FormControl('', [Validators.required]),
   };
-  meta: BookmarkMetaData;
+  meta: BookmarkMetaData | null = null;
 
-  private metaDataSubject = new BehaviorSubject<BookmarkMetaData>(null);
+  private metaDataSubject = new BehaviorSubject<BookmarkMetaData | null>(null);
   metaData$ = this.metaDataSubject.pipe(tap((data) => (this.meta = data)));
 
   private isLoadingSubject = new Subject<boolean>();
@@ -43,26 +43,28 @@ export class BookmarksAddComponent extends WithDestroy implements OnInit, AfterV
   constructor(
     public ref: DialogRef<BookmarkAddModalPayload>,
     private metaExtractorService: MetaExtractorService,
-    private store: Store
+    private store: Store,
   ) {
     super();
   }
 
   ngOnInit(): void {
     if (this.ref.data.type === ModalOperationType.update) {
-      const { description, name, image, site, url, favicon } = this.ref.data.bookmark;
-      this.metaDataSubject.next({
-        description,
-        title: name,
-        image,
-        favicon,
-        site,
-      });
-      this.bookmarkFormControls.url.disable();
-      this.bookmarkFormControls.description.setValue(description);
-      this.bookmarkFormControls.name.setValue(name);
-      this.bookmarkFormControls.site.setValue(site);
-      this.bookmarkFormControls.url.setValue(url);
+      if (this.ref.data?.bookmark) {
+        const { description = '', name, image = '', site, url, favicon } = this.ref.data.bookmark;
+        this.metaDataSubject.next({
+          description,
+          title: name,
+          image,
+          favicon,
+          site,
+        });
+        this.bookmarkFormControls.url.disable();
+        this.bookmarkFormControls.description.setValue(description);
+        this.bookmarkFormControls.name.setValue(name);
+        this.bookmarkFormControls.site.setValue(site);
+        this.bookmarkFormControls.url.setValue(url);
+      }
     }
   }
 
@@ -72,7 +74,7 @@ export class BookmarksAddComponent extends WithDestroy implements OnInit, AfterV
     }
   }
 
-  fetchOrAdd(meta: BookmarkMetaData) {
+  fetchOrAdd(meta: BookmarkMetaData | null) {
     if (meta) {
       const data = {
         ...meta,
@@ -107,7 +109,7 @@ export class BookmarksAddComponent extends WithDestroy implements OnInit, AfterV
             this.bookmarkFormControls.site.setValue(data.site);
             this.bookmarkFormControls.description.setValue(data.description);
             this.metaDataSubject.next(data);
-          })
+          }),
         )
         .subscribe((data) => {
           this.isLoadingSubject.next(false);
@@ -137,7 +139,9 @@ export class BookmarksAddComponent extends WithDestroy implements OnInit, AfterV
         description: this.bookmarkFormControls.description.value,
         site: this.bookmarkFormControls.site.value,
       };
-      this.store.dispatch(new UpdateBookmark(this.ref.data.bookmark.id, bookmarkUpdatedData));
+      if (this.ref.data?.bookmark?.id) {
+        this.store.dispatch(new UpdateBookmark(this.ref.data.bookmark.id, bookmarkUpdatedData));
+      }
     }
     this.ref.close();
   }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 export interface User {
-  id?: string;
+  id: string;
   firstname: string;
   lastname: string;
   email: string;

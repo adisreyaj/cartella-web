@@ -7,7 +7,9 @@
     </app-explorer-sidebar>
   </aside>
   <main class="overflow-y-auto bookmarks__main bg-gray-50 dark:bg-dark-800">
-    <app-bookmarks-list [user]="user" [isLoading]="bookmarkLoading$ | async">
+    <app-bookmarks-list [user]="user$|async" [isLoading]="bookmarkLoading$ | async" [activeFolder]="activeFolder$"
+                        [bookmarksShown]="bookmarksShown$ |async" [bookmarks]="allBookmarks$ |async"
+                        [bookmarkFetched]="bookmarkFetched$ |async" [folders]="folders$ |async">
     </app-bookmarks-list>
   </main>
   <div *ngIf="(isMenuOpen$ | async)" (click)="closeMenu()" class="overlay"></div>

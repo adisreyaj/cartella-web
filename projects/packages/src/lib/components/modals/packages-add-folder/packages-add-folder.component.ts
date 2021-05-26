@@ -16,7 +16,7 @@ import { AddPackageFolder, UpdatePackageFolder } from '../../../shared/store/act
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackagesAddFolderComponent extends WithDestroy implements OnInit, AfterViewInit {
-  @ViewChild('folderNameRef') folderNameRef: ElementRef;
+  @ViewChild('folderNameRef') folderNameRef: ElementRef | null = null;
   folderName = new FormControl('', [Validators.required]);
 
   private savingSubject = new BehaviorSubject<boolean>(false);
@@ -25,7 +25,7 @@ export class PackagesAddFolderComponent extends WithDestroy implements OnInit, A
   constructor(
     public ref: DialogRef<PackageFolderAddModalPayload>,
     private toaster: ToastService,
-    private store: Store
+    private store: Store,
   ) {
     super();
   }
@@ -57,7 +57,7 @@ export class PackagesAddFolderComponent extends WithDestroy implements OnInit, A
       .dispatch(
         new UpdatePackageFolder(folder.id, {
           name: this.folderName.value,
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -68,7 +68,7 @@ export class PackagesAddFolderComponent extends WithDestroy implements OnInit, A
         () => {
           this.savingSubject.next(false);
           this.toaster.showErrorToast('Failed to update the folder!');
-        }
+        },
       );
     this.subs.add(sub);
   }
@@ -81,7 +81,7 @@ export class PackagesAddFolderComponent extends WithDestroy implements OnInit, A
           name: this.folderName.value,
           metadata: {},
           private: true,
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -95,7 +95,7 @@ export class PackagesAddFolderComponent extends WithDestroy implements OnInit, A
           } else {
             this.toaster.showErrorToast('Folder was not created!');
           }
-        }
+        },
       );
     this.subs.add(sub);
   }

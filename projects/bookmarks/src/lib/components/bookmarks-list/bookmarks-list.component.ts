@@ -10,9 +10,8 @@ import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.ser
 import { MenuService } from '@cartella/services/menu/menu.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
-import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
+import { Store } from '@ngxs/store';
+import { switchMap, tap } from 'rxjs/operators';
 import {
   Bookmark,
   BookmarkAddModalPayload,
@@ -22,7 +21,6 @@ import {
 } from '../../shared/interfaces/bookmarks.interface';
 import { DeleteBookmark, GetBookmarks, UpdateBookmark } from '../../shared/store/actions/bookmarks.action';
 import { BookmarkFolderState } from '../../shared/store/states/bookmark-folders.state';
-import { BookmarkState } from '../../shared/store/states/bookmarks.state';
 import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.component';
 
 @Component({
@@ -32,23 +30,13 @@ import { BookmarksAddComponent } from '../modals/bookmarks-add/bookmarks-add.com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BookmarksListComponent extends WithDestroy implements OnInit {
-  @Input() user: User;
+  @Input() user!: User;
   @Input() isLoading = false;
-
-  @Select(BookmarkFolderState.getActiveBookmarkFolder)
-  activeFolder$: Observable<BookmarkFolder>;
-
-  @Select(BookmarkState.getBookmarksShown)
-  bookmarksShown$: Observable<Bookmark[]>;
-
-  @Select(BookmarkState.getAllBookmarks)
-  bookmarks$: Observable<Bookmark[]>;
-
-  @Select(BookmarkState.getBookmarkFetched)
-  bookmarkFetched$: Observable<boolean>;
-
-  @Select(BookmarkFolderState.getAllBookmarkFolders)
-  folders$: Observable<BookmarkFolder[]>;
+  @Input() activeFolder!: BookmarkFolder;
+  @Input() bookmarksShown!: Bookmark[];
+  @Input() bookmarks!: Bookmark[];
+  @Input() bookmarkFetched!: boolean;
+  @Input() folders!: BookmarkFolder[];
 
   packagesCount = new Array(this.store.selectSnapshot(HomeState.getItemsCount)?.items?.bookmarks || 1).fill('');
 
@@ -56,13 +44,9 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
     private dialog: DialogService,
     private store: Store,
     private menu: MenuService,
-    private syncService: IDBSyncService
+    private syncService: IDBSyncService,
   ) {
     super();
-  }
-
-  get activeFolder() {
-    return this.store.selectSnapshot(BookmarkFolderState.getActiveBookmarkFolder);
   }
 
   ngOnInit(): void {}
@@ -71,7 +55,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
     this.menu.toggleMenu();
   }
 
-  trackBy(_, { id }: { id: string }) {
+  trackBy(_: number, { id }: { id: string }) {
     return id;
   }
   addNewBookmark() {
@@ -92,7 +76,7 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
         this.store.dispatch(
           new UpdateBookmark(bookmark.id, {
             favorite: !bookmark?.favorite,
-          })
+          }),
         );
         break;
       case BookmarkCardEventType.edit:
@@ -133,23 +117,21 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
         type: FeatureType.bookmark,
         action: UpdateBookmark,
         item: bookmark,
-        folders: this.folders$.pipe(map((folders) => folders.filter(({ id }) => id !== bookmark.folder.id))),
+        folders: this.folders.filter(({ id }) => id !== bookmark.folder.id),
       },
       enableClose: false,
     });
     this.subs.add(
       dialogRef.afterClosed$
         .pipe(
-          switchMap(() => combineLatest([this.bookmarks$, this.folders$])),
-          take(1),
-          switchMap(([bookmarks, folders]) => this.syncService.syncItems(bookmarks, folders)),
+          switchMap(() => this.syncService.syncItems(this.bookmarks, this.folders)),
           switchMap(() =>
             this.store.dispatch(
-              new GetBookmarks(this.store.selectSnapshot(BookmarkFolderState.getActiveBookmarkFolder)?.id)
-            )
-          )
+              new GetBookmarks(this.store.selectSnapshot(BookmarkFolderState.getActiveBookmarkFolder)?.id),
+            ),
+          ),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 
@@ -165,9 +147,9 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
             if (response) {
               this.store.dispatch(new DeleteBookmark(bookmark.id));
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
   private handleShare(bookmark: Bookmark) {
@@ -185,9 +167,9 @@ export class BookmarksListComponent extends WithDestroy implements OnInit {
           tap((response) => {
             if (response) {
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 }

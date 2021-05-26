@@ -1,19 +1,17 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
 import { BUTTON_SIZE_PADDINGS } from '../buttons.config';
 
 @Component({
   selector: 'button[secondaryButton], a[secondaryButton]',
-  templateUrl: './secondary-button.component.html',
-  styleUrls: ['./secondary-button.component.scss'],
+  template: ` <ng-container *ngIf="!loading">
+      <ng-content></ng-content>
+    </ng-container>
+    <ng-container *ngIf="loading">
+      <cartella-button-loader></cartella-button-loader>
+    </ng-container>`,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SecondaryButtonComponent implements OnInit {
+export class SecondaryButtonComponent {
   @HostBinding('class') get classes() {
     return `btn-secondary rounded-md
      border border-transparent
@@ -36,8 +34,4 @@ export class SecondaryButtonComponent implements OnInit {
 
   @Input() size: 'sm' | 'lg' = 'lg';
   @Input() loading = false;
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }

@@ -17,11 +17,10 @@ import { SNIPPET_TEMPLATE } from '@cartella/config/snippets.config';
 import { Technology } from '@cartella/interfaces/technology.interface';
 import { NameGeneratorService } from '@cartella/services/name-generator/name-generator.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
-import { TechnologyState } from '@cartella/store/states/technology.state';
-import { Select, Store } from '@ngxs/store';
+import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { BehaviorSubject, fromEvent, Observable } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, fromEvent } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs/operators';
 import {
   Snippet as Snippet,
   SnippetFolder,
@@ -31,8 +30,6 @@ import {
   SnippetRequest,
 } from '../../shared/interfaces/snippets.interface';
 import { AddSnippet, SetActiveSnippet, UpdateSnippet } from '../../shared/store/actions/snippets.action';
-import { SnippetFolderState } from '../../shared/store/states/snippet-folders.state';
-import { SnippetState } from '../../shared/store/states/snippets.state';
 @Component({
   selector: 'app-snippets-sidebar',
   templateUrl: './snippets-sidebar.component.html',
@@ -44,21 +41,13 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
   @Input() isLoading = false;
   @Input() isLargeScreen = true;
   @Input() mode = SnippetModes.explorer;
+  @Input() activeSnippet: Snippet | null = null;
+  @Input() snippetFetched: boolean = false;
+  @Input() activeFolder: SnippetFolder | null = null;
+  @Input() technologies: Technology[] = [];
 
   @Output() modeChanged = new EventEmitter<SnippetModes>();
   @Output() snippetEvent = new EventEmitter<SnippetItemEvent>();
-
-  @Select(SnippetState.getActiveSnippet)
-  activeSnippet$: Observable<Snippet>;
-
-  @Select(SnippetState.getSnippetFetched)
-  snippetFetched$: Observable<boolean>;
-
-  @Select(SnippetFolderState.getActiveSnippetFolder)
-  activeFolder$: Observable<SnippetFolder>;
-
-  @Select(TechnologyState.getTechnologiesList)
-  technologies$: Observable<Technology[]>;
 
   private snippetsToShowSubject = new BehaviorSubject<Snippet[]>([]);
   snippetsToShow$ = this.snippetsToShowSubject.pipe();
@@ -118,21 +107,15 @@ export class SnippetsSidebarComponent extends WithDestroy implements OnInit, OnC
   }
 
   createNewSnippet(technologyId: string) {
-    if (!this.activeFolder$) return;
-    this.activeFolder$
-      .pipe(
-        take(1),
-        switchMap((activeFolder) => {
-          const data: SnippetRequest = {
-            ...SNIPPET_TEMPLATE,
-            slug: this.nameGeneratorService.generate(),
-            technologyId,
-            folderId: activeFolder.id,
-          };
-          return this.store.dispatch(new AddSnippet(data));
-        }),
-      )
-      .subscribe(() => {});
+    if (this.activeFolder) {
+      const data: SnippetRequest = {
+        ...SNIPPET_TEMPLATE,
+        slug: this.nameGeneratorService.generate(),
+        technologyId,
+        folderId: this.activeFolder.id,
+      };
+      this.store.dispatch(new AddSnippet(data));
+    }
   }
 
   private getFilteredSnippetsBasedOnSearchTerm(searchTerm = '') {

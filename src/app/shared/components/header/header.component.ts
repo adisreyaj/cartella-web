@@ -18,7 +18,7 @@ import { SubSink } from 'subsink';
 })
 export class HeaderComponent implements OnDestroy {
   @Select(UserState.getLoggedInUser)
-  user$: Observable<User>;
+  user$!: Observable<User>;
 
   isDarkMode$ = this.darkMode.isDarkMode$;
   isMenuOpen$ = this.menu.isMenuOpen$;

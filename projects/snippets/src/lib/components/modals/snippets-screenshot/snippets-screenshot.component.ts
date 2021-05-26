@@ -1,11 +1,4 @@
-import {
-  AfterViewInit,
-  Component,
-  ElementRef,
-  OnInit,
-  Renderer2,
-  ViewChild,
-} from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DEFAULT_EDITOR_OPTIONS } from '@cartella/config/snippets.config';
 import { DialogRef } from '@ngneat/dialog';
 import codemirror from 'codemirror';
@@ -26,15 +19,12 @@ import { ScreenShotDialogPayload } from '../../../shared/interfaces/snippets.int
   styleUrls: ['./snippets-screenshot.component.scss'],
 })
 export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
-  @ViewChild('codeContainerRef') codeContainerRef: ElementRef;
-  @ViewChild('editor', { static: true }) editorRef: ElementRef;
+  @ViewChild('codeContainerRef') codeContainerRef: ElementRef | null = null;
+  @ViewChild('editor', { static: true }) editorRef: ElementRef | null = null;
 
-  editor: codemirror.EditorFromTextArea;
+  editor: codemirror.EditorFromTextArea | null = null;
 
-  constructor(
-    public ref: DialogRef<ScreenShotDialogPayload>,
-    private renderer: Renderer2
-  ) {}
+  constructor(public ref: DialogRef<ScreenShotDialogPayload>, private renderer: Renderer2) {}
 
   ngOnInit(): void {}
 
@@ -50,10 +40,7 @@ export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
   }
 
   private download(blob: Blob) {
-    saveAs(
-      blob,
-      `cartella-${this.ref.data.name ?? Math.floor(Math.random() * 100000)}.png`
-    );
+    saveAs(blob, `cartella-${this.ref.data.name ?? Math.floor(Math.random() * 100000)}.png`);
   }
   private async generateImage(node: HTMLElement) {
     return await domtoimage.toBlob(node, {

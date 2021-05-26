@@ -1,13 +1,5 @@
-import {
-  EntityFolder,
-  EntityGeneral,
-  EntityOwner,
-  EntityShare,
-} from '@cartella/interfaces/entity.interface';
-import {
-  FolderBaseRequest,
-  FolderBaseResponse,
-} from '@cartella/interfaces/folder.interface';
+import { EntityFolder, EntityGeneral, EntityOwner, EntityShare } from '@cartella/interfaces/entity.interface';
+import { FolderBaseRequest, FolderBaseResponse } from '@cartella/interfaces/folder.interface';
 import { ModalOperationType } from '@cartella/interfaces/general.interface';
 
 export type BookmarkFolderRequest = FolderBaseRequest;
@@ -17,13 +9,13 @@ export interface BookmarkBase {
   name: string;
   url: string;
   image: string | null;
-  description: string | null;
+  description?: string | null;
   private: boolean;
   metadata: any;
   site?: string;
   favicon?: string;
   favorite: boolean;
-  domain: string | null;
+  domain: string | null | undefined;
 }
 
 export interface BookmarkRequest extends BookmarkBase {
@@ -31,12 +23,7 @@ export interface BookmarkRequest extends BookmarkBase {
   folderId: string;
 }
 
-export interface Bookmark
-  extends BookmarkBase,
-    EntityOwner,
-    EntityFolder,
-    EntityShare,
-    EntityGeneral {
+export interface Bookmark extends BookmarkBase, EntityOwner, EntityFolder, EntityShare, EntityGeneral {
   tags: any[];
 }
 
@@ -47,11 +34,11 @@ export interface BookmarkResponseFolder {
 
 export interface BookmarkMetaData {
   title: string;
-  image: string;
-  description: string;
+  image: string | null;
+  description: string | null;
   twitter?: string;
   favicon?: string;
-  domain?: string;
+  domain?: string | null | undefined;
   site?: string;
 }
 

@@ -39,11 +39,11 @@ export class HomeMostRecentlyAddedComponent implements OnInit {
     },
   };
   swiperPagination: SwiperOptions['pagination'] = false;
-  swiper: Swiper = null;
+  swiper: Swiper | null = null;
   showNavigation = true;
 
   @Select(HomeState.getLatestItems)
-  recent$: Observable<any[]>;
+  recent$!: Observable<any[]>;
 
   constructor(private cdr: ChangeDetectorRef, private router: Router) {}
 

@@ -10,9 +10,8 @@ import { MenuService } from '@cartella/services/menu/menu.service';
 import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
-import { combineLatest, Observable, of } from 'rxjs';
-import { map, switchMap, take, tap } from 'rxjs/operators';
-import { HomeState } from '../../../../../../src/app/pages/dashboard/home/shared/store/states/home.state';
+import { Observable, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
 import {
   Package,
   PackageCardEvent,
@@ -31,25 +30,16 @@ import { PackagesAddComponent } from '../modals/packages-add/packages-add.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PackagesListComponent extends WithDestroy implements OnInit {
-  @Input() user: User | null = null;
-  @Input() activeFolder: PackageFolder | null = null;
-  @Input() folders: PackageFolder[] | null = [];
-  @Input() packages: Package[] | null = [];
-  @Input() isLoading: boolean | null = false;
+  @Input() user!: User;
+  @Input() activeFolder!: PackageFolder;
+  @Input() folders!: PackageFolder[];
+  @Input() packages!: Package[];
+  @Input() isLoading!: boolean;
 
-  packagesCount = new Array(this.store.selectSnapshot(HomeState.getItemsCount)?.items?.packages || 1).fill('');
-
-  @Select(PackageFolderState.getActivePackageFolder)
-  activeFolder$: Observable<PackageFolder>;
-
-  @Select(PackageFolderState.getAllPackageFolders)
-  folders$: Observable<PackageFolder[]>;
-
-  @Select(PackageState.getAllPackages)
-  packages$: Observable<Package[]>;
+  packagesCount = new Array(this.packages.length || 1).fill('');
 
   @Select(PackageState.isPackageFetched)
-  fetched$: Observable<boolean>;
+  fetched$!: Observable<boolean>;
 
   constructor(
     private dialog: DialogService,
@@ -112,18 +102,14 @@ export class PackagesListComponent extends WithDestroy implements OnInit {
         type: FeatureType.bookmark,
         action: UpdatePackage,
         item: packageData,
-        folders: this.folders$
-          ? this.folders$.pipe(map((folders) => folders.filter(({ id }) => id !== packageData.folder.id)))
-          : of([]),
+        folders: this.folders.filter(({ id }) => id !== packageData.folder.id),
       },
       enableClose: false,
     });
     this.subs.add(
       dialogRef.afterClosed$
         .pipe(
-          switchMap(() => combineLatest([this.packages$ ?? of([]), this.folders$ ?? of([])])),
-          take(1),
-          switchMap(([packages, folders]) => this.syncService.syncItems(packages, folders)),
+          switchMap(() => this.syncService.syncItems(this.packages, this.folders)),
           switchMap(() => {
             const activePackageFolder = this.store.selectSnapshot(PackageFolderState.getActivePackageFolder);
             if (activePackageFolder) {

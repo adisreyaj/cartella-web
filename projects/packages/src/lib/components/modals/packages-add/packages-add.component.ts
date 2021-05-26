@@ -46,7 +46,7 @@ export class PackagesAddComponent extends WithDestroy implements OnInit, AfterVi
   tagSuggestions$ = this.tagSuggestionSubject.pipe();
 
   @Select(TagState.getTagsList)
-  tags$: Observable<Tag[]>;
+  tags$!: Observable<Tag[]>;
 
   constructor(
     public ref: DialogRef<PackageAddModalPayload>,
