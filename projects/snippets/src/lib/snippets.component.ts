@@ -343,7 +343,9 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   private updateSnippetsWhenActiveFolderChanges() {
     return this.activeFolder$.pipe(
       pluck('id'),
-      switchMap((folderId) => this.store.dispatch(new GetSnippets(folderId))),
+      switchMap((folderId) =>
+        this.store.dispatch(new GetSnippets(folderId)).pipe(tap(() => this.snippetLoadingSubject.next(false))),
+      ),
     );
   }
 
