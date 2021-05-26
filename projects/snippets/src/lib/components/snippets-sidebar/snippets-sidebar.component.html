@@ -5,11 +5,11 @@
       <p class="text-sm text-gray-500 dark:text-gray-50">Manage your snippets</p>
     </div>
     <div class="relative" *ngIf="activeFolder">
-      <span *ngIf="['all','starred'].includes(activeFolder.id)" class="absolute w-full h-full"
-            tippy="Choose a folder first">
+      <span *ngIf="['all','starred','shared'].includes(activeFolder.id)" class="absolute w-full h-full"
+            tippy="Choose a valid folder">
       </span>
       <button primaryButton [tippy]="createSnippetSelector" placement="top-start" variation="menu"
-              [disabled]="['all','starred'].includes(activeFolder.id)" aria-label="Create new snippet">
+              [disabled]="['all','starred','shared'].includes(activeFolder.id)" aria-label="Create new snippet">
         <rmx-icon name="add-line"></rmx-icon>
       </button>
     </div>
