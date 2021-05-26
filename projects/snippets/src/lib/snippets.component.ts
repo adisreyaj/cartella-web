@@ -22,7 +22,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, finalize, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
@@ -358,8 +358,11 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private updateSnippetsInIDB() {
-    const sub = combineLatest([this.allSnippets$, this.allSnippetFolders$.pipe(take(1))])
-      .pipe(switchMap(([snippets, folders]) => this.syncService.syncItems(snippets, folders)))
+    const sub = this.allSnippets$
+      .pipe(
+        withLatestFrom(this.allSnippetFolders$),
+        switchMap(([snippets, folders]) => this.syncService.syncItems(snippets, folders)),
+      )
       .subscribe();
     this.subs.add(sub);
   }

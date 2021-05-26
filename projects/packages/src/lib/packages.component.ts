@@ -122,7 +122,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
       size: 'sm',
       data: {
         folder,
-        owner: this.store.selectSnapshot<User>((state) => state.user)?.id,
+        owner: this.store.selectSnapshot<User>(UserState.getLoggedInUser as any)?.id,
       },
       enableClose: false,
     });
@@ -158,7 +158,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     this.dialog.open(PackagesAddFolderComponent, {
       size: 'sm',
       data: {
-        owner: this.store.selectSnapshot<User>((state) => state.user)?.id,
+        owner: this.store.selectSnapshot<User>(UserState.getLoggedInUser as any)?.id,
       },
       enableClose: false,
     });
