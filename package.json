@@ -18,11 +18,11 @@
   "scripts": {
     "ng": "ng",
     "start": "cross-env NODE_ENV=development ng serve",
-    "build:prod": "cross-env NODE_ENV=production ng build --prod",
+    "build:prod": "cross-env NODE_ENV=production ng build",
     "test": "ng test",
     "lint": "eslint src/**/*.ts",
     "e2e": "ng e2e",
-    "build:analyze": "cross-env NODE_ENV=production ng build --prod --vendor-chunk=false --source-map=true",
+    "build:analyze": "cross-env NODE_ENV=production ng build --vendor-chunk=false --source-map=true",
     "analyze": "source-map-explorer dist/cartella/*.js"
   },
   "private": true,
