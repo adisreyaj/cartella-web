@@ -83,6 +83,14 @@
               ],
               "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
             }
           }
         },
@@ -94,8 +102,12 @@
           "configurations": {
             "production": {
               "browserTarget": "cartella:build:production"
+            },
+            "development": {
+              "browserTarget": "cartella:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -175,6 +187,126 @@
             "tsConfig": [
               "projects/ui/tsconfig.lib.json",
               "projects/ui/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "snippets": {
+      "projectType": "library",
+      "root": "projects/snippets",
+      "sourceRoot": "projects/snippets/src",
+      "prefix": "cartella",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/snippets/tsconfig.lib.json",
+            "project": "projects/snippets/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/snippets/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/snippets/src/test.ts",
+            "tsConfig": "projects/snippets/tsconfig.spec.json",
+            "karmaConfig": "projects/snippets/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/snippets/tsconfig.lib.json",
+              "projects/snippets/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "bookmarks": {
+      "projectType": "library",
+      "root": "projects/bookmarks",
+      "sourceRoot": "projects/bookmarks/src",
+      "prefix": "cartella",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/bookmarks/tsconfig.lib.json",
+            "project": "projects/bookmarks/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/bookmarks/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/bookmarks/src/test.ts",
+            "tsConfig": "projects/bookmarks/tsconfig.spec.json",
+            "karmaConfig": "projects/bookmarks/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/bookmarks/tsconfig.lib.json",
+              "projects/bookmarks/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "packages": {
+      "projectType": "library",
+      "root": "projects/packages",
+      "sourceRoot": "projects/packages/src",
+      "prefix": "cartella",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:ng-packagr",
+          "options": {
+            "tsConfig": "projects/packages/tsconfig.lib.json",
+            "project": "projects/packages/ng-package.json"
+          },
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/packages/tsconfig.lib.prod.json"
+            }
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/packages/src/test.ts",
+            "tsConfig": "projects/packages/tsconfig.spec.json",
+            "karmaConfig": "projects/packages/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/packages/tsconfig.lib.json",
+              "projects/packages/tsconfig.spec.json"
             ],
             "exclude": [
               "**/node_modules/**"

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastService } from '@app/services/toast/toast.service';
-import { AuthService } from '../../../shared/services/auth/auth.service';
+import { AuthService } from '@cartella/services/auth/auth.service';
+import { ToastService } from '@cartella/services/toast/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -11,12 +11,12 @@ import { AuthService } from '../../../shared/services/auth/auth.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignUpComponent implements OnInit {
-  signUpForm: FormGroup;
+  signUpForm!: FormGroup;
   constructor(
     private auth: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
   ) {}
 
   ngOnInit(): void {
@@ -40,41 +40,17 @@ export class SignUpComponent implements OnInit {
         },
         (error) => {
           this.toast.showErrorToast(error.message);
-        }
+        },
       );
     }
   }
 
   private initForm() {
     this.signUpForm = this.fb.group({
-      firstname: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(50),
-        ],
-      ],
-      lastname: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(50),
-        ],
-      ],
-      email: [
-        '',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(24),
-        ],
-      ],
+      firstname: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+      lastname: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]],
+      email: ['', [Validators.required, Validators.email, Validators.minLength(5)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(24)]],
     });
   }
 }

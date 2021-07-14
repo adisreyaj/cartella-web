@@ -1,0 +1,37 @@
+.screenshot-container {
+  &.material-darker {
+    background-color: #212121;
+    .screenshot-header,
+    .screenshot-footer {
+      color: #ffffff50;
+    }
+  }
+  &.material-palenight {
+    background-color: #292d3e;
+    .screenshot-header,
+    .screenshot-footer {
+      color: #ffffff50;
+    }
+  }
+  &.dracula {
+    background-color: #282a36;
+    .screenshot-header,
+    .screenshot-footer {
+      color: #ffffff50;
+    }
+  }
+  &.one-dark {
+    background-color: #282c34;
+    .screenshot-header,
+    .screenshot-footer {
+      color: #ffffff50;
+    }
+  }
+  &.one-light {
+    background-color: #f3f3f3;
+    .screenshot-header,
+    .screenshot-footer {
+      color: #444;
+    }
+  }
+}

@@ -16,6 +16,7 @@ import {
   RiCodeSSlashLine,
   RiDeleteBin2Line,
   RiErrorWarningLine,
+  RiEyeLine,
   RiFireFill,
   RiFoldersLine,
   RiFullscreenExitLine,
@@ -32,6 +33,7 @@ import {
   RiSettingsLine,
   RiShareBoxLine,
   RiShareCircleLine,
+  RiShareLine,
   RiShutDownLine,
   RiStarFill,
   RiStarLine,
@@ -48,6 +50,7 @@ const icons = {
   RiShareCircleLine,
   RiClipboardLine,
   RiFullscreenLine,
+  RiEyeLine,
   RiPaletteLine,
   RiCodeLine,
   RiFullscreenExitLine,
@@ -74,6 +77,7 @@ const icons = {
   RiMenu4Line,
   RiHomeLine,
   RiSettingsLine,
+  RiShareLine,
   RiFireFill,
 };
 @NgModule({

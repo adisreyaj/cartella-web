@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { DeletePromptComponent } from '@app/components/delete-prompt/delete-prompt.component';
-import { ModalOperationType } from '@app/interfaces/general.interface';
-import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { DeleteTag } from '@app/store/actions/tag.action';
-import { TagState } from '@app/store/states/tag.state';
+import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
+import { ModalOperationType } from '@cartella/interfaces/general.interface';
+import { Tag, TagAddModalPayload } from '@cartella/interfaces/tag.interface';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { DeleteTag } from '@cartella/store/actions/tag.action';
+import { TagState } from '@cartella/store/states/tag.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
@@ -19,7 +19,7 @@ import { TagsAddComponent } from '../modals/tags-add/tags-add.component';
 })
 export class ProfileTagsComponent extends WithDestroy implements OnInit {
   @Select(TagState.getCustomTagsList)
-  tags$: Observable<Tag[]>;
+  tags$!: Observable<Tag[]>;
 
   constructor(private store: Store, private dialog: DialogService) {
     super();
@@ -27,7 +27,7 @@ export class ProfileTagsComponent extends WithDestroy implements OnInit {
 
   ngOnInit(): void {}
 
-  trackBy(_, tag: Tag) {
+  trackBy(_: number, tag: Tag) {
     return tag?.id;
   }
 
@@ -64,9 +64,9 @@ export class ProfileTagsComponent extends WithDestroy implements OnInit {
             if (response) {
               this.store.dispatch(new DeleteTag(id));
             }
-          })
+          }),
         )
-        .subscribe(() => {})
+        .subscribe(() => {}),
     );
   }
 }

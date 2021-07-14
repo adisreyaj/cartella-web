@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { environment } from '@app/env/environment';
-import { AuthGuard } from '@app/guards/auth.guard';
-import { FeatureGuard } from '@app/guards/feature.guard';
+import { ROUTES, ROUTE_DATA } from '@cartella/config/routes.config';
+import { AuthGuard } from '@cartella/guards/auth.guard';
+import { FeatureGuard } from '@cartella/guards/feature.guard';
 import { DashboardComponent } from './dashboard.component';
 
 const routes: Routes = [
@@ -15,65 +15,33 @@ const routes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        loadChildren: () =>
-          import('./home/home.module').then((m) => m.HomeModule),
+        loadChildren: () => import('./home/home.module').then((m) => m.HomeModule),
         canLoad: [FeatureGuard],
-        data: {
-          feature: 'home',
-          title: 'Cartella - All in one dev bookmark tool!',
-          description: `Bookmark your favorite articles, libraries, code snippets and more.
-          One place to collect them all.`,
-          ogUrl: `${environment.hostname}`,
-        },
+        data: ROUTE_DATA.home,
       },
       {
-        path: 'snippets',
-        loadChildren: () =>
-          import('./snippets/snippets.module').then((m) => m.SnippetsModule),
+        path: ROUTES.dashboard.snippets,
+        loadChildren: () => import('@cartella/snippets/module').then((m) => m.SnippetsModule),
         canLoad: [FeatureGuard],
-        data: {
-          feature: 'snippets',
-          title: 'Snippets - Manage your code snippets! | Cartella',
-          description: `Saw a really cool code snippet on the internet or want to save those repetitive code snippets? Cartella has you covered. Save and share your favorite code snippets with ease.`,
-          ogUrl: `${environment.hostname}/snippets`,
-        },
+        data: ROUTE_DATA.snippets,
       },
       {
-        path: 'bookmarks',
-        loadChildren: () =>
-          import('./bookmarks/bookmarks.module').then((m) => m.BookmarksModule),
+        path: ROUTES.dashboard.bookmarks,
+        loadChildren: () => import('@cartella/bookmarks/module').then((m) => m.BookmarksModule),
         canLoad: [FeatureGuard],
-        data: {
-          feature: 'bookmarks',
-          title: 'Bookmarks - Manage your articles and blogs! | Cartella',
-          description: `Save all your favorite articles and blogs in one place so that you will never miss those gems. Organize them in folders and add tags to easily find what you are looking for.`,
-          ogUrl: `${environment.hostname}/bookmarks`,
-        },
+        data: ROUTE_DATA.bookmarks,
       },
       {
-        path: 'packages',
-        loadChildren: () =>
-          import('./packages/packages.module').then((m) => m.PackagesModule),
+        path: ROUTES.dashboard.packages,
+        loadChildren: () => import('@cartella/packages/module').then((m) => m.PackagesModule),
         canLoad: [FeatureGuard],
-        data: {
-          feature: 'packages',
-          title: 'Package - Organize your favorite libraries | Cartella',
-          description: `Did you come across some awesome library someone shared on twitter, and want to save it for later so that you will never forget the name? Packages section can help you add your favorite libraries with ease`,
-          ogUrl: `${environment.hostname}/packages`,
-        },
+        data: ROUTE_DATA.packages,
       },
       {
-        path: 'profile',
-        loadChildren: () =>
-          import('./profile/profile.module').then((m) => m.ProfileModule),
+        path: ROUTES.dashboard.profile,
+        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
         canLoad: [FeatureGuard],
-        data: {
-          feature: 'profile',
-          title: 'Profile - Manage your profile  | Cartella',
-          description: `Bookmark your favorite articles, libraries, code snippets and more.
-          One place to collect them all.`,
-          ogUrl: `${environment.hostname}/profile`,
-        },
+        data: ROUTE_DATA.profile,
       },
     ],
   },

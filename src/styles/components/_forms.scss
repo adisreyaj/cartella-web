@@ -42,9 +42,13 @@
   input[type='radio'] {
     @apply text-primary;
   }
+
+  .ng-select.ng-select-single .ng-select-container {
+    height: 42px;
+  }
 }
 
-body.mode-dark {
+body.dark {
   .ng-select-container,
   .ng-dropdown-panel,
   .ng-select.ng-select-opened > .ng-select-container {
@@ -66,12 +70,13 @@ body.mode-dark {
   }
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option {
     @apply bg-dark-900;
+    @apply text-gray-300;
   }
 
   .ng-option,
   .ng-value,
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
-    @apply text-gray-400;
+    @apply text-gray-300;
   }
   .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-marked {
     @apply bg-dark-900;

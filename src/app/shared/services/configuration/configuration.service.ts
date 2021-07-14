@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { CARTELLA_ENDPOINTS } from '@app/config/endpoints.config';
-import { environment } from '@app/env/environment';
-import { FeatureConfiguration } from '@app/interfaces/configuration.interface';
+import { CARTELLA_ENDPOINTS } from '@cartella/config/endpoints.config';
+import { environment } from '@cartella/env/environment';
+import { FeatureConfiguration } from '@cartella/interfaces/configuration.interface';
 import { get, has } from 'lodash-es';
 import { tap } from 'rxjs/operators';
 
@@ -10,7 +10,7 @@ import { tap } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ConfigurationService {
-  config: FeatureConfiguration = null;
+  config: FeatureConfiguration | null = null;
   configUrl = `${environment.api}/${CARTELLA_ENDPOINTS.config}`;
 
   constructor(private http: HttpClient) {}

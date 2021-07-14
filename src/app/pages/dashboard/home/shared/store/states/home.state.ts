@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { StorageFolders } from '@app/services/storage/storage.interface';
-import { StorageService } from '@app/services/storage/storage.service';
+import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { tap } from 'rxjs/operators';
 import { HomeItemCounts } from '../../interfaces/home.interface';
@@ -8,11 +7,11 @@ import { HomeService } from '../../services/home.service';
 import { GetCounts, GetLatestItems, GetTopItems } from '../actions/home.action';
 
 export class HomeStateModel {
-  latest: any[];
-  top: any[];
-  latestUpdatedAt: Date;
-  topUpdatedAt: Date;
-  counts: HomeItemCounts;
+  latest: any[] = [];
+  top: any[] = [];
+  latestUpdatedAt!: Date;
+  topUpdatedAt!: Date;
+  counts!: HomeItemCounts;
   countsFetched = false;
 }
 @State({
@@ -20,10 +19,7 @@ export class HomeStateModel {
 })
 @Injectable()
 export class HomeState {
-  constructor(
-    private homeService: HomeService,
-    private storage: StorageService
-  ) {}
+  constructor(private homeService: HomeService, private storage: BaseStorageService) {}
   @Selector()
   static getLatestItemsLastUpdated(state: HomeStateModel) {
     return state.latestUpdatedAt;
@@ -56,7 +52,7 @@ export class HomeState {
           top: result,
           topUpdatedAt: new Date(),
         });
-      })
+      }),
     );
   }
   @Action(GetCounts)
@@ -69,8 +65,8 @@ export class HomeState {
           counts: result,
           countsFetched: true,
         });
-        this.storage.setItem(StorageFolders.count, 'count', result);
-      })
+        this.storage.setItem('count', result);
+      }),
     );
   }
 
@@ -84,7 +80,7 @@ export class HomeState {
           latest: result,
           latestUpdatedAt: new Date(),
         });
-      })
+      }),
     );
   }
 }

@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { DarkModeService } from '@app/services/dark-mode/dark-mode.service';
-import { MetaService } from '@app/services/meta/meta.service';
+import { CleanupService } from '@cartella/services/cleanup/cleanup.service';
+import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
+import { MetaService } from '@cartella/services/meta/meta.service';
 import { NgSelectConfig } from '@ng-select/ng-select';
 import { filter, map, mergeMap } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+  template: `<router-outlet></router-outlet>`,
 })
 export class AppComponent implements OnInit {
   // To enable dark mode in auth pages
@@ -16,11 +16,14 @@ export class AppComponent implements OnInit {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private metaService: MetaService,
-    private config: NgSelectConfig
+    private config: NgSelectConfig,
+    private cleanupService: CleanupService
   ) {
     this.config.appendTo = 'body';
   }
   ngOnInit(): void {
+    // Cleanup local data
+    this.cleanupService.cleanUpLocalSyncedData();
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),

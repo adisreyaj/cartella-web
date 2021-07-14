@@ -1,17 +1,12 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ToastService } from '@app/services/toast/toast.service';
+import { AuthService } from '@cartella/services/auth/auth.service';
+import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
+import { ToastService } from '@cartella/services/toast/toast.service';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { SubSink } from 'subsink';
-import { AuthService } from '../../../shared/services/auth/auth.service';
-import { StorageService } from '../../../shared/services/storage/storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -19,7 +14,7 @@ import { StorageService } from '../../../shared/services/storage/storage.service
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  loginForm: FormGroup;
+  loginForm!: FormGroup;
 
   private loadingSubject = new BehaviorSubject<boolean>(false);
   readonly loading$ = this.loadingSubject.pipe();
@@ -28,8 +23,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     private auth: AuthService,
     private fb: FormBuilder,
     private router: Router,
-    private storageService: StorageService,
-    private toast: ToastService
+    private storageService: BaseStorageService,
+    private toast: ToastService,
   ) {
     this.initForm();
   }
@@ -53,7 +48,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             if (response) {
               localStorage.setItem('token', response.accessToken);
             }
-          })
+          }),
         )
         .subscribe(
           () => {
@@ -63,7 +58,7 @@ export class LoginComponent implements OnInit, OnDestroy {
           (error) => {
             this.loadingSubject.next(false);
             this.toast.showErrorToast(error.error.message);
-          }
+          },
         );
     }
   }
@@ -78,18 +73,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
   private initForm() {
     this.loginForm = this.fb.group({
-      username: [
-        '',
-        [Validators.required, Validators.email, Validators.minLength(5)],
-      ],
-      password: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(6),
-          Validators.maxLength(24),
-        ],
-      ],
+      username: ['', [Validators.required, Validators.email, Validators.minLength(5)]],
+      password: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(24)]],
     });
   }
 }

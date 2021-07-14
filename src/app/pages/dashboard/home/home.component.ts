@@ -1,16 +1,12 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { User } from '@app/interfaces/user.interface';
-import { UserState } from '@app/store/states/user.state';
+import { User } from '@cartella/interfaces/user.interface';
+import { UserState } from '@cartella/store/states/user.state';
 import { Select, Store } from '@ngxs/store';
 import dayjs from 'dayjs';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { HOME_ITEMS_EXPIRY } from './shared/config/home.config';
 import { HomeItemCounts } from './shared/interfaces/home.interface';
-import {
-  GetCounts,
-  GetLatestItems,
-  GetTopItems,
-} from './shared/store/actions/home.action';
+import { GetCounts, GetLatestItems, GetTopItems } from './shared/store/actions/home.action';
 import { HomeState } from './shared/store/states/home.state';
 @Component({
   selector: 'app-home',
@@ -20,9 +16,9 @@ import { HomeState } from './shared/store/states/home.state';
 })
 export class HomeComponent implements OnInit {
   @Select(UserState.getLoggedInUser)
-  user$: Observable<User>;
+  user$!: Observable<User>;
   @Select(HomeState.getItemsCount)
-  counts$: Observable<{ items: HomeItemCounts; fetched: boolean }>;
+  counts$!: Observable<{ items: HomeItemCounts; fetched: boolean }>;
 
   countLoadingSubject = new BehaviorSubject<boolean>(false);
   countLoading$ = this.countLoadingSubject.pipe();
@@ -37,12 +33,8 @@ export class HomeComponent implements OnInit {
   }
 
   checkAndGetItems() {
-    const latestUpdatedTime = this.store.selectSnapshot(
-      HomeState.getLatestItemsLastUpdated
-    );
-    const topUpdatedTime = this.store.selectSnapshot(
-      HomeState.getTopItemsLastUpdated
-    );
+    const latestUpdatedTime = this.store.selectSnapshot(HomeState.getLatestItemsLastUpdated);
+    const topUpdatedTime = this.store.selectSnapshot(HomeState.getTopItemsLastUpdated);
 
     const isLatestDataStale = this.checkIfStale(latestUpdatedTime);
     const isTopDataStale = this.checkIfStale(topUpdatedTime);
@@ -60,10 +52,6 @@ export class HomeComponent implements OnInit {
     if (!date) {
       return true;
     }
-    return (
-      date &&
-      dayjs(date).add(HOME_ITEMS_EXPIRY.value, HOME_ITEMS_EXPIRY.unit) <=
-        currentTime
-    );
+    return date && dayjs(date).add(HOME_ITEMS_EXPIRY.value, HOME_ITEMS_EXPIRY.unit) <= currentTime;
   }
 }

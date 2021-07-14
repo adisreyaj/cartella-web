@@ -14,7 +14,7 @@
   }
 }
 
-body.mode-dark {
+body.dark {
   .cartella-dialog {
     .ngneat-dialog-content {
       @apply bg-dark-500;
@@ -26,5 +26,9 @@ body.mode-dark {
     input[type='password'] {
       @apply dark:bg-dark-700;
     }
+  }
+
+  .ngneat-close-dialog svg {
+    color: #fff;
   }
 }

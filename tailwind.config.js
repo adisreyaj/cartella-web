@@ -1,9 +1,10 @@
 var defaultTheme = require('tailwindcss/defaultTheme');
 module.exports = {
   prefix: '',
+  mode: 'jit',
   purge: {
-    enabled: process.env.NODE_ENV === 'production',
-    content: ['./src/app/**/*.{html,ts}', './projects/ui/**/*.{html,ts}'],
+    enabled: true,
+    content: ['./src/app/**/*.{html,ts}', './projects/**/*.{html,ts}'],
   },
   darkMode: 'class',
   theme: {
@@ -68,16 +69,9 @@ module.exports = {
       },
     }),
   },
-  variants: {
-    extend: {
-      backgroundColor: ['dark-hover'],
-      textColor: ['dark-hover', 'dark-focus'],
-    },
-  },
   plugins: [
     require('@tailwindcss/custom-forms'),
     require('@tailwindcss/line-clamp'),
     require('@tailwindcss/typography'),
-    require('tailwindcss-dark-mode')(),
   ],
 };

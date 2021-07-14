@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MenuService } from '@app/services/menu/menu.service';
-import { GetCustomTags } from '@app/store/actions/tag.action';
-import { GetTechnologies } from '@app/store/actions/technology.action';
-import { GetLoggedInUser } from '@app/store/actions/user.action';
+import { ROUTES } from '@cartella/config/routes.config';
+import { MenuService } from '@cartella/services/menu/menu.service';
+import { GetCustomTags } from '@cartella/store/actions/tag.action';
+import { GetTechnologies } from '@cartella/store/actions/technology.action';
+import { GetLoggedInUser } from '@cartella/store/actions/user.action';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,15 +13,10 @@ import { Observable } from 'rxjs';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent implements OnInit {
-  isMenuOpen$: Observable<boolean>;
-  constructor(
-    private store: Store,
-    private router: Router,
-    public menu: MenuService
-  ) {}
+  isMenuOpen$ = this.menu.isMenuOpen$;
+  constructor(private store: Store, private router: Router, public menu: MenuService) {}
 
   ngOnInit(): void {
-    this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.getLoggedUserDetails();
     this.getTechnologies();
     this.getCustomTags();
@@ -35,8 +30,8 @@ export class DashboardComponent implements OnInit {
     this.store.dispatch(new GetLoggedInUser()).subscribe(
       () => {},
       () => {
-        this.router.navigate(['/auth/login']);
-      }
+        this.router.navigate([ROUTES.auth.root, ROUTES.auth.login]);
+      },
     );
   }
 

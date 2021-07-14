@@ -1,0 +1,131 @@
+@import 'buttons';
+:host {
+  --editor-header-height: 80px;
+  --editor-footer-height: 36px;
+  display: block;
+  height: calc(100vh - var(--header-height) - 2px);
+  width: 100%;
+  overflow: hidden;
+  @apply bg-gray-50;
+  @apply dark:bg-dark-900;
+}
+.playground {
+  height: 100%;
+  display: grid;
+  grid-template-rows: var(--editor-header-height) 1fr var(--editor-footer-height);
+  &__header {
+    &-button {
+      @include defaultRing();
+      @apply rounded-full;
+      @apply p-2;
+      @apply bg-white;
+      @apply shadow-sm;
+      &.active {
+        @apply bg-primary;
+        @apply text-white;
+      }
+    }
+    #snippet-name:not(.disabled) {
+      &:hover {
+        @apply bg-gray-100;
+      }
+    }
+
+    &.material-darker,
+    &.material-palenight,
+    &.dracula,
+    &.one-dark {
+      color: #fff;
+      background-color: #212121;
+      .playground__header__meta {
+        @apply text-gray-300;
+      }
+      .playground__header-button:not(.custom-color):not(.active) {
+        @apply text-gray-800;
+      }
+    }
+    &.material-darker {
+      background-color: #212121;
+      #snippet-name {
+        background-color: #212121;
+      }
+      #snippet-name:not(.disabled) {
+        &:hover {
+          background-color: lighten(#212121, 10);
+        }
+      }
+    }
+    &.material-palenight {
+      background-color: #292d3e;
+      #snippet-name {
+        background-color: #292d3e;
+      }
+      #snippet-name:not(.disabled) {
+        &:hover {
+          background-color: lighten(#292d3e, 10);
+        }
+      }
+    }
+    &.dracula {
+      background-color: #282a36;
+      #snippet-name {
+        background-color: #282a36;
+      }
+      #snippet-name:not(.disabled) {
+        &:hover {
+          background-color: lighten(#282a36, 10);
+        }
+      }
+    }
+    &.one-light {
+      background-color: #f3f3f3;
+      #snippet-name {
+        background-color: #f3f3f3;
+      }
+      #snippet-name:not(.disabled) {
+        &:hover {
+          background-color: lighten(#f3f3f3, 10);
+        }
+      }
+    }
+    &.one-dark {
+      background-color: #282c34;
+      #snippet-name {
+        background-color: #282c34;
+      }
+      #snippet-name:not(.disabled) {
+        &:hover {
+          background-color: lighten(#282c34, 10);
+        }
+      }
+    }
+  }
+  &__editor {
+    display: flex;
+    height: calc(100vh - var(--header-height) - var(--editor-header-height) - var(--editor-footer-height));
+  }
+
+  &__footer {
+    &.material-darker,
+    &.material-palenight,
+    &.dracula,
+    &.one-dark {
+      color: #fff;
+    }
+    &.material-darker {
+      background-color: #212121;
+    }
+    &.material-palenight {
+      background-color: #292d3e;
+    }
+    &.dracula {
+      background-color: #282a36;
+    }
+    &.one-dark {
+      background-color: #282c34;
+    }
+    &.one-light {
+      background-color: #f3f3f3;
+    }
+  }
+}

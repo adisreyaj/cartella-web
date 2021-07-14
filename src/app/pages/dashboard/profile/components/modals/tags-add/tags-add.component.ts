@@ -8,11 +8,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ModalOperationType } from '@app/interfaces/general.interface';
-import { Tag, TagAddModalPayload } from '@app/interfaces/tag.interface';
-import { ToastService } from '@app/services/toast/toast.service';
-import { WithDestroy } from '@app/services/with-destroy/with-destroy';
-import { AddTag, DeleteTag, UpdateTag } from '@app/store/actions/tag.action';
+import { ModalOperationType } from '@cartella/interfaces/general.interface';
+import { Tag, TagAddModalPayload } from '@cartella/interfaces/tag.interface';
+import { ToastService } from '@cartella/services/toast/toast.service';
+import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { AddTag, DeleteTag, UpdateTag } from '@cartella/store/actions/tag.action';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
@@ -25,11 +25,9 @@ import { TwitterComponent } from 'ngx-color/twitter';
   styleUrls: ['./tags-add.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TagsAddComponent
-  extends WithDestroy
-  implements OnInit, AfterViewInit {
-  @ViewChild('tagNameRef') tagNameRef: ElementRef;
-  @ViewChild(TwitterComponent) colorPickerRef: TwitterComponent;
+export class TagsAddComponent extends WithDestroy implements OnInit, AfterViewInit {
+  @ViewChild('tagNameRef') tagNameRef: ElementRef | null = null;
+  @ViewChild(TwitterComponent) colorPickerRef: TwitterComponent | null = null;
   tagName = new FormControl('', [Validators.required]);
   tagColor = '#ff595e';
   colors = [
@@ -49,7 +47,7 @@ export class TagsAddComponent
     public ref: DialogRef<TagAddModalPayload>,
     private cdr: ChangeDetectorRef,
     private toaster: ToastService,
-    private store: Store
+    private store: Store,
   ) {
     super();
   }
@@ -57,7 +55,7 @@ export class TagsAddComponent
   ngOnInit(): void {
     if (this.ref?.data) {
       const { tag, type } = this.ref.data;
-      if (type === ModalOperationType.update) {
+      if (tag && type === ModalOperationType.update) {
         this.tagName.setValue(tag?.name);
         this.tagColor = tag.color;
         this.cdr.detectChanges();
@@ -88,7 +86,7 @@ export class TagsAddComponent
       .dispatch(
         new UpdateTag(tag.id, {
           name: this.tagName.value,
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -97,7 +95,7 @@ export class TagsAddComponent
         },
         () => {
           this.toaster.showErrorToast('Failed to update the tag!');
-        }
+        },
       );
     this.subs.add(sub);
   }
@@ -109,7 +107,7 @@ export class TagsAddComponent
           name: this.tagName.value,
           color: this.tagColor,
           metadata: {},
-        })
+        }),
       )
       .subscribe(
         () => {
@@ -121,7 +119,7 @@ export class TagsAddComponent
           } else {
             this.toaster.showErrorToast('Tag was not created!');
           }
-        }
+        },
       );
     this.subs.add(sub);
   }
@@ -138,7 +136,7 @@ export class TagsAddComponent
         } else {
           this.toaster.showErrorToast('Tag was not deleted!');
         }
-      }
+      },
     );
     this.subs.add(sub);
   }

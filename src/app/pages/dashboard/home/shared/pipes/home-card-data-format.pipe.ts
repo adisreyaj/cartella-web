@@ -1,8 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { Bookmark } from '@app/bookmarks/shared/interfaces/bookmarks.interface';
-import { FeatureType } from '@app/interfaces/general.interface';
-import { Package } from '@app/packages/shared/interfaces/packages.interface';
-import { Snippet } from '@app/snippets/shared/interfaces/snippets.interface';
+import { Bookmark } from '@cartella/bookmarks';
+import { FeatureType } from '@cartella/interfaces/general.interface';
+import { Package } from '@cartella/packages';
+import { Snippet } from '@cartella/snippets';
 import { HomeCardInput, HomeItems } from '../interfaces/home.interface';
 
 @Pipe({
@@ -10,54 +10,36 @@ import { HomeCardInput, HomeItems } from '../interfaces/home.interface';
 })
 export class HomeCardDataFormatPipe implements PipeTransform {
   transform(value: HomeItems): null | HomeCardInput {
-    let formatted: HomeCardInput = null;
+    let formatted: HomeCardInput | null = null;
     if (value) {
       const { type, data, views } = value;
       switch (type) {
         case FeatureType.bookmark: {
-          const {
-            id,
-            name,
-            description,
-            updatedAt,
-            ...bookmarkData
-          } = data as Bookmark;
+          const { id, name, description, updatedAt, ...bookmarkData } = data as Bookmark;
           formatted = {
             data: bookmarkData,
             label: name,
             type,
             updatedAt,
-            description,
+            description: description ?? '',
             views,
           };
           break;
         }
         case FeatureType.snippet: {
-          const {
-            id,
-            name,
-            description,
-            updatedAt,
-            ...snippetData
-          } = data as Snippet;
+          const { id, name, description, updatedAt, ...snippetData } = data as Snippet;
           formatted = {
             data: snippetData,
             label: name,
             type,
             updatedAt,
-            description,
+            description: description ?? '',
             views,
           };
           break;
         }
         case FeatureType.package: {
-          const {
-            id,
-            name,
-            description,
-            updatedAt,
-            ...packageData
-          } = data as Package;
+          const { id, name, description, updatedAt, ...packageData } = data as Package;
           formatted = {
             data: packageData,
             label: name,

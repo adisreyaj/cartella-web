@@ -1,0 +1,109 @@
+<div class="relative flex flex-col p-2 bg-white rounded-md shadow-md dark:bg-dark-700 hover:shadow-lg">
+  <button class="absolute p-1 bg-white rounded-lg cursor-pointer dark:bg-dark-700 focus:outline-none"
+          style="top: 2px;right: 2px;" tippy="Toggle Favorite" (click)="handleFavoriteToggle(package)"
+          aria-label="Toggle favorite">
+    <rmx-icon [name]="package?.favorite ? 'star-fill' : 'star-line'" class="text-gray-500 dark:text-gray-50 icon-md"
+              [class.text-primary]="package?.favorite"></rmx-icon>
+  </button>
+  <div class="flex items-center">
+    <img [src]="package?.image" class="w-12 h-12 mr-4 rounded-sm" width="48px" height="48px" [alt]="package?.name">
+    <div>
+      <p class="text-sm font-semibold dark:text-white line-clamp-1">{{package?.name}}</p>
+      <p class="mb-2 text-sm text-gray-500 dark:text-gray-50 line-clamp-2" [style.minHeight.px]="40">
+        {{package?.description}}
+      </p>
+    </div>
+  </div>
+  <ng-container *ngTemplateOutlet="bundleReport;context:{$implicit: package.metadata.bundle}"></ng-container>
+  <ng-container *ngTemplateOutlet="repoDetails;context:{$implicit: package}"></ng-container>
+  <footer class="flex items-center justify-between pb-1 mt-3">
+    <div class="flex items-center">
+      <rmx-icon name="time-line" class="mr-1 text-gray-500 dark:text-gray-50 icon-xs"></rmx-icon>
+      <p class="text-xs text-gray-500 dark:text-gray-100">{{package.updatedAt | date: 'MMM d'}}</p>
+    </div>
+    <div class="flex items-center">
+      <div class="relative dropdown">
+      </div>
+      <button secondaryButton size="sm" class="mr-2" [tippy]="cardOptions" placement="bottom-start"
+              variation="menu">More</button>
+      <a primaryButton size="sm" target="_blank" [href]="package.metadata.links.homepage" rel="noopener noreferrer"
+         (click)="updateView(package)">View</a>
+    </div>
+  </footer>
+</div>
+
+
+<ng-template #bundleReport let-bundle>
+  <div class="flex items-center justify-between py-2 my-3 text-xs text-gray-400 border-t border-b dark:border-gray-700">
+    <div class="flex items-center">
+      <div class="mr-3">
+        <p class="font-semibold text-gray-700 dark:text-white">{{bundle.size.minified | filesize}}</p>
+        <p>Minified</p>
+      </div>
+      <div>
+        <p class="font-semibold text-gray-700 dark:text-white">{{bundle.size.gzipped | filesize}}</p>
+        <p>GZipped</p>
+      </div>
+    </div>
+    <a class="flex items-center rounded-sm default-ring text-primary hover:underline dark:text-dark-50" target="_blank"
+       rel="noopener noreferrer" [href]="'https://bundlephobia.com/result?p='+ package.name">
+      <rmx-icon name="share-box-line" class="mr-1 icon-xs"></rmx-icon>
+      <p>More Stats</p>
+    </a>
+  </div>
+</ng-template>
+
+
+<ng-template #repoDetails let-package>
+  <div class="flex items-center justify-between pb-2 mb-3 text-xs text-gray-400 border-b dark:border-gray-700">
+    <div class="flex items-center">
+      <div class="mr-3">
+        <p class="font-semibold text-gray-700 dark:text-white">{{package?.repo?.starsCount | shortCount}}</p>
+        <p>Stars</p>
+      </div>
+      <div class="mr-3">
+        <p class="font-semibold text-gray-700 dark:text-white">{{package?.metadata?.npm?.downloadsCount | shortCount}}
+        </p>
+        <p>Dwnlds</p>
+      </div>
+      <div class="mr-3">
+        <p class="font-semibold text-gray-700 dark:text-white">{{package?.repo?.issues?.open}}</p>
+        <p>Issues</p>
+      </div>
+      <div>
+        <div class="flex items-center">
+          <p class="mr-1 font-semibold text-gray-700 dark:text-white">{{package?.metadata?.license}}</p>
+          <a target="_blank" rel="noopener noreferrer" class="dark:text-dark-50"
+             [href]="'https://choosealicense.com/licenses/' + (package?.metadata?.license | lowercase)"
+             aria-label="License details">
+            <rmx-icon name="share-box-line" class="icon-xxs text-primary dark:text-dark-50"></rmx-icon>
+          </a>
+        </div>
+        <p>License</p>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #cardOptions let-hide>
+  <div class="flex flex-col w-36">
+    <ng-container *feature="'modules.packages.sharing'">
+      <div class="dropdown-item" (click)="handleShare(package);hide()">
+        <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
+        <p>Share</p>
+      </div>
+    </ng-container>
+    <div class="dropdown-item" (click)="handleMoveToFolder(package);hide()">
+      <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
+      <p>Move to</p>
+    </div>
+    <div class="dropdown-item" (click)="handleEdit(package);hide()">
+      <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
+      <p>Edit</p>
+    </div>
+    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleDelete(package);hide()">
+      <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
+      <p>Delete</p>
+    </div>
+  </div>
+</ng-template>

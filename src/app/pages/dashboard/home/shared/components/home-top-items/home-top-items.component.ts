@@ -1,14 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { Bookmark } from '@app/bookmarks/shared/interfaces/bookmarks.interface';
-import { FeatureType } from '@app/interfaces/general.interface';
-import { Package } from '@app/packages/shared/interfaces/packages.interface';
-import { Snippet } from '@app/snippets/shared/interfaces/snippets.interface';
+import { Bookmark } from '@cartella/bookmarks';
+import { FeatureType } from '@cartella/interfaces/general.interface';
+import { Package } from '@cartella/packages';
+import { Snippet } from '@cartella/snippets';
 import { Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import Swiper, { SwiperOptions } from 'swiper';
@@ -42,11 +37,11 @@ export class HomeTopItemsComponent implements OnInit {
   };
 
   swiperPagination: SwiperOptions['pagination'] = false;
-  swiper: Swiper = null;
+  swiper: Swiper | null = null;
   showNavigation = true;
 
   @Select(HomeState.getTopItems)
-  top$: Observable<any[]>;
+  top$!: Observable<any[]>;
 
   constructor(private cdr: ChangeDetectorRef, private router: Router) {}
 
@@ -71,10 +66,7 @@ export class HomeTopItemsComponent implements OnInit {
         window.open((item.data as Partial<Bookmark>).url, '_blank');
         break;
       case FeatureType.snippet:
-        this.router.navigate([
-          '/snippets',
-          (item.data as Partial<Snippet>)?.slug,
-        ]);
+        this.router.navigate(['/snippets', (item.data as Partial<Snippet>)?.slug]);
         break;
       case FeatureType.package:
         window.open((item.data as Partial<Package>)?.repo, '_blank');

@@ -1,0 +1,27 @@
+<div class="p-4">
+  <header class="mb-4">
+    <p class="font-semibold dark:text-white">
+      Export as Image
+    </p>
+  </header>
+  <section #codeContainerRef [class]="ref?.data?.theme" class="overflow-y-auto rounded-md screenshot-container">
+    <div class="relative py-3 pl-2 pr-4" style="max-height: 70vh;">
+      <header class="flex items-center justify-between pl-2 mb-2 text-sm screenshot-header">
+        <p>{{ref?.data?.name}}</p>
+        <div class="flex items-center">
+          <img [src]="ref?.data?.language?.icon" class="rounded-md" style="height: 20px;"
+               [alt]="ref?.data?.language?.name">
+          <p class="ml-1">{{ref?.data?.language?.name}}</p>
+        </div>
+      </header>
+      <textarea #editor class="w-full h-full"></textarea>
+      <!-- <footer class="pb-2 text-xs text-right screenshot-footer">
+        <p>cartella.sreyaj.dev</p>
+      </footer> -->
+    </div>
+  </section>
+  <footer class="flex justify-end mt-6">
+    <button dialogClose secondaryButton class="mr-2">Cancel</button>
+    <button (click)="exportCode()" primaryButton>Download</button>
+  </footer>
+</div>

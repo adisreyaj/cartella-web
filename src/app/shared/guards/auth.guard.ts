@@ -1,13 +1,7 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivateChild,
-  Router,
-  RouterStateSnapshot,
-  UrlTree,
-} from '@angular/router';
-import { AuthService } from '@app/services/auth/auth.service';
+import { ActivatedRouteSnapshot, CanActivateChild, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { ROUTES } from '@cartella/config/routes.config';
 import { Observable } from 'rxjs';
 const helper = new JwtHelperService();
 
@@ -15,19 +9,17 @@ const helper = new JwtHelperService();
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivateChild {
-  constructor(private router: Router, private auth: AuthService) {}
+  constructor(private router: Router) {}
   canActivateChild(
     childRoute: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot
-  ):
-    | Observable<boolean | UrlTree>
-    | Promise<boolean | UrlTree>
-    | boolean
-    | UrlTree {
+    state: RouterStateSnapshot,
+  ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     const token = localStorage.getItem('token') || null;
-    const isExpired = helper.isTokenExpired(token);
-    if (!isExpired) {
-      return true;
+    if (token) {
+      const isExpired = helper.isTokenExpired(token);
+      if (!isExpired) {
+        return true;
+      }
     }
     let options = {};
     if (state.url !== '/') {
@@ -35,7 +27,7 @@ export class AuthGuard implements CanActivateChild {
         queryParams: { returnUrl: state.url },
       };
     }
-    this.router.navigate(['/auth/login'], options);
+    this.router.navigate([ROUTES.auth.root, ROUTES.auth.login], options);
     return false;
   }
 }

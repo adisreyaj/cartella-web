@@ -5,11 +5,17 @@
   @apply focus:ring-offset-1;
 }
 
-button.btn-normal:disabled {
-  // background-color: lighten(#3d29bd, 20) !important;
-  @apply bg-gray-300;
-  @apply dark:bg-gray-600;
-  cursor: not-allowed;
+button {
+  &.btn-normal:disabled {
+    @apply bg-gray-300;
+    @apply dark:bg-gray-600;
+    cursor: not-allowed;
+  }
+  &.btn-primary:disabled {
+    @apply bg-gray-300;
+    @apply dark:bg-gray-600;
+    cursor: not-allowed;
+  }
 }
 
 .default-ring {

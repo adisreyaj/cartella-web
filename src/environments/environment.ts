@@ -5,8 +5,7 @@
 export const environment = {
   production: false,
   hostname: 'http://localhost:4200',
-  api: 'https://srv.sreyaj.dev/cartella/api',
-  // api: 'http://192.168.18.10:3222/cartella/api',
+  api: 'http://localhost:3222/cartella/api',
 };
 
 /*
@@ -16,4 +15,4 @@ export const environment = {
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
  */
-// import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+import 'zone.js/dist/zone-error'; // Included with Angular CLI.
