@@ -12,7 +12,7 @@
     <p class="mb-2 text-xs text-gray-500 line-clamp-2 dark:text-gray-50" [style.minHeight.px]="35">
       {{bookmark?.description}}</p>
   </div>
-  <section>
+  <section class="flex items-center justify-between">
     <a [href]="'https://' + bookmark.domain" class="flex items-center justify-start space-x-2" target="_blank"
        rel="noopener noreferrer">
       <ng-container *ngIf="bookmark?.favicon;else defaultFavicon">
@@ -25,11 +25,17 @@
       </ng-template>
       <a class="text-xs text-gray-500 dark:text-gray-50 hover:underline hover:text-primary">{{bookmark?.site}}</a>
     </a>
+    <div class="flex items-center space-x-1 cursor-default" [tippy]="'Shared by ' + bookmark?.owner?.firstname"
+         *ngIf="bookmark | isSharedItem">
+      <rmx-icon name="user-shared-2-line" class="icon-xs"></rmx-icon>
+      <p class="text-xs text-gray-500">Shared</p>
+    </div>
   </section>
   <footer class="flex items-center justify-between pb-1 mt-3">
     <div class="flex items-center">
       <rmx-icon name="time-line" class="mr-1 text-gray-500 dark:text-gray-50 icon-xs"></rmx-icon>
-      <p class="text-xs text-gray-500 dark:text-gray-50">{{bookmark.updatedAt | date: 'MMM d'}}</p>
+      <p class="text-xs text-gray-500 dark:text-gray-50">{{bookmark.updatedAt |
+        date: 'MMM d'}}</p>
     </div>
     <div class="flex items-center">
       <div class="relative dropdown">
