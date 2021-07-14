@@ -2,9 +2,9 @@
      (click)="handleClick(item)">
   <header class="flex items-center justify-between mb-1">
     <p class="-mt-1 text-xs text-gray-400 dark:text-gray-100">{{item?.type | titlecase}}</p>
-    <ng-container *ngIf="index < 2">
+    <div [style.opacity]="index > 2 ? 0 :1">
       <rmx-icon name="fire-fill" class="text-green-500 icon-md" tippy="Hot"></rmx-icon>
-    </ng-container>
+    </div>
   </header>
 
   <div class="text-sm text-left item-label">
