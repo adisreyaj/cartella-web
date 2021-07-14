@@ -58,21 +58,22 @@
   <div class="flex items-center justify-between pb-2 mb-3 text-xs text-gray-400 border-b dark:border-gray-700">
     <div class="flex items-center">
       <div class="mr-3">
-        <p class="font-semibold text-gray-700 dark:text-white">{{package?.repo?.starsCount | shortCount}}</p>
+        <p class="font-semibold text-gray-700 dark:text-white line-clamp-1">{{package?.repo?.starsCount | shortCount}}</p>
         <p>Stars</p>
       </div>
       <div class="mr-3">
-        <p class="font-semibold text-gray-700 dark:text-white">{{package?.metadata?.npm?.downloadsCount | shortCount}}
+        <p class="font-semibold text-gray-700 dark:text-white line-clamp-1">{{package?.metadata?.npm?.downloadsCount |
+          shortCount}}
         </p>
         <p>Dwnlds</p>
       </div>
       <div class="mr-3">
-        <p class="font-semibold text-gray-700 dark:text-white">{{package?.repo?.issues?.open}}</p>
+        <p class="font-semibold text-gray-700 dark:text-white line-clamp-1">{{package?.repo?.issues?.open}}</p>
         <p>Issues</p>
       </div>
       <div>
         <div class="flex items-center">
-          <p class="mr-1 font-semibold text-gray-700 dark:text-white">{{package?.metadata?.license}}</p>
+          <p class="mr-1 font-semibold text-gray-700 dark:text-white line-clamp-1">{{package?.metadata?.license}}</p>
           <a target="_blank" rel="noopener noreferrer" class="dark:text-dark-50"
              [href]="'https://choosealicense.com/licenses/' + (package?.metadata?.license | lowercase)"
              aria-label="License details">
