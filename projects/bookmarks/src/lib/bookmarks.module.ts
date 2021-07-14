@@ -20,6 +20,7 @@ import { ButtonsModule } from '@cartella/ui';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
+import { IsSharedItemModule } from '../../../../src/app/shared/pipes/is-shared-item/is-shared-item.module';
 import { BookmarksRoutingModule } from './bookmarks-routing.module';
 import { BookmarksComponent } from './bookmarks.component';
 import { BookmarksListCardComponent } from './components/bookmarks-list-card/bookmarks-list-card.component';
@@ -59,6 +60,7 @@ import { BookmarkState } from './shared/store/states/bookmarks.state';
     DeletePromptModule,
     NgxsModule.forFeature([BookmarkState, BookmarkFolderState]),
     IsOwnerModule,
+    IsSharedItemModule,
   ],
   providers: [
     MenuService,
