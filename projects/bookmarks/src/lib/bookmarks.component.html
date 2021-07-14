@@ -7,7 +7,7 @@
     </app-explorer-sidebar>
   </aside>
   <main class="overflow-y-auto bookmarks__main bg-gray-50 dark:bg-dark-800">
-    <app-bookmarks-list [user]="user$|async" [isLoading]="bookmarkLoading$ | async" [activeFolder]="activeFolder$"
+    <app-bookmarks-list [user]="user$|async" [isLoading]="bookmarkLoading$ | async" [activeFolder]="activeFolder$ | async"
                         [bookmarksShown]="bookmarksShown$ |async" [bookmarks]="allBookmarks$ |async"
                         [bookmarkFetched]="bookmarkFetched$ |async" [folders]="folders$ |async">
     </app-bookmarks-list>
