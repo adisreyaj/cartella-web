@@ -1,10 +1,6 @@
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
-import {
-  BrowserModule,
-  HammerModule,
-  HAMMER_GESTURE_CONFIG,
-} from '@angular/platform-browser';
+import { BrowserModule, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { CartellaHammerConfig } from '@cartella/config/hammer.config';
@@ -17,12 +13,7 @@ import { TechnologyState } from '@cartella/store/states/technology.state';
 import { UserState } from '@cartella/store/states/user.state';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
-import {
-  popperVariation,
-  TippyModule,
-  tooltipVariation,
-  withContextMenuVariation,
-} from '@ngneat/helipopper';
+import { popperVariation, TippyModule, tooltipVariation, withContextMenuVariation } from '@ngneat/helipopper';
 import { TippyConfig } from '@ngneat/helipopper/lib/tippy.types';
 import { HotToastModule } from '@ngneat/hot-toast';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -49,9 +40,7 @@ const tippyConfig: Partial<TippyConfig> = {
   },
 };
 
-const configurationFactory = (
-  configurationService: ConfigurationService
-) => () => configurationService.loadConfig();
+const configurationFactory = (configurationService: ConfigurationService) => () => configurationService.loadConfig();
 
 @NgModule({
   declarations: [AppComponent],
