@@ -18,11 +18,11 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build:prod": "cross-env NODE_ENV=production ng build --prod",
+    "build:prod": "cross-env NODE_ENV=production ng build",
     "test": "ng test",
     "lint": "eslint src/**/*.ts",
     "e2e": "ng e2e",
-    "build:analyze": "cross-env NODE_ENV=production ng build --prod --vendor-chunk=false --source-map=true",
+    "build:analyze": "cross-env NODE_ENV=production ng build --vendor-chunk=false --source-map=true",
     "analyze": "source-map-explorer dist/cartella/*.js"
   },
   "private": true,
@@ -48,7 +48,7 @@
     "@ngxs/store": "^3.7.1",
     "@sentry/angular": "^6.2.0",
     "@sentry/tracing": "^6.2.0",
-    "angular-remix-icon": "^2.0.0",
+    "angular-remix-icon": "^1.1.1",
     "dayjs": "^1.10.4",
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.5",
