@@ -39,10 +39,12 @@ import {
   RiStarLine,
   RiTimeLine,
   RiUser3Line,
+  RiUserShared2Line,
 } from 'angular-remix-icon';
 
 const icons = {
   RiFoldersLine,
+  RiUserShared2Line,
   RiStarLine,
   RiAddCircleLine,
   RiSearchLine,
