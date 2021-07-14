@@ -53,21 +53,27 @@
         </div>
         </ng-container>
     </ng-container>
+    <ng-container *ngIf="(bookmark |isOwner)">
     <div class="dropdown-item" (click)="handleMoveToFolder(bookmark);hide()">
       <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>
       <p>Move to</p>
     </div>
+    </ng-container>
     <div class="dropdown-item" (click)="handleCopyToClipboard(bookmark);hide()">
       <rmx-icon name="clipboard-line" class="icon-sm"></rmx-icon>
       <p>Copy Link</p>
     </div>
-    <div class="dropdown-item" (click)="handleEdit(bookmark);hide()">
-      <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
-      <p>Edit</p>
-    </div>
-    <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleDelete(bookmark);hide()">
-      <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
-      <p>Delete</p>
-    </div>
+    <ng-container *ngIf="(bookmark |isOwner)">
+      <div class="dropdown-item" (click)="handleEdit(bookmark);hide()">
+        <rmx-icon name="pencil-line" class="icon-sm"></rmx-icon>
+        <p>Edit</p>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="(bookmark |isOwner)">
+      <div class="text-red-600 dark:text-red-500 dropdown-item" (click)="handleDelete(bookmark);hide()">
+        <rmx-icon name="delete-bin-2-line" class="icon-sm"></rmx-icon>
+        <p>Delete</p>
+      </div>
+    </ng-container>
   </div>
 </ng-template>
