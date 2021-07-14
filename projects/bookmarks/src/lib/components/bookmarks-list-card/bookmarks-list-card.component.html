@@ -46,10 +46,12 @@
 <ng-template #cardOptions let-hide>
   <div class="flex flex-col w-36">
     <ng-container *feature="'modules.bookmarks.sharing'">
-      <div class="dropdown-item" (click)="handleShare(bookmark);hide()">
-        <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
-        <p>Share</p>
-      </div>
+      <ng-container *ngIf="(bookmark |isOwner)">
+        <div class="dropdown-item" (click)="handleShare(bookmark);hide()">
+          <rmx-icon name="share-circle-line" class="icon-sm"></rmx-icon>
+          <p>Share</p>
+        </div>
+        </ng-container>
     </ng-container>
     <div class="dropdown-item" (click)="handleMoveToFolder(bookmark);hide()">
       <rmx-icon name="folders-line" class="icon-sm"></rmx-icon>

@@ -8,8 +8,10 @@ import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-
 import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
 import { DefaultImageModule } from '@cartella/directives/default-image/default-image.module';
 import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
+import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { IconModule } from '@cartella/modules/icon/icon.module';
+import { IsOwnerModule } from '@cartella/pipes/is-owner/is-owner.module';
 import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
 import { MenuService } from '@cartella/services/menu/menu.service';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
@@ -18,7 +20,6 @@ import { ButtonsModule } from '@cartella/ui';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
-import { HoveredDirectiveModule } from 'src/app/shared/directives/hovered/hovered-directive.module';
 import { BookmarksRoutingModule } from './bookmarks-routing.module';
 import { BookmarksComponent } from './bookmarks.component';
 import { BookmarksListCardComponent } from './components/bookmarks-list-card/bookmarks-list-card.component';
@@ -57,6 +58,7 @@ import { BookmarkState } from './shared/store/states/bookmarks.state';
     SharePopupModule,
     DeletePromptModule,
     NgxsModule.forFeature([BookmarkState, BookmarkFolderState]),
+    IsOwnerModule,
   ],
   providers: [
     MenuService,
