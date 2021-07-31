@@ -14,7 +14,7 @@ import { BUTTON_SIZE_PADDINGS } from '../buttons.config';
 export class SecondaryButtonComponent {
   @HostBinding('class') get classes() {
     return `btn-secondary rounded-md
-     border border-transparent
+     border border-gray-100
      flex items-center
      bg-gray-50
      dark:bg-dark-700

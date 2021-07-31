@@ -9,49 +9,55 @@
        style="max-width: 600px;">
     <div class="grid w-full py-32 lg:py-6 lg:h-100 place-items-center">
       <div class="w-full sm:w-3/4">
-        <!-- <div class="flex items-center">
+        <div class="flex items-center">
           <img src="../../../assets/images/cartella.svg" alt="Cartella" style="height: 50px;">
           <h1 class="ml-2 text-3xl font-bold">Cartella</h1>
-        </div> -->
+        </div>
         <h2 class="my-8 mb-8 text-xl font-semibold tracking-tighter text-gray-700 sm:text-2xl dark:text-white">Create an
           account</h2>
         <div class="grid grid-cols-1 gap-2 sm:grid-cols-2 sm:gap-6">
-          <button type="button" secondaryButton class="flex items-center justify-center py-2 ring-default"
-                  (click)="signUpWithGoogle()">
-            <img src="../../../assets/images/google.svg" alt="Sign In with Google" style="height: 25px;">
-            <span class="ml-2 text-xs font-semibold">
-              Sign up with Google
-            </span>
-          </button>
-          <button type="button" secondaryButton class="flex items-center justify-center py-2 ring-default"
-                  (click)="signUpWithGithub()">
+          <ng-container *feature="'modules.signup.google'">
+            <button type="button" secondaryButton class="flex items-center justify-center py-2 ring-default"
+                    (click)="signUpWithGoogle()">
+              <img src="../../../assets/images/google.svg" alt="Sign In with Google" style="height: 25px;">
+              <span class="ml-2 text-xs font-semibold">
+                Sign up with Google
+              </span>
+            </button>
+          </ng-container>
+          <ng-container *feature="'modules.signup.github'">
+            <button type="button" secondaryButton class="flex items-center justify-center py-2 ring-default"
+                    (click)="signUpWithGithub()">
             <img src="../../../assets/images/github.svg" alt="Sign In with Github" style="height: 25px;">
             <span class="ml-2 text-xs font-semibold">
               Sign up with Github
             </span>
           </button>
+        </ng-container>
         </div>
-        <form class="mt-6" [formGroup]="signUpForm" (ngSubmit)="signUpWithCredentials()">
-          <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div class="form-group">
-              <label for="firstname">First Name</label>
-              <input type="text" name="firstname" id="firstname" formControlName="firstname">
+        <ng-container *feature="'modules.signup.credentials'">
+          <form class="mt-6" [formGroup]="signUpForm" (ngSubmit)="signUpWithCredentials()">
+            <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" name="firstname" id="firstname" formControlName="firstname">
+              </div>
+              <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" name="lastname" id="lastname" formControlName="lastname">
+              </div>
             </div>
             <div class="form-group">
-              <label for="lastname">Last Name</label>
-              <input type="text" name="lastname" id="lastname" formControlName="lastname">
+              <label for="email">Email</label>
+              <input type="email" name="email" id="email" formControlName="email">
             </div>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" name="email" id="email" formControlName="email">
-          </div>
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" name="password" id="password" formControlName="password">
-          </div>
-          <button primaryButton class="grid items-center w-full" [disabled]="signUpForm?.invalid">Signup</button>
-        </form>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" name="password" id="password" formControlName="password">
+            </div>
+            <button primaryButton class="grid items-center w-full" [disabled]="signUpForm?.invalid">Signup</button>
+          </form>
+        </ng-container>
         <p class="mt-8 text-center dark:text-white">Already have an account?
           <a class="font-semibold text-primary dark:text-dark-50" routerLink="/auth/login">Login</a>
         </p>
