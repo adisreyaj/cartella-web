@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { ALL_BOOKMARKS_FOLDER } from '../../config/bookmarks.config';
@@ -17,7 +18,7 @@ import {
 export class BookmarkFolderStateModel {
   bookmarkFolders: BookmarkFolder[] = [];
   fetched = false;
-  activeBookmarkFolder: BookmarkFolder | null = null;
+  activeBookmarkFolder: BookmarkFolder | undefined = undefined;
 }
 @State({
   name: 'bookmarkFolders',
@@ -46,7 +47,7 @@ export class BookmarkFolderState {
   }
 
   @Action(GetBookmarkFolders)
-  getBookmarkFolders({ getState, setState, patchState }: StateContext<BookmarkFolderStateModel>) {
+  getBookmarkFolders({ getState, patchState }: StateContext<BookmarkFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
       return this.storage.getItem('folders').pipe(
@@ -72,8 +73,7 @@ export class BookmarkFolderState {
       return this.bookmarkService.getFolders().pipe(
         map(({ payload }) => payload),
         tap((result) => {
-          setState({
-            ...state,
+          patchState({
             bookmarkFolders: result,
             fetched: true,
             activeBookmarkFolder: ALL_BOOKMARKS_FOLDER,
@@ -84,59 +84,51 @@ export class BookmarkFolderState {
   }
 
   @Action(AddBookmarkFolder)
-  addBookmarkFolder({ getState, patchState }: StateContext<BookmarkFolderStateModel>, { payload }: AddBookmarkFolder) {
+  addBookmarkFolder({ setState }: StateContext<BookmarkFolderStateModel>, { payload }: AddBookmarkFolder) {
     return this.bookmarkService.createNewFolder(payload).pipe(
       tap((result) => {
-        const state = getState();
-        patchState({
-          bookmarkFolders: [...state.bookmarkFolders, result],
-          activeBookmarkFolder: result,
-        });
+        setState(
+          patch({
+            bookmarkFolders: append([result]),
+            activeBookmarkFolder: result,
+          }),
+        );
       }),
     );
   }
 
   @Action(UpdateBookmarkFolder)
-  updateBookmarkFolder(
-    { getState, setState }: StateContext<BookmarkFolderStateModel>,
-    { payload, id }: UpdateBookmarkFolder,
-  ) {
+  updateBookmarkFolder({ setState }: StateContext<BookmarkFolderStateModel>, { payload, id }: UpdateBookmarkFolder) {
     return this.bookmarkService.updateFolder(id, payload).pipe(
       tap((result) => {
-        const state = getState();
-        const foldersList = [...state.bookmarkFolders];
-        const folderIndex = foldersList.findIndex((item) => item.id === id);
-        foldersList[folderIndex] = result;
-        setState({
-          ...state,
-          bookmarkFolders: foldersList,
-        });
+        setState(
+          patch({
+            bookmarkFolders: updateItem((item) => item?.id === id, result),
+          }),
+        );
       }),
     );
   }
 
   @Action(DeleteBookmarkFolder)
-  deleteBookmarkFolder({ getState, setState }: StateContext<BookmarkFolderStateModel>, { id }: DeleteBookmarkFolder) {
+  deleteBookmarkFolder({ setState }: StateContext<BookmarkFolderStateModel>, { id }: DeleteBookmarkFolder) {
     return this.bookmarkService.deleteFolder(id).pipe(
       tap(() => {
-        const state = getState();
-        const filteredArray = state.bookmarkFolders.filter((item) => item.id !== id);
-        setState({
-          ...state,
-          bookmarkFolders: filteredArray,
-        });
+        setState(
+          patch({
+            bookmarkFolders: removeItem<BookmarkFolder>((item) => item?.id === id),
+          }),
+        );
       }),
     );
   }
 
   @Action(SetActiveBookmarkFolder, { cancelUncompleted: true })
   setSelectedBookmarkFolder(
-    { getState, setState }: StateContext<BookmarkFolderStateModel>,
+    { patchState }: StateContext<BookmarkFolderStateModel>,
     { payload }: SetActiveBookmarkFolder,
   ) {
-    const state = getState();
-    setState({
-      ...state,
+    patchState({
       activeBookmarkFolder: payload,
     });
   }

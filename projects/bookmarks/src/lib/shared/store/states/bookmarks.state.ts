@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Bookmark } from '../../interfaces/bookmarks.interface';
@@ -17,7 +18,7 @@ export class BookmarkStateModel {
   allBookmarks: Bookmark[] = [];
   fetched: boolean = false;
   bookmarksShown: Bookmark[] = [];
-  activeBookmark: Bookmark | null = null;
+  activeBookmark: Bookmark | undefined = undefined;
 }
 @State({
   name: 'bookmarks',
@@ -135,49 +136,44 @@ export class BookmarkState {
   }
 
   @Action(AddBookmark)
-  addBookmark({ getState, patchState }: StateContext<BookmarkStateModel>, { payload }: AddBookmark) {
+  addBookmark({ setState }: StateContext<BookmarkStateModel>, { payload }: AddBookmark) {
     return this.bookmarkService.createNewBookmark(payload).pipe(
       tap((result) => {
-        const state = getState();
-        patchState({
-          allBookmarks: [...state.allBookmarks, result],
-          bookmarksShown: [...state.bookmarksShown, result],
-          activeBookmark: result,
-        });
+        setState(
+          patch({
+            allBookmarks: append([result]),
+            bookmarksShown: append([result]),
+            activeBookmark: result,
+          }),
+        );
       }),
     );
   }
 
   @Action(UpdateBookmark)
-  updateBookmark({ getState, patchState }: StateContext<BookmarkStateModel>, { payload, id }: UpdateBookmark) {
+  updateBookmark({ setState }: StateContext<BookmarkStateModel>, { payload, id }: UpdateBookmark) {
     return this.bookmarkService.updateBookmark(id, payload).pipe(
       tap((result) => {
-        const state = getState();
-        const allBookmarkList = [...state.allBookmarks];
-        const bookmarkIndex = allBookmarkList.findIndex((item) => item.id === id);
-        allBookmarkList[bookmarkIndex] = result;
-        const shownBookmarkList = [...state.bookmarksShown];
-        const shownBookmarkIndex = shownBookmarkList.findIndex((item) => item.id === id);
-        shownBookmarkList[shownBookmarkIndex] = result;
-        patchState({
-          allBookmarks: allBookmarkList,
-          bookmarksShown: shownBookmarkList,
-        });
+        setState(
+          patch({
+            allBookmarks: updateItem((item) => item?.id === id, result),
+            bookmarksShown: updateItem((item) => item?.id === id, result),
+          }),
+        );
       }),
     );
   }
 
   @Action(DeleteBookmark)
-  deleteBookmark({ getState, patchState }: StateContext<BookmarkStateModel>, { id }: DeleteBookmark) {
+  deleteBookmark({ setState }: StateContext<BookmarkStateModel>, { id }: DeleteBookmark) {
     return this.bookmarkService.deleteBookmark(id).pipe(
       tap(() => {
-        const state = getState();
-        const filteredAllBookmarks = state.allBookmarks.filter((item) => item.id !== id);
-        const filteredVisibleBookmarks = state.bookmarksShown.filter((item) => item.id !== id);
-        patchState({
-          allBookmarks: filteredAllBookmarks,
-          bookmarksShown: filteredVisibleBookmarks,
-        });
+        setState(
+          patch({
+            allBookmarks: removeItem<Bookmark>((item) => item?.id === id),
+            bookmarksShown: removeItem<Bookmark>((item) => item?.id === id),
+          }),
+        );
       }),
     );
   }
