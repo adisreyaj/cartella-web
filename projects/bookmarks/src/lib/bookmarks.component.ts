@@ -14,8 +14,8 @@ import { UserState } from '@cartella/store/states/user.state';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
-import { BehaviorSubject, combineLatest, forkJoin, Observable, of } from 'rxjs';
-import { catchError, filter, finalize, pluck, switchMap, take, tap } from 'rxjs/operators';
+import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
+import { catchError, filter, finalize, pluck, switchMap, withLatestFrom } from 'rxjs/operators';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import { Bookmark, BookmarkFolder, BookmarkFolderAddModalPayload } from './shared/interfaces/bookmarks.interface';
@@ -185,7 +185,6 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
   private updateBookmarksWhenActiveFolderChanges() {
     return this.activeFolder$
       .pipe(
-        tap(() => console.log('[Bookmark]: Active folder changed')),
         pluck('id'),
         switchMap((folderId) => this.store.dispatch(new GetBookmarks(folderId))),
       )
@@ -221,8 +220,11 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
    * `combineLatest` to emit when `allBookmarkFolders$` emits value
    */
   private updateBookmarksInIDB() {
-    const sub = combineLatest([this.allBookmarks$, this.allBookmarkFolders$.pipe(take(1))])
-      .pipe(switchMap(([bookmarks, folders]) => this.syncService.syncItems(bookmarks, folders)))
+    const sub = this.allBookmarks$
+      .pipe(
+        withLatestFrom(this.allBookmarkFolders$),
+        switchMap(([bookmarks, folders]) => this.syncService.syncItems(bookmarks, folders)),
+      )
       .subscribe();
     this.subs.add(sub);
   }
