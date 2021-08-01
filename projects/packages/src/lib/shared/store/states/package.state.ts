@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Package } from '../../interfaces/packages.interface';
@@ -11,7 +12,7 @@ export class PackageStateModel {
   allPackages: Package[] = [];
   fetched: boolean = false;
   packagesShown: Package[] = [];
-  activePackage: Package | null = null;
+  activePackage: Package | undefined = undefined;
 }
 @State({
   name: 'packages',
@@ -74,8 +75,7 @@ export class PackageState {
           return this.packageService.getPackages().pipe(
             map(({ payload }) => payload),
             tap((result) => {
-              setState({
-                ...state,
+              patchState({
                 fetched: true,
                 allPackages: result,
                 packagesShown: result,
@@ -126,49 +126,45 @@ export class PackageState {
   }
 
   @Action(AddPackage)
-  addPackage({ getState, patchState }: StateContext<PackageStateModel>, { payload }: AddPackage) {
+  addPackage({ getState, setState }: StateContext<PackageStateModel>, { payload }: AddPackage) {
     return this.packageService.createNewPackage(payload).pipe(
       tap((result) => {
         const state = getState();
-        patchState({
-          allPackages: [...state.allPackages, result],
-          packagesShown: [...state.packagesShown, result],
-          activePackage: result,
-        });
+        setState(
+          patch({
+            allPackages: append([result]),
+            packagesShown: append([result]),
+            activePackage: result,
+          }),
+        );
       }),
     );
   }
 
   @Action(UpdatePackage)
-  updatePackage({ getState, patchState }: StateContext<PackageStateModel>, { payload, id }: UpdatePackage) {
+  updatePackage({ setState }: StateContext<PackageStateModel>, { payload, id }: UpdatePackage) {
     return this.packageService.updatePackage(id, payload).pipe(
       tap((result) => {
-        const state = getState();
-        const allPackageList = [...state.allPackages];
-        const packageIndex = allPackageList.findIndex((item) => item.id === id);
-        allPackageList[packageIndex] = result;
-        const shownPackageList = [...state.packagesShown];
-        const shownPackageIndex = shownPackageList.findIndex((item) => item.id === id);
-        shownPackageList[shownPackageIndex] = result;
-        patchState({
-          allPackages: allPackageList,
-          packagesShown: shownPackageList,
-        });
+        setState(
+          patch({
+            allPackages: updateItem((item) => item?.id === id, result),
+            packagesShown: updateItem((item) => item?.id === id, result),
+          }),
+        );
       }),
     );
   }
 
   @Action(DeletePackage)
-  deletePackage({ getState, patchState }: StateContext<PackageStateModel>, { id }: DeletePackage) {
+  deletePackage({ setState }: StateContext<PackageStateModel>, { id }: DeletePackage) {
     return this.packageService.deletePackage(id).pipe(
       tap(() => {
-        const state = getState();
-        const filteredAllPackages = state.allPackages.filter((item) => item.id !== id);
-        const filteredVisiblePackages = state.packagesShown.filter((item) => item.id !== id);
-        patchState({
-          allPackages: filteredAllPackages,
-          packagesShown: filteredVisiblePackages,
-        });
+        setState(
+          patch({
+            allPackages: removeItem<Package>((item) => item?.id !== id),
+            packagesShown: removeItem<Package>((item) => item?.id !== id),
+          }),
+        );
       }),
     );
   }

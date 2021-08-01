@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
-import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { Action, Selector, State, StateContext, StateOperator } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { of, throwError } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { Snippet } from '../../interfaces/snippets.interface';
@@ -20,7 +21,7 @@ import {
 export class SnippetStateModel {
   allSnippets: Snippet[] = [];
   snippetsShown: Snippet[] = [];
-  activeSnippet: Snippet | null = null;
+  activeSnippet: Snippet | undefined = undefined;
   fetched = false;
 }
 @State({
@@ -57,7 +58,7 @@ export class SnippetState {
   }
 
   @Action(GetSnippets, { cancelUncompleted: true })
-  getSnippets({ getState, setState, patchState }: StateContext<SnippetStateModel>, { id }: GetSnippets) {
+  getSnippets({ getState, patchState }: StateContext<SnippetStateModel>, { id }: GetSnippets) {
     switch (id) {
       case 'all':
         const state = getState();
@@ -85,8 +86,7 @@ export class SnippetState {
           return this.snippetService.getSnippets().pipe(
             map(({ payload }) => payload),
             tap((result) => {
-              setState({
-                ...state,
+              patchState({
                 fetched: true,
                 allSnippets: result,
                 snippetsShown: result,
@@ -137,40 +137,40 @@ export class SnippetState {
   }
 
   @Action(AddSnippet)
-  addSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { payload }: AddSnippet) {
+  addSnippet({ setState }: StateContext<SnippetStateModel>, { payload }: AddSnippet) {
     return this.snippetService.createNewSnippet(payload).pipe(
       tap((result) => {
-        const state = getState();
-        patchState({
-          allSnippets: [...state.allSnippets, result],
-          snippetsShown: [...state.snippetsShown, result],
-          activeSnippet: result,
-        });
+        setState(
+          patch({
+            allSnippets: append([result]),
+            snippetsShown: append([result]),
+            activeSnippet: result,
+          }),
+        );
       }),
     );
   }
 
   @Action(UpdateSnippet)
-  updateSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { payload, id }: UpdateSnippet) {
+  updateSnippet({ setState }: StateContext<SnippetStateModel>, { payload, id }: UpdateSnippet) {
     return this.snippetService.updateSnippet(id, payload).pipe(
       tap((result) => {
-        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
-        patchState(stateToPatch);
+        const stateToPatch = this.getUpdatedSnippetsState(id, result);
+        setState(stateToPatch);
       }),
     );
   }
 
   @Action(DeleteSnippet)
-  deleteSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id }: DeleteSnippet) {
+  deleteSnippet({ setState }: StateContext<SnippetStateModel>, { id }: DeleteSnippet) {
     return this.snippetService.deleteSnippet(id).pipe(
       tap(() => {
-        const state = getState();
-        const filteredAllSnippets = state.allSnippets.filter((item) => item.id !== id);
-        const filteredVisibleSnippets = state.snippetsShown.filter((item) => item.id !== id);
-        patchState({
-          allSnippets: filteredAllSnippets,
-          snippetsShown: filteredVisibleSnippets,
-        });
+        setState(
+          patch({
+            allSnippets: removeItem<Snippet>((item) => item?.id === id),
+            snippetsShown: removeItem<Snippet>((item) => item?.id === id),
+          }),
+        );
       }),
     );
   }
@@ -206,48 +206,39 @@ export class SnippetState {
     }
   }
 
-  @Action(ShareSnippet, { cancelUncompleted: true })
-  shareSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id, shareTo }: ShareSnippet) {
+  @Action(ShareSnippet)
+  shareSnippet({ setState }: StateContext<SnippetStateModel>, { id, shareTo }: ShareSnippet) {
     return this.snippetService.share(id, shareTo).pipe(
       tap((result) => {
-        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
-        patchState(stateToPatch);
+        const stateToPatch = this.getUpdatedSnippetsState(id, result);
+        setState(stateToPatch);
       }),
     );
   }
 
-  @Action(UnShareSnippet, { cancelUncompleted: true })
-  unShareSnippet({ getState, patchState }: StateContext<SnippetStateModel>, { id, revoke }: UnShareSnippet) {
+  @Action(UnShareSnippet)
+  unShareSnippet({ setState }: StateContext<SnippetStateModel>, { id, revoke }: UnShareSnippet) {
     return this.snippetService.unShare(id, revoke).pipe(
       tap((result) => {
-        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
-        patchState(stateToPatch);
+        const stateToPatch = this.getUpdatedSnippetsState(id, result);
+        setState(stateToPatch);
       }),
     );
   }
-  @Action(UpdateSharePreferencesSnippet, { cancelUncompleted: true })
-  updateSharePref(
-    { getState, patchState }: StateContext<SnippetStateModel>,
-    { id, shareTo }: UpdateSharePreferencesSnippet,
-  ) {
+  @Action(UpdateSharePreferencesSnippet)
+  updateSharePref({ setState }: StateContext<SnippetStateModel>, { id, shareTo }: UpdateSharePreferencesSnippet) {
     return this.snippetService.updateSharePref(id, shareTo).pipe(
       tap((result) => {
-        const stateToPatch = this.getUpdatedSnippetsState(id, result, getState());
-        patchState(stateToPatch);
+        const stateToPatch = this.getUpdatedSnippetsState(id, result);
+        setState(stateToPatch);
       }),
     );
   }
 
-  private getUpdatedSnippetsState(id: string, result: Snippet, state: SnippetStateModel) {
-    const allSnippetList = [...state.allSnippets];
-    const snippetIndex = allSnippetList.findIndex((item) => item.id === id);
-    allSnippetList[snippetIndex] = result;
-    const shownSnippetList = [...state.snippetsShown];
-    const shownSnippetIndex = shownSnippetList.findIndex((item) => item.id === id);
-    shownSnippetList[shownSnippetIndex] = result;
-    return {
-      allSnippets: allSnippetList,
-      snippetsShown: shownSnippetList,
-    };
+  private getUpdatedSnippetsState(id: string, result: Snippet): StateOperator<SnippetStateModel> {
+    return patch({
+      allSnippets: updateItem((item) => item?.id === id, result),
+      snippetsShown: updateItem((item) => item?.id === id, result),
+    });
   }
 }

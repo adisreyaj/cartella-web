@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { ALL_SNIPPETS_FOLDER } from '@cartella/config/snippets.config';
 import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
+import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { SnippetFolder } from '../../interfaces/snippets.interface';
@@ -16,14 +17,14 @@ import {
 
 export class SnippetFolderStateModel {
   snippetFolders: SnippetFolder[] = [];
-  activeSnippetFolder: SnippetFolder | null = null;
+  activeSnippetFolder: SnippetFolder | undefined = undefined;
   fetched: boolean = false;
 }
 @State({
   name: 'snippetFolders',
   defaults: {
     snippetFolders: [],
-    activeSnippetFolder: null,
+    activeSnippetFolder: undefined,
     fetched: false,
   },
 })
@@ -47,7 +48,7 @@ export class SnippetFolderState {
   }
 
   @Action(GetSnippetFolders)
-  getSnippetFolders({ getState, patchState, setState }: StateContext<SnippetFolderStateModel>) {
+  getSnippetFolders({ getState, patchState }: StateContext<SnippetFolderStateModel>) {
     const state = getState();
     if (state.fetched) {
       return this.storage.getItem('snippets').pipe(
@@ -73,8 +74,7 @@ export class SnippetFolderState {
       return this.snippetService.getFolders().pipe(
         map(({ payload }) => payload),
         tap((result) => {
-          setState({
-            ...state,
+          patchState({
             snippetFolders: result,
             fetched: true,
             activeSnippetFolder: ALL_SNIPPETS_FOLDER,
@@ -85,56 +85,48 @@ export class SnippetFolderState {
   }
 
   @Action(AddSnippetFolder)
-  addSnippet({ getState, patchState }: StateContext<SnippetFolderStateModel>, { payload }: AddSnippetFolder) {
+  addSnippet({ setState }: StateContext<SnippetFolderStateModel>, { payload }: AddSnippetFolder) {
     return this.snippetService.createNewFolder(payload).pipe(
       tap((result) => {
-        const state = getState();
-        patchState({
-          snippetFolders: [...state.snippetFolders, result],
-          activeSnippetFolder: result,
-        });
+        setState(
+          patch({
+            snippetFolders: append([result]),
+            activeSnippetFolder: result,
+          }),
+        );
       }),
     );
   }
 
   @Action(UpdateSnippetFolder)
-  updateSnippet({ getState, setState }: StateContext<SnippetFolderStateModel>, { payload, id }: UpdateSnippetFolder) {
+  updateSnippet({ setState }: StateContext<SnippetFolderStateModel>, { payload, id }: UpdateSnippetFolder) {
     return this.snippetService.updateFolder(id, payload).pipe(
       tap((result) => {
-        const state = getState();
-        const foldersList = [...state.snippetFolders];
-        const folderIndex = foldersList.findIndex((item) => item.id === id);
-        foldersList[folderIndex] = result;
-        setState({
-          ...state,
-          snippetFolders: foldersList,
-        });
+        setState(
+          patch({
+            snippetFolders: updateItem((item) => item?.id === id, result),
+          }),
+        );
       }),
     );
   }
 
   @Action(DeleteSnippetFolder)
-  deleteSnippet({ getState, setState }: StateContext<SnippetFolderStateModel>, { id }: DeleteSnippetFolder) {
+  deleteSnippet({ setState }: StateContext<SnippetFolderStateModel>, { id }: DeleteSnippetFolder) {
     return this.snippetService.deleteFolder(id).pipe(
       tap(() => {
-        const state = getState();
-        const filteredArray = state.snippetFolders.filter((item) => item.id !== id);
-        setState({
-          ...state,
-          snippetFolders: filteredArray,
-        });
+        setState(
+          patch({
+            snippetFolders: removeItem<SnippetFolder>((item) => item?.id !== id),
+          }),
+        );
       }),
     );
   }
 
   @Action(SetActiveSnippetFolder, { cancelUncompleted: true })
-  setSelectedSnippetId(
-    { getState, setState }: StateContext<SnippetFolderStateModel>,
-    { payload }: SetActiveSnippetFolder,
-  ) {
-    const state = getState();
-    setState({
-      ...state,
+  setSelectedSnippetId({ patchState }: StateContext<SnippetFolderStateModel>, { payload }: SetActiveSnippetFolder) {
+    patchState({
       activeSnippetFolder: payload,
     });
   }

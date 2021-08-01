@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
 import {
   ExplorerSidebarEvent,
-  ExplorerSidebarEventType,
+  ExplorerSidebarEventType
 } from '@cartella/components/explorer-sidebar/explorer-sidebar.component';
 import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
 import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
@@ -22,26 +22,25 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, finalize, pluck, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, tap, withLatestFrom } from 'rxjs/operators';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
   SnippetFolder,
   SnippetItemEvent,
   SnippetItemEventType,
-  SnippetModes,
+  SnippetModes
 } from './shared/interfaces/snippets.interface';
 import {
   DeleteSnippetFolder,
   GetSnippetFolders,
-  SetActiveSnippetFolder,
+  SetActiveSnippetFolder
 } from './shared/store/actions/snippets-folders.action';
 import {
   DeleteSnippet,
   GetSnippets,
   SetActiveSnippet,
-  SetActiveSnippetWithSlug,
-  UpdateSnippet,
+  SetActiveSnippetWithSlug, UpdateSnippet
 } from './shared/store/actions/snippets.action';
 import { SnippetFolderState } from './shared/store/states/snippet-folders.state';
 import { SnippetState } from './shared/store/states/snippets.state';
@@ -251,9 +250,8 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
     this.subs.add(
       dialogRef.afterClosed$
         .pipe(
-          switchMap(() => combineLatest([this.snippets$, this.folders$])),
-          take(1),
-          switchMap(([snippets, folders]) => this.syncService.syncItems(snippets, folders)),
+          withLatestFrom(this.snippets$, this.folders$),
+          switchMap(([, snippets, folders]) => this.syncService.syncItems(snippets, folders)),
           switchMap(() => {
             const activeFolder = this.store.selectSnapshot(SnippetFolderState.getActiveSnippetFolder);
             if (activeFolder) {
@@ -285,7 +283,7 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
   }
 
   private handleShare(snippet: Snippet) {
-    const dialogRef = this.dialog.open(SharePopupComponent, {
+    this.dialog.open(SharePopupComponent, {
       size: 'md',
       minHeight: 'unset',
       data: {
@@ -293,16 +291,6 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
         item: snippet,
       },
     });
-    this.subs.add(
-      dialogRef.afterClosed$
-        .pipe(
-          tap((response) => {
-            if (response) {
-            }
-          }),
-        )
-        .subscribe(() => {}),
-    );
   }
 
   private getDataFromAPI() {

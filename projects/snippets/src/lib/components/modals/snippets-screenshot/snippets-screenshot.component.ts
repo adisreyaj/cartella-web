@@ -1,4 +1,5 @@
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
+import { AfterViewInit, Component, ElementRef, Inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { DEFAULT_EDITOR_OPTIONS } from '@cartella/config/snippets.config';
 import { DialogRef } from '@ngneat/dialog';
 import codemirror from 'codemirror';
@@ -11,6 +12,7 @@ import 'codemirror/mode/sass/sass';
 import 'codemirror/mode/shell/shell';
 import domtoimage from 'dom-to-image';
 import { saveAs } from 'file-saver';
+import { BehaviorSubject } from 'rxjs';
 import { ScreenShotDialogPayload } from '../../../shared/interfaces/snippets.interface';
 
 @Component({
@@ -23,8 +25,19 @@ export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
   @ViewChild('editor', { static: true }) editorRef: ElementRef | null = null;
 
   editor: codemirror.EditorFromTextArea | null = null;
+  initialDimensions = {
+    width: '0px',
+    height: '0px',
+  };
 
-  constructor(public ref: DialogRef<ScreenShotDialogPayload>, private renderer: Renderer2) {}
+  private loadingSubject = new BehaviorSubject(false);
+  loading$ = this.loadingSubject.asObservable();
+
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    public ref: DialogRef<ScreenShotDialogPayload>,
+    private renderer: Renderer2,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -33,9 +46,18 @@ export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
   }
   async exportCode() {
     if (this.codeContainerRef) {
-      this.generateImage(this.codeContainerRef.nativeElement).then((blob) => {
-        this.download(blob);
-      });
+      this.generateImage(this.codeContainerRef.nativeElement)
+        .then((blob) => {
+          if (blob) {
+            (this.codeContainerRef?.nativeElement as HTMLDivElement).style.width = this.initialDimensions.width;
+            (this.codeContainerRef?.nativeElement as HTMLDivElement).style.height = this.initialDimensions.height;
+            this.download(blob);
+            this.ref.close();
+          }
+        })
+        .finally(() => {
+          this.loadingSubject.next(false);
+        });
     }
   }
 
@@ -43,10 +65,23 @@ export class SnippetsScreenshotComponent implements OnInit, AfterViewInit {
     saveAs(blob, `cartella-${this.ref.data.name ?? Math.floor(Math.random() * 100000)}.png`);
   }
   private async generateImage(node: HTMLElement) {
-    return await domtoimage.toBlob(node, {
-      width: node.scrollWidth,
-      height: node.scrollHeight,
-    });
+    const codeEditor = this.document.querySelector('app-snippets-screenshot .CodeMirror-scroll');
+    if (codeEditor) {
+      this.loadingSubject.next(true);
+      const width = codeEditor.scrollWidth;
+      const height = codeEditor.scrollHeight + 30;
+      this.initialDimensions = {
+        width: (this.codeContainerRef?.nativeElement as HTMLDivElement).style.width,
+        height: (this.codeContainerRef?.nativeElement as HTMLDivElement).style.height,
+      };
+      (this.codeContainerRef?.nativeElement as HTMLDivElement).style.width = `${width}px`;
+      (this.codeContainerRef?.nativeElement as HTMLDivElement).style.height = `${height}px`;
+      return await domtoimage.toBlob(node, {
+        width,
+        height,
+      });
+    }
+    return null;
   }
 
   private attachWatermark(node: HTMLElement) {
