@@ -1,19 +1,33 @@
+<div *ngIf="(loading$ | async)"
+     class="absolute top-0 left-0 z-40 flex items-center justify-center w-full h-full bg-white">
+  <div class="flex flex-col items-center space-y-2">
+    <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid"
+         display="block">
+      <circle cx="50" cy="50" r="32" stroke-width="8" stroke="#3d29bd"
+              stroke-dasharray="50.26548245743669 50.26548245743669" fill="none" stroke-linecap="round">
+        <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" dur="1s" keyTimes="0;1"
+                          values="0 50 50;360 50 50" />
+      </circle>
+    </svg>
+    <p>Loading</p>
+  </div>
+</div>
 <div class="p-4">
   <header class="mb-4">
     <p class="font-semibold dark:text-white">
       Export as Image
     </p>
   </header>
-  <section #codeContainerRef [class]="ref?.data?.theme" class="overflow-y-auto rounded-md screenshot-container">
-    <div class="relative py-3 pl-2 pr-4" style="max-height: 70vh;">
-      <header class="flex items-center justify-between pl-2 mb-2 text-sm screenshot-header">
-        <p>{{ref?.data?.name}}</p>
-        <div class="flex items-center">
-          <img [src]="ref?.data?.language?.icon" class="rounded-md" style="height: 20px;"
-               [alt]="ref?.data?.language?.name">
-          <p class="ml-1">{{ref?.data?.language?.name}}</p>
-        </div>
-      </header>
+    <section #codeContainerRef [class]="ref?.data?.theme" class="overflow-y-auto rounded-md screenshot-container">
+      <div class="relative py-3 pl-2 pr-4" style="max-height: 70vh;">
+        <header class="flex items-center justify-between pl-2 mb-2 text-sm screenshot-header">
+          <p>{{ref?.data?.name}}</p>
+          <div class="flex items-center">
+            <img [src]="ref?.data?.language?.icon" class="rounded-md" style="height: 20px;"
+                 [alt]="ref?.data?.language?.name">
+            <p class="ml-1">{{ref?.data?.language?.name}}</p>
+          </div>
+        </header>
       <textarea #editor class="w-full h-full"></textarea>
       <!-- <footer class="pb-2 text-xs text-right screenshot-footer">
         <p>cartella.sreyaj.dev</p>

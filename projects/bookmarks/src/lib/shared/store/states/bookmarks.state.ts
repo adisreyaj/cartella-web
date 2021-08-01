@@ -16,7 +16,7 @@ import {
 
 export class BookmarkStateModel {
   allBookmarks: Bookmark[] = [];
-  fetched: boolean = false;
+  fetched = false;
   bookmarksShown: Bookmark[] = [];
   activeBookmark: Bookmark | undefined = undefined;
 }
@@ -54,7 +54,7 @@ export class BookmarkState {
   }
 
   @Action(GetBookmarks, { cancelUncompleted: true })
-  getBookmarks({ getState, setState, patchState }: StateContext<BookmarkStateModel>, { id }: GetBookmarks) {
+  getBookmarks({ getState, patchState }: StateContext<BookmarkStateModel>, { id }: GetBookmarks) {
     switch (id) {
       case 'all':
         const state = getState();
@@ -82,8 +82,7 @@ export class BookmarkState {
           return this.bookmarkService.getBookmarks().pipe(
             map(({ payload }) => payload),
             tap((result) => {
-              setState({
-                ...state,
+              patchState({
                 fetched: true,
                 allBookmarks: result,
                 bookmarksShown: result,
