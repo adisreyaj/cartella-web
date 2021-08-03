@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { IconModule } from '@cartella/modules/icon/icon.module';
+import { HoveredDirectiveModule } from '@cartella/ui/directives';
+import { IconModule } from '@cartella/ui/modules';
 import { TippyModule } from '@ngneat/helipopper';
-import { HoveredDirectiveModule } from 'src/app/shared/directives/hovered/hovered-directive.module';
 import { ExplorerSidebarComponent } from './explorer-sidebar.component';
 
 @NgModule({

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Technology } from '@cartella/interfaces/technology.interface';
-import { TechnologyService } from '@cartella/services/technology/technology.service';
+import { TechnologyService } from '@cartella/ui/services';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { map, tap } from 'rxjs/operators';
 import { GetTechnologies } from '../actions/technology.action';

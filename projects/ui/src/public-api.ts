@@ -1,5 +1,3 @@
-/*
- * Public API Surface of ui
- */
-
-export * from './lib/buttons/buttons.module';
+export * from './components';
+export * from './directives';
+export * from './pipes';

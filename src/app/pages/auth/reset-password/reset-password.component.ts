@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { WithDestroy } from '@cartella/ui/services';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { ResetPasswordService } from './services/reset-password.service';

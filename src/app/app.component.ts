@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
-import { CleanupService } from '@cartella/services/cleanup/cleanup.service';
-import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
-import { MetaService } from '@cartella/services/meta/meta.service';
+import { CleanupService, DarkModeService, MetaService } from '@cartella/ui/services';
 import { NgSelectConfig } from '@ng-select/ng-select';
 import { filter, map, mergeMap } from 'rxjs/operators';
 @Component({
@@ -17,7 +15,7 @@ export class AppComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private metaService: MetaService,
     private config: NgSelectConfig,
-    private cleanupService: CleanupService
+    private cleanupService: CleanupService,
   ) {
     this.config.appendTo = 'body';
   }
@@ -35,7 +33,7 @@ export class AppComponent implements OnInit {
           return route;
         }),
         filter((route) => route.outlet === 'primary'),
-        mergeMap((route) => route.data)
+        mergeMap((route) => route.data),
       )
       .subscribe((event) => {
         this.metaService.updateTitle(event.title);

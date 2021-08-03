@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
-import { StorageFolders } from '@cartella/services/storage/storage.interface';
+import { BaseStorageService, StorageFolders } from '@cartella/ui/services';
 import { DedicatedInstanceFactory } from 'ngforage';
 
 @Injectable({
@@ -12,7 +11,7 @@ export class HomeStorageService extends BaseStorageService {
       dif.createNgForage({
         name: 'cartella',
         storeName: StorageFolders.count,
-      })
+      }),
     );
   }
 }

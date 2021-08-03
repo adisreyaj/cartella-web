@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
 import { ModalOperationType } from '@cartella/interfaces/general.interface';
 import { Tag, TagAddModalPayload } from '@cartella/interfaces/tag.interface';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { DeleteTag } from '@cartella/store/actions/tag.action';
 import { TagState } from '@cartella/store/states/tag.state';
+import { DeletePromptComponent } from '@cartella/ui/components';
+import { WithDestroy } from '@cartella/ui/services';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';

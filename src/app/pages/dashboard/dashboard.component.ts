@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ROUTES } from '@cartella/config/routes.config';
-import { MenuService } from '@cartella/services/menu/menu.service';
 import { GetCustomTags } from '@cartella/store/actions/tag.action';
 import { GetTechnologies } from '@cartella/store/actions/technology.action';
 import { GetLoggedInUser } from '@cartella/store/actions/user.action';
+import { MenuService } from '@cartella/ui/services';
 import { Store } from '@ngxs/store';
 
 @Component({

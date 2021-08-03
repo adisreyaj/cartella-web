@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../../environments/environment';
-import { CARTELLA_ENDPOINTS } from '../../config/endpoints.config';
-import { User } from '../../interfaces/user.interface';
+import { CARTELLA_ENDPOINTS } from '../../../../../src/app/shared/config/endpoints.config';
+import { User } from '../../../../../src/app/shared/interfaces/user.interface';
+import { environment } from '../../../../../src/environments/environment';
 
 @Injectable({
   providedIn: 'root',

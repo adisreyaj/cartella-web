@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
-import { IconModule } from '@cartella/modules/icon/icon.module';
-import { TimeAgoPipeModule } from '@cartella/pipes/time-ago-pipe/time-ago-pipe.module';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
-import { ButtonsModule } from '@cartella/ui';
+import { ButtonsModule } from '@cartella/ui/components';
+import { HoveredDirectiveModule } from '@cartella/ui/directives';
+import { IconModule } from '@cartella/ui/modules';
+import { TimeAgoPipeModule } from '@cartella/ui/pipes';
+import { BaseStorageService } from '@cartella/ui/services';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';
 import { SwiperModule } from 'swiper/angular';
