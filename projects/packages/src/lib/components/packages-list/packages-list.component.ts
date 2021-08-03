@@ -30,6 +30,7 @@ export class PackagesListComponent extends WithDestroy implements OnChanges {
   @Input() activeFolder!: PackageFolder;
   @Input() folders!: PackageFolder[];
   @Input() packages!: Package[];
+  @Input() allPackages!: Package[];
   @Input() isLoading!: boolean;
 
   packagesCount = [''];
@@ -108,7 +109,8 @@ export class PackagesListComponent extends WithDestroy implements OnChanges {
     this.subs.add(
       dialogRef.afterClosed$
         .pipe(
-          switchMap(() => this.syncService.syncItems(this.packages, this.folders)),
+          tap(() => console.log(this.packages, this.folders)),
+          switchMap(() => this.syncService.syncItems(this.allPackages, this.folders)),
           switchMap(() => {
             const activePackageFolder = this.store.selectSnapshot(PackageFolderState.getActivePackageFolder);
             if (activePackageFolder) {

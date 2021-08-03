@@ -21,7 +21,7 @@ export class FolderAssortService {
     let starred: Items[] = [];
     if (items?.length > 0) {
       items.forEach((item) => {
-        if (item.owner.id === user.id) {
+        if (item?.owner?.id === user?.id) {
           if (item.favorite) {
             starred = [...starred, item];
           } else {
