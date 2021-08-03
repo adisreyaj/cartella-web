@@ -8,7 +8,7 @@
       <span *ngIf="['all','starred'].includes(activeFolder?.id)" class="absolute w-full h-full"
             tippy="Choose a folder first">
       </span>
-      <button primaryButton [disabled]="['all','starred'].includes(activeFolder?.id)" (click)="addNewPackage()"
+      <button primaryButton [disabled]="['all','starred','shared'].includes(activeFolder?.id)" (click)="addNewPackage()"
               aria-label="Create new package">
         <rmx-icon name="add-line"></rmx-icon>
       </button>
