@@ -18,8 +18,8 @@
   "scripts": {
     "ng": "ng",
     "start": "cross-env NODE_ENV=development ng serve",
-    "build:prod": "cross-env NODE_ENV=production ng build",
-    "build:prod:source-map": "cross-env NODE_ENV=production ng build --source-map=true",
+    "build:prod": "cross-env NODE_ENV=production ng build --configuration production",
+    "build:prod:source-map": "cross-env NODE_ENV=production ng build --source-map=true --configuration production",
     "test": "ng test",
     "lint": "eslint src/**/*.ts",
     "e2e": "ng e2e",
