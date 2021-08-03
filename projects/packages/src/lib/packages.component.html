@@ -8,7 +8,9 @@
   </aside>
   <main class="overflow-y-auto bg-white packages__main dark:bg-dark-800">
     <app-packages-list [user]="user$ | async" [activeFolder]="activeFolder$ | async" [folders]="folders$ | async"
-                       [isLoading]="packageLoading$ | async" [packages]="packagesShown$ | async">
+                       [isLoading]="packageLoading$ | async" [packages]="packagesShown$ | async"
+                       [allPackages]="allPackages$ | async"
+                       >
     </app-packages-list>
   </main>
 
