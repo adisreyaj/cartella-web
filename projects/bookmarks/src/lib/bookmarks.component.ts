@@ -8,7 +8,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, forkJoin, Observable, of } from 'rxjs';
-import { catchError, filter, finalize, pluck, switchMap, withLatestFrom } from 'rxjs/operators';
+import { catchError, filter, finalize, pluck, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { BookmarksAddFolderComponent } from './components/modals/bookmarks-add-folder/bookmarks-add-folder.component';
 import { ALL_BOOKMARKS_FOLDER } from './shared/config/bookmarks.config';
 import { Bookmark, BookmarkFolder, BookmarkFolderAddModalPayload } from './shared/interfaces/bookmarks.interface';
@@ -72,11 +72,15 @@ export class BookmarksComponent extends WithDestroy implements OnInit {
 
   ngOnInit(): void {
     const sub = this.getDataFromAPI()
-      .pipe(switchMap(() => this.updateBookmarksWhenActiveFolderChanges()))
-      .subscribe(() => {
-        this.updateBookmarksInIDB();
-        this.updateBookmarkFoldersInIDB();
-      });
+      .pipe(
+        take(1),
+        tap(() => {
+          this.updateBookmarksInIDB();
+          this.updateBookmarkFoldersInIDB();
+        }),
+        switchMap(() => this.updateBookmarksWhenActiveFolderChanges()),
+      )
+      .subscribe();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.subs.add(sub);
   }

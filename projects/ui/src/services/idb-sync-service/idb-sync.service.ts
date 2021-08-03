@@ -3,7 +3,7 @@ import { Bookmark, BookmarkFolder } from '@cartella/bookmarks';
 import { Package, PackageFolder } from '@cartella/packages';
 import { Snippet, SnippetFolder } from '@cartella/snippets';
 import { forkJoin, Observable, of } from 'rxjs';
-import { catchError, mapTo } from 'rxjs/operators';
+import { catchError, mapTo, take } from 'rxjs/operators';
 import { FolderAssortService } from '../folder-assort/folder-assort.service';
 import { BaseStorageService } from '../storage/base-storage.service';
 
@@ -23,11 +23,12 @@ export class IDBSyncService {
         this.syncSharedItems(shared),
         this.syncOwnItems(itemsGroupedByFolders),
       ]).pipe(
+        take(1),
         mapTo(true),
         catchError((err) => {
           console.error(err);
           return of(false);
-        })
+        }),
       );
     }
     return of(false);
@@ -39,7 +40,7 @@ export class IDBSyncService {
       catchError((err) => {
         console.error('Save Bookmark Folders', err);
         return of(false);
-      })
+      }),
     );
   }
 
@@ -52,7 +53,7 @@ export class IDBSyncService {
         catchError((err) => {
           console.error('Save Bookmark Folders', err);
           return of(false);
-        })
+        }),
       );
     }
     return of(false);
@@ -64,7 +65,7 @@ export class IDBSyncService {
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
         return of(false);
-      })
+      }),
     );
   }
   private syncStarredItems(items: Items[]) {
@@ -73,7 +74,7 @@ export class IDBSyncService {
       catchError((err) => {
         console.error('Save Starred Bookmarks', err);
         return of(false);
-      })
+      }),
     );
   }
 
@@ -95,7 +96,7 @@ export class IDBSyncService {
           ...acc,
           [id]: items?.length > 0 ? items.filter(({ folder: { id: folderId } }) => folderId === id) : [],
         }),
-        {}
+        {},
       );
     }
     return [];

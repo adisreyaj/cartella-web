@@ -19,25 +19,26 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, finalize, pluck, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { SnippetsAddFolderComponent } from './components/modals/snippets-add-folder/snippets-add-folder.component';
 import {
   Snippet,
   SnippetFolder,
   SnippetItemEvent,
   SnippetItemEventType,
-  SnippetModes
+  SnippetModes,
 } from './shared/interfaces/snippets.interface';
 import {
   DeleteSnippetFolder,
   GetSnippetFolders,
-  SetActiveSnippetFolder
+  SetActiveSnippetFolder,
 } from './shared/store/actions/snippets-folders.action';
 import {
   DeleteSnippet,
   GetSnippets,
   SetActiveSnippet,
-  SetActiveSnippetWithSlug, UpdateSnippet
+  SetActiveSnippetWithSlug,
+  UpdateSnippet,
 } from './shared/store/actions/snippets.action';
 import { SnippetFolderState } from './shared/store/states/snippet-folders.state';
 import { SnippetState } from './shared/store/states/snippets.state';
@@ -108,12 +109,16 @@ export class SnippetsComponent extends WithDestroy implements OnInit {
 
   ngOnInit(): void {
     const sub = this.getDataFromAPI()
-      .pipe(switchMap(() => this.updateSnippetsWhenActiveFolderChanges()))
-      .subscribe(() => {
-        this.store.dispatch(new SetActiveSnippet(null));
-        this.updateSnippetFoldersInIDB();
-        this.updateSnippetsInIDB();
-      });
+      .pipe(
+        take(1),
+        tap(() => {
+          this.store.dispatch(new SetActiveSnippet(null));
+          this.updateSnippetFoldersInIDB();
+          this.updateSnippetsInIDB();
+        }),
+        switchMap(() => this.updateSnippetsWhenActiveFolderChanges()),
+      )
+      .subscribe();
     this.observeLayoutChanges();
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.allSnippets$
