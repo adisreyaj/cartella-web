@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ALL_SNIPPETS_FOLDER } from '@cartella/config/snippets.config';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
+import { BaseStorageService } from '@cartella/ui/services';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { append, patch, removeItem, updateItem } from '@ngxs/store/operators';
 import { of } from 'rxjs';

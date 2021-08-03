@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Tag } from '@cartella/interfaces/tag.interface';
-import { TagService } from '@cartella/services/tag/tag.service';
+import { TagService } from '@cartella/ui/services';
 import { Action, Selector, State, StateContext } from '@ngxs/store';
 import { map, tap } from 'rxjs/operators';
 import { AddTag, DeleteTag, GetCustomTags, UpdateTag } from '../actions/tag.action';

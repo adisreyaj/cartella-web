@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { MenuService } from '@cartella/services/menu/menu.service';
+import { MenuService } from '@cartella/ui/services';
 
 @Component({
   selector: 'app-profile',

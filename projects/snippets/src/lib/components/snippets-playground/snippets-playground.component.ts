@@ -13,16 +13,12 @@ import {
   ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
-import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
-import { SharePopupPayload } from '@cartella/components/share-popup/share-popup.interface';
 import { DEFAULT_EDITOR_OPTIONS, THEMES_SUPPORTED } from '@cartella/config/snippets.config';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Technology } from '@cartella/interfaces/technology.interface';
-import { HasWriteAccessPipe } from '@cartella/pipes/has-write-access/has-write-access.pipe';
-import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
-import { EditorThemeService } from '@cartella/services/theme/editor-theme.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { DeletePromptComponent, SharePopupComponent, SharePopupPayload } from '@cartella/ui/components';
+import { HasWriteAccessPipe } from '@cartella/ui/pipes';
+import { DarkModeService, EditorThemeService, WithDestroy } from '@cartella/ui/services';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import codemirror from 'codemirror';

@@ -1,9 +1,8 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Tag } from '@cartella/interfaces/tag.interface';
-import { ToastService } from '@cartella/services/toast/toast.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { TagState } from '@cartella/store/states/tag.state';
+import { ToastService, WithDestroy } from '@cartella/ui/services';
 import { DialogRef } from '@ngneat/dialog';
 import { TippyInstance } from '@ngneat/helipopper';
 import { Select, Store } from '@ngxs/store';

@@ -2,10 +2,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { LoginMethods, User } from '@cartella/interfaces/user.interface';
-import { ToastService } from '@cartella/services/toast/toast.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { UpdateUser, UpdateUserLoginMethod } from '@cartella/store/actions/user.action';
 import { UserState } from '@cartella/store/states/user.state';
+import { ToastService, WithDestroy } from '@cartella/ui/services';
 import { Select, Store } from '@ngxs/store';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';

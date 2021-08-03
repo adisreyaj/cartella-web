@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
-import { StorageFolders } from '@cartella/services/storage/storage.interface';
+import { BaseStorageService } from '@cartella/ui/services/storage/base-storage.service';
+import { StorageFolders } from '@cartella/ui/services/storage/storage.interface';
 import { DedicatedInstanceFactory } from 'ngforage';
 
 @Injectable({

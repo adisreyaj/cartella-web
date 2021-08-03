@@ -4,13 +4,11 @@ import { BrowserModule, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/pla
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { CartellaHammerConfig } from '@cartella/config/hammer.config';
-import { IconModule } from '@cartella/modules/icon/icon.module';
-import { ConfigurationService } from '@cartella/services/configuration/configuration.service';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
-import { StorageService } from '@cartella/services/storage/storage.service';
 import { TagState } from '@cartella/store/states/tag.state';
 import { TechnologyState } from '@cartella/store/states/technology.state';
 import { UserState } from '@cartella/store/states/user.state';
+import { IconModule } from '@cartella/ui/modules';
+import { BaseStorageService, ConfigurationService, StorageService } from '@cartella/ui/services';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import { popperVariation, TippyModule, tooltipVariation, withContextMenuVariation } from '@ngneat/helipopper';

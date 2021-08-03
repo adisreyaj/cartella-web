@@ -1,19 +1,19 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DeletePromptModule } from '@cartella/components/delete-prompt/delete-prompt.module';
-import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/explorer-sidebar.module';
-import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
-import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
-import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
-import { IconModule } from '@cartella/modules/icon/icon.module';
-import { CountPipeModule } from '@cartella/pipes/count-pipe/count-pipe.module';
-import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
-import { MenuService } from '@cartella/services/menu/menu.service';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@cartella/tokens/feature.token';
-import { ButtonsModule } from '@cartella/ui';
+import {
+  ButtonsModule,
+  DeletePromptModule,
+  ExplorerSidebarModule,
+  MoveToFolderModule,
+  SharePopupModule,
+} from '@cartella/ui/components';
+import { FeatureDirectiveModule } from '@cartella/ui/directives';
+import { IconModule } from '@cartella/ui/modules';
+import { CountPipeModule } from '@cartella/ui/pipes';
+import { BaseStorageService, IDBSyncService, MenuService } from '@cartella/ui/services';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';
 import { NgxsModule } from '@ngxs/store';

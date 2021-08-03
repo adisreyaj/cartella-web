@@ -1,14 +1,10 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
-import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
-import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
-import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
 import { HomeState } from '@cartella/home/shared/store/states/home.state';
 import { FeatureType, ModalOperationType } from '@cartella/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@cartella/interfaces/move-to-folder.interface';
 import { User } from '@cartella/interfaces/user.interface';
-import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
-import { MenuService } from '@cartella/services/menu/menu.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { DeletePromptComponent, MoveToFolderComponent, SharePopupComponent } from '@cartella/ui/components';
+import { IDBSyncService, MenuService, WithDestroy } from '@cartella/ui/services';
 import { DialogService } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { switchMap, tap } from 'rxjs/operators';
