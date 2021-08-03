@@ -9,7 +9,7 @@
       <label for="name">Folder Name</label>
       <ng-select [formControl]="folderSelected" [clearable]="false" [searchable]="false" class="w-40"
                  aria-label="Choose theme">
-        <ng-option *ngFor="let folder of (ref.data.folders | async)" [value]="folder.id">
+        <ng-option *ngFor="let folder of ref.data?.folders" [value]="folder.id">
           {{folder?.name}}
         </ng-option>
       </ng-select>
