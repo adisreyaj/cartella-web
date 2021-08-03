@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ModalOperationType } from '@cartella/interfaces/general.interface';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { WithDestroy } from '@cartella/ui/services';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject, Subject } from 'rxjs';

@@ -1,23 +1,20 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
-import {
-  ExplorerSidebarEvent,
-  ExplorerSidebarEventType
-} from '@cartella/components/explorer-sidebar/explorer-sidebar.component';
-import { MoveToFolderComponent } from '@cartella/components/move-to-folder/move-to-folder.component';
-import { SharePopupComponent } from '@cartella/components/share-popup/share-popup.component';
 import { ALL_SNIPPETS_FOLDER } from '@cartella/config/snippets.config';
 import { FeatureType } from '@cartella/interfaces/general.interface';
 import { MoveToFolderModalPayload } from '@cartella/interfaces/move-to-folder.interface';
 import { Technology } from '@cartella/interfaces/technology.interface';
 import { User } from '@cartella/interfaces/user.interface';
-import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
-import { MenuService } from '@cartella/services/menu/menu.service';
-import { ToastService } from '@cartella/services/toast/toast.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { TechnologyState } from '@cartella/store/states/technology.state';
+import {
+  DeletePromptComponent,
+  ExplorerSidebarEvent,
+  ExplorerSidebarEventType,
+  MoveToFolderComponent,
+  SharePopupComponent,
+} from '@cartella/ui/components';
+import { IDBSyncService, MenuService, ToastService, WithDestroy } from '@cartella/ui/services';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';

@@ -1,7 +1,7 @@
 import { Bookmark } from '@cartella/bookmarks';
+import { FeatureType } from '@cartella/interfaces/general.interface';
 import { Package } from '@cartella/packages';
 import { Snippet } from '@cartella/snippets';
-import { FeatureType } from '../../interfaces/general.interface';
 
 export interface SharePopupPayload {
   entity: FeatureType;

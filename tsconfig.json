@@ -16,16 +16,27 @@
     "lib": ["es2018", "dom"],
     "paths": {
       "@cartella/ui": ["projects/ui/src/public-api.ts"],
+      "@cartella/ui/*": [
+        "projects/ui/src/*"
+      ],
       "@cartella/env/*": ["src/environments/*"],
-      "@cartella/services/*": ["src/app/shared/services/*"],
+      "@cartella/services/*": [
+        "projects/ui/src/services/*"
+      ],
       "@cartella/guards/*": ["src/app/shared/guards/*"],
       "@cartella/interfaces/*": ["src/app/shared/interfaces/*"],
       "@cartella/tokens/*": ["src/app/shared/tokens/*"],
       "@cartella/config/*": ["src/app/shared/config/*"],
-      "@cartella/modules/*": ["src/app/shared/modules/*"],
+      "@cartella/modules/*": [
+        "projects/ui/src/modules/*"
+      ],
       "@cartella/components/*": ["src/app/shared/components/*"],
-      "@cartella/pipes/*": ["src/app/shared/pipes/*"],
-      "@cartella/directives/*": ["src/app/shared/directives/*"],
+      "@cartella/pipes/*": [
+        "projects/ui/src/pipes/*"
+      ],
+      "@cartella/directives/*": [
+        "@cartella/ui/directives/*"
+      ],
       "@cartella/store/*": ["src/app/shared/store/*"],
       "@cartella/home/*": ["src/app/pages/dashboard/home/*"],
       "@cartella/snippets": ["projects/snippets/src/public-api.ts"],

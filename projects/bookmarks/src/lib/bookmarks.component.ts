@@ -1,16 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { DeletePromptComponent } from '@cartella/components/delete-prompt/delete-prompt.component';
-import {
-  ExplorerSidebarEvent,
-  ExplorerSidebarEventType,
-} from '@cartella/components/explorer-sidebar/explorer-sidebar.component';
 import { ModalOperationType } from '@cartella/interfaces/general.interface';
 import { LoggedUser } from '@cartella/interfaces/user.interface';
-import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
-import { MenuService } from '@cartella/services/menu/menu.service';
-import { ToastService } from '@cartella/services/toast/toast.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
 import { UserState } from '@cartella/store/states/user.state';
+import { DeletePromptComponent, ExplorerSidebarEvent, ExplorerSidebarEventType } from '@cartella/ui/components';
+import { IDBSyncService, MenuService, ToastService, WithDestroy } from '@cartella/ui/services';
 import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';

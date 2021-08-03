@@ -1,7 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { ToastService } from '@cartella/services/toast/toast.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { ToastService, WithDestroy } from '@cartella/ui/services';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';

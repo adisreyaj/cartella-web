@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ROUTES } from '@cartella/config/routes.config';
-import { ToastService } from '@cartella/services/toast/toast.service';
 import { GetLoggedInUser } from '@cartella/store/actions/user.action';
+import { ToastService } from '@cartella/ui/services';
 import { Store } from '@ngxs/store';
 import { take } from 'rxjs/operators';
 

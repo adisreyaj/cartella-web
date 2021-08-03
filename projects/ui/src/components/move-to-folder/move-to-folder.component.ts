@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MoveToFolderModalPayload } from '@cartella/interfaces/move-to-folder.interface';
-import { ToastService } from '@cartella/services/toast/toast.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { ToastService, WithDestroy } from '@cartella/ui/services';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 
@@ -14,11 +13,7 @@ import { Store } from '@ngxs/store';
 })
 export class MoveToFolderComponent extends WithDestroy implements OnInit {
   folderSelected = new FormControl('');
-  constructor(
-    public ref: DialogRef<MoveToFolderModalPayload>,
-    private toaster: ToastService,
-    private store: Store
-  ) {
+  constructor(public ref: DialogRef<MoveToFolderModalPayload>, private toaster: ToastService, private store: Store) {
     super();
   }
 
@@ -44,7 +39,7 @@ export class MoveToFolderComponent extends WithDestroy implements OnInit {
         .dispatch(
           new this.action(this.item.id, {
             folderId: this.folderSelected.value,
-          })
+          }),
         )
         .subscribe(
           () => {
@@ -52,8 +47,8 @@ export class MoveToFolderComponent extends WithDestroy implements OnInit {
           },
           (err) => {
             this.toaster.showErrorToast('Failed to move!');
-          }
-        )
+          },
+        ),
     );
   }
 }

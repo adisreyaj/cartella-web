@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnIn
 import { FormControl, Validators } from '@angular/forms';
 import { Bookmark, UpdateBookmark } from '@cartella/bookmarks';
 import { FeatureType } from '@cartella/interfaces/general.interface';
+import { Access, ShareTo, UpdateSharePrefRequest } from '@cartella/interfaces/share.interface';
 import { Package, UpdatePackage } from '@cartella/packages';
 import { ShareSnippet, UnShareSnippet, UpdateSharePreferencesSnippet } from '@cartella/snippets';
+import { ToastService } from '@cartella/ui/services';
 import { DialogRef } from '@ngneat/dialog';
 import { Store } from '@ngxs/store';
 import { BehaviorSubject } from 'rxjs';
-import { Access, ShareTo, UpdateSharePrefRequest } from '../../interfaces/share.interface';
-import { ToastService } from '../../services/toast/toast.service';
 import { SharePopupPayload } from './share-popup.interface';
 
 @Component({

@@ -15,8 +15,7 @@ import {
 } from '@angular/core';
 import { SNIPPET_TEMPLATE } from '@cartella/config/snippets.config';
 import { Technology } from '@cartella/interfaces/technology.interface';
-import { NameGeneratorService } from '@cartella/services/name-generator/name-generator.service';
-import { WithDestroy } from '@cartella/services/with-destroy/with-destroy';
+import { NameGeneratorService, WithDestroy } from '@cartella/ui/services';
 import { Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, fromEvent } from 'rxjs';

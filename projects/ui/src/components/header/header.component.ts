@@ -1,11 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from '@cartella/interfaces/user.interface';
-import { CleanupService } from '@cartella/services/cleanup/cleanup.service';
-import { DarkModeService } from '@cartella/services/dark-mode/dark-mode.service';
-import { MenuService } from '@cartella/services/menu/menu.service';
 import { LogoutUser } from '@cartella/store/actions/user.action';
 import { UserState } from '@cartella/store/states/user.state';
+import { CleanupService, DarkModeService, MenuService } from '@cartella/ui/services';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';

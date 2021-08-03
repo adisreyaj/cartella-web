@@ -3,25 +3,25 @@ import { LayoutModule } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DeletePromptModule } from '@cartella/components/delete-prompt/delete-prompt.module';
-import { ExplorerSidebarModule } from '@cartella/components/explorer-sidebar/explorer-sidebar.module';
-import { MoveToFolderModule } from '@cartella/components/move-to-folder/move-to-folder.module';
-import { SharePopupModule } from '@cartella/components/share-popup/share-popup.module';
-import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
-import { FullscreenModule } from '@cartella/directives/fullscreen/fullscreen.module';
-import { HoveredDirectiveModule } from '@cartella/directives/hovered/hovered-directive.module';
 import { FeatureType } from '@cartella/interfaces/general.interface';
-import { IconModule } from '@cartella/modules/icon/icon.module';
-import { HasWriteAccessModule } from '@cartella/pipes/has-write-access/has-write-access.module';
-import { IsOwnerModule } from '@cartella/pipes/is-owner/is-owner.module';
-import { IsSharedItemModule } from '@cartella/pipes/is-shared-item/is-shared-item.module';
-import { LanguagePipeModule } from '@cartella/pipes/language-pipe/language-pipe.module';
-import { TimeAgoPipeModule } from '@cartella/pipes/time-ago-pipe/time-ago-pipe.module';
-import { IDBSyncService } from '@cartella/services/idb-sync-service/idb-sync.service';
-import { MenuService } from '@cartella/services/menu/menu.service';
-import { BaseStorageService } from '@cartella/services/storage/base-storage.service';
 import { FEATURE_TOKEN } from '@cartella/tokens/feature.token';
-import { ButtonsModule } from '@cartella/ui';
+import {
+  ButtonsModule,
+  DeletePromptModule,
+  ExplorerSidebarModule,
+  MoveToFolderModule,
+  SharePopupModule,
+} from '@cartella/ui/components';
+import { FeatureDirectiveModule, FullscreenModule, HoveredDirectiveModule } from '@cartella/ui/directives';
+import { IconModule } from '@cartella/ui/modules';
+import {
+  HasWriteAccessModule,
+  IsOwnerModule,
+  IsSharedItemModule,
+  LanguagePipeModule,
+  TimeAgoPipeModule,
+} from '@cartella/ui/pipes';
+import { BaseStorageService, IDBSyncService, MenuService } from '@cartella/ui/services';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
 import { TippyModule } from '@ngneat/helipopper';

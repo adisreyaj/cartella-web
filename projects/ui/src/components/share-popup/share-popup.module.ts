@@ -3,9 +3,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ButtonsModule } from '@cartella/ui';
+import { IconModule } from '@cartella/ui/modules';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { DialogModule } from '@ngneat/dialog';
-import { IconModule } from '../../modules/icon/icon.module';
 import { SharePopupComponent } from './share-popup.component';
 
 @NgModule({

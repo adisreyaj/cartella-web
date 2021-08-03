@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FeatureDirectiveModule } from '@cartella/directives/feature/feature.module';
-import { IconModule } from '@cartella/modules/icon/icon.module';
 import { ButtonsModule } from '@cartella/ui';
+import { FeatureDirectiveModule } from '@cartella/ui/directives/feature/feature.module';
+import { IconModule } from '@cartella/ui/modules';
 import { TippyModule } from '@ngneat/helipopper';
 import { HeaderComponent } from './header.component';
 
