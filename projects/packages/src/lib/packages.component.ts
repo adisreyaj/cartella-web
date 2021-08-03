@@ -7,7 +7,7 @@ import { DialogService } from '@ngneat/dialog';
 import { Select, Store } from '@ngxs/store';
 import { has } from 'lodash-es';
 import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
-import { filter, finalize, pluck, switchMap, withLatestFrom } from 'rxjs/operators';
+import { filter, finalize, pluck, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { PackagesAddFolderComponent } from './components/modals/packages-add-folder/packages-add-folder.component';
 import { ALL_PACKAGES_FOLDER } from './shared/config/packages.config';
 import { Package, PackageFolder } from './shared/interfaces/packages.interface';
@@ -70,11 +70,15 @@ export class PackagesComponent extends WithDestroy implements OnInit {
 
   ngOnInit(): void {
     const sub = this.getDataFromAPI()
-      .pipe(switchMap(() => this.updatePackagesWhenActiveFolderChanges()))
-      .subscribe(() => {
-        this.updatePackageFoldersInIDB();
-        this.updatePackagesInIDB();
-      });
+      .pipe(
+        take(1),
+        tap(() => {
+          this.updatePackageFoldersInIDB();
+          this.updatePackagesInIDB();
+        }),
+        switchMap(() => this.updatePackagesWhenActiveFolderChanges()),
+      )
+      .subscribe(() => {});
     this.isMenuOpen$ = this.menu.isMenuOpen$;
     this.subs.add(sub);
   }
@@ -198,6 +202,7 @@ export class PackagesComponent extends WithDestroy implements OnInit {
     if (this.allPackages$ && this.allPackageFolders$) {
       const sub = this.allPackages$
         .pipe(
+          tap(console.log),
           withLatestFrom(this.allPackageFolders$),
           switchMap(([packages, folders]) => this.syncService.syncItems(packages, folders)),
         )
