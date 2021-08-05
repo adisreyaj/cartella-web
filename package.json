@@ -17,7 +17,7 @@
   "license": "Apache License 2.0",
   "scripts": {
     "ng": "ng",
-    "start": "cross-env NODE_ENV=development ng serve",
+    "start": "cross-env NODE_ENV=development ng serve --configuration development",
     "build:prod": "cross-env NODE_ENV=production ng build --configuration production",
     "build:prod:source-map": "cross-env NODE_ENV=production ng build --source-map=true --configuration production",
     "test": "ng test",
