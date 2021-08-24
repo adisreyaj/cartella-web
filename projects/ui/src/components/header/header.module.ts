@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ButtonsModule } from '@cartella/ui';
+import { ButtonsModule } from '@cartella/ui/components';
 import { FeatureDirectiveModule } from '@cartella/ui/directives/feature/feature.module';
 import { IconModule } from '@cartella/ui/modules';
 import { TippyModule } from '@ngneat/helipopper';
