@@ -13,38 +13,71 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "es2020",
-    "lib": ["es2018", "dom"],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "paths": {
-      "@cartella/ui": ["projects/ui/src/public-api.ts"],
+      "@cartella/ui": [
+        "projects/ui/src/public-api.ts"
+      ],
       "@cartella/ui/*": [
         "projects/ui/src/*"
       ],
-      "@cartella/env/*": ["src/environments/*"],
+      "@cartella/env/*": [
+        "src/environments/*"
+      ],
       "@cartella/services/*": [
         "projects/ui/src/services/*"
       ],
-      "@cartella/guards/*": ["src/app/shared/guards/*"],
-      "@cartella/interfaces/*": ["src/app/shared/interfaces/*"],
-      "@cartella/tokens/*": ["src/app/shared/tokens/*"],
-      "@cartella/config/*": ["src/app/shared/config/*"],
+      "@cartella/guards/*": [
+        "src/app/shared/guards/*"
+      ],
+      "@cartella/interfaces/*": [
+        "src/app/shared/interfaces/*"
+      ],
+      "@cartella/tokens/*": [
+        "src/app/shared/tokens/*"
+      ],
+      "@cartella/config/*": [
+        "src/app/shared/config/*"
+      ],
       "@cartella/modules/*": [
         "projects/ui/src/modules/*"
       ],
-      "@cartella/components/*": ["src/app/shared/components/*"],
+      "@cartella/components/*": [
+        "src/app/shared/components/*"
+      ],
       "@cartella/pipes/*": [
         "projects/ui/src/pipes/*"
       ],
       "@cartella/directives/*": [
         "@cartella/ui/directives/*"
       ],
-      "@cartella/store/*": ["src/app/shared/store/*"],
-      "@cartella/home/*": ["src/app/pages/dashboard/home/*"],
-      "@cartella/snippets": ["projects/snippets/src/public-api.ts"],
-      "@cartella/bookmarks": ["projects/bookmarks/src/public-api.ts"],
-      "@cartella/packages": ["projects/packages/src/public-api.ts"],
-      "@cartella/snippets/module": ["projects/snippets/src/module.ts"],
-      "@cartella/bookmarks/module": ["projects/bookmarks/src/module.ts"],
-      "@cartella/packages/module": ["projects/packages/src/module.ts"]
+      "@cartella/store/*": [
+        "src/app/shared/store/*"
+      ],
+      "@cartella/home/*": [
+        "src/app/pages/dashboard/home/*"
+      ],
+      "@cartella/snippets": [
+        "projects/snippets/src/public-api.ts"
+      ],
+      "@cartella/bookmarks": [
+        "projects/bookmarks/src/public-api.ts"
+      ],
+      "@cartella/packages": [
+        "projects/packages/src/public-api.ts"
+      ],
+      "@cartella/snippets/module": [
+        "projects/snippets/src/module.ts"
+      ],
+      "@cartella/bookmarks/module": [
+        "projects/bookmarks/src/module.ts"
+      ],
+      "@cartella/packages/module": [
+        "projects/packages/src/module.ts"
+      ]
     }
   },
   "angularCompilerOptions": {
