@@ -31,6 +31,12 @@ npm install
 npm start
 ```
 
+## Built With
+
+<p align="center">
+  <img src="https://cardify.vercel.app/api/badges?technologies=typescript,angular,tailwindcss&width=150" alt="Tech used" />
+</p>
+
 ## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome.<br />
